@@ -1,0 +1,21 @@
+* {
+  box-sizing: border-box;
+}
+body {
+  font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
+  background-color: rgb(243, 243, 243);
+}
+
+.container {
+  margin: 80px auto 0 auto;
+  max-width: 900px;
+}
+.nav-container {
+  margin: auto;
+}
+.nav-container svg {
+  color: #fff;
+}
+a {
+  text-decoration: none;
+}
