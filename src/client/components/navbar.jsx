@@ -1,8 +1,9 @@
 import React, {Component} from 'react';
 import {Link} from 'react-router-dom';
 import pt from 'prop-types';
+import route from '../utils/routes';
 // Redux Stuff
-// import {connect} from 'react-redux';
+import {connect} from 'react-redux';
 // MUI
 import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
@@ -28,7 +29,7 @@ class Navbar extends Component {
                   <MyButton title="Написать пост" onClick={() => {}} className="button" placement={"bottom"}>
                     <AddIcon color="primary" />
                   </MyButton>
-                  <Link to="/">
+                  <Link to={route.HOME}>
                     <MyButton title="На главную" onClick={() => {}} className="button" placement={"bottom"}>
                       <HomeIcon color="primary" />
                     </MyButton>
@@ -40,9 +41,9 @@ class Navbar extends Component {
               ) :
               (
                 <>
-                  <Button color="inherit" component={Link} to="/">Home</Button>
-                  <Button color="inherit" component={Link} to="/signup">Signup</Button>
-                  <Button color="inherit" component={Link} to="/login">Login</Button>
+                  <Button color="inherit" component={Link} to={route.HOME}>Home</Button>
+                  <Button color="inherit" component={Link} to={route.SIGNUP}>Signup</Button>
+                  <Button color="inherit" component={Link} to={route.LOGIN}>Login</Button>
                 </>
               )
           }
@@ -53,12 +54,10 @@ class Navbar extends Component {
 }
 
 Navbar.propTypes = {
-  // authenticated: pt.bool.isRequired,
+  authenticated: pt.bool.isRequired,
 }
-// const mapStateToProps = (state) => ({
-//   authenticated: state.user.authenticated,
-// });
+const mapStateToProps = (state) => ({
+  authenticated: state.user.authenticated,
+});
 
-// export default connect(mapStateToProps)(Navbar);
-export default Navbar;
-
+export default connect(mapStateToProps)(Navbar);

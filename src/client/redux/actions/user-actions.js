@@ -4,12 +4,11 @@ import axios from 'axios';
 axios.defaults.baseURL = `/api`;
 
 
-export const loginUser = (userData, history) => (dispatch) => {
+export const signupUser = (newUserData, history) => (dispatch) => {
   dispatch({type: uiActionType.LOADING_UI});
-  return axios.post(`/login`, userData)
+  return axios.post(`/signup`, newUserData)
     .then((res) => {
-      // console.log(res.data.token);
-      setAuthorizationHeader(res.data.token);
+      setAuthorizationHeader(res.data.userToken);
       dispatch(getUserData());
       dispatch({type: uiActionType.CLEAR_ERRORS});
       history.push(`/`);
@@ -23,11 +22,12 @@ export const loginUser = (userData, history) => (dispatch) => {
     });
 };
 
-export const signupUser = (newUserData, history) => (dispatch) => {
+export const loginUser = (userData, history) => (dispatch) => {
   dispatch({type: uiActionType.LOADING_UI});
-  return axios.post(`/signup`, newUserData)
+  return axios.post(`/login`, userData)
     .then((res) => {
-      setAuthorizationHeader(res.data.userToken);
+      // console.log(res.data.token);
+      setAuthorizationHeader(res.data.token);
       dispatch(getUserData());
       dispatch({type: uiActionType.CLEAR_ERRORS});
       history.push(`/`);
@@ -60,6 +60,16 @@ export const getUserData = () => (dispatch) => {
     .catch((err) => console.log(err));
 };
 
+const setAuthorizationHeader = (token) => {
+  const TKidToken = `Bearer ${token}`;
+  localStorage.setItem(`TKidToken`, TKidToken);
+  // console.log(`H axios: `, axios.defaults.headers);
+  axios.defaults.headers.common[`Authorization`] = TKidToken;
+};
+
+
+
+
 // export const uploadImage = (formData) => (dispatch) => {
 //   console.log('formData: ', formData);
 //   dispatch({type: userActionType.LOADING_USER});
@@ -79,10 +89,3 @@ export const getUserData = () => (dispatch) => {
 //     })
 //     .catch((err) => console.log(err));
 // };
-
-const setAuthorizationHeader = (token) => {
-  const TKidToken = `Bearer ${token}`;
-  localStorage.setItem(`TKidToken`, TKidToken);
-  // console.log(`H axios: `, axios.defaults.headers);
-  axios.defaults.headers.common[`Authorization`] = TKidToken;
-};

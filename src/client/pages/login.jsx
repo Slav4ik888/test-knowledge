@@ -10,8 +10,8 @@ import TextField from '@material-ui/core/TextField';
 import Button from '@material-ui/core/Button';
 import CircularProgress from '@material-ui/core/CircularProgress';
 // Redux Stuff
-// import {connect} from 'react-redux';
-// import {loginUser} from '../redux/actions/user-actions';
+import {connect} from 'react-redux';
+import {loginUser} from '../redux/actions/user-actions';
 
 
 // const styles = (theme) => ({
@@ -59,14 +59,14 @@ class Login extends Component {
     this.handleChange = this.handleChange.bind(this);
   }
 
-  // static getDerivedStateFromProps(props, state) {
-  //   if (props.UI.errors !== state.errors) {
-  //     return {
-  //       errors: props.UI.errors,
-  //     };
-  //   }
-  //   return null;
-  // }
+  static getDerivedStateFromProps(props, state) {
+    if (props.UI.errors !== state.errors) {
+      return {
+        errors: props.UI.errors,
+      };
+    }
+    return null;
+  }
 
   handleSubmit(e) {
     e.preventDefault();
@@ -74,7 +74,7 @@ class Login extends Component {
       email: this.state.email,
       password: this.state.password,
     };
-    // this.props.loginUser(userData, this.props.history);
+    this.props.loginUser(userData, this.props.history);
   }
 
   handleChange(e) {
@@ -84,9 +84,8 @@ class Login extends Component {
   }
 
   render() {
-    const {classes} = this.props;
+    const {classes, UI: {loading}} = this.props;
     const {errors} = this.state;
-    const loading = true;
 
     return (
       <Grid container className={classes.form}>
@@ -142,20 +141,19 @@ class Login extends Component {
 }
 
 Login.propTypes = {
-  // classes: pt.object.isRequired,
-  // loginUser: pt.func.isRequired,
-  // user: pt.object.isRequired,
-  // UI: pt.object.isRequired,
-  // history: pt.func.isRequired,
+  classes: pt.object.isRequired,
+  loginUser: pt.func.isRequired,
+  user: pt.object.isRequired,
+  UI: pt.object.isRequired,
+  history: pt.object.isRequired,
 };
 
-// const mapStateToProps = (state) => ({
-//   user: state.user,
-//   UI: state.UI,
-// });
-// const mapActionsToProps = {
-//   loginUser
-// };
+const mapStateToProps = (state) => ({
+  user: state.user,
+  UI: state.UI,
+});
+const mapActionsToProps = {
+  loginUser
+};
 
-// export default connect(mapStateToProps, mapActionsToProps)(withStyles(styles)(Login));
-export default withStyles(styles)(Login);
+export default connect(mapStateToProps, mapActionsToProps)(withStyles(styles)(Login));
