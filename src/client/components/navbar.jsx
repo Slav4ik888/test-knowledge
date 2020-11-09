@@ -4,7 +4,7 @@ import pt from 'prop-types';
 import route from '../utils/routes';
 // Redux Stuff
 import {connect} from 'react-redux';
-// MUI
+// MUI Stuff
 import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
 import Button from '@material-ui/core/Button';
@@ -12,7 +12,7 @@ import Button from '@material-ui/core/Button';
 import HomeIcon from '@material-ui/icons/Home';
 import AddIcon from '@material-ui/icons/Add';
 import Notifications from '@material-ui/icons/Notifications';
-// Component
+// Components
 import MyButton from './button/button';
 
 

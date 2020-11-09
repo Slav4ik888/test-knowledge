@@ -1,5 +1,6 @@
 import React from 'react';
 import {BrowserRouter as Router, Route, Switch} from 'react-router-dom';
+import route from './utils/routes';
 import jwtDecode from 'jwt-decode';
 import axios from 'axios';
 // Redux
@@ -45,17 +46,17 @@ const App = () => {
           <Switch>
             <Route
               exact
-              path="/"
+              path={route.HOME}
               component={Home}
             />
             <AuthRoute
               exact
-              path="/signup"
+              path={route.SIGNUP}
               component={Signup}
             />
             <AuthRoute
               exact
-              path="/login"
+              path={route.LOGIN}
               component={Login}
             />
           </Switch>

@@ -15,7 +15,6 @@ const AuthRoute = ({component: Component, authenticated}) => (
 );
 
 AuthRoute.propTypes = {
-  component: pt.node.isRequired,
   authenticated: pt.bool.isRequired,
 };
 
