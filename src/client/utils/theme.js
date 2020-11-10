@@ -41,4 +41,5 @@ export default {
     position: `absolute`,
     color: `#147070`,
   },
+  
 };
