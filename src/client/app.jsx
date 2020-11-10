@@ -5,7 +5,7 @@ import jwtDecode from 'jwt-decode';
 import axios from 'axios';
 // Redux
 import store from './redux/store';
-import {logoutUser, getUserData, getCompanyData, getUserAndCompanyData} from './redux/actions/user-actions';
+import {logoutUser, getUserAndCompanyData} from './redux/actions/user-actions';
 import {userActionType} from './redux/types';
 // MUI Stuff
 import {ThemeProvider} from '@material-ui/core/styles';
@@ -33,8 +33,6 @@ if (token && !token.includes(`Bearer undefined`)) {
     store.dispatch({type: userActionType.SET_AUTHENTICATED});
     axios.defaults.headers.common[`Authorization`] = token;
     store.dispatch(getUserAndCompanyData());
-    // store.dispatch(getUserData());
-    // store.dispatch(getCompanyData());
   }
 }
 

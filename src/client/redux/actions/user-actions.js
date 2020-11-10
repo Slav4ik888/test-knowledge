@@ -48,7 +48,7 @@ export const loginUser = (userData, history) => (dispatch) => {
     .then((res) => {
       // console.log(res.data.token);
       setAuthorizationHeader(res.data.token);
-      dispatch(getUserData());
+      dispatch(getUserAndCompanyData());
       dispatch({type: uiActionType.CLEAR_ERRORS});
       history.push(route.HOME);
     })
@@ -88,7 +88,6 @@ export const getCompanyData = () => (dispatch) => {
   dispatch({type: userActionType.LOADING_USER});
   return axios.get(`/company`)
     .then((res) => {
-      console.log(`res.data: `, res.data);
       dispatch({
         type: userActionType.SET_COMPANY,
         payload: res.data,
@@ -105,7 +104,6 @@ export const getUserAndCompanyData = () => (dispatch) => {
   dispatch({type: userActionType.LOADING_USER});
   return axios.get(`/userAndCompany`)
     .then((res) => {
-      console.log(`res.data: `, res.data);
       const { userData, companyData } = res.data
       dispatch({
         type: userActionType.SET_COMPANY,
