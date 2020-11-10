@@ -1,9 +1,10 @@
-import {userActionType, dataActionType} from '../types';
+import {userActionType} from '../types';
 import {extend} from '../../utils/utils';
 const initialState = {
   authenticated: false,
   loading: false,
-  credentials: {},
+  userProfile: {},
+  companyProfile: {},
 };
 
 export default function (state = initialState, action) {
@@ -22,12 +23,18 @@ export default function (state = initialState, action) {
       return initialState;
 
     case userActionType.SET_USER:
-      return {
+      return extend(state, {
         authenticated: true,
         loading: false,
-        credentials: action.payload,
-      };
+        userProfile: action.payload,
+      });
     
+    case userActionType.SET_COMPANY:
+      return extend(state, {
+        companyProfile: action.payload,
+        loading: false,
+      });
+
     default: return state;
   }
 }

@@ -1,7 +1,27 @@
 import {userActionType, uiActionType} from '../types';
 import axios from 'axios';
+import route from '../../utils/routes';
 
 axios.defaults.baseURL = `/api`;
+
+export const signupCompany = (newCompanyData, history) => (dispatch) => {
+  dispatch({type: uiActionType.LOADING_UI});
+  return axios.post(`/signupCompany`, newCompanyData)
+    .then((res) => {
+      setAuthorizationHeader(res.data.userToken);
+      dispatch(getUserData());
+      dispatch(getCompanyData());
+      dispatch({type: uiActionType.CLEAR_ERRORS});
+      history.push(route.HOME);
+    })
+    .catch((err) => {
+      console.log(err.response.data);
+      dispatch({
+        type: uiActionType.SET_ERRORS,
+        payload: err.response.data,
+      });
+    });
+};
 
 
 export const signupUser = (newUserData, history) => (dispatch) => {
@@ -11,7 +31,7 @@ export const signupUser = (newUserData, history) => (dispatch) => {
       setAuthorizationHeader(res.data.userToken);
       dispatch(getUserData());
       dispatch({type: uiActionType.CLEAR_ERRORS});
-      history.push(`/`);
+      history.push(route.HOME);
     })
     .catch((err) => {
       console.log(err.response.data);
@@ -30,7 +50,7 @@ export const loginUser = (userData, history) => (dispatch) => {
       setAuthorizationHeader(res.data.token);
       dispatch(getUserData());
       dispatch({type: uiActionType.CLEAR_ERRORS});
-      history.push(`/`);
+      history.push(route.HOME);
     })
     .catch((err) => {
       console.log(err.response.data);
@@ -57,7 +77,49 @@ export const getUserData = () => (dispatch) => {
         payload: res.data,
       });
     })
-    .catch((err) => console.log(err));
+    .catch((err) => {
+      console.log(err);
+      dispatch({type: userActionType.SET_UNAUTHENTICATED});
+    });
+};
+
+// Получение данных о компании
+export const getCompanyData = () => (dispatch) => {
+  dispatch({type: userActionType.LOADING_USER});
+  return axios.get(`/company`)
+    .then((res) => {
+      console.log(`res.data: `, res.data);
+      dispatch({
+        type: userActionType.SET_COMPANY,
+        payload: res.data,
+      });
+    })
+    .catch((err) => {
+      console.log(err);
+      dispatch({type: userActionType.SET_UNAUTHENTICATED});
+    });
+};
+
+// Получение данных сразу и о компании и о пользователе
+export const getUserAndCompanyData = () => (dispatch) => {
+  dispatch({type: userActionType.LOADING_USER});
+  return axios.get(`/userAndCompany`)
+    .then((res) => {
+      console.log(`res.data: `, res.data);
+      const { userData, companyData } = res.data
+      dispatch({
+        type: userActionType.SET_COMPANY,
+        payload: companyData,
+      });
+      dispatch({
+        type: userActionType.SET_USER,
+        payload: userData,
+      });
+    })
+    .catch((err) => {
+      console.log(err);
+      dispatch({type: userActionType.SET_UNAUTHENTICATED});
+    });
 };
 
 const setAuthorizationHeader = (token) => {

@@ -5,7 +5,7 @@ import jwtDecode from 'jwt-decode';
 import axios from 'axios';
 // Redux
 import store from './redux/store';
-import {logoutUser, getUserData} from './redux/actions/user-actions';
+import {logoutUser, getUserData, getCompanyData, getUserAndCompanyData} from './redux/actions/user-actions';
 import {userActionType} from './redux/types';
 // MUI Stuff
 import {ThemeProvider} from '@material-ui/core/styles';
@@ -16,7 +16,7 @@ import Navbar from './components/navbar/navbar';
 import AuthRoute from './utils/auth-route';
 // Pages
 import Home from './pages/home';
-import Signup from './pages/signup';
+import SignupCompany from './pages/signup-company';
 import Login from './pages/login';
 
 
@@ -32,7 +32,9 @@ if (token && !token.includes(`Bearer undefined`)) {
   } else {
     store.dispatch({type: userActionType.SET_AUTHENTICATED});
     axios.defaults.headers.common[`Authorization`] = token;
-    store.dispatch(getUserData());
+    store.dispatch(getUserAndCompanyData());
+    // store.dispatch(getUserData());
+    // store.dispatch(getCompanyData());
   }
 }
 
@@ -51,8 +53,8 @@ const App = () => {
             />
             <AuthRoute
               exact
-              path={route.SIGNUP}
-              component={Signup}
+              path={route.SIGNUP_COMPANY}
+              component={SignupCompany}
             />
             <AuthRoute
               exact

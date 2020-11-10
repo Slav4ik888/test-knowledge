@@ -1,12 +1,11 @@
 import {positions, role} from './mocks';
 
-export const user = {
+export const profileUser = {
   firstName: `Вячеслав`,
   secondName: `Корзан`,
   middleName: `Александрович`,
   email: `korzan.va@mail.ru`,
   userId: `sldkjflkjsldkjlfkjls`,
-  nickname: `Vyacheslav`,
   imageUrl: `https://firebasestorage.googleapis.com/v0/b/socialapp-103bb.appspot.com/o/no-img-user.png?alt=media`,
   createdAt: `2020-11-04T18:16:54.385Z`,
 
@@ -15,4 +14,5 @@ export const user = {
     positions.storekeeper,
   ],
   role: role.ADMIN,
-}
+  companyId: `dfj3898fhdlkjf83`, // uid
+};

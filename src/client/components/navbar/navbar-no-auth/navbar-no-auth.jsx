@@ -37,7 +37,7 @@ const NavbarNoAuth = () => {
         <MenuIcon />
       </IconButton>
       <Typography className={classes.title} variant="h6" noWrap>
-        T-Knowledge - тестирование сотрудников на знание обязанностей
+        Team-Knowledge - тестирование сотрудников на знание обязанностей
       </Typography>
       <div className={classes.grow} />
       <Entrance />

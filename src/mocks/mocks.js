@@ -98,11 +98,19 @@ export const questions = [
 
 // Правила для Ролей
 export const rules = [
+  EDIT_PROFILE_COMPANY,
+  EDIT_USERS,
+  EDIT_DOCUMENTS,
+  EDIT_TESTS,
 
 ];
 // Роли в приложении
 export const role = {
-  ADMIN: `ADMIN`,
-  SUPERVISOR: `SUPERVISOR`,
-  USER: `USER`,
+  // Полный доступ ко всему функционалу приложения
+  ADMIN: `ADMIN`, 
+  // Доступ к редактированию, возможности добавлять пользователей
+  // без доступа к профилю компании
+  SUPERVISOR: `SUPERVISOR`, 
+  // Доступ к тестам для занимаемых постов, без возможности редактирования
+  USER: `USER`, 
 }

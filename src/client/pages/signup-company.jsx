@@ -5,7 +5,7 @@ import pt from 'prop-types';
 import icon from '../images/user.png';
 // Redux Stuff
 import {connect} from 'react-redux';
-import {signupUser} from '../redux/actions/user-actions';
+import {signupCompany} from '../redux/actions/user-actions';
 // MUI Stuff
 import Grid from '@material-ui/core/Grid';
 import Paper from '@material-ui/core/Paper';
@@ -54,14 +54,14 @@ const styles = {
 };
 
 
-class Signup extends Component {
+class SignupCompany extends Component {
   constructor() {
     super();
     this.state = {
       email: ``,
       password: ``,
       confirmPassword: ``,
-      nickname: ``,
+      companyName: ``,
       errors: {},
     };
     this.handleSubmit = this.handleSubmit.bind(this);
@@ -84,10 +84,10 @@ class Signup extends Component {
       email: this.state.email,
       password: this.state.password,
       confirmPassword: this.state.confirmPassword,
-      nickname: this.state.nickname,
+      companyName: this.state.companyName,
     };
 
-    this.props.signupUser(newUserData, this.props.history);
+    this.props.signupCompany(newUserData, this.props.history);
   }
 
   handleChange(e) {
@@ -110,6 +110,13 @@ class Signup extends Component {
               Регистрация
             </Typography>
             <form noValidate onSubmit={this.handleSubmit}>
+              <TextField id="companyName" name="companyName" type="text" label="Название компании" fullWidth
+                helperText={errors.companyName}
+                error={errors.companyName ? true : false}
+                className={classes.TextField}
+                value={this.state.companyName}
+                onChange={this.handleChange}
+              />
               <TextField
                 id="email" name="email" type="email" label="Введите email" fullWidth
                 className={classes.TextField}
@@ -132,13 +139,7 @@ class Signup extends Component {
                 value={this.state.confirmPassword}
                 onChange={this.handleChange}
               />
-              <TextField id="nickname" name="nickname" type="text" label="Придумайте себе nick" fullWidth
-                helperText={errors.nickname}
-                error={errors.nickname ? true : false}
-                className={classes.TextField}
-                value={this.state.nickname}
-                onChange={this.handleChange}
-              />
+              
 
               {
                 errors.general && (
@@ -170,16 +171,16 @@ class Signup extends Component {
   }
 }
 
-Signup.propTypes = {
+SignupCompany.propTypes = {
   classes: pt.object.isRequired,
   history: pt.object.isRequired,
   user: pt.object.isRequired,
   UI: pt.object.isRequired,
-  signupUser: pt.func.isRequired,
+  signupCompany: pt.func.isRequired,
 };
 
 const mapStateToProps = (state) => ({
   user: state.user,
   UI: state.UI,
 });
-export default connect(mapStateToProps, {signupUser})(withStyles(styles)(Signup));
+export default connect(mapStateToProps, {signupCompany})(withStyles(styles)(SignupCompany));

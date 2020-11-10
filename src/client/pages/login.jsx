@@ -138,7 +138,7 @@ class Login extends Component {
               </Button>
               <br />
               <br />
-              <small>Нет аккаунта? - <Link to={route.SIGNUP}>зарегистрируйтесь</Link></small>
+              <small>Нет аккаунта? - <Link to={route.SIGNUP_COMPANY}>зарегистрируйтесь</Link></small>
             </form>
           </Paper>
         </Grid>

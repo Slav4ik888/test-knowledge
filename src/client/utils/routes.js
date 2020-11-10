@@ -1,6 +1,6 @@
 export default {
   HOME: `/home`,
   LOGIN: `/login`,
-  SIGNUP: `/singup`,
+  SIGNUP_COMPANY: `/singup-company`,
   PROFILE: `/profile`,
 };
