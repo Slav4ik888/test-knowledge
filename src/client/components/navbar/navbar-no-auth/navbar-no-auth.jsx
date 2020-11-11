@@ -1,12 +1,14 @@
 import React from 'react';
+import {Link} from 'react-router-dom';
+import route from '../../../utils/routes';
 // MUI Stuff
 import {makeStyles} from '@material-ui/core/styles';
 import IconButton from '@material-ui/core/IconButton';
 import Typography from '@material-ui/core/Typography';
+import Button from '@material-ui/core/Button';
 // Icons
 import MenuIcon from '@material-ui/icons/Menu';
-// Components
-import Entrance from '../../entrance/entrance';
+import AccountCircle from '@material-ui/icons/AccountCircle';
 
 const useStyles = makeStyles((theme) => ({
   grow: {
@@ -40,7 +42,13 @@ const NavbarNoAuth = () => {
         Team-Knowledge - тестирование сотрудников на знание обязанностей
       </Typography>
       <div className={classes.grow} />
-      <Entrance />
+      <Button
+        component={Link}
+        to={route.LOGIN}
+        endIcon={<AccountCircle />}
+      >
+        Войти
+      </Button>
       
     </>
   );

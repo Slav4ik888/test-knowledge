@@ -1,5 +1,8 @@
-import React from 'react'
-import pt from 'prop-types'
+import React from 'react';
+import pt from 'prop-types';
+// Redux Stuff
+import {connect} from 'react-redux';
+import { logoutUser } from '../../redux/actions/user-actions';
 // MUI Stuff
 import MenuItem from '@material-ui/core/MenuItem';
 import Menu from '@material-ui/core/Menu';
@@ -7,6 +10,7 @@ import { makeStyles } from '@material-ui/core/styles';
 // Icons
 import AccountCircle from '@material-ui/icons/AccountCircle';
 import KeyboardReturn from '@material-ui/icons/KeyboardReturn';
+import HomeIcon from '@material-ui/icons/Home';
 
 
 const useStyles = makeStyles((theme) => {
@@ -15,17 +19,11 @@ const useStyles = makeStyles((theme) => {
     line: {
       borderTop: `1px solid ${theme.palette.primary.dark}`,
     },
-    profileMenu: {
-      position: `absolute`,
-      top: 50,
-      right: 10,
-      width: 200,
-      minWidth: `240px`,
-    }
+    
   }});
 
 
-const Profile = ({open, onClose, anchorEl, profileMenuId}) => {
+const Profile = ({open, onClose, anchorEl, profileMenuId, logoutUser}) => {
   const classes = useStyles();
 
   return (
@@ -37,15 +35,17 @@ const Profile = ({open, onClose, anchorEl, profileMenuId}) => {
       transformOrigin={{ vertical: 'top', horizontal: 'right' }}
       open={open}
       onClose={onClose}
-      classes={classes.profileMenu}
     >
-      <MenuItem onClick={onClose}>Компания</MenuItem>
+      <MenuItem onClick={onClose}>
+        <HomeIcon />
+        <div>Компания</div>
+      </MenuItem>
       <MenuItem onClick={onClose}>
         <AccountCircle />
         <div>Ваш профиль</div>
       </MenuItem>
       <div className={classes.line}></div>
-      <MenuItem onClick={onClose}>
+      <MenuItem onClick={logoutUser}>
         <KeyboardReturn />
         <div>Выйти</div>
       </MenuItem>
@@ -60,4 +60,11 @@ Profile.propTypes = {
   profileMenuId: pt.string.isRequired,
 }
 
-export default Profile;
+Profile.propTypes = {
+  logoutUser: pt.func.isRequired,
+}
+const mapStateToProps = (state) => ({
+  authenticated: state.user.authenticated,
+});
+
+export default connect(mapStateToProps, {logoutUser})(Profile);

@@ -1,7 +1,5 @@
 import React from 'react';
-import {Link} from 'react-router-dom';
 import pt from 'prop-types';
-import route from '../../../utils/routes';
 // Redux Stuff
 import {connect} from 'react-redux';
 // MUI Stuff
