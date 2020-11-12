@@ -1,8 +1,8 @@
-import React from 'react';
+import React, {useState} from 'react';
 import pt from 'prop-types';
 // Redux Stuff
 import {connect} from 'react-redux';
-import { logoutUser } from '../../redux/actions/user-actions';
+import { logoutUser } from '../../../redux/actions/user-actions';
 // MUI Stuff
 import MenuItem from '@material-ui/core/MenuItem';
 import Menu from '@material-ui/core/Menu';
@@ -11,6 +11,8 @@ import { makeStyles } from '@material-ui/core/styles';
 import AccountCircle from '@material-ui/icons/AccountCircle';
 import KeyboardReturn from '@material-ui/icons/KeyboardReturn';
 import HomeIcon from '@material-ui/icons/Home';
+// Components
+import ProfielUserEdit from '../profile-user/profile-user-edit';
 
 
 const useStyles = makeStyles((theme) => {
@@ -19,12 +21,20 @@ const useStyles = makeStyles((theme) => {
     line: {
       borderTop: `1px solid ${theme.palette.primary.dark}`,
     },
-    
-  }});
+  }
+});
+  
+
 
 
 const Profile = ({open, onClose, anchorEl, profileMenuId, logoutUser}) => {
   const classes = useStyles();
+  const [userProfile, setUserProfile] = useState(false);
+  const handleUserProfileOpen = () => {
+    onClose();
+    setUserProfile(true);
+  };
+  const handleUserProfileClose = () => setUserProfile(false);
 
   return (
     <Menu
@@ -40,10 +50,14 @@ const Profile = ({open, onClose, anchorEl, profileMenuId, logoutUser}) => {
         <HomeIcon />
         <div>Компания</div>
       </MenuItem>
-      <MenuItem onClick={onClose}>
+
+      <MenuItem onClick={handleUserProfileOpen}>
         <AccountCircle />
         <div>Ваш профиль</div>
       </MenuItem>
+
+      <ProfielUserEdit open={userProfile} onClose={handleUserProfileClose}/>
+
       <div className={classes.line}></div>
       <MenuItem onClick={logoutUser}>
         <KeyboardReturn />

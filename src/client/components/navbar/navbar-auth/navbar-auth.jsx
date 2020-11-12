@@ -19,7 +19,7 @@ import NotificationsIcon from '@material-ui/icons/Notifications';
 import MoreIcon from '@material-ui/icons/MoreVert';
 // Components
 import MyButton from '../../button/button';
-import Profile from '../../profile/profile';
+import Profile from '../../profiles/profile-main/profile';
 
 
 const useStyles = makeStyles((theme) => ({

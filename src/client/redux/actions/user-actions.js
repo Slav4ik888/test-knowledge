@@ -1,5 +1,22 @@
 import {userActionType, uiActionType} from '../types';
 import axios from 'axios';
+// const api = axios.create({
+//   baseURL: `https://4.react.pages.academy/guess-melody`,
+//   timeout: 1000 * 5,
+//   withCredentials: true,
+// });
+
+// const onSuccess = (response) => response;
+// const onFail = (err) => {
+//   if (err.response.status === 401) {
+//     console.log(`Обработал ошибку 401`);
+//     return {data: null};
+//   }
+//   return err;
+// };
+
+// api.interceptors.response.use(onSuccess, onFail);
+
 import route from '../../utils/routes';
 
 axios.defaults.baseURL = `/api`;
@@ -140,12 +157,13 @@ const setAuthorizationHeader = (token) => {
 //     .catch((err) => console.log(err));
 // };
 
-// export const editUserDetails = (userDetails) => (dispatch) => {
-//   dispatch({type: userActionType.LOADING_USER});
-//   return axios
-//     .post(`/user`, userDetails)
-//     .then(() => {
-//       dispatch(getUserData());
-//     })
-//     .catch((err) => console.log(err));
-// };
+export const setUserDetails = (userProfile) => (dispatch) => {
+  console.log(`Action: `, userProfile);
+  // dispatch({type: userActionType.LOADING_USER});
+  // return axios
+  //   .post(`/user`, userProfile)
+  //   .then(() => {
+  //     dispatch(getUserData());
+  //   })
+  //   .catch((err) => console.log(err));
+};
