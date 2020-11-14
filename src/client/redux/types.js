@@ -12,9 +12,12 @@ export const uiActionType = {
   LOADING_UI: `LOADING_UI`,
   SET_ERRORS: `SET_ERRORS`,
   CLEAR_ERRORS: `CLEAR_ERRORS`,
+  SET_MESSAGES: `SET_MESSAGES`,
+  CLEAR_MESSAGES: `CLEAR_MESSAGES`,
 };
 
 // Data reducer types
 export const dataActionType = {
   LOADING_DATA: `LOADING_DATA`,
+  SET_USERS: `SET_USERS`,
 };

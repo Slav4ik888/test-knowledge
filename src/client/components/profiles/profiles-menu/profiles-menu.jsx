@@ -19,7 +19,6 @@ import ProfielCompanyEdit from '../profile-company/profile-company-edit';
 
 
 const useStyles = makeStyles((theme) => {
-  console.log('theme: ', theme);
   return {
     line: {
       borderTop: `1px solid ${theme.palette.primary.dark}`,
@@ -29,7 +28,7 @@ const useStyles = makeStyles((theme) => {
   
 
 
-const Profile = ({open, onClose, anchorEl, profileMenuId, logoutUser}) => {
+const ProfilesMenu = ({open, onClose, anchorEl, profilesMenuId, logoutUser}) => {
   const classes = useStyles();
   const [userProfile, setUserProfile] = useState(false);
   const handleUserProfileOpen = () => {
@@ -51,7 +50,7 @@ const Profile = ({open, onClose, anchorEl, profileMenuId, logoutUser}) => {
     <Menu
       anchorEl={anchorEl}
       anchorOrigin={{ vertical: 'top', horizontal: 'right' }}
-      id={profileMenuId}
+      id={profilesMenuId}
       keepMounted
       transformOrigin={{ vertical: 'top', horizontal: 'right' }}
       open={open}
@@ -86,18 +85,16 @@ const Profile = ({open, onClose, anchorEl, profileMenuId, logoutUser}) => {
   )
 }
 
-Profile.propTypes = {
+ProfilesMenu.propTypes = {
+  logoutUser: pt.func.isRequired,
   onClose: pt.func.isRequired,
   open: pt.bool.isRequired,
   anchorEl: pt.object,
-  profileMenuId: pt.string.isRequired,
+  profilesMenuId: pt.string.isRequired,
 }
 
-Profile.propTypes = {
-  logoutUser: pt.func.isRequired,
-}
 const mapStateToProps = (state) => ({
   authenticated: state.user.authenticated,
 });
 
-export default connect(mapStateToProps, {logoutUser})(Profile);
+export default connect(mapStateToProps, {logoutUser})(ProfilesMenu);

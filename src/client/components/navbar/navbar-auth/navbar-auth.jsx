@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useState} from 'react';
 import pt from 'prop-types';
 // Redux Stuff
 import {connect} from 'react-redux';
@@ -6,10 +6,12 @@ import {connect} from 'react-redux';
 import { fade, makeStyles } from '@material-ui/core/styles';
 import IconButton from '@material-ui/core/IconButton';
 import Typography from '@material-ui/core/Typography';
+import Tooltip from '@material-ui/core/Tooltip';
 import InputBase from '@material-ui/core/InputBase';
 import Badge from '@material-ui/core/Badge';
 import MenuItem from '@material-ui/core/MenuItem';
 import Menu from '@material-ui/core/Menu';
+import Button from '@material-ui/core/Button';
 // Icons
 import MenuIcon from '@material-ui/icons/Menu';
 import SearchIcon from '@material-ui/icons/Search';
@@ -19,7 +21,8 @@ import NotificationsIcon from '@material-ui/icons/Notifications';
 import MoreIcon from '@material-ui/icons/MoreVert';
 // Components
 import MyButton from '../../buttons/button-icon/button-icon';
-import Profile from '../../profiles/profile-main/profile';
+import ProfilesMenu from '../../profiles/profiles-menu/profiles-menu';
+import UsersMenu from '../../users/users-menu/users-menu';
 
 
 const useStyles = makeStyles((theme) => ({
@@ -72,7 +75,10 @@ const useStyles = makeStyles((theme) => ({
       width: '20ch',
     },
   },
-  sectionDesktop: {
+  sectionButtons: {
+
+  },
+  sectionUserBlock: {
     display: 'none',
     [theme.breakpoints.up('md')]: {
       display: 'flex',
@@ -82,19 +88,19 @@ const useStyles = makeStyles((theme) => ({
 
 const NavbarAuth = () => {
   const classes = useStyles();
-  const [anchorEl, setAnchorEl] = React.useState(null);
 
-  const isProfileOpen = Boolean(anchorEl);
+  const [anchorPro, setAnchorPro] = useState(null);
+  const isProfilesOpen = Boolean(anchorPro);
+  const profilesMenuId = `profile-menu`;
+  const handleProfilesMenuOpen = (event) => setAnchorPro(event.currentTarget);
+  const handleProfilesMenuClose = () => setAnchorPro(null);
+  
+  const [anchorUsr, setAnchorUsr] = useState(null);
+  const isUsersOpen = Boolean(anchorUsr);
+  const usersMenuId = `users-menu`
+  const handleUserMenuOpen = (event) => setAnchorUsr(event.currentTarget);
+  const handleUserMenuClose = () => setAnchorUsr(null);
 
-  const handleProfileMenuOpen = (event) => {
-    setAnchorEl(event.currentTarget);
-  };
-
-  const handleMenuClose = () => {
-    setAnchorEl(null);
-  };
-
-  const profileMenuId = `profile-menu`;
   // const renderMenu = (
   //   <Menu
   //     anchorEl={anchorEl}
@@ -139,8 +145,15 @@ const NavbarAuth = () => {
           inputProps={{ 'aria-label': 'search' }}
         />
       </div>
+      {/* <Tooltip title="Управление пользователями" placement="bottom" arrow> */}
+      {/* variant="contained" color="primary" */}
+        <Button onClick={handleUserMenuOpen} >
+          Сотрудники
+        </Button>
+      {/* </Tooltip> */}
       <div className={classes.grow} />
-      <div className={classes.sectionDesktop}>
+
+      <div className={classes.sectionUserBlock}>
         <IconButton aria-label="show 4 new mails" color="inherit">
           <Badge badgeContent={4} color="secondary">
             <MailIcon />
@@ -154,19 +167,26 @@ const NavbarAuth = () => {
         <IconButton
           edge="end"
           aria-label="account of current user"
-          aria-controls={profileMenuId}
+          aria-controls={profilesMenuId}
           aria-haspopup="true"
-          onClick={handleProfileMenuOpen}
+          onClick={handleProfilesMenuOpen}
           color="inherit"
         >
           <AccountCircle />
         </IconButton>
       </div>
-      <Profile
-        open={isProfileOpen}
-        onClose={handleMenuClose}
-        profileMenuId={profileMenuId}
-        anchorEl={anchorEl}
+
+      <ProfilesMenu
+        open={isProfilesOpen}
+        onClose={handleProfilesMenuClose}
+        profilesMenuId={profilesMenuId}
+        anchorEl={anchorPro}
+      />
+      <UsersMenu
+        open={isUsersOpen}
+        onClose={handleUserMenuClose}
+        usersMenuId={usersMenuId}
+        anchorEl={anchorUsr}
       />
       {/* {renderMenu} */}
     </>

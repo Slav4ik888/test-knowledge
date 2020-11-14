@@ -1,9 +1,4 @@
-// Статус на котором находится тест
-export const testStatus = {
-  START: `Начат`,
-  PROGRESS: ` В процессе`, // Выполнил более 30%
-  END: `Завершён`,
-};
+import { testStatus } from '../types';
 
 export const testLogs = [
   {

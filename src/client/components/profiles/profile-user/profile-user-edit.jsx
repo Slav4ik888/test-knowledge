@@ -61,6 +61,7 @@ const ProfielUserEdit = ({classes, open, onClose, userProfile, setUserDetails}) 
   if (!open) {
     return null;
   }
+  
   const [newUP, setNewUP] = useState(userProfile);
 
   const handleChange = (e) => {
@@ -72,7 +73,8 @@ const ProfielUserEdit = ({classes, open, onClose, userProfile, setUserDetails}) 
 
   const handleClose = () => onClose();
 
-  const handleSubmit = () => {
+  const handleSubmit = (e) => {
+    e.preventDefault();
     setUserDetails(newUP);
     onClose();
   };
@@ -112,8 +114,8 @@ const ProfielUserEdit = ({classes, open, onClose, userProfile, setUserDetails}) 
               value={newUP.middleName} onChange={handleChange} fullWidth
             />
             <TextField
-              name="email" type="email" label="Email" className={classes.textField}
-              value={newUP.email} onChange={() => { }} fullWidth
+              name="email" type="email" label="Email" className={classes.textField} disabled
+              value={newUP.email} onChange={handleChange} fullWidth
             />
 
           </form>

@@ -80,4 +80,5 @@ Thumbs.db
 public/bundle.js
 public/bundle.js.map
 archive/
-src/server/
+src/server/firebase/config.js
+src/server/firebase/service-account-key.json

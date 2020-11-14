@@ -4,6 +4,7 @@ import {extend} from '../../utils/utils';
 
 const initialState = {
   loading: false,
+  messages: {},
   errors: {},
 };
 
@@ -22,6 +23,18 @@ export default function (state = initialState, action) {
       return extend(state, {
         loading: false,
         errors: {},
+      });
+    
+    case uiActionType.SET_MESSAGES:
+      return extend(state, {
+        loading: false,
+        messages: action.payload,
+      });
+    
+    case uiActionType.CLEAR_MESSAGES:
+      return extend(state, {
+        loading: false,
+        messages: {},
       });
     default: return state;
   }

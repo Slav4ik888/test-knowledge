@@ -1,22 +1,4 @@
-// Полномочия для Ролей
-export const authority = [
-  EDIT_PROFILE_COMPANY,
-  EDIT_USERS,
-  EDIT_DOCUMENTS,
-  EDIT_TESTS,
-
-];
-
-// Роли в приложении
-export const role = {
-  // Полный доступ ко всему функционалу приложения
-  ADMIN: `Администратор`,
-  // Доступ к редактированию, возможности добавлять пользователей
-  // без доступа к профилю компании
-  SUPERVISOR: `Супервайзер`,
-  // Доступ к тестам для занимаемых постов, без возможности редактирования
-  USER: `Пользователь`,
-};
+import { role, authority } from '../types';
 
 // Должности
 export const positions = [

@@ -41,23 +41,23 @@ export const signupCompany = (newCompanyData, history) => (dispatch) => {
 };
 
 
-export const signupUser = (newUserData, history) => (dispatch) => {
-  dispatch({type: uiActionType.LOADING_UI});
-  return axios.post(`/signup`, newUserData)
-    .then((res) => {
-      setAuthorizationHeader(res.data.userToken);
-      dispatch(getUserData());
-      dispatch({type: uiActionType.CLEAR_ERRORS});
-      history.push(route.HOME);
-    })
-    .catch((err) => {
-      console.log(err.response.data);
-      dispatch({
-        type: uiActionType.SET_ERRORS,
-        payload: err.response.data,
-      });
-    });
-};
+// export const signupUser = (newUserData, history) => (dispatch) => {
+//   dispatch({type: uiActionType.LOADING_UI});
+//   return axios.post(`/signup`, newUserData)
+//     .then((res) => {
+//       setAuthorizationHeader(res.data.userToken);
+//       dispatch(getUserData());
+//       dispatch({type: uiActionType.CLEAR_ERRORS});
+//       history.push(route.HOME);
+//     })
+//     .catch((err) => {
+//       console.log(err.response.data);
+//       dispatch({
+//         type: uiActionType.SET_ERRORS,
+//         payload: err.response.data,
+//       });
+//     });
+// };
 
 export const loginUser = (userData, history) => (dispatch) => {
   dispatch({type: uiActionType.LOADING_UI});
@@ -121,7 +121,7 @@ export const getUserAndCompanyData = () => (dispatch) => {
   dispatch({type: userActionType.LOADING_USER});
   return axios.get(`/userAndCompany`)
     .then((res) => {
-      const { userData, companyData } = res.data
+      const { userData, companyData } = res.data;
       dispatch({
         type: userActionType.SET_COMPANY,
         payload: companyData,
@@ -157,8 +157,9 @@ const setAuthorizationHeader = (token) => {
 //     .catch((err) => console.log(err));
 // };
 
+// Сохраняем данные о пользователе
 export const setUserDetails = (userProfile) => (dispatch) => {
-  console.log(`Action: `, userProfile);
+  console.log('userProfile: ', userProfile);
   dispatch({type: userActionType.LOADING_USER});
   return axios
     .post(`/user`, userProfile)
@@ -177,8 +178,8 @@ export const setUserDetails = (userProfile) => (dispatch) => {
     });
 };
 
+// Сохраняем данные о компании
 export const setCompanyDetails = (companyProfile) => (dispatch) => {
-  console.log(`Action: `, companyProfile);
   dispatch({type: userActionType.LOADING_USER});
   return axios
     .post(`/company`, companyProfile)
@@ -194,5 +195,36 @@ export const setCompanyDetails = (companyProfile) => (dispatch) => {
         type: uiActionType.SET_ERRORS,
         payload: err.response.data,
       });
+    });
+};
+
+// Приглашаем и регистрируем пользователя для компании
+export const addUser = (email) => (dispatch) => {
+  dispatch({ type: uiActionType.LOADING_UI });
+  const newUser = {
+    email,
+    password: `qazwsx12`,
+    confirmPassword: `qazwsx12`,
+  };
+
+  return axios
+    .post(`/addUser`, newUser)
+    .then((res) => {
+      const { message } = res.data;
+      // Добавить данные нового пользователя
+      // dispatch({
+      //   type: userActionType.SET_USER,
+      //   payload: userProfile,
+      // });
+      dispatch({ type: uiActionType.SET_MESSAGES, payload: message });
+      dispatch({ type: uiActionType.CLEAR_ERRORS });
+    })
+    .catch((err) => {
+      console.log(err);
+      dispatch({
+        type: uiActionType.SET_ERRORS,
+        payload: err.response.data,
+      });
+
     });
 };

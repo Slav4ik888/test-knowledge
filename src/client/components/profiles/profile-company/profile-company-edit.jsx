@@ -72,7 +72,8 @@ const ProfielCompanyEdit = ({classes, open, onClose, companyProfile, setCompanyD
 
   const handleClose = () => onClose();
 
-  const handleSubmit = () => {
+  const handleSubmit = (e) => {
+    e.preventDefault();
     onClose();
     setCompanyDetails(newCP);
   };

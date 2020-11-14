@@ -2,6 +2,11 @@ import {dataActionType} from '../types';
 import {extend} from '../../utils/utils';
 
 const initialState = {
+  users: [],
+  positions: [],
+  docs: [],
+  rules: [],
+  questions: [],
   loading: false,
 };
 
