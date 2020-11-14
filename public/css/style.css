@@ -15,15 +15,17 @@ body {
 }
 .nav-container svg {
   color: #fff;
-  /* color: #a9dbf1;
+}
+a {
+  text-decoration: none;
+}
+.test {
+  color: #a9dbf1;
   color: #9fe2ff;
   color: #a9dbf1;
   color: #85c1db;
 
   light: #ff6333;
   main: #ff3d00;
-  dark: #b22a00; */
-}
-a {
-  text-decoration: none;
+  dark: #b22a00;
 }

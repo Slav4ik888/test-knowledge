@@ -3,7 +3,7 @@ import pt from 'prop-types';
 import withStyles from '@material-ui/core/styles/withStyles';
 // Readux Stuff
 import {connect} from 'react-redux';
-import {setUserDetails} from '../../../redux/actions/user-actions';
+import {setCompanyDetails} from '../../../redux/actions/user-actions';
 // MUI Stuff
 import Button from '@material-ui/core/Button';
 import TextField from '@material-ui/core/TextField';
@@ -56,30 +56,27 @@ const styles = {
   }
 };
 
-const ProfielUserEdit = ({classes, open, onClose, userProfile, setUserDetails}) => {
+const ProfielCompanyEdit = ({classes, open, onClose, companyProfile, setCompanyDetails}) => {
 
   if (!open) {
     return null;
   }
-  const [newUP, setNewUP] = useState(userProfile);
+  const [newCP, setNewCP] = useState(companyProfile);
 
   const handleChange = (e) => {
 
-    let userProfileUpdate = Object.assign({}, newUP);
-    userProfileUpdate[e.target.name] = e.target.value;
-    setNewUP(userProfileUpdate); 
+    let companyProfileUpdate = Object.assign({}, newCP);
+    companyProfileUpdate[e.target.name] = e.target.value;
+    setNewCP(companyProfileUpdate); 
   };
 
   const handleClose = () => onClose();
 
   const handleSubmit = () => {
-    setUserDetails(newUP);
     onClose();
+    setCompanyDetails(newCP);
   };
 
-  // createdAt
-  // positions
-  // role
 
   return (
     <>
@@ -89,31 +86,28 @@ const ProfielUserEdit = ({classes, open, onClose, userProfile, setUserDetails}) 
         fullWidth
         maxWidth="sm"
       >
-        <DialogTitle>Ваш профиль</DialogTitle>
+        <DialogTitle>Профиль компани</DialogTitle>
         <DialogContent>
           <form>
             <div className={classes.imageWrapper}>
-              <img src={newUP.imageUrl} alt="profile" className={classes.profileImage} />
+              <img src={newCP.imageUrl} alt="Логотип компании" className={classes.profileImage} />
               <input type="file" id="imageInput" hidden="hidden" onChange={() => {}} />
-              <MyButton title="Обновить аватарку" onClick={() => { }} className={classes.button} placement={"top"}>
+              <MyButton title="Обновить логотип" onClick={() => {}} className={classes.button} placement={"top"}>
                   <EditIcon color="primary" />
               </MyButton>
             </div>
+            
             <TextField
-              name="firstName" type="text" label="Имя" className={classes.textField}
-              value={newUP.firstName} onChange={handleChange} fullWidth
+              name="companyName" type="text" label="Название компании" className={classes.textField}
+              value={newCP.companyName} onChange={handleChange} fullWidth
             />
             <TextField
-              name="secondName" type="text" label="Фамилия" className={classes.textField}
-              value={newUP.secondName} onChange={handleChange} fullWidth
+              name="owner" type="text" label="Владелец аккаунта" className={classes.textField} disabled
+              value={newCP.owner} onChange={() => { }} fullWidth
             />
             <TextField
-              name="middleName" type="text" label="Отчество" className={classes.textField}
-              value={newUP.middleName} onChange={handleChange} fullWidth
-            />
-            <TextField
-              name="email" type="email" label="Email" className={classes.textField}
-              value={newUP.email} onChange={() => { }} fullWidth
+              name="createdAt" type="text" label="Дата регистраци" className={classes.textField} disabled
+              value={newCP.createdAt} onChange={() => { }} fullWidth
             />
 
           </form>
@@ -131,16 +125,16 @@ const ProfielUserEdit = ({classes, open, onClose, userProfile, setUserDetails}) 
   );
 }
 
-ProfielUserEdit.propTypes = {
-  setUserDetails: pt.func.isRequired,
+ProfielCompanyEdit.propTypes = {
+  setCompanyDetails: pt.func.isRequired,
+  companyProfile: pt.object,
   open: pt.bool.isRequired,
   onClose: pt.func.isRequired,
   classes: pt.object.isRequired,
-  userProfile: pt.object,
 };
 
 const mapStateToProps = (state) => ({
-  userProfile: state.user.userProfile,
+  companyProfile: state.user.companyProfile,
 });
 
-export default connect(mapStateToProps, {setUserDetails})(withStyles(styles)(ProfielUserEdit));
+export default connect(mapStateToProps, {setCompanyDetails})(withStyles(styles)(ProfielCompanyEdit));

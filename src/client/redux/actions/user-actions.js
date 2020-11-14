@@ -159,11 +159,40 @@ const setAuthorizationHeader = (token) => {
 
 export const setUserDetails = (userProfile) => (dispatch) => {
   console.log(`Action: `, userProfile);
-  // dispatch({type: userActionType.LOADING_USER});
-  // return axios
-  //   .post(`/user`, userProfile)
-  //   .then(() => {
-  //     dispatch(getUserData());
-  //   })
-  //   .catch((err) => console.log(err));
+  dispatch({type: userActionType.LOADING_USER});
+  return axios
+    .post(`/user`, userProfile)
+    .then(() => {
+      dispatch({
+        type: userActionType.SET_USER,
+        payload: userProfile,
+      });
+    })
+    .catch((err) => {
+      console.log(err);
+      dispatch({
+        type: uiActionType.SET_ERRORS,
+        payload: err.response.data,
+      });
+    });
+};
+
+export const setCompanyDetails = (companyProfile) => (dispatch) => {
+  console.log(`Action: `, companyProfile);
+  dispatch({type: userActionType.LOADING_USER});
+  return axios
+    .post(`/company`, companyProfile)
+    .then(() => {
+      dispatch({
+        type: userActionType.SET_COMPANY,
+        payload: companyProfile,
+      });
+    })
+    .catch((err) => {
+      console.log(err);
+      dispatch({
+        type: uiActionType.SET_ERRORS,
+        payload: err.response.data,
+      });
+    });
 };

@@ -8,11 +8,14 @@ import MenuItem from '@material-ui/core/MenuItem';
 import Menu from '@material-ui/core/Menu';
 import { makeStyles } from '@material-ui/core/styles';
 // Icons
+import ListItemIcon from '@material-ui/core/ListItemIcon';
+import ListItemText from '@material-ui/core/ListItemText';
 import AccountCircle from '@material-ui/icons/AccountCircle';
 import KeyboardReturn from '@material-ui/icons/KeyboardReturn';
 import HomeIcon from '@material-ui/icons/Home';
 // Components
 import ProfielUserEdit from '../profile-user/profile-user-edit';
+import ProfielCompanyEdit from '../profile-company/profile-company-edit';
 
 
 const useStyles = makeStyles((theme) => {
@@ -26,7 +29,6 @@ const useStyles = makeStyles((theme) => {
   
 
 
-
 const Profile = ({open, onClose, anchorEl, profileMenuId, logoutUser}) => {
   const classes = useStyles();
   const [userProfile, setUserProfile] = useState(false);
@@ -36,6 +38,15 @@ const Profile = ({open, onClose, anchorEl, profileMenuId, logoutUser}) => {
   };
   const handleUserProfileClose = () => setUserProfile(false);
 
+  const [companyProfile, setCompanyProfile] = useState(false);
+  const handleCompanyProfileOpen = () => {
+    onClose();
+    setCompanyProfile(true);
+  };
+  const handleCompanyProfileClose = () => setCompanyProfile(false);
+
+  
+  
   return (
     <Menu
       anchorEl={anchorEl}
@@ -46,22 +57,30 @@ const Profile = ({open, onClose, anchorEl, profileMenuId, logoutUser}) => {
       open={open}
       onClose={onClose}
     >
-      <MenuItem onClick={onClose}>
-        <HomeIcon />
-        <div>Компания</div>
+      <MenuItem onClick={handleCompanyProfileOpen}>
+        <ListItemIcon>
+          <HomeIcon fontSize="small" />
+        </ListItemIcon>
+        <ListItemText primary="Компания" />
       </MenuItem>
 
+      <ProfielCompanyEdit open={companyProfile} onClose={handleCompanyProfileClose}/>
+      
       <MenuItem onClick={handleUserProfileOpen}>
-        <AccountCircle />
-        <div>Ваш профиль</div>
+        <ListItemIcon>
+          <AccountCircle fontSize="small" />
+        </ListItemIcon>
+        <ListItemText primary="Ваш профиль" />
       </MenuItem>
 
       <ProfielUserEdit open={userProfile} onClose={handleUserProfileClose}/>
 
       <div className={classes.line}></div>
       <MenuItem onClick={logoutUser}>
-        <KeyboardReturn />
-        <div>Выйти</div>
+        <ListItemIcon>
+          <KeyboardReturn fontSize="small" />
+        </ListItemIcon>
+        <ListItemText primary="Выйти" />
       </MenuItem>
     </Menu>
   )

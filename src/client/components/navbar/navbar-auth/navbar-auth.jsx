@@ -18,7 +18,7 @@ import MailIcon from '@material-ui/icons/Mail';
 import NotificationsIcon from '@material-ui/icons/Notifications';
 import MoreIcon from '@material-ui/icons/MoreVert';
 // Components
-import MyButton from '../../button/button';
+import MyButton from '../../buttons/button-icon/button-icon';
 import Profile from '../../profiles/profile-main/profile';
 
 
