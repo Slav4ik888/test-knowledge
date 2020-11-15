@@ -1,4 +1,6 @@
-import {userActionType, uiActionType} from '../types';
+import { userActionType, uiActionType, dataActionType } from '../types';
+import { getAllUsersData } from './data-actions';
+
 import axios from 'axios';
 // const api = axios.create({
 //   baseURL: `https://4.react.pages.academy/guess-melody`,
@@ -65,7 +67,8 @@ export const loginUser = (userData, history) => (dispatch) => {
     .then((res) => {
       // console.log(res.data.token);
       setAuthorizationHeader(res.data.token);
-      dispatch(getUserAndCompanyData());
+      dispatch(getUserAndCompanyData()); // Загружаем данные по user & company
+      dispatch(getAllUsersData()); // Загружаем данные по всем пользователям 
       dispatch({type: uiActionType.CLEAR_ERRORS});
       history.push(route.HOME);
     })
@@ -82,6 +85,7 @@ export const logoutUser = () => (dispatch) => {
   localStorage.removeItem(`TKidToken`);
   delete axios.defaults.headers.common[`Authorization`];
   dispatch({type: userActionType.SET_UNAUTHENTICATED});
+  dispatch({type: dataActionType.SET_INITIAL}); // Очищаем данные в data-reducer
 };
 
 // Получение данных о пользователе
@@ -157,8 +161,8 @@ const setAuthorizationHeader = (token) => {
 //     .catch((err) => console.log(err));
 // };
 
-// Сохраняем данные о пользователе
-export const setUserDetails = (userProfile) => (dispatch) => {
+// Обновляем данные о пользователе
+export const updateUserDetails = (userProfile) => (dispatch) => {
   console.log('userProfile: ', userProfile);
   dispatch({type: userActionType.LOADING_USER});
   return axios
@@ -178,8 +182,8 @@ export const setUserDetails = (userProfile) => (dispatch) => {
     });
 };
 
-// Сохраняем данные о компании
-export const setCompanyDetails = (companyProfile) => (dispatch) => {
+// Обновляем данные о компании
+export const updateCompanyDetails = (companyProfile) => (dispatch) => {
   dispatch({type: userActionType.LOADING_USER});
   return axios
     .post(`/company`, companyProfile)
@@ -195,6 +199,24 @@ export const setCompanyDetails = (companyProfile) => (dispatch) => {
         type: uiActionType.SET_ERRORS,
         payload: err.response.data,
       });
+    });
+};
+
+// Обновляем positions
+export const updatePositions = (newPositions) => (dispatch) => {
+  dispatch({ type: uiActionType.LOADING_UI });
+  return axios.post(`/positions`, newPositions)
+    .then((res) => {
+      console.log(`Обновлённые по всем должностям: `, res.data);
+      dispatch({ type: userActionType.SET_COMPANY, payload: res.data });
+      dispatch({ type: uiActionType.CLEAR_ERRORS });
+    })
+    .catch((err) => {
+      console.log(err);
+      dispatch({
+        type: uiActionType.SET_ERRORS,
+        payload: err.data,
+      })
     });
 };
 
@@ -218,6 +240,7 @@ export const addUser = (email) => (dispatch) => {
       // });
       dispatch({ type: uiActionType.SET_MESSAGES, payload: message });
       dispatch({ type: uiActionType.CLEAR_ERRORS });
+      dispatch(getAllUsersData());
     })
     .catch((err) => {
       console.log(err);

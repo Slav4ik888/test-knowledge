@@ -20,28 +20,10 @@ exports.getAllUsersData = (req, res) => {
     })
 };
 
-// Получаем список должностей
-exports.getPositions = (req, res) => {
-  db
-    .collection(`companies`)
-    .doc(`${req.user.companyId}/positions`)
-    .get()
-    .then(data => {
-      let positions = [];
-      data.forEach(doc => {
-        positions.push({
-          id: doc.data().id,
-          order: doc.data().order,
-          title: doc.data().title,
-        });
-      });
-      return res.json(positions);
-    })
-    .catch(err => {
-      console.error(err);
-      return res.status(500).json({ error: err.code });
-    });
-};
+
+
+
+
 
 exports.postOneScream = (req, res) => {
   const newScream = {

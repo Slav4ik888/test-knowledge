@@ -4,12 +4,13 @@ const firebaseConfig = require('../firebase/config');
 
 const { uuid } = require("uuidv4");
 const { role } = require('../../types');
+const { positions } = require('../utils/templates');
 
 const { validationCompanyName, validationSignupData, reduceCompanyDetails } = require('../utils/validators');
 
 // Create new company
 exports.signupCompany = (req, res) => {
-  let newCopmany = {
+  let newCompany = {
     companyName: req.body.companyName,
   };
   let newUser = {
@@ -18,7 +19,7 @@ exports.signupCompany = (req, res) => {
     confirmPassword: req.body.confirmPassword,
   }
   // validate data
-  const { validCompany, errorsCompany } = validationCompanyName(newCopmany.companyName);
+  const { validCompany, errorsCompany } = validationCompanyName(newCompany.companyName);
   if (!validCompany) return res.status(400).json(errorsCompany);
 
   const { valid, errors } = validationSignupData(newUser);
@@ -50,15 +51,16 @@ exports.signupCompany = (req, res) => {
     .then(token => {
       userToken = token;
       // Получили токен, сохраняем компанию
-      Object.assign(newCopmany, {
+      Object.assign(newCompany, {
         owner: userId,
         imageUrl: `https://firebasestorage.googleapis.com/v0/b/${firebaseConfig.storageBucket}/o/${moImgCompany}?alt=media`,
         createdAt: new Date().toISOString(),
+        positions,
       });
 
       return db
         .collection(`companies`)
-        .add(newCopmany)
+        .add(newCompany)
     })
     .then((doc) => {
       console.log('docId: ', doc.id);
@@ -72,7 +74,7 @@ exports.signupCompany = (req, res) => {
         userId,
         role: role.OWNER,
         companyId: doc.id, 
-        positions: [`не указана`],
+        positions: [`4`],
       });
       delete newUser.password;
       delete newUser.confirmPassword;
@@ -82,7 +84,7 @@ exports.signupCompany = (req, res) => {
         .set(newUser);
     })
     .then(() => {
-      return res.status(201).json({ userToken, newUser, newUser });
+      return res.status(201).json({ userToken, newUser, newCompany });
     })
     .catch(err => {
       console.error(err);
@@ -150,8 +152,8 @@ exports.getUserAndCompanyData = (req, res) => {
 // компани, чтобы изменять данные мог только владелец
 
 
-// Set company details
-exports.setCompanyDetails = (req, res) => {
+// Update company details
+exports.updateCompanyDetails = (req, res) => {
   let companyDetails = reduceCompanyDetails(req.body);
 
   db
@@ -166,8 +168,12 @@ exports.setCompanyDetails = (req, res) => {
       // Те значения которые не меняются, оставляем как были
       companyDetails.createdAt = data.createdAt;
       companyDetails.owner = data.owner;
+      companyDetails.positions = data.positions;
+
   
-      db.doc(`/companies/${req.user.companyId}`).update(companyDetails)
+      db
+        .doc(`/companies/${req.user.companyId}`)
+        .update(companyDetails)
         .then(() => {
           return res.json({ message: `Данные компании успешно добавлены` });
         })
@@ -176,4 +182,42 @@ exports.setCompanyDetails = (req, res) => {
           return res.status(500).json({ error: err.code });
         })
     })
+};
+
+// Обновляем список должностей
+exports.updatePositions = (req, res) => {
+  let companyDetails = reduceCompanyDetails(req.body);
+
+  db
+    .doc(`/companies/${req.user.companyId}`)
+    .get()
+    .then(doc => {
+      if (doc.exists) {
+        return doc.data();
+      }
+    })
+    .then((data) => {
+      // Те значения которые не меняются, оставляем как были
+      companyDetails.createdAt = data.createdAt;
+      companyDetails.owner = data.owner;
+
+      db
+        .doc(`/companies/${req.user.companyId}`)
+        .update(companyDetails)
+        .then((data) => {
+          let positions = [];
+          data.forEach(doc => {
+            positions.push({
+              id: doc.data().id,
+              order: doc.data().order,
+              title: doc.data().title,
+            });
+          });
+          return res.json({ positions, message: `Данные компании успешно добавлены` });
+        })
+    })
+    .catch(err => {
+      console.error(err);
+      return res.status(500).json({ error: err.code });
+    });
 };

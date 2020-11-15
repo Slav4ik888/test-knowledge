@@ -3,7 +3,7 @@ import pt from 'prop-types';
 import withStyles from '@material-ui/core/styles/withStyles';
 // Readux Stuff
 import {connect} from 'react-redux';
-import {setUserDetails} from '../../../redux/actions/user-actions';
+import {updateUserDetails} from '../../../redux/actions/user-actions';
 // MUI Stuff
 import Button from '@material-ui/core/Button';
 import TextField from '@material-ui/core/TextField';
@@ -56,7 +56,7 @@ const styles = {
   }
 };
 
-const ProfielUserEdit = ({classes, open, onClose, userProfile, setUserDetails}) => {
+const ProfielUserEdit = ({classes, open, onClose, userProfile, updateUserDetails}) => {
 
   if (!open) {
     return null;
@@ -75,7 +75,7 @@ const ProfielUserEdit = ({classes, open, onClose, userProfile, setUserDetails}) 
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    setUserDetails(newUP);
+    updateUserDetails(newUP);
     onClose();
   };
 
@@ -134,7 +134,7 @@ const ProfielUserEdit = ({classes, open, onClose, userProfile, setUserDetails}) 
 }
 
 ProfielUserEdit.propTypes = {
-  setUserDetails: pt.func.isRequired,
+  updateUserDetails: pt.func.isRequired,
   open: pt.bool.isRequired,
   onClose: pt.func.isRequired,
   classes: pt.object.isRequired,
@@ -145,4 +145,4 @@ const mapStateToProps = (state) => ({
   userProfile: state.user.userProfile,
 });
 
-export default connect(mapStateToProps, {setUserDetails})(withStyles(styles)(ProfielUserEdit));
+export default connect(mapStateToProps, {updateUserDetails})(withStyles(styles)(ProfielUserEdit));

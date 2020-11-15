@@ -19,5 +19,6 @@ export const uiActionType = {
 // Data reducer types
 export const dataActionType = {
   LOADING_DATA: `LOADING_DATA`,
+  SET_INITIAL: `SET_INITIAL`,
   SET_USERS: `SET_USERS`,
 };

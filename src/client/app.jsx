@@ -1,14 +1,15 @@
 import React from 'react';
-import {BrowserRouter as Router, Route, Switch} from 'react-router-dom';
+import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
 import route from './utils/routes';
 import jwtDecode from 'jwt-decode';
 import axios from 'axios';
 // Redux
 import store from './redux/store';
-import {logoutUser, getUserAndCompanyData} from './redux/actions/user-actions';
-import {userActionType} from './redux/types';
+import { logoutUser, getUserAndCompanyData } from './redux/actions/user-actions';
+import { getAllUsersData } from './redux/actions/data-actions';
+import { userActionType } from './redux/types';
 // MUI Stuff
-import {ThemeProvider} from '@material-ui/core/styles';
+import { ThemeProvider } from '@material-ui/core/styles';
 import createMuiTheme from '@material-ui/core/styles/createMuiTheme';
 import themeFile from './utils/theme';
 // Components
@@ -20,8 +21,6 @@ import SignupCompany from './pages/signup-company';
 import Login from './pages/login';
 
 
-const theme = createMuiTheme(themeFile);
-  
 const token = localStorage.TKidToken;
 if (token && !token.includes(`Bearer undefined`)) {
   // console.log(`token: `, token);
@@ -33,11 +32,14 @@ if (token && !token.includes(`Bearer undefined`)) {
     store.dispatch({type: userActionType.SET_AUTHENTICATED});
     axios.defaults.headers.common[`Authorization`] = token;
     store.dispatch(getUserAndCompanyData());
+    store.dispatch(getAllUsersData());// Загружаем данные обо всех пользователях
   }
-}
+};
+
+const theme = createMuiTheme(themeFile);
+
 
 const App = () => {
-
   return (
     <ThemeProvider theme={theme}>
       <Router>

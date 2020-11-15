@@ -3,7 +3,7 @@ import pt from 'prop-types';
 import withStyles from '@material-ui/core/styles/withStyles';
 // Readux Stuff
 import {connect} from 'react-redux';
-import {setCompanyDetails} from '../../../redux/actions/user-actions';
+import {updateCompanyDetails} from '../../../redux/actions/user-actions';
 // MUI Stuff
 import Button from '@material-ui/core/Button';
 import TextField from '@material-ui/core/TextField';
@@ -56,7 +56,7 @@ const styles = {
   }
 };
 
-const ProfielCompanyEdit = ({classes, open, onClose, companyProfile, setCompanyDetails}) => {
+const ProfielCompanyEdit = ({classes, open, onClose, companyProfile, updateCompanyDetails}) => {
 
   if (!open) {
     return null;
@@ -75,7 +75,7 @@ const ProfielCompanyEdit = ({classes, open, onClose, companyProfile, setCompanyD
   const handleSubmit = (e) => {
     e.preventDefault();
     onClose();
-    setCompanyDetails(newCP);
+    updateCompanyDetails(newCP);
   };
 
 
@@ -127,7 +127,7 @@ const ProfielCompanyEdit = ({classes, open, onClose, companyProfile, setCompanyD
 }
 
 ProfielCompanyEdit.propTypes = {
-  setCompanyDetails: pt.func.isRequired,
+  updateCompanyDetails: pt.func.isRequired,
   companyProfile: pt.object,
   open: pt.bool.isRequired,
   onClose: pt.func.isRequired,
@@ -138,4 +138,4 @@ const mapStateToProps = (state) => ({
   companyProfile: state.user.companyProfile,
 });
 
-export default connect(mapStateToProps, {setCompanyDetails})(withStyles(styles)(ProfielCompanyEdit));
+export default connect(mapStateToProps, {updateCompanyDetails})(withStyles(styles)(ProfielCompanyEdit));

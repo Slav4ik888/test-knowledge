@@ -33,7 +33,7 @@ exports.addUser = (req, res) => {
         secondName: ``,
         middleName: ``,
         userId: data.user.uid,
-        positions: [`не указана`],
+        positions: [`4`],
         role: role.USER,
         companyId: newUser.companyId,
       };
@@ -105,7 +105,7 @@ exports.deleteUser = (req, res) => {
 };
 
 // Get own user details
-exports.getAuthenticatedUser = (req, res) => {
+exports.getUserDetails = (req, res) => {
   db
     .doc(`/companies/${req.user.companyId}/users/${req.user.email}`)
     .get()
@@ -123,8 +123,8 @@ exports.getAuthenticatedUser = (req, res) => {
     })
 };
 
-// Set user details
-exports.setUserDetails = (req, res) => {
+// Update user details
+exports.updateUserDetails = (req, res) => {
   let userDetails = reduceUserDetails(req.body);
 
   // Те значения которые не меняются, оставляем как были
@@ -136,7 +136,9 @@ exports.setUserDetails = (req, res) => {
   userDetails.role = req.user.role;
   console.log('userDetails: ', userDetails);
 
-  db.doc(`/companies/${req.user.companyId}/users/${req.user.email}`).update(userDetails)
+  db
+    .doc(`/companies/${req.user.companyId}/users/${req.user.email}`)
+    .update(userDetails)
     .then(() => {
       return res.json({ message: `Данные пользователя успешно добавлены` });
     })

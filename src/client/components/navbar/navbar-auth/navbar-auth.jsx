@@ -1,7 +1,8 @@
 import React, {useState} from 'react';
-import pt from 'prop-types';
+// import pt from 'prop-types';
 // Redux Stuff
-import {connect} from 'react-redux';
+// import { connect } from 'react-redux';
+// import { getPositions } from '../../../redux/actions/data-actions';
 // MUI Stuff
 import { fade, makeStyles } from '@material-ui/core/styles';
 import IconButton from '@material-ui/core/IconButton';
@@ -9,8 +10,6 @@ import Typography from '@material-ui/core/Typography';
 import Tooltip from '@material-ui/core/Tooltip';
 import InputBase from '@material-ui/core/InputBase';
 import Badge from '@material-ui/core/Badge';
-import MenuItem from '@material-ui/core/MenuItem';
-import Menu from '@material-ui/core/Menu';
 import Button from '@material-ui/core/Button';
 // Icons
 import MenuIcon from '@material-ui/icons/Menu';
@@ -23,6 +22,7 @@ import MoreIcon from '@material-ui/icons/MoreVert';
 import MyButton from '../../buttons/button-icon/button-icon';
 import ProfilesMenu from '../../profiles/profiles-menu/profiles-menu';
 import UsersMenu from '../../users/users-menu/users-menu';
+import PosMain from '../../positions/pos-main/pos-main';
 
 
 const useStyles = makeStyles((theme) => ({
@@ -101,6 +101,10 @@ const NavbarAuth = () => {
   const handleUserMenuOpen = (event) => setAnchorUsr(event.currentTarget);
   const handleUserMenuClose = () => setAnchorUsr(null);
 
+  const [posMenu, setPosMenu] = useState(false);
+  const handlePosMenuOpen = () => setPosMenu(true);
+  const handlePosMenuClose = () => setPosMenu(false);
+  
   // const renderMenu = (
   //   <Menu
   //     anchorEl={anchorEl}
@@ -147,10 +151,13 @@ const NavbarAuth = () => {
       </div>
       {/* <Tooltip title="Управление пользователями" placement="bottom" arrow> */}
       {/* variant="contained" color="primary" */}
-        <Button onClick={handleUserMenuOpen} >
-          Сотрудники
-        </Button>
+      <Button onClick={handleUserMenuOpen} >
+        Сотрудники
+      </Button>
       {/* </Tooltip> */}
+      <Button onClick={handlePosMenuOpen} >
+        Должности
+      </Button>
       <div className={classes.grow} />
 
       <div className={classes.sectionUserBlock}>
@@ -188,17 +195,21 @@ const NavbarAuth = () => {
         usersMenuId={usersMenuId}
         anchorEl={anchorUsr}
       />
+      <PosMain
+        open={posMenu}
+        onClose={handlePosMenuClose}
+      />
       {/* {renderMenu} */}
     </>
   );
 };
 
 // NavbarAuth.propTypes = {
-//   authenticated: pt.bool.isRequired,
+//   getPositions: pt.func.isRequired,
 // }
 // const mapStateToProps = (state) => ({
-//   authenticated: state.user.authenticated,
+//   positions: state.data.positions,
 // });
 
-// export default connect(mapStateToProps)(NavbarAuth);
+// export default connect(mapStateToProps, { getPositions })(NavbarAuth);
 export default NavbarAuth;

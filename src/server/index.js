@@ -6,9 +6,10 @@ const FBAuth = require('./firebase/fb-auth');
 
 // const os = require('os');
 
-const { addUser, login, getAuthenticatedUser, setUserDetails } = require('./handlers/users');
-const { signupCompany, getCompanyData, getUserAndCompanyData, setCompanyDetails } = require('./handlers/company');
-const { getAllUsersData, getPositions } = require('./handlers/data');
+const { addUser, login, getUserDetails, updateUserDetails } = require('./handlers/users');
+const { signupCompany, getCompanyData, getUserAndCompanyData, updateCompanyDetails,
+updatePositions } = require('./handlers/company');
+const { getAllUsersData } = require('./handlers/data');
 
 app.use(bodyParser.json());
 
@@ -18,20 +19,19 @@ app.post(`/api/login`, login);
 app.post(`/api/addUser`, FBAuth, addUser);
 
 // get data user and company routes 
-app.get(`/api/company`, FBAuth, getCompanyData);
-app.get(`/api/user`, FBAuth, getAuthenticatedUser);
+app.get(`/api/user`, FBAuth, getUserDetails);
+app.post(`/api/user`, FBAuth, updateUserDetails);
 app.get(`/api/usersData`, FBAuth, getAllUsersData);
-app.get(`/api/positions`, FBAuth, getPositions);
 app.get(`/api/userAndCompany`, FBAuth, getUserAndCompanyData);
 
 // post data user and company routes
-app.post(`/api/user`, FBAuth, setUserDetails);
-app.post(`/api/company`, FBAuth, setCompanyDetails);
-
+app.post(`/api/company`, FBAuth, updateCompanyDetails);
+app.get(`/api/company`, FBAuth, getCompanyData);
+app.post(`/api/positions`, FBAuth, updatePositions);
 
 app.use(express.static('dist'));
 // app.get('/api/getUsername', (req, res) => res.send({ username: os.userInfo().username }));
 
 app.listen(process.env.PORT || 8080, () => console.log(`Listening on port ${process.env.PORT || 8080}!`));
 
-// git add . && git commit -m "collection users transfer to company" && git push origin master
+// git add . && git commit -m "pos-main" && git push origin master

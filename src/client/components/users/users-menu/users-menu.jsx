@@ -1,37 +1,19 @@
 import React, {useState} from 'react';
 import pt from 'prop-types';
-// Redux Stuff
-import {connect} from 'react-redux';
-import { getAllUsersData } from '../../../redux/actions/data-actions';
 // MUI Stuff
 import MenuItem from '@material-ui/core/MenuItem';
 import Menu from '@material-ui/core/Menu';
-import { makeStyles } from '@material-ui/core/styles';
 // Icons
 import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListItemText from '@material-ui/core/ListItemText';
-import AccountCircle from '@material-ui/icons/AccountCircle';
-import KeyboardReturn from '@material-ui/icons/KeyboardReturn';
 import AddIcon from '@material-ui/icons/Add';
 import EditIcon from '@material-ui/icons/Edit';
 // Components
 import UserAdd from '../user-add/user-add';
 import UsersChange from '../users-change/users-change';
 
-const useStyles = makeStyles((theme) => {
-  console.log('theme: ', theme);
-  return {
-    line: {
-      borderTop: `1px solid ${theme.palette.primary.dark}`,
-    },
-  }
-});
-  
 
-
-const UsersMenu = ({open, onClose, anchorEl, usersMenuId, users, getAllUsersData}) => {
-  const classes = useStyles();
-
+const UsersMenu = ({open, onClose, anchorEl, usersMenuId}) => {
   const [addUser, setAddUser] = useState(false);
   const handleAddUserOpen = () => {
     onClose();
@@ -41,14 +23,10 @@ const UsersMenu = ({open, onClose, anchorEl, usersMenuId, users, getAllUsersData
 
   const [changeUsers, setChangeUsers] = useState(false);
   const handleChangeUsersOpen = () => {
-    if (!users.length) {
-      getAllUsersData(); // Загружаем данные обо всех пользователях
-    }
     onClose();
     setChangeUsers(true);
   };
   const handleChangeUsersClose = () => setChangeUsers(false);
-
   
   
   return (
@@ -85,16 +63,9 @@ const UsersMenu = ({open, onClose, anchorEl, usersMenuId, users, getAllUsersData
 
 UsersMenu.propTypes = {
   onClose: pt.func.isRequired,
-  getAllUsersData: pt.func.isRequired,
   open: pt.bool.isRequired,
   anchorEl: pt.object,
   usersMenuId: pt.string.isRequired,
-  users: pt.array.isRequired,
 }
 
-const mapStateToProps = (state) => ({
-  authenticated: state.user.authenticated,
-  users: state.data.users,
-});
-
-export default connect(mapStateToProps, {getAllUsersData})(UsersMenu);
+export default UsersMenu;

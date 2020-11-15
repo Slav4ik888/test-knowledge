@@ -54,7 +54,6 @@ const UserAdd = ({ open, onClose, UI: { loading, errors, messages }, addUser, us
   }
   const classes = useStyles();
 
-  console.log(`ДАННЫЕ: `, users);
   const [userSeleted, setUserSelected] = useState(``);
   const [userIdx, setUserIdx] = useState(null);
 
