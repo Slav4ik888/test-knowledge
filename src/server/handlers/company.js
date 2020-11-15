@@ -29,7 +29,10 @@ exports.signupCompany = (req, res) => {
 
   let userToken, userId;
 
-  db.doc(`/users/${newUser.email}`).get()
+  db
+    .collectionGroup(`users`)
+    .where(`email`, `==`, newUser.email)
+    .get()
     .then(doc => {
       if (doc.exists) {
         return res.status(400).json({ email: `Этот email уже занят` });
@@ -58,6 +61,7 @@ exports.signupCompany = (req, res) => {
         .add(newCopmany)
     })
     .then((doc) => {
+      console.log('docId: ', doc.id);
       // Сохраняем данные нового пользователя
       Object.assign(newUser, {
         firstName: ``,
@@ -74,7 +78,7 @@ exports.signupCompany = (req, res) => {
       delete newUser.confirmPassword;
 
       return db
-        .doc(`/users/${newUser.email}`)
+        .doc(`/companies/${newUser.companyId}/users/${newUser.email}`)
         .set(newUser);
     })
     .then(() => {
@@ -114,7 +118,7 @@ exports.getCompanyData = (req, res) => {
 exports.getUserAndCompanyData = (req, res) => {
   let userData, companyData;
   db
-    .doc(`/users/${req.user.email}`)
+    .doc(`/companies/${req.user.companyId}/users/${req.user.email}`)
     .get()
     .then(doc => {
       if (doc.exists) {

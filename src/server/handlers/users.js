@@ -20,7 +20,6 @@ exports.addUser = (req, res) => {
 
   const moImgUser = `no-img-user.png`;
 
-  // validate data
   let userToken, userId;
 
   return auth
@@ -38,7 +37,7 @@ exports.addUser = (req, res) => {
         role: role.USER,
         companyId: newUser.companyId,
       };
-      return db.doc(`/users/${newUser.email}`).set(userCreadantials);
+      return db.doc(`/companies/${newUser.companyId}/users/${newUser.email}`).set(userCreadantials);
     })
     .then(() => {
       return res.status(201).json({message: `Пользователь с email: ${newUser.email} - успешно добавлен!`});
@@ -108,7 +107,7 @@ exports.deleteUser = (req, res) => {
 // Get own user details
 exports.getAuthenticatedUser = (req, res) => {
   db
-    .doc(`/users/${req.user.email}`)
+    .doc(`/companies/${req.user.companyId}/users/${req.user.email}`)
     .get()
     .then(doc => {
       if (doc.exists) {
@@ -137,7 +136,7 @@ exports.setUserDetails = (req, res) => {
   userDetails.role = req.user.role;
   console.log('userDetails: ', userDetails);
 
-  db.doc(`/users/${req.user.email}`).update(userDetails)
+  db.doc(`/companies/${req.user.companyId}/users/${req.user.email}`).update(userDetails)
     .then(() => {
       return res.json({ message: `Данные пользователя успешно добавлены` });
     })
@@ -148,131 +147,126 @@ exports.setUserDetails = (req, res) => {
 };
 
 
-// TODO: Get any user`s details
-exports.getUserDetails = (req, res) => {
-  let userData = {};
+// Get any user`s details
+// exports.getUserDetails = (req, res) => {
+//   let userData = {};
 
-  res.set('Access-Control-Allow-Origin', '*');
-  res.set('Access-Control-Allow-Methods', 'GET, OPTIONS');
-  res.set("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept, Authorization, authorization, X-Custom-Header");
+//   db.doc(`/users/${req.params.handle}`).get()
+//     .then(doc => {
+//       if (doc.exists) {
+//         userData.user = doc.data();
+//         return db
+//           .collection(`screams`)
+//           .where(`userHandle`, `==`, req.params.handle)
+//           .orderBy(`createdAt`, `desc`)
+//           .get();
+//       } else {
+//         return res.status(404).json({ error: `Запрашиваемый пользователь отсутствует` });
+//       }
+//     })
+//     .then(data => {
+//       userData.screams = [];
+//       data.forEach(doc => {
+//         userData.screams.push({
+//           body: doc.data().body,
+//           userHandle: doc.data().userHandle,
+//           createdAt: doc.data().createdAt,
+//           userImage: doc.data().userImage,
+//           likeCount: doc.data().likeCount,
+//           commentCount: doc.data().commentCount,
+//           screamId: doc.id,
+//         });
+//       });
+//       return res.json(userData);
+//     })
+//     .catch(err => {
+//       console.error(err);
+//       return res.status(500).json({ error: err.code });
+//     });
+// };
 
+// // Mark
+// exports.markNotificationsRead = (req, res) => {
+//   res.set('Access-Control-Allow-Origin', 'http://localhost:1337');
+//   res.set("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept, Authorization, authorization, X-Custom-Header");
+//   res.set('Access-Control-Allow-Credentials', 'true');
   
-  db.doc(`/users/${req.params.handle}`).get()
-    .then(doc => {
-      if (doc.exists) {
-        userData.user = doc.data();
-        return db
-          .collection(`screams`)
-          .where(`userHandle`, `==`, req.params.handle)
-          .orderBy(`createdAt`, `desc`)
-          .get();
-      } else {
-        return res.status(404).json({ error: `Запрашиваемый пользователь отсутствует` });
-      }
-    })
-    .then(data => {
-      userData.screams = [];
-      data.forEach(doc => {
-        userData.screams.push({
-          body: doc.data().body,
-          userHandle: doc.data().userHandle,
-          createdAt: doc.data().createdAt,
-          userImage: doc.data().userImage,
-          likeCount: doc.data().likeCount,
-          commentCount: doc.data().commentCount,
-          screamId: doc.id,
-        });
-      });
-      return res.json(userData);
-    })
-    .catch(err => {
-      console.error(err);
-      return res.status(500).json({ error: err.code });
-    });
-};
+//   let batch = db.batch();
+//   req.body.forEach(notificationId => {
+//     const notification = db.doc(`/notifications/${notificationId}`);
+//     batch.update(notification, { read: true });
+//   });
 
-// Mark
-exports.markNotificationsRead = (req, res) => {
-  res.set('Access-Control-Allow-Origin', 'http://localhost:1337');
-  res.set("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept, Authorization, authorization, X-Custom-Header");
-  res.set('Access-Control-Allow-Credentials', 'true');
+//   batch.commit()
+//     .then(() => {
+//       return res.json({ message: `Notifications marked read` });
+//     })
+//     .catch(err => {
+//       console.error(err);
+//       return res.status(500).json({ error: err.code });
+//     });
+// };
+
+// // Upload in a profile image of user
+// exports.uploadImage = (req, res) => {
+//   res.set('Access-Control-Allow-Origin', 'http://localhost:1337');
+//   res.set("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept, Authorization, authorization, X-Custom-Header");
+//   res.set('Access-Control-Allow-Credentials', 'true');
+
+//   const BusBoy = require('busboy');
+//   const path = require('path');
+//   const os = require('os');
+//   const fs = require('fs');
+
+//   const busboy = new BusBoy({ headers: req.headers });
+
+//   let imageFileName;
+//   let imageToBeUploaded = {};
   
-  let batch = db.batch();
-  req.body.forEach(notificationId => {
-    const notification = db.doc(`/notifications/${notificationId}`);
-    batch.update(notification, { read: true });
-  });
+//   let generatedToken = uuid();
 
-  batch.commit()
-    .then(() => {
-      return res.json({ message: `Notifications marked read` });
-    })
-    .catch(err => {
-      console.error(err);
-      return res.status(500).json({ error: err.code });
-    });
-};
+//   busboy.on(`file`, (fieldname, file, filename, encoding, mimetype) => {
+//     if (mimetype !== `image/png` && mimetype !== `image/jpeg`) {
+//       return res.status(400).json({ error: `Не подходящий формат файла` });
+//     }
 
-// Upload in a profile image of user
-exports.uploadImage = (req, res) => {
-  res.set('Access-Control-Allow-Origin', 'http://localhost:1337');
-  res.set("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept, Authorization, authorization, X-Custom-Header");
-  res.set('Access-Control-Allow-Credentials', 'true');
+//     // my.image.png => ['my', 'image', 'png']
+//     const imageExtention = filename.split(`.`)[filename.split(`.`).length - 1];
+//     // 93284987928.png
+//     imageFileName = `${Math.round(
+//       Math.random() * 10000000000
+//     ).toString()}.${imageExtention}`;
+//     const filepath = path.join(os.tmpdir(), imageFileName);
+//     imageToBeUploaded = { filepath, mimetype };
 
-  const BusBoy = require('busboy');
-  const path = require('path');
-  const os = require('os');
-  const fs = require('fs');
+//     file.pipe(fs.createWriteStream(filepath));
+//   });
 
-  const busboy = new BusBoy({ headers: req.headers });
-
-  let imageFileName;
-  let imageToBeUploaded = {};
-  
-  let generatedToken = uuid();
-
-  busboy.on(`file`, (fieldname, file, filename, encoding, mimetype) => {
-    if (mimetype !== `image/png` && mimetype !== `image/jpeg`) {
-      return res.status(400).json({ error: `Не подходящий формат файла` });
-    }
-
-    // my.image.png => ['my', 'image', 'png']
-    const imageExtention = filename.split(`.`)[filename.split(`.`).length - 1];
-    // 93284987928.png
-    imageFileName = `${Math.round(
-      Math.random() * 10000000000
-    ).toString()}.${imageExtention}`;
-    const filepath = path.join(os.tmpdir(), imageFileName);
-    imageToBeUploaded = { filepath, mimetype };
-
-    file.pipe(fs.createWriteStream(filepath));
-  });
-
-  busboy.on(`finish`, () => {
-    admin
-      .storage()
-      .bucket()
-      .upload(imageToBeUploaded.filepath, {
-        resumable: false,
-        metadata: {
-          metadata: {
-            contentType: imageToBeUploaded.mimetype,
-            //Generate token to be appended to imageUrl
-            firebaseStorageDownloadTokens: generatedToken,
-          },
-        },
-    })
-      .then(() => {
-        const imageUrl = `https://firebasestorage.googleapis.com/v0/b/${firebaseConfig.storageBucket}/o/${imageFileName}?alt=media&token=${generatedToken}`;
-        return db.doc(`/users/${req.user.handle}`).update({ imageUrl });
-      })
-      .then(() => {
-        return res.json({ message: `Картинка успешно загружена!` });
-      })
-      .catch((err) => {
-        console.error(err);
-        return res.status(500).json({ error: `Не удалось загрузить картинку: ${err.code}` })
-      })
-  });
-  busboy.end(req.rawBody);
-};
+//   busboy.on(`finish`, () => {
+//     admin
+//       .storage()
+//       .bucket()
+//       .upload(imageToBeUploaded.filepath, {
+//         resumable: false,
+//         metadata: {
+//           metadata: {
+//             contentType: imageToBeUploaded.mimetype,
+//             //Generate token to be appended to imageUrl
+//             firebaseStorageDownloadTokens: generatedToken,
+//           },
+//         },
+//     })
+//       .then(() => {
+//         const imageUrl = `https://firebasestorage.googleapis.com/v0/b/${firebaseConfig.storageBucket}/o/${imageFileName}?alt=media&token=${generatedToken}`;
+//         return db.doc(`/users/${req.user.handle}`).update({ imageUrl });
+//       })
+//       .then(() => {
+//         return res.json({ message: `Картинка успешно загружена!` });
+//       })
+//       .catch((err) => {
+//         console.error(err);
+//         return res.status(500).json({ error: `Не удалось загрузить картинку: ${err.code}` })
+//       })
+//   });
+//   busboy.end(req.rawBody);
+// };

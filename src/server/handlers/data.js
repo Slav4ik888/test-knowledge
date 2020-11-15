@@ -6,9 +6,9 @@ const { role } = require('../../types');
 exports.getAllUsersData = (req, res) => {
   let users = [];
   db
+    .collection(`companies`)
+    .doc(`${req.user.companyId}`)
     .collection(`users`)
-    .where(`companyId`, `==`, req.user.companyId)
-    // .doc(`/users/${req.user.email}`)
     .get()
     .then(docs => {
       docs.forEach((doc) => users.push(doc.data()));
@@ -20,25 +20,22 @@ exports.getAllUsersData = (req, res) => {
     })
 };
 
-exports.getAllScreams = (req, res) => {
+// Получаем список должностей
+exports.getPositions = (req, res) => {
   db
-    .collection(`screams`)
-    .orderBy(`createdAt`, `desc`)
+    .collection(`companies`)
+    .doc(`${req.user.companyId}/positions`)
     .get()
     .then(data => {
-      let screams = [];
+      let positions = [];
       data.forEach(doc => {
-        screams.push({
-          screamId: doc.id,
-          body: doc.data().body,
-          userHandle: doc.data().userHandle,
-          createdAt: doc.data().createdAt,
-          commentCount: doc.data().commentCount,
-          likeCount: doc.data().likeCount,
-          imageUrl: doc.data().imageUrl,
+        positions.push({
+          id: doc.data().id,
+          order: doc.data().order,
+          title: doc.data().title,
         });
       });
-      return res.json(screams);
+      return res.json(positions);
     })
     .catch(err => {
       console.error(err);
@@ -47,10 +44,6 @@ exports.getAllScreams = (req, res) => {
 };
 
 exports.postOneScream = (req, res) => {
-  res.set('Access-Control-Allow-Origin', 'http://localhost:1337');
-  res.set("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept, Authorization, authorization, X-Custom-Header");
-  res.set('Access-Control-Allow-Credentials', 'true');
-
   const newScream = {
     body: req.body.body,
     // userHandle: req.body.userHandle, // первоначальные до middleware
@@ -79,9 +72,6 @@ exports.postOneScream = (req, res) => {
 // Fetch one scream
 exports.getScream = (req, res) => {
   let screamData = {};
-  res.set('Access-Control-Allow-Origin', '*');
-  res.set('Access-Control-Allow-Methods', 'GET, POST, OPTIONS');
-  res.set("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept, Authorization, authorization, X-Custom-Header");
   
   db.doc(`/screams/${req.params.screamId}`).get()
     .then(doc => {

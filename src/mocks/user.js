@@ -4,12 +4,15 @@ import { role, authority } from '../types';
 export const positions = [
   {
     id: `ewf43`,
+    order: 10,
     title: `Директор`,
   }, {
     id: `df43`,
+    order: 20,
     title: `Супервайзер`,
   }, {
     id: `gsf43`,
+    order: 30,
     title: `Кладовщик`,
   }
 ];
