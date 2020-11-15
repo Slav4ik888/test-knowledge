@@ -1,26 +1,24 @@
-import {dataActionType} from '../types';
+import {dataActionType, uiActionType} from '../types';
+import axios from 'axios';
+axios.defaults.baseURL = `/api`;
 
-// Get all screams
-// export const getScreams = () => (dispatch) => {
-//   console.log(`11: `, axios.defaults.headers);
-//   dispatch({ type: dataActionType.LOADING_DATA });
-//   return axios.get(`/screams`)
-//     .then((res) => {
-//       console.log(`res: `, res.data);
-//       dispatch({
-//         type: dataActionType.SET_SCREAMS,
-//         payload: res.data,
-//       });
-        
-//     })
-//     .catch((err) => {
-//       console.log(err);
-//       dispatch({
-//         type: dataActionType.SET_SCREAMS,
-//         payload: [],
-//       })
-//     });
-// };
+// Получаем данные всех пользователей
+export const getAllUsersData = () => (dispatch) => {
+  dispatch({ type: uiActionType.LOADING_UI });
+  return axios.get(`/usersData`)
+    .then((res) => {
+      console.log(`Данные по всем пользователям: `, res.data);
+      dispatch({ type: dataActionType.SET_USERS, payload: res.data });
+      dispatch({ type: uiActionType.CLEAR_ERRORS });
+    })
+    .catch((err) => {
+      console.log(err);
+      dispatch({
+        type: uiActionType.SET_ERRORS,
+        payload: err.data,
+      })
+    });
+};
 
 // Like a scream
 // export const likeScream = (screamId) => (dispatch) => {

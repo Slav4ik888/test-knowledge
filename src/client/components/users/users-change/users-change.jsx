@@ -47,16 +47,23 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const UserAdd = ({open, onClose, UI, loading, addUser}) => {
+const UserAdd = ({ open, onClose, UI: { loading, errors, messages }, addUser, users}) => {
 
   if (!open) {
     return null;
   }
   const classes = useStyles();
 
-  const [user, setUser] = React.useState('');
+  console.log(`ДАННЫЕ: `, users);
+  const [userSeleted, setUserSelected] = useState(``);
+  const [userIdx, setUserIdx] = useState(null);
+
   const handleChange = (e) => {
-    setUser(Number(e.target.value) || '');
+    const email = e.target.value;
+    const newIdx = users.findIndex(user => user.email === email);
+    console.log('newIdx: ', newIdx);
+    setUserSelected(email);
+    setUserIdx(newIdx);
   };
   const handleClose = () => onClose();
 
@@ -65,15 +72,11 @@ const UserAdd = ({open, onClose, UI, loading, addUser}) => {
     // addUser(email);
   };
 
-  const { errors } = UI;
-
 
   return (
     <>
-      <Dialog disableBackdropClick disableEscapeKeyDown open={open} onClose={handleClose}>
-        {/* fullWidth
-        maxWidth="sm" */}
-        <DialogTitle>Настройка сотрудников</DialogTitle>
+      <Dialog disableBackdropClick disableEscapeKeyDown open={open} onClose={handleClose} fullWidth maxWidth="sm">
+        <DialogTitle>Настройки</DialogTitle>
         <DialogContent>
           <form className={classes.container}>
             <FormControl className={classes.formControl}>
@@ -81,19 +84,27 @@ const UserAdd = ({open, onClose, UI, loading, addUser}) => {
               <Select
                 labelId="users-label"
                 id="users-select"
-                value={user}
+                value={userSeleted}
                 onChange={handleChange}
                 input={<Input />}
               >
-                <MenuItem value="">
-                  <em>None</em>
-                </MenuItem>
-                <MenuItem value={10}>Ten</MenuItem>
-                <MenuItem value={20}>Twenty</MenuItem>
-                <MenuItem value={30}>Thirty</MenuItem>
+                <MenuItem value=""><em>None</em></MenuItem>
+                {users.map((user) => <MenuItem key={user.email} value={user.email}>{user.email}</MenuItem>)}
               </Select>
             </FormControl>
           </form>
+          {userSeleted &&
+            <>
+              <Typography variant="h5" color="primary" >Занимаемые должности</Typography>
+              {users[userIdx].positions.map((pos) => <Typography key={pos} variant="body1" >{pos}</Typography>)}
+              <Typography variant="h5" color="primary">Статус в приложении</Typography>
+              <Typography variant="body1" >{users[userIdx].role}</Typography>
+              <Button onClick={handleClose}>
+                Удалить пользователя
+              </Button>
+            </>
+          }
+
           {
             errors.general && (
               <Typography variant="body2" className={classes.customError}>
@@ -123,14 +134,14 @@ const UserAdd = ({open, onClose, UI, loading, addUser}) => {
 UserAdd.propTypes = {
   addUser: pt.func.isRequired,
   open: pt.bool.isRequired,
-  loading: pt.bool.isRequired,
   onClose: pt.func.isRequired,
   UI: pt.object.isRequired,
+  users: pt.array.isRequired,
 };
 
 const mapStateToProps = (state) => ({
   UI: state.UI,
-  loading: state.user.loading,
+  users: state.data.users,
 });
 
 export default connect(mapStateToProps, {addUser})(UserAdd);

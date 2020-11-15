@@ -1,9 +1,26 @@
-const {db} = require('../utils/admin');
+const { db } = require('../firebase/admin');
+const { role } = require('../../types');
+
+
+// Получаем данные по всем пользователям компании
+exports.getAllUsersData = (req, res) => {
+  let users = [];
+  db
+    .collection(`users`)
+    .where(`companyId`, `==`, req.user.companyId)
+    // .doc(`/users/${req.user.email}`)
+    .get()
+    .then(docs => {
+      docs.forEach((doc) => users.push(doc.data()));
+      return res.json(users);
+    })
+    .catch(err => {
+      console.error(err);
+      return res.status(500).json({ error: err.code });
+    })
+};
 
 exports.getAllScreams = (req, res) => {
-  res.set('Access-Control-Allow-Origin', 'http://localhost:1337');
-  res.set("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept, Authorization, authorization, X-Custom-Header");
-
   db
     .collection(`screams`)
     .orderBy(`createdAt`, `desc`)

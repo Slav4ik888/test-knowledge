@@ -34,7 +34,7 @@ exports.addUser = (req, res) => {
         secondName: ``,
         middleName: ``,
         userId: data.user.uid,
-        positions: [],
+        positions: [`не указана`],
         role: role.USER,
         companyId: newUser.companyId,
       };
@@ -85,7 +85,6 @@ exports.login = (req, res) => {
       }
     })
 };
-
 
 // TODO: changeOwner
 

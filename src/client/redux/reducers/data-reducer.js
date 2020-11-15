@@ -1,6 +1,18 @@
 import {dataActionType} from '../types';
 import {extend} from '../../utils/utils';
-
+// Должности
+// export const positions = [
+//   {
+//     id: `ewf43`,
+//     title: `Директор`,
+//   }, {
+//     id: `df43`,
+//     title: `Супервайзер`,
+//   }, {
+//     id: `gsf43`,
+//     title: `Кладовщик`,
+//   }
+// ];
 const initialState = {
   users: [],
   positions: [],
@@ -17,9 +29,9 @@ export default function (state = initialState, action) {
         loading: true,
       });
     
-    case dataActionType.SET_SCREAMS:
+    case dataActionType.SET_USERS:
       return extend(state, {
-        screams: action.payload,
+        users: action.payload,
         loading: false,
       });
     

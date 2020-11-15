@@ -2,7 +2,7 @@ import React, {useState} from 'react';
 import pt from 'prop-types';
 // Redux Stuff
 import {connect} from 'react-redux';
-// import { logoutUser } from '../../../redux/actions/user-actions';
+import { getAllUsersData } from '../../../redux/actions/data-actions';
 // MUI Stuff
 import MenuItem from '@material-ui/core/MenuItem';
 import Menu from '@material-ui/core/Menu';
@@ -29,7 +29,7 @@ const useStyles = makeStyles((theme) => {
   
 
 
-const UsersMenu = ({open, onClose, anchorEl, usersMenuId}) => {
+const UsersMenu = ({open, onClose, anchorEl, usersMenuId, users, getAllUsersData}) => {
   const classes = useStyles();
 
   const [addUser, setAddUser] = useState(false);
@@ -41,6 +41,9 @@ const UsersMenu = ({open, onClose, anchorEl, usersMenuId}) => {
 
   const [changeUsers, setChangeUsers] = useState(false);
   const handleChangeUsersOpen = () => {
+    if (!users.length) {
+      getAllUsersData(); // Загружаем данные обо всех пользователях
+    }
     onClose();
     setChangeUsers(true);
   };
@@ -82,13 +85,16 @@ const UsersMenu = ({open, onClose, anchorEl, usersMenuId}) => {
 
 UsersMenu.propTypes = {
   onClose: pt.func.isRequired,
+  getAllUsersData: pt.func.isRequired,
   open: pt.bool.isRequired,
   anchorEl: pt.object,
   usersMenuId: pt.string.isRequired,
+  users: pt.array.isRequired,
 }
 
 const mapStateToProps = (state) => ({
   authenticated: state.user.authenticated,
+  users: state.data.users,
 });
 
-export default connect(mapStateToProps)(UsersMenu);
+export default connect(mapStateToProps, {getAllUsersData})(UsersMenu);

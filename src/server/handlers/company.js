@@ -68,7 +68,7 @@ exports.signupCompany = (req, res) => {
         userId,
         role: role.OWNER,
         companyId: doc.id, 
-        positions: [],
+        positions: [`не указана`],
       });
       delete newUser.password;
       delete newUser.confirmPassword;

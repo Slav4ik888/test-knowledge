@@ -81,4 +81,5 @@ public/bundle.js
 public/bundle.js.map
 archive/
 src/server/firebase/config.js
+src/server/firebase/archive/
 src/server/firebase/service-account-key.json
