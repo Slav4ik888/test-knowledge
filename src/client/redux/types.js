@@ -21,4 +21,5 @@ export const dataActionType = {
   LOADING_DATA: `LOADING_DATA`,
   SET_INITIAL: `SET_INITIAL`,
   SET_USERS: `SET_USERS`,
+  SET_POSITIONS: `SET_POSITIONS`,
 };

@@ -28,8 +28,20 @@ export const signupCompany = (newCompanyData, history) => (dispatch) => {
   return axios.post(`/signupCompany`, newCompanyData)
     .then((res) => {
       setAuthorizationHeader(res.data.userToken);
-      dispatch(getUserData());
-      dispatch(getCompanyData());
+      dispatch({
+        type: userActionType.SET_USER,
+        payload: res.data.newUser,
+      });
+      dispatch({
+        type: userActionType.SET_COMPANY,
+        payload: res.data.newCompany,
+      });
+      dispatch({
+        type: dataActionType.SET_POSITIONS,
+        payload: res.data.newPositions.positions,
+      });
+      // dispatch(getUserData());
+      // dispatch(getCompanyData());
       dispatch({type: uiActionType.CLEAR_ERRORS});
       history.push(route.HOME);
     })
@@ -184,7 +196,7 @@ export const updateUserDetails = (userProfile) => (dispatch) => {
 
 // Обновляем данные о компании
 export const updateCompanyDetails = (companyProfile) => (dispatch) => {
-  dispatch({type: userActionType.LOADING_USER});
+  dispatch({ type: userActionType.LOADING_USER });
   return axios
     .post(`/company`, companyProfile)
     .then(() => {
@@ -199,24 +211,6 @@ export const updateCompanyDetails = (companyProfile) => (dispatch) => {
         type: uiActionType.SET_ERRORS,
         payload: err.response.data,
       });
-    });
-};
-
-// Обновляем positions
-export const updatePositions = (newPositions) => (dispatch) => {
-  dispatch({ type: uiActionType.LOADING_UI });
-  return axios.post(`/positions`, newPositions)
-    .then((res) => {
-      console.log(`Обновлённые по всем должностям: `, res.data);
-      dispatch({ type: userActionType.SET_COMPANY, payload: res.data });
-      dispatch({ type: uiActionType.CLEAR_ERRORS });
-    })
-    .catch((err) => {
-      console.log(err);
-      dispatch({
-        type: uiActionType.SET_ERRORS,
-        payload: err.data,
-      })
     });
 };
 

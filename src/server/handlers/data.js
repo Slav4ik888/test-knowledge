@@ -6,11 +6,12 @@ const { role } = require('../../types');
 exports.getAllUsersData = (req, res) => {
   let users = [];
   db
-    .collection(`companies`)
+    .collection(`users`)
     .doc(`${req.user.companyId}`)
     .collection(`users`)
     .get()
     .then(docs => {
+      console.log(users);
       docs.forEach((doc) => users.push(doc.data()));
       return res.json(users);
     })

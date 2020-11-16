@@ -20,8 +20,6 @@ exports.addUser = (req, res) => {
 
   const moImgUser = `no-img-user.png`;
 
-  let userToken, userId;
-
   return auth
     .createUserWithEmailAndPassword(newUser.email, newUser.password)
     .then(data => {
@@ -33,11 +31,11 @@ exports.addUser = (req, res) => {
         secondName: ``,
         middleName: ``,
         userId: data.user.uid,
-        positions: [`4`],
+        positions: [],
         role: role.USER,
         companyId: newUser.companyId,
       };
-      return db.doc(`/companies/${newUser.companyId}/users/${newUser.email}`).set(userCreadantials);
+      return db.doc(`/users/${newUser.companyId}/users/${newUser.email}`).set(userCreadantials);
     })
     .then(() => {
       return res.status(201).json({message: `Пользователь с email: ${newUser.email} - успешно добавлен!`});
@@ -105,9 +103,9 @@ exports.deleteUser = (req, res) => {
 };
 
 // Get own user details
-exports.getUserDetails = (req, res) => {
+exports.getUserData = (req, res) => {
   db
-    .doc(`/companies/${req.user.companyId}/users/${req.user.email}`)
+    .doc(`users/${req.user.companyId}/users/${req.user.email}`)
     .get()
     .then(doc => {
       if (doc.exists) {
@@ -124,7 +122,7 @@ exports.getUserDetails = (req, res) => {
 };
 
 // Update user details
-exports.updateUserDetails = (req, res) => {
+exports.updateUserData = (req, res) => {
   let userDetails = reduceUserDetails(req.body);
 
   // Те значения которые не меняются, оставляем как были
@@ -137,7 +135,7 @@ exports.updateUserDetails = (req, res) => {
   console.log('userDetails: ', userDetails);
 
   db
-    .doc(`/companies/${req.user.companyId}/users/${req.user.email}`)
+    .doc(`users/${req.user.companyId}/users/${req.user.email}`)
     .update(userDetails)
     .then(() => {
       return res.json({ message: `Данные пользователя успешно добавлены` });

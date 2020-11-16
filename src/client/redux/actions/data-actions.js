@@ -20,6 +20,28 @@ export const getAllUsersData = () => (dispatch) => {
     });
 };
 
+// Обновляем positions
+export const updatePositions = (newPositions) => (dispatch) => {
+  dispatch({ type: uiActionType.LOADING_UI });
+  return axios.post(`/positions`, newPositions)
+    .then((res) => {
+      console.log(`Обновлённые positions: `, res.data);
+      dispatch({
+        type: dataActionType.SET_POSITIONS,
+        payload: res.data.positions,
+      })
+      dispatch({ type: uiActionType.CLEAR_ERRORS });
+    })
+    .catch((err) => {
+      console.log(err);
+      dispatch({
+        type: uiActionType.SET_ERRORS,
+        payload: err.data,
+      })
+    });
+};
+
+
 // Like a scream
 // export const likeScream = (screamId) => (dispatch) => {
 //   return axios.get(`/scream/${screamId}/like`)

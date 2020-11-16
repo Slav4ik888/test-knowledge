@@ -1,15 +1,19 @@
-const { admin, db } = require('../firebase/admin');
+const { db } = require('../firebase/admin');
 const { auth } = require('../firebase/fire');
 const firebaseConfig = require('../firebase/config');
 
 const { uuid } = require("uuidv4");
 const { role } = require('../../types');
 const { positions } = require('../utils/templates');
+const newPositions = {
+  positions,
+};
 
 const { validationCompanyName, validationSignupData, reduceCompanyDetails } = require('../utils/validators');
 
 // Create new company
 exports.signupCompany = (req, res) => {
+  // Сохраняем полученные данные их формы заполненную пользователем при регистрации
   let newCompany = {
     companyName: req.body.companyName,
   };
@@ -28,44 +32,40 @@ exports.signupCompany = (req, res) => {
   const moImgCompany = `no-img-company.svg`;
   const moImgUser = `no-img-user.png`;
 
-  let userToken, userId;
+  let userToken, userId, companyId;
 
-  db
+  db // Проверяем свободен ли email
     .collectionGroup(`users`)
     .where(`email`, `==`, newUser.email)
     .get()
     .then(doc => {
       if (doc.exists) {
         return res.status(400).json({ email: `Этот email уже занят` });
-      } else {
-        // Создаём нового пользователя
-        return auth
-          .createUserWithEmailAndPassword(newUser.email, newUser.password)
+      } else { // Создаём нового пользователя
+        return auth.createUserWithEmailAndPassword(newUser.email, newUser.password)
       }
     })
     .then(data => {
       userId = data.user.uid;
-      // Получаем токен
-      return data.user.getIdToken();
+      return data.user.getIdToken(); // Получаем токен
     })
     .then(token => {
       userToken = token;
-      // Получили токен, сохраняем компанию
-      Object.assign(newCompany, {
+      
+      Object.assign(newCompany, { // Подготавливаем данные компании
         owner: userId,
         imageUrl: `https://firebasestorage.googleapis.com/v0/b/${firebaseConfig.storageBucket}/o/${moImgCompany}?alt=media`,
         createdAt: new Date().toISOString(),
-        positions,
       });
 
-      return db
+      return db // Добавляем компанию в коллекцию
         .collection(`companies`)
-        .add(newCompany)
+        .add(newCompany) 
     })
     .then((doc) => {
-      console.log('docId: ', doc.id);
-      // Сохраняем данные нового пользователя
-      Object.assign(newUser, {
+      companyId = doc.id;
+      
+      Object.assign(newUser, { // Подготавливаем данные нового пользователя
         firstName: ``,
         secondName: ``,
         middleName: ``,
@@ -73,18 +73,27 @@ exports.signupCompany = (req, res) => {
         imageUrl: `https://firebasestorage.googleapis.com/v0/b/${firebaseConfig.storageBucket}/o/${moImgUser}?alt=media`,
         userId,
         role: role.OWNER,
-        companyId: doc.id, 
-        positions: [`4`],
+        companyId, 
+        positions: [],
       });
       delete newUser.password;
       delete newUser.confirmPassword;
 
-      return db
-        .doc(`/companies/${newUser.companyId}/users/${newUser.email}`)
-        .set(newUser);
+      return db // Сохраняем данные по новому пользователю
+        .collection(`users`)
+        .doc(companyId)
+        .collection(`users`)
+        .doc(newUser.email)
+        .set(newUser) 
     })
     .then(() => {
-      return res.status(201).json({ userToken, newUser, newCompany });
+      return db // Сохраняем начальные positions
+        .collection(`positions`)
+        .doc(companyId)
+        .set(newPositions)
+    })
+    .then(() => {
+      return res.status(201).json({ userToken, newUser, newCompany, newPositions });
     })
     .catch(err => {
       console.error(err);
@@ -120,7 +129,7 @@ exports.getCompanyData = (req, res) => {
 exports.getUserAndCompanyData = (req, res) => {
   let userData, companyData;
   db
-    .doc(`/companies/${req.user.companyId}/users/${req.user.email}`)
+    .doc(`users/${req.user.companyId}/users/${req.user.email}`)
     .get()
     .then(doc => {
       if (doc.exists) {
@@ -153,71 +162,19 @@ exports.getUserAndCompanyData = (req, res) => {
 
 
 // Update company details
-exports.updateCompanyDetails = (req, res) => {
+exports.updateCompanyData = (req, res) => {
   let companyDetails = reduceCompanyDetails(req.body);
 
   db
     .doc(`/companies/${req.user.companyId}`)
-    .get()
-    .then(doc => {
-      if (doc.exists) {
-        return doc.data();
-      }
+    .update({
+      companyName: companyDetails.companyName,
     })
-    .then((data) => {
-      // Те значения которые не меняются, оставляем как были
-      companyDetails.createdAt = data.createdAt;
-      companyDetails.owner = data.owner;
-      companyDetails.positions = data.positions;
-
-  
-      db
-        .doc(`/companies/${req.user.companyId}`)
-        .update(companyDetails)
-        .then(() => {
-          return res.json({ message: `Данные компании успешно добавлены` });
-        })
-        .catch(err => {
-          console.error(err);
-          return res.status(500).json({ error: err.code });
-        })
-    })
-};
-
-// Обновляем список должностей
-exports.updatePositions = (req, res) => {
-  let companyDetails = reduceCompanyDetails(req.body);
-
-  db
-    .doc(`/companies/${req.user.companyId}`)
-    .get()
-    .then(doc => {
-      if (doc.exists) {
-        return doc.data();
-      }
-    })
-    .then((data) => {
-      // Те значения которые не меняются, оставляем как были
-      companyDetails.createdAt = data.createdAt;
-      companyDetails.owner = data.owner;
-
-      db
-        .doc(`/companies/${req.user.companyId}`)
-        .update(companyDetails)
-        .then((data) => {
-          let positions = [];
-          data.forEach(doc => {
-            positions.push({
-              id: doc.data().id,
-              order: doc.data().order,
-              title: doc.data().title,
-            });
-          });
-          return res.json({ positions, message: `Данные компании успешно добавлены` });
-        })
+    .then(() => {
+      return res.json({ message: `Данные компании успешно обновлены` });
     })
     .catch(err => {
       console.error(err);
       return res.status(500).json({ error: err.code });
-    });
+    })
 };
