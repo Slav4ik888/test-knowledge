@@ -3,7 +3,7 @@ import pt from 'prop-types';
 import withStyles from '@material-ui/core/styles/withStyles';
 // Readux Stuff
 import {connect} from 'react-redux';
-import {updateUserDetails} from '../../../redux/actions/user-actions';
+import {updateUserDetails, deleteUser} from '../../../redux/actions/user-actions';
 // MUI Stuff
 import Button from '@material-ui/core/Button';
 import TextField from '@material-ui/core/TextField';
@@ -53,10 +53,10 @@ const styles = {
     '& a': {
       margin: `20px 10px`
     }
-  }
+  },
 };
 
-const ProfielUserEdit = ({classes, open, onClose, userProfile, updateUserDetails}) => {
+const ProfielUserEdit = ({classes, open, onClose, userProfile, updateUserDetails, deleteUser}) => {
 
   if (!open) {
     return null;
@@ -79,9 +79,10 @@ const ProfielUserEdit = ({classes, open, onClose, userProfile, updateUserDetails
     onClose();
   };
 
-  // createdAt
-  // positions
-  // role
+  const handleDeleteAccount = () => {
+    deleteUser(userProfile);
+    onClose();
+  };
 
   return (
     <>
@@ -118,6 +119,10 @@ const ProfielUserEdit = ({classes, open, onClose, userProfile, updateUserDetails
               value={newUP.email} onChange={handleChange} fullWidth
             />
 
+            <Button onClick={handleDeleteAccount}>
+              Удалить аккаунт
+            </Button>
+            
           </form>
         </DialogContent>
         <DialogActions>
@@ -135,6 +140,7 @@ const ProfielUserEdit = ({classes, open, onClose, userProfile, updateUserDetails
 
 ProfielUserEdit.propTypes = {
   updateUserDetails: pt.func.isRequired,
+  deleteUser: pt.func.isRequired,
   open: pt.bool.isRequired,
   onClose: pt.func.isRequired,
   classes: pt.object.isRequired,
@@ -145,4 +151,4 @@ const mapStateToProps = (state) => ({
   userProfile: state.user.userProfile,
 });
 
-export default connect(mapStateToProps, {updateUserDetails})(withStyles(styles)(ProfielUserEdit));
+export default connect(mapStateToProps, {updateUserDetails, deleteUser})(withStyles(styles)(ProfielUserEdit));

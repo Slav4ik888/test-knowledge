@@ -54,24 +54,32 @@ export const signupCompany = (newCompanyData, history) => (dispatch) => {
     });
 };
 
+// Приглашаем и регистрируем пользователя для компании
+export const addUser = (email) => (dispatch) => {
+  dispatch({ type: uiActionType.LOADING_UI });
+  const newUser = {
+    email,
+    password: `qazwsx12`,
+    confirmPassword: `qazwsx12`,
+  };
 
-// export const signupUser = (newUserData, history) => (dispatch) => {
-//   dispatch({type: uiActionType.LOADING_UI});
-//   return axios.post(`/signup`, newUserData)
-//     .then((res) => {
-//       setAuthorizationHeader(res.data.userToken);
-//       dispatch(getUserData());
-//       dispatch({type: uiActionType.CLEAR_ERRORS});
-//       history.push(route.HOME);
-//     })
-//     .catch((err) => {
-//       console.log(err.response.data);
-//       dispatch({
-//         type: uiActionType.SET_ERRORS,
-//         payload: err.response.data,
-//       });
-//     });
-// };
+  return axios
+    .post(`/addUser`, newUser)
+    .then((res) => {
+      const { message } = res.data;
+      dispatch({ type: uiActionType.SET_MESSAGES, payload: message });
+      dispatch({ type: uiActionType.CLEAR_ERRORS });
+      dispatch(getAllUsersData());
+    })
+    .catch((err) => {
+      console.log(err);
+      dispatch({
+        type: uiActionType.SET_ERRORS,
+        payload: err.response.data,
+      });
+
+    });
+};
 
 export const loginUser = (userData, history) => (dispatch) => {
   dispatch({type: uiActionType.LOADING_UI});
@@ -153,6 +161,39 @@ export const getUserAndCompanyData = () => (dispatch) => {
     });
 };
 
+// Удаление пользователя
+export const deleteUser = (userProfile) => (dispatch) => {
+  console.log('userProfile: ', userProfile);
+  dispatch({type: userActionType.LOADING_USER});
+  return axios.post(`/deleteUser`, userProfile)
+    .then((res) => {
+      // Определяем это сам пользователь себя удалил или его удалил Владелец
+      switch (res.data.result) {
+        case `user`:
+          console.log(`Удалили user`);
+          dispatch(logoutUser());
+          break;
+        
+        case `worker`:
+          console.log(`Удалили worker`);
+          dispatch({
+            type: dataActionType.DEL_USER,
+            payload: userProfile,
+          });
+          break;
+        
+        default: return;
+      };
+
+    })
+    .catch((err) => {
+      dispatch({
+        type: uiActionType.SET_ERRORS,
+        payload: err.response.data,
+      });
+    });
+};
+
 const setAuthorizationHeader = (token) => {
   const TKidToken = `Bearer ${token}`;
   localStorage.setItem(`TKidToken`, TKidToken);
@@ -214,34 +255,3 @@ export const updateCompanyDetails = (companyProfile) => (dispatch) => {
     });
 };
 
-// Приглашаем и регистрируем пользователя для компании
-export const addUser = (email) => (dispatch) => {
-  dispatch({ type: uiActionType.LOADING_UI });
-  const newUser = {
-    email,
-    password: `qazwsx12`,
-    confirmPassword: `qazwsx12`,
-  };
-
-  return axios
-    .post(`/addUser`, newUser)
-    .then((res) => {
-      const { message } = res.data;
-      // Добавить данные нового пользователя
-      // dispatch({
-      //   type: userActionType.SET_USER,
-      //   payload: userProfile,
-      // });
-      dispatch({ type: uiActionType.SET_MESSAGES, payload: message });
-      dispatch({ type: uiActionType.CLEAR_ERRORS });
-      dispatch(getAllUsersData());
-    })
-    .catch((err) => {
-      console.log(err);
-      dispatch({
-        type: uiActionType.SET_ERRORS,
-        payload: err.response.data,
-      });
-
-    });
-};

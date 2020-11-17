@@ -29,6 +29,13 @@ export default function (state = initialState, action) {
         userProfile: action.payload,
       });
     
+    // case userActionType.DEL_USER:
+    //   return extend(state, {
+    //     authenticated: true,
+    //     loading: false,
+    //     userProfile: action.payload,
+    //   });
+    
     case userActionType.SET_COMPANY:
       return extend(state, {
         companyProfile: action.payload,

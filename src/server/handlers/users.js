@@ -86,15 +86,40 @@ exports.login = (req, res) => {
 // TODO: changeOwner
 
 
-// TODO: Delete user
+// Delete user
 exports.deleteUser = (req, res) => { 
-  admin.auth().deleteUser(req.user.uid)
+  let result;
+
+  if (req.user.role !== `Владелец` && req.user.userId !== req.body.userId) {
+    console.log(`Сотрудник пытается удалить другого сотрудника`);
+    return res.status(400).json({ error: `Извините, у вас недостаточно прав для удаление другого сотрудника` });
+  }
+
+  if (req.user.role === `Владелец` || req.user.userId !== req.body.userId) {
+    console.log(`Владелец, удаляет сотрудника`);
+    result = `worker`;
+  }
+
+  if (req.user.role !== `Владелец` || req.user.userId === req.body.userId) {
+    console.log(`Сотрудник, удаляет себя`);
+    result = `user`;
+  }
+  
+  if (req.user.userId === req.body.userId && req.user.role === `Владелец`) {
+    console.log(`Попытка удалить аккаунт компании`);
+    return res.status(400).json({ error: `Вы являетесь Владельцем аккаунта и не можете удалить себя как пользователя. Вы можете назначить другого пользователя Владельцем, либо удалить аккаунт компании из "Профиля компании"` });
+  }
+
+  
+  admin
+    .auth()
+    .deleteUser(req.body.userId)
     .then(() => {
       console.log('Successfully deleted user');
-      return db.doc(`/users/${req.user.nickname}`).delete();
+      return db.doc(`/users/${req.user.companyId}/users/${req.body.email}`).delete();
     })
     .then(() => {
-      return res.json({ message: `Пользователь успешно удалён` });
+      return res.json({ result, message: `Пользователь ${req.body.email} успешно удалён` });
     })
     .catch((err) => {
       console.log('Error deleting user:', error);
@@ -145,128 +170,3 @@ exports.updateUserData = (req, res) => {
       return res.status(500).json({ error: err.code });
     })
 };
-
-
-// Get any user`s details
-// exports.getUserDetails = (req, res) => {
-//   let userData = {};
-
-//   db.doc(`/users/${req.params.handle}`).get()
-//     .then(doc => {
-//       if (doc.exists) {
-//         userData.user = doc.data();
-//         return db
-//           .collection(`screams`)
-//           .where(`userHandle`, `==`, req.params.handle)
-//           .orderBy(`createdAt`, `desc`)
-//           .get();
-//       } else {
-//         return res.status(404).json({ error: `Запрашиваемый пользователь отсутствует` });
-//       }
-//     })
-//     .then(data => {
-//       userData.screams = [];
-//       data.forEach(doc => {
-//         userData.screams.push({
-//           body: doc.data().body,
-//           userHandle: doc.data().userHandle,
-//           createdAt: doc.data().createdAt,
-//           userImage: doc.data().userImage,
-//           likeCount: doc.data().likeCount,
-//           commentCount: doc.data().commentCount,
-//           screamId: doc.id,
-//         });
-//       });
-//       return res.json(userData);
-//     })
-//     .catch(err => {
-//       console.error(err);
-//       return res.status(500).json({ error: err.code });
-//     });
-// };
-
-// // Mark
-// exports.markNotificationsRead = (req, res) => {
-//   res.set('Access-Control-Allow-Origin', 'http://localhost:1337');
-//   res.set("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept, Authorization, authorization, X-Custom-Header");
-//   res.set('Access-Control-Allow-Credentials', 'true');
-  
-//   let batch = db.batch();
-//   req.body.forEach(notificationId => {
-//     const notification = db.doc(`/notifications/${notificationId}`);
-//     batch.update(notification, { read: true });
-//   });
-
-//   batch.commit()
-//     .then(() => {
-//       return res.json({ message: `Notifications marked read` });
-//     })
-//     .catch(err => {
-//       console.error(err);
-//       return res.status(500).json({ error: err.code });
-//     });
-// };
-
-// // Upload in a profile image of user
-// exports.uploadImage = (req, res) => {
-//   res.set('Access-Control-Allow-Origin', 'http://localhost:1337');
-//   res.set("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept, Authorization, authorization, X-Custom-Header");
-//   res.set('Access-Control-Allow-Credentials', 'true');
-
-//   const BusBoy = require('busboy');
-//   const path = require('path');
-//   const os = require('os');
-//   const fs = require('fs');
-
-//   const busboy = new BusBoy({ headers: req.headers });
-
-//   let imageFileName;
-//   let imageToBeUploaded = {};
-  
-//   let generatedToken = uuid();
-
-//   busboy.on(`file`, (fieldname, file, filename, encoding, mimetype) => {
-//     if (mimetype !== `image/png` && mimetype !== `image/jpeg`) {
-//       return res.status(400).json({ error: `Не подходящий формат файла` });
-//     }
-
-//     // my.image.png => ['my', 'image', 'png']
-//     const imageExtention = filename.split(`.`)[filename.split(`.`).length - 1];
-//     // 93284987928.png
-//     imageFileName = `${Math.round(
-//       Math.random() * 10000000000
-//     ).toString()}.${imageExtention}`;
-//     const filepath = path.join(os.tmpdir(), imageFileName);
-//     imageToBeUploaded = { filepath, mimetype };
-
-//     file.pipe(fs.createWriteStream(filepath));
-//   });
-
-//   busboy.on(`finish`, () => {
-//     admin
-//       .storage()
-//       .bucket()
-//       .upload(imageToBeUploaded.filepath, {
-//         resumable: false,
-//         metadata: {
-//           metadata: {
-//             contentType: imageToBeUploaded.mimetype,
-//             //Generate token to be appended to imageUrl
-//             firebaseStorageDownloadTokens: generatedToken,
-//           },
-//         },
-//     })
-//       .then(() => {
-//         const imageUrl = `https://firebasestorage.googleapis.com/v0/b/${firebaseConfig.storageBucket}/o/${imageFileName}?alt=media&token=${generatedToken}`;
-//         return db.doc(`/users/${req.user.handle}`).update({ imageUrl });
-//       })
-//       .then(() => {
-//         return res.json({ message: `Картинка успешно загружена!` });
-//       })
-//       .catch((err) => {
-//         console.error(err);
-//         return res.status(500).json({ error: `Не удалось загрузить картинку: ${err.code}` })
-//       })
-//   });
-//   busboy.end(req.rawBody);
-// };

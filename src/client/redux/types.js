@@ -5,6 +5,8 @@ export const userActionType = {
   SET_UNAUTHENTICATED: `SET_UNAUTHENTICATED`,
   SET_USER: `SET_USER`,
   SET_COMPANY: `SET_COMPANY`,
+  DEL_USER: `DEL_USER`,
+  DEL_COMPANY: `DEL_COMPANY`,
 };
 
 // UI reducer types
@@ -21,5 +23,6 @@ export const dataActionType = {
   LOADING_DATA: `LOADING_DATA`,
   SET_INITIAL: `SET_INITIAL`,
   SET_USERS: `SET_USERS`,
+  DEL_USER: `DEL_USER`,
   SET_POSITIONS: `SET_POSITIONS`,
 };

@@ -26,6 +26,21 @@ export default function (state = initialState, action) {
         loading: false,
       });
     
+    case dataActionType.DEL_USER:
+      const delUserId = action.payload.userId;
+      console.log('delUserId: ', delUserId );
+      let newUsers = state.users;
+      console.log('newUsers: ', newUsers);
+      const idx = newUsers.findIndex((user) => user.userId === delUserId );
+      console.log('idx: ', idx);
+      if (idx !== -1) {
+        newUsers = [...newUsers.slice(0, idx), ...newUsers.slice(idx + 1, newUsers.length)];
+      }
+      return extend(state, {
+        users: newUsers,
+        loading: false,
+      });
+    
     case dataActionType.SET_POSITIONS:
       return extend(state, {
         positions: action.payload,

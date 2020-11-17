@@ -70,13 +70,13 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const PosMain = ({ open, onClose, UI: { loading, errors, messages }, companyProfile: {positions}}) => {
+const PosMain = ({ open, onClose, UI: { loading, errors, messages }, positions}) => {
 
   if (!open) {
     return null;
   }
   const classes = useStyles();
-
+  console.log(positions);
   const handleClose = () => onClose();
 
   const handleSubmit = (e) => {
@@ -177,12 +177,12 @@ PosMain.propTypes = {
   open: pt.bool.isRequired,
   onClose: pt.func.isRequired,
   UI: pt.object.isRequired,
-  companyProfile: pt.object.isRequired,
+  positions: pt.array.isRequired,
 };
 
 const mapStateToProps = (state) => ({
   UI: state.UI,
-  companyProfile: state.user.companyProfile,
+  positions: state.data.positions,
 });
 
 export default connect(mapStateToProps)(PosMain);

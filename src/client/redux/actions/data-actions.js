@@ -1,4 +1,6 @@
-import {dataActionType, uiActionType} from '../types';
+import { dataActionType, uiActionType } from '../types';
+import { logoutUser } from './user-actions';
+
 import axios from 'axios';
 axios.defaults.baseURL = `/api`;
 
@@ -15,8 +17,31 @@ export const getAllUsersData = () => (dispatch) => {
       console.log(err);
       dispatch({
         type: uiActionType.SET_ERRORS,
-        payload: err.data,
+        payload: err.response.data,
+      });
+      dispatch(logoutUser());
+    });
+};
+
+// Получаем positions
+export const getPositions = () => (dispatch) => {
+  dispatch({ type: uiActionType.LOADING_UI });
+  return axios.get(`/getPositions`)
+    .then((res) => {
+      console.log(`Полученные positions: `, res.data.positions);
+      dispatch({
+        type: dataActionType.SET_POSITIONS,
+        payload: res.data.positions,
       })
+      dispatch({ type: uiActionType.CLEAR_ERRORS });
+    })
+    .catch((err) => {
+      console.log(err);
+      dispatch({
+        type: uiActionType.SET_ERRORS,
+        payload: err.response.data,
+      })
+      dispatch(logoutUser());
     });
 };
 

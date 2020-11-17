@@ -11,6 +11,7 @@ exports.updatePositions = (req, res) => {
     .doc(`positions/${req.user.companyId}`)
     .set(newPositions)
     .then((data) => {
+      console.log('data: ', data);
       let positions = [];
       data.forEach(doc => {
         positions.push({
@@ -20,6 +21,34 @@ exports.updatePositions = (req, res) => {
         });
       });
       return res.json({ positions, message: `Список должностей успешно добавлён` });
+    })
+    .catch(err => {
+      console.error(err);
+      return res.status(500).json({ error: err.code });
+    });
+};
+
+// Обновляем список должностей
+exports.getPositions = (req, res) => {
+  db
+    .doc(`positions/${req.user.companyId}`)
+    .get()
+    .then(doc => {
+      if (doc.exists) {
+        return doc.data();
+      }
+    })
+    .then((data) => {
+      let positions = [];
+      data.positions.forEach(doc => {
+        positions.push({
+          id: doc.id,
+          order: doc.order,
+          title: doc.title,
+        });
+      });
+      console.log('positions: ', positions);
+      return res.json({ positions });
     })
     .catch(err => {
       console.error(err);

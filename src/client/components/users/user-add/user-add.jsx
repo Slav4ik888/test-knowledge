@@ -59,9 +59,13 @@ const styles = {
     fontSize: `0.8rem`,
     marginTop: 10,
   },
+  progress: {
+    position: `absolute`,
+    color: `#147070`,
+  },
 };
 
-const UserAdd = ({classes, open, onClose, UI, loading, addUser}) => {
+const UserAdd = ({ classes, open, onClose, UI: {errors, loading }, addUser}) => {
 
   if (!open) {
     return null;
@@ -77,7 +81,6 @@ const UserAdd = ({classes, open, onClose, UI, loading, addUser}) => {
     addUser(email);
   };
 
-  const { errors } = UI;
 
   return (
     <>
@@ -127,7 +130,7 @@ const UserAdd = ({classes, open, onClose, UI, loading, addUser}) => {
 UserAdd.propTypes = {
   addUser: pt.func.isRequired,
   open: pt.bool.isRequired,
-  loading: pt.bool.isRequired,
+  // loading: pt.bool.isRequired,
   onClose: pt.func.isRequired,
   classes: pt.object.isRequired,
   UI: pt.object.isRequired,
@@ -135,7 +138,7 @@ UserAdd.propTypes = {
 
 const mapStateToProps = (state) => ({
   UI: state.UI,
-  loading: state.user.loading,
+  // loading: state.user.loading,
 });
 
 export default connect(mapStateToProps, {addUser})(withStyles(styles)(UserAdd));

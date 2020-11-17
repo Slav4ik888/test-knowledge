@@ -3,7 +3,7 @@ import pt from 'prop-types';
 import { makeStyles } from '@material-ui/core/styles';
 // Readux Stuff
 import {connect} from 'react-redux';
-import {addUser} from '../../../redux/actions/user-actions';
+import {addUser, deleteUser} from '../../../redux/actions/user-actions';
 // MUI Stuff
 import Button from '@material-ui/core/Button';
 import Typography from '@material-ui/core/Typography';
@@ -47,7 +47,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const UserAdd = ({ open, onClose, UI: { loading, errors, messages }, addUser, users}) => {
+const UserAdd = ({ open, onClose, UI: { loading, errors, messages }, addUser, deleteUser, users}) => {
 
   if (!open) {
     return null;
@@ -71,6 +71,11 @@ const UserAdd = ({ open, onClose, UI: { loading, errors, messages }, addUser, us
     // addUser(email);
   };
 
+  const handleDeleteAccount = () => {
+    console.log(`users[userIdx]: `, users[userIdx]);
+    deleteUser(users[userIdx]);
+    onClose();
+  };
 
   return (
     <>
@@ -98,7 +103,7 @@ const UserAdd = ({ open, onClose, UI: { loading, errors, messages }, addUser, us
               {users[userIdx].positions.map((pos) => <Typography key={pos} variant="body1" >{pos}</Typography>)}
               <Typography variant="h5" color="primary">Статус в приложении</Typography>
               <Typography variant="body1" >{users[userIdx].role}</Typography>
-              <Button onClick={handleClose}>
+              <Button onClick={handleDeleteAccount}>
                 Удалить пользователя
               </Button>
             </>
@@ -132,6 +137,7 @@ const UserAdd = ({ open, onClose, UI: { loading, errors, messages }, addUser, us
 
 UserAdd.propTypes = {
   addUser: pt.func.isRequired,
+  deleteUser: pt.func.isRequired,
   open: pt.bool.isRequired,
   onClose: pt.func.isRequired,
   UI: pt.object.isRequired,
@@ -143,4 +149,4 @@ const mapStateToProps = (state) => ({
   users: state.data.users,
 });
 
-export default connect(mapStateToProps, {addUser})(UserAdd);
+export default connect(mapStateToProps, {addUser, deleteUser})(UserAdd);
