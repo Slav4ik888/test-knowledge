@@ -122,8 +122,8 @@ const ProfielUserEdit = ({classes, open, onClose, userProfile, updateUserDetails
             <Button onClick={handleDeleteAccount}>
               Удалить аккаунт
             </Button>
-            
           </form>
+          
         </DialogContent>
         <DialogActions>
           <Button onClick={handleClose} >

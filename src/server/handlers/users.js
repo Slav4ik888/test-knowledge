@@ -122,7 +122,7 @@ exports.deleteUser = (req, res) => {
       return res.json({ result, message: `Пользователь ${req.body.email} успешно удалён` });
     })
     .catch((err) => {
-      console.log('Error deleting user:', error);
+      console.log('Error deleting user:', err);
       return res.status(500).json({ err: err.code });
     });
 };

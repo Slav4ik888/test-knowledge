@@ -194,6 +194,22 @@ export const deleteUser = (userProfile) => (dispatch) => {
     });
 };
 
+// Удаление компании
+export const deleteCompany = () => (dispatch) => {
+  dispatch({type: userActionType.LOADING_USER});
+  return axios.get(`/deleteCompany`)
+    .then(() => {
+      console.log(`Должен произойти выход`);
+      dispatch(logoutUser());
+    })
+    .catch((err) => {
+      dispatch({
+        type: uiActionType.SET_ERRORS,
+        payload: err.response.data,
+      });
+    });
+};
+
 const setAuthorizationHeader = (token) => {
   const TKidToken = `Bearer ${token}`;
   localStorage.setItem(`TKidToken`, TKidToken);
@@ -247,7 +263,7 @@ export const updateCompanyDetails = (companyProfile) => (dispatch) => {
       });
     })
     .catch((err) => {
-      console.log(err);
+      console.log(err.response.data);
       dispatch({
         type: uiActionType.SET_ERRORS,
         payload: err.response.data,

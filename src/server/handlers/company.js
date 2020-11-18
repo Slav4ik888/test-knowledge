@@ -1,4 +1,4 @@
-const { db } = require('../firebase/admin');
+const { admin, db } = require('../firebase/admin');
 const { auth } = require('../firebase/fire');
 const firebaseConfig = require('../firebase/config');
 
@@ -9,7 +9,8 @@ const newPositions = {
   positions,
 };
 
-const { validationCompanyName, validationSignupData, reduceCompanyDetails } = require('../utils/validators');
+const { validationSignupData, reduceCompanyDetails, validationCompanyAuthority } = require('../utils/validators');
+const { deleteDocument, deleteUsersCollection } = require('../utils/deletes');
 
 // Create new company
 exports.signupCompany = (req, res) => {
@@ -23,10 +24,10 @@ exports.signupCompany = (req, res) => {
     confirmPassword: req.body.confirmPassword,
   }
   // validate data
-  const { validCompany, errorsCompany } = validationCompanyName(newCompany.companyName);
-  if (!validCompany) return res.status(400).json(errorsCompany);
+  // let { valid, errors } = validationCompanyName(newCompany.companyName);
+  // if (!valid) return res.status(400).json(errors);
 
-  const { valid, errors } = validationSignupData(newUser);
+  let { valid, errors } = validationSignupData(newUser, newCompany);
   if (!valid) return res.status(400).json(errors);
 
   const moImgCompany = `no-img-company.svg`;
@@ -157,24 +158,69 @@ exports.getUserAndCompanyData = (req, res) => {
     })
 };
 
-// TODO: проверить является ли авторизованный пользователь владельцем аккаунта
-// компани, чтобы изменять данные мог только владелец
-
 
 // Update company details
 exports.updateCompanyData = (req, res) => {
-  let companyDetails = reduceCompanyDetails(req.body);
+  
+  validationCompanyAuthority(req.user) // является ли пользователь Владельцем аккаунта
+    .then((data) => {
+      const { valid, errors } = data;
+      console.log('valid: ', valid);
+      if (!valid) return res.status(400).json(errors);
 
-  db
-    .doc(`/companies/${req.user.companyId}`)
-    .update({
-      companyName: companyDetails.companyName,
-    })
-    .then(() => {
-      return res.json({ message: `Данные компании успешно обновлены` });
+      let companyDetails = reduceCompanyDetails(req.body);
+
+      db
+        .doc(`/companies/${req.user.companyId}`)
+        .update({
+          companyName: companyDetails.companyName,
+        })
+        .then(() => {
+          return res.json({ message: `Данные компании успешно обновлены` });
+        })
+        .catch(err => {
+          console.error(err);
+          return res.status(500).json({ error: err.code });
+        })
+    });
+  
+};
+
+// Delete company 
+exports.deleteCompany = (req, res) => {
+  validationCompanyAuthority(req.user) // является ли пользователь Владельцем аккаунта
+    .then((data) => {
+      const { valid, errors } = data;
+      console.log('errors: ', errors);
+      console.log('valid: ', valid);
+      if (!valid) return res.status(400).json(errors);
+
+      // удаляем positions
+      deleteDocument(db, `positions`, req.user.companyId);// db.doc(`positions/${req.user.companyId}`);
+      
+      // удаляем всех users
+      let users = [];
+      db.collection(`users`).doc(`${req.user.companyId}`).collection(`users`).get()
+        .then(docs => {
+          docs.forEach((doc) => users.push(doc.data()));
+          // Удаляем каждого user
+          users.forEach((user) => admin.auth().deleteUser(user.userId));
+        })
+        .then(() => {
+          // удаляем company
+          deleteDocument(db, `companies`, req.user.companyId);// db.doc(`companies/${req.user.companyId}`);
+          // удаляем users
+          deleteUsersCollection(db, req.user.companyId, 50)
+            .then(() => {
+              console.log(22);
+              deleteDocument(db, `users`, req.user.companyId);
+          })
+        })
     })
     .catch(err => {
       console.error(err);
       return res.status(500).json({ error: err.code });
     })
+      // TODO: удаляем documents
+  
 };

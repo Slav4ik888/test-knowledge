@@ -7,9 +7,10 @@ const FBAuth = require('./firebase/fb-auth');
 // const os = require('os');
 
 const { addUser, login, getUserData, updateUserData, deleteUser } = require('./handlers/users');
-const { signupCompany, getCompanyData, getUserAndCompanyData, updateCompanyData } = require('./handlers/company');
+const { signupCompany, getCompanyData, getUserAndCompanyData, updateCompanyData, deleteCompany } = require('./handlers/company');
 const { getPositions, updatePositions } = require('./handlers/positions');
 const { getAllUsersData } = require('./handlers/data');
+
 
 app.use(bodyParser.json());
 
@@ -28,6 +29,7 @@ app.post(`/api/deleteUser`, FBAuth, deleteUser)
 // post data user and company routes
 app.get(`/api/company`, FBAuth, getCompanyData);
 app.post(`/api/company`, FBAuth, updateCompanyData);
+app.get(`/api/deleteCompany`, FBAuth, deleteCompany);
 app.post(`/api/positions`, FBAuth, updatePositions);
 app.get(`/api/getPositions`, FBAuth, getPositions);
 
@@ -36,4 +38,4 @@ app.use(express.static('dist'));
 
 app.listen(process.env.PORT || 8080, () => console.log(`Listening on port ${process.env.PORT || 8080}!`));
 
-// git add . && git commit -m "create deleteUser" && git push origin master
+// git add . && git commit -m "create deleteCompany" && git push origin master

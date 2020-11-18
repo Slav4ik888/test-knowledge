@@ -3,7 +3,7 @@ import pt from 'prop-types';
 import withStyles from '@material-ui/core/styles/withStyles';
 // Readux Stuff
 import {connect} from 'react-redux';
-import {updateCompanyDetails} from '../../../redux/actions/user-actions';
+import {updateCompanyDetails, deleteCompany} from '../../../redux/actions/user-actions';
 // MUI Stuff
 import Button from '@material-ui/core/Button';
 import TextField from '@material-ui/core/TextField';
@@ -56,7 +56,7 @@ const styles = {
   }
 };
 
-const ProfielCompanyEdit = ({classes, open, onClose, companyProfile, updateCompanyDetails}) => {
+const ProfielCompanyEdit = ({classes, open, onClose, companyProfile, updateCompanyDetails, deleteCompany}) => {
 
   if (!open) {
     return null;
@@ -78,6 +78,10 @@ const ProfielCompanyEdit = ({classes, open, onClose, companyProfile, updateCompa
     updateCompanyDetails(newCP);
   };
 
+  const handleDeleteCompanyAccount = () => {
+    deleteCompany();
+    onClose();
+  };
 
   return (
     <>
@@ -111,7 +115,11 @@ const ProfielCompanyEdit = ({classes, open, onClose, companyProfile, updateCompa
               value={newCP.createdAt} onChange={() => { }} fullWidth
             />
 
+            <Button onClick={handleDeleteCompanyAccount}>
+              Удалить профиль
+            </Button>
           </form>
+          
         </DialogContent>
         <DialogActions>
           <Button onClick={handleClose} >
@@ -128,6 +136,7 @@ const ProfielCompanyEdit = ({classes, open, onClose, companyProfile, updateCompa
 
 ProfielCompanyEdit.propTypes = {
   updateCompanyDetails: pt.func.isRequired,
+  deleteCompany: pt.func.isRequired,
   companyProfile: pt.object,
   open: pt.bool.isRequired,
   onClose: pt.func.isRequired,
@@ -138,4 +147,4 @@ const mapStateToProps = (state) => ({
   companyProfile: state.user.companyProfile,
 });
 
-export default connect(mapStateToProps, {updateCompanyDetails})(withStyles(styles)(ProfielCompanyEdit));
+export default connect(mapStateToProps, {updateCompanyDetails, deleteCompany})(withStyles(styles)(ProfielCompanyEdit));

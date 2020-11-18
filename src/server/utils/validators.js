@@ -1,3 +1,5 @@
+const { db } = require('../firebase/admin');
+
 const isEmail = (email) => {
   const emailRegEx = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
   if (email.match(emailRegEx)) {
@@ -15,18 +17,7 @@ const isEmpty = (str) => {
   }
 };
 
-exports.validationCompanyName = (companyName) => {
-  let errorsCompany = {};
-  // Проверка companyName
-  if (isEmpty(companyName)) errors.companyName = `Название компани не должно быть пустым`;
-  
-  return {
-    errorsCompany,
-    validCompany: Object.keys(errorsCompany).length === 0 ? true : false
-  }
-};
-
-exports.validationSignupData = (data) => {
+const validationSignupData = (data) => {
   let errors = {};
   // Проверка email
   if (isEmpty(data.email)) errors.email = `Поле email не должно быть пустым`;
@@ -43,7 +34,7 @@ exports.validationSignupData = (data) => {
   }
 };
 
-exports.validationLoginData = (data) => {
+const validationLoginData = (data) => {
   let errors = {};
 
   // Проверка email
@@ -60,8 +51,7 @@ exports.validationLoginData = (data) => {
   }
 };
 
-exports.reduceUserDetails = (data) => {
-  console.log('data: ', data);
+const reduceUserDetails = (data) => {
   let userDetails = {};
 
   if (!isEmpty(data.firstName.trim())) userDetails.firstName = data.firstName;
@@ -71,9 +61,35 @@ exports.reduceUserDetails = (data) => {
   return userDetails;
 };
 
-exports.reduceCompanyDetails = (data) => {
+const reduceCompanyDetails = (data) => {
   let companyDetails = {};
   if (!isEmpty(data.companyName.trim())) companyDetails.companyName = data.companyName;
 
   return companyDetails;
+};
+
+// является ли пользователь Владельцем аккаунта
+async function validationCompanyAuthority(user) {
+  let errors = {};
+  let owner = ``;
+  const doc = await db.doc(`/companies/${user.companyId}`)
+    .get();
+  
+  owner = doc.data().owner;
+  if (user.userId !== owner) {
+    console.log(`Не владелец пытается изменить данные в профиле компании`);
+    errors.general = `Извините, у вас недостаточно прав для редактирования профиля компании`;
+  }
+
+  return {
+    errors,
+    valid: Object.keys(errors).length === 0 ? true : false,
+  }
+};
+
+module.exports = {
+  validationCompanyAuthority,
+  validationLoginData,
+  reduceCompanyDetails,
+  validationSignupData
 };

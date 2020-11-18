@@ -11,7 +11,6 @@ exports.updatePositions = (req, res) => {
     .doc(`positions/${req.user.companyId}`)
     .set(newPositions)
     .then((data) => {
-      console.log('data: ', data);
       let positions = [];
       data.forEach(doc => {
         positions.push({
@@ -47,7 +46,6 @@ exports.getPositions = (req, res) => {
           title: doc.title,
         });
       });
-      console.log('positions: ', positions);
       return res.json({ positions });
     })
     .catch(err => {

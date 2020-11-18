@@ -11,7 +11,7 @@ exports.getAllUsersData = (req, res) => {
     .collection(`users`)
     .get()
     .then(docs => {
-      console.log(users);
+      console.log(`users: `, users);
       docs.forEach((doc) => users.push(doc.data()));
       return res.json(users);
     })
