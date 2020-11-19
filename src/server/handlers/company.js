@@ -54,7 +54,8 @@ exports.signupCompany = (req, res) => {
       userToken = token;
       
       Object.assign(newCompany, { // Подготавливаем данные компании
-        owner: userId,
+        ownerId: userId,
+        owner: newUser.email,
         imageUrl: `https://firebasestorage.googleapis.com/v0/b/${firebaseConfig.storageBucket}/o/${moImgCompany}?alt=media`,
         createdAt: new Date().toISOString(),
       });

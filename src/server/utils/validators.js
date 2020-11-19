@@ -71,12 +71,12 @@ const reduceCompanyDetails = (data) => {
 // является ли пользователь Владельцем аккаунта
 async function validationCompanyAuthority(user) {
   let errors = {};
-  let owner = ``;
+  let ownerId = ``;
   const doc = await db.doc(`/companies/${user.companyId}`)
     .get();
   
-  owner = doc.data().owner;
-  if (user.userId !== owner) {
+  ownerId = doc.data().ownerId;
+  if (user.userId !== ownerId) {
     console.log(`Не владелец пытается изменить данные в профиле компании`);
     errors.general = `Извините, у вас недостаточно прав для редактирования профиля компании`;
   }

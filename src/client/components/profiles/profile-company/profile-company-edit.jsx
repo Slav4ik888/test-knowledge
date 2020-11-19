@@ -56,7 +56,7 @@ const styles = {
   }
 };
 
-const ProfielCompanyEdit = ({classes, open, onClose, companyProfile, updateCompanyDetails, deleteCompany}) => {
+const ProfielCompanyEdit = ({ classes, open, onClose, user: { userProfile, companyProfile }, updateCompanyDetails, deleteCompany}) => {
 
   if (!open) {
     return null;
@@ -107,17 +107,22 @@ const ProfielCompanyEdit = ({classes, open, onClose, companyProfile, updateCompa
               value={newCP.companyName} onChange={handleChange} fullWidth
             />
             <TextField
-              name="owner" type="text" label="Владелец аккаунта" className={classes.textField} disabled
-              value={newCP.owner} onChange={() => { }} fullWidth
+              name="owner" type="text" label="Владелец аккаунта" className={classes.textField}
+              disabled={userProfile.email !== companyProfile.owner}
+              value={companyProfile.owner} onChange={() => { }} fullWidth
             />
             <TextField
               name="createdAt" type="text" label="Дата регистраци" className={classes.textField} disabled
               value={newCP.createdAt} onChange={() => { }} fullWidth
             />
 
-            <Button onClick={handleDeleteCompanyAccount}>
-              Удалить профиль
-            </Button>
+            {
+              userProfile.role === `Владелец` &&
+                <Button onClick={handleDeleteCompanyAccount}>
+                  Удалить профиль
+                </Button>
+            }
+
           </form>
           
         </DialogContent>
@@ -137,14 +142,14 @@ const ProfielCompanyEdit = ({classes, open, onClose, companyProfile, updateCompa
 ProfielCompanyEdit.propTypes = {
   updateCompanyDetails: pt.func.isRequired,
   deleteCompany: pt.func.isRequired,
-  companyProfile: pt.object,
+  user: pt.object.isRequired,
   open: pt.bool.isRequired,
   onClose: pt.func.isRequired,
   classes: pt.object.isRequired,
 };
 
 const mapStateToProps = (state) => ({
-  companyProfile: state.user.companyProfile,
+  user: state.user,
 });
 
 export default connect(mapStateToProps, {updateCompanyDetails, deleteCompany})(withStyles(styles)(ProfielCompanyEdit));
