@@ -2,7 +2,8 @@ import React, {useState} from 'react';
 import pt from 'prop-types';
 import { makeStyles } from '@material-ui/core/styles';
 // Readux Stuff
-import {connect} from 'react-redux';
+import { connect } from 'react-redux';
+import { updatePositions } from '../../../redux/actions/data-actions';
 // MUI Stuff
 import Button from '@material-ui/core/Button';
 import Paper from '@material-ui/core/Paper';
@@ -11,24 +12,13 @@ import Dialog from '@material-ui/core/Dialog';
 import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
 import DialogTitle from '@material-ui/core/DialogTitle';
-import List from '@material-ui/core/List';
-import ListItem from '@material-ui/core/ListItem';
-import ListItemAvatar from '@material-ui/core/ListItemAvatar';
-import ListItemIcon from '@material-ui/core/ListItemIcon';
-import ListItemSecondaryAction from '@material-ui/core/ListItemSecondaryAction';
-import ListItemText from '@material-ui/core/ListItemText';
-import Avatar from '@material-ui/core/Avatar';
 import IconButton from '@material-ui/core/IconButton';
 import InputBase from '@material-ui/core/InputBase';
-import Divider from '@material-ui/core/Divider';
 // Icons
 import CircularProgress from '@material-ui/core/CircularProgress';
-import Delete from '@material-ui/icons/Delete';
-import EditIcon from '@material-ui/icons/Edit';
 import AddIcon from '@material-ui/icons/Add';
-import FolderIcon from '@material-ui/icons/Folder';
 // Component
-
+import PositionsList from '../positions-list/positions-list';
 
 const useStyles = makeStyles((theme) => ({
   dialog: {
@@ -36,9 +26,6 @@ const useStyles = makeStyles((theme) => ({
   },
   textField: {
     margin: `10px auto 10px auto`,
-  },
-  editIcon: {
-    marginRight: 40,
   },
   input: {
     marginLeft: theme.spacing(1),
@@ -64,27 +51,21 @@ const useStyles = makeStyles((theme) => ({
     padding: theme.spacing(1),
     minWidth: 300,
   },
-  divider: {
-    height: 28,
-    margin: 4,
-  },
 }));
 
-const PosMain = ({ open, onClose, UI: { loading, errors, messages }, positions}) => {
+const PositionsContainer = ({ open, onClose, UI: { loading, errors, messages }, positions, updatePositions}) => {
 
   if (!open) {
     return null;
   }
   const classes = useStyles();
   console.log(positions);
-  const handleClose = () => onClose();
-
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    // addUser(email);
-  };
-  const handleEditPos = (id) => {
-    console.log(`handleEditPos id: `, id);
+  
+  const handleEditPos = (id, newTitle) => {
+    let newPositions = [...positions];
+    const idx = positions.findIndex((pos) => pos.id === id);
+    newPositions[idx].title = newTitle;
+    updatePositions(newPositions);
   };
   const handleDelPos = (id) => {
     console.log(`handleDelPos id: `, id);
@@ -100,6 +81,12 @@ const PosMain = ({ open, onClose, UI: { loading, errors, messages }, positions})
     setNewPos(``);
   };
 
+  const handleClose = () => onClose();
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    // addUser(email);
+  };
 
   return (
     <>
@@ -108,31 +95,11 @@ const PosMain = ({ open, onClose, UI: { loading, errors, messages }, positions})
       >
         <DialogTitle>Настройки</DialogTitle>
         <DialogContent>
-          <List>
-            {positions &&
-              positions.map((pos) => <ListItem key={pos.id}>
-                <ListItemAvatar>
-                  <Avatar>
-                    <FolderIcon />
-                  </Avatar>
-                </ListItemAvatar>
-                <ListItemText primary={pos.title}/>
-
-                <ListItemSecondaryAction onClick={() => handleEditPos(pos.id)} className={classes.editIcon}>
-                  <IconButton aria-label="Edit">
-                    <EditIcon />
-                  </IconButton>
-                </ListItemSecondaryAction>
-                <Divider className={classes.divider} orientation="vertical" />
-                <ListItemSecondaryAction onClick={() => handleDelPos(pos.id)}>
-                  <IconButton edge="end" aria-label="Delete">
-                    <Delete />
-                  </IconButton>
-                </ListItemSecondaryAction>
-
-              </ListItem>)
-            }
-          </List> 
+          <PositionsList
+            positions={positions}
+            onEdit={handleEditPos}
+            onDel={handleDelPos}
+          />
 
           <Paper component="form" className={classes.formControl}>
             <InputBase
@@ -173,7 +140,8 @@ const PosMain = ({ open, onClose, UI: { loading, errors, messages }, positions})
   );
 }
 
-PosMain.propTypes = {
+PositionsContainer.propTypes = {
+  updatePositions: pt.func.isRequired,
   open: pt.bool.isRequired,
   onClose: pt.func.isRequired,
   UI: pt.object.isRequired,
@@ -185,4 +153,4 @@ const mapStateToProps = (state) => ({
   positions: state.data.positions,
 });
 
-export default connect(mapStateToProps)(PosMain);
+export default connect(mapStateToProps, {updatePositions})(PositionsContainer);

@@ -47,23 +47,27 @@ export const getPositions = () => (dispatch) => {
 
 // Обновляем positions
 export const updatePositions = (newPositions) => (dispatch) => {
-  dispatch({ type: uiActionType.LOADING_UI });
-  return axios.post(`/positions`, newPositions)
-    .then((res) => {
-      console.log(`Обновлённые positions: `, res.data);
-      dispatch({
-        type: dataActionType.SET_POSITIONS,
-        payload: res.data.positions,
-      })
-      dispatch({ type: uiActionType.CLEAR_ERRORS });
-    })
-    .catch((err) => {
-      console.log(err);
-      dispatch({
-        type: uiActionType.SET_ERRORS,
-        payload: err.data,
-      })
-    });
+  dispatch({
+    type: dataActionType.SET_POSITIONS,
+    payload: newPositions,
+  });
+  // dispatch({ type: uiActionType.LOADING_UI });
+  // return axios.post(`/positions`, newPositions)
+  //   .then((res) => {
+  //     console.log(`Обновлённые positions: `, res.data);
+  //     dispatch({
+  //       type: dataActionType.SET_POSITIONS,
+  //       payload: res.data.positions,
+  //     })
+  //     dispatch({ type: uiActionType.CLEAR_ERRORS });
+  //   })
+  //   .catch((err) => {
+  //     console.log(err);
+  //     dispatch({
+  //       type: uiActionType.SET_ERRORS,
+  //       payload: err.data,
+  //     })
+  //   });
 };
 
 

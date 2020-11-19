@@ -22,7 +22,7 @@ import MoreIcon from '@material-ui/icons/MoreVert';
 import MyButton from '../../buttons/button-icon/button-icon';
 import ProfilesMenu from '../../profiles/profiles-menu/profiles-menu';
 import UsersMenu from '../../users/users-menu/users-menu';
-import PosMain from '../../positions/pos-main/pos-main';
+import PositionsContainer from '../../positions/positions-container/positions-container';
 
 
 const useStyles = makeStyles((theme) => ({
@@ -195,7 +195,7 @@ const NavbarAuth = () => {
         usersMenuId={usersMenuId}
         anchorEl={anchorUsr}
       />
-      <PosMain
+      <PositionsContainer
         open={posMenu}
         onClose={handlePosMenuClose}
       />
