@@ -38,4 +38,4 @@ app.use(express.static('dist'));
 
 app.listen(process.env.PORT || 8080, () => console.log(`Listening on port ${process.env.PORT || 8080}!`));
 
-// git add . && git commit -m "ownerId owner" && git push origin master
+// git add . && git commit -m "create Confirm & button DeleteCompany" && git push origin master

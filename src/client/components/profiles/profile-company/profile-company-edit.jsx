@@ -15,6 +15,7 @@ import DialogTitle from '@material-ui/core/DialogTitle';
 import EditIcon from '@material-ui/icons/Edit';
 // Component
 import MyButton from '../../buttons/button-icon/button-icon';
+import DeleteCompany from '../../buttons/delete-company/delete-company';
 
 
 const styles = {
@@ -79,8 +80,9 @@ const ProfielCompanyEdit = ({ classes, open, onClose, user: { userProfile, compa
   };
 
   const handleDeleteCompanyAccount = () => {
-    deleteCompany();
-    onClose();
+    console.log(`deleteCompany`);
+    // deleteCompany();
+    // onClose();
   };
 
   return (
@@ -118,9 +120,7 @@ const ProfielCompanyEdit = ({ classes, open, onClose, user: { userProfile, compa
 
             {
               userProfile.role === `Владелец` &&
-                <Button onClick={handleDeleteCompanyAccount}>
-                  Удалить профиль
-                </Button>
+                <DeleteCompany callback={handleDeleteCompanyAccount} />
             }
 
           </form>
