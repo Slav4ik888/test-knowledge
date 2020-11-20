@@ -192,8 +192,6 @@ exports.deleteCompany = (req, res) => {
   validationCompanyAuthority(req.user) // является ли пользователь Владельцем аккаунта
     .then((data) => {
       const { valid, errors } = data;
-      console.log('errors: ', errors);
-      console.log('valid: ', valid);
       if (!valid) return res.status(400).json(errors);
 
       // удаляем positions
@@ -216,6 +214,9 @@ exports.deleteCompany = (req, res) => {
               console.log(22);
               deleteDocument(db, `users`, req.user.companyId);
           })
+        })
+        .then(() => {
+          return res.json({ message: `Данные по компании успешно удалены` });
         })
     })
     .catch(err => {

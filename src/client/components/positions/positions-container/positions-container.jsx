@@ -1,24 +1,23 @@
-import React, {useState} from 'react';
+import React, {useState, useRef, useEffect} from 'react';
 import pt from 'prop-types';
 import { makeStyles } from '@material-ui/core/styles';
+import { createId, getMaxOrder } from '../utils';
 // Readux Stuff
 import { connect } from 'react-redux';
 import { updatePositions } from '../../../redux/actions/data-actions';
 // MUI Stuff
 import Button from '@material-ui/core/Button';
-import Paper from '@material-ui/core/Paper';
 import Typography from '@material-ui/core/Typography';
 import Dialog from '@material-ui/core/Dialog';
 import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
 import DialogTitle from '@material-ui/core/DialogTitle';
-import IconButton from '@material-ui/core/IconButton';
-import InputBase from '@material-ui/core/InputBase';
 // Icons
 import CircularProgress from '@material-ui/core/CircularProgress';
-import AddIcon from '@material-ui/icons/Add';
 // Component
 import PositionsList from '../positions-list/positions-list';
+import PositionAdd from '../position-add/position-add';
+
 
 const useStyles = makeStyles((theme) => ({
   dialog: {
@@ -27,12 +26,7 @@ const useStyles = makeStyles((theme) => ({
   textField: {
     margin: `10px auto 10px auto`,
   },
-  input: {
-    marginLeft: theme.spacing(1),
-    width: `calc(100% - 60px)`,
-    flex: 1,
-    padding: theme.spacing(1),
-  },
+  
   iconButton: {
     padding: 10,
   },
@@ -45,12 +39,12 @@ const useStyles = makeStyles((theme) => ({
     display: 'flex',
     flexWrap: 'wrap',
   },
-  formControl: {
-    marginTop: theme.spacing(4),
-    marginBottom: theme.spacing(2),
-    padding: theme.spacing(1),
-    minWidth: 300,
-  },
+  possitionAdd: {
+    paddingLeft: theme.spacing(4),
+    paddingRight: theme.spacing(4),
+    paddingTop: theme.spacing(1),
+    paddingBottom: theme.spacing(1),
+  }
 }));
 
 const PositionsContainer = ({ open, onClose, UI: { loading, errors, messages }, positions, updatePositions}) => {
@@ -67,18 +61,24 @@ const PositionsContainer = ({ open, onClose, UI: { loading, errors, messages }, 
     newPositions[idx].title = newTitle;
     updatePositions(newPositions);
   };
+
   const handleDelPos = (id) => {
     console.log(`handleDelPos id: `, id);
+    const idx = positions.findIndex((pos) => pos.id === id);
+    let newPositions = [...positions.slice(0, idx), ...positions.slice(idx + 1)];
+    updatePositions(newPositions);
   };
 
-  const [newPos, setNewPos] = useState(``);
-  const handleChangeAddPos = (e) => {
-    console.log('e.target.value: ', e.target.value);
-    setNewPos(e.target.value);
-  };
-  const handleAddPos = () => {
-    console.log(`new position: `, newPos);
-    setNewPos(``);
+  const handleAddPos = (title) => {
+    if (title.trim()) {
+      const newPos = {
+        title,
+        id: createId(positions),
+        order: getMaxOrder(positions),
+      }
+      let newPositions = [newPos, ...positions];
+      updatePositions(newPositions);
+    }
   };
 
   const handleClose = () => onClose();
@@ -88,32 +88,41 @@ const PositionsContainer = ({ open, onClose, UI: { loading, errors, messages }, 
     // addUser(email);
   };
 
+  const listRef = useRef(null);
+  useEffect(() => {
+    if (open) {
+      const { current: listElement } = listRef;
+      if (listElement !== null) {
+        listElement.focus();
+      }
+    }
+  }, [open]);
+
   return (
     <>
-      <Dialog disableBackdropClick disableEscapeKeyDown className={classes.dialog}
-        open={open} onClose={handleClose} fullWidth maxWidth="sm"
+      <Dialog
+        disableBackdropClick
+        disableEscapeKeyDown
+        className={classes.dialog}
+        open={open}
+        onClose={handleClose}
+        fullWidth
+        maxWidth="sm"
+        scroll={`paper`}
       >
-        <DialogTitle>Настройки</DialogTitle>
-        <DialogContent>
-          <PositionsList
-            positions={positions}
-            onEdit={handleEditPos}
-            onDel={handleDelPos}
-          />
-
-          <Paper component="form" className={classes.formControl}>
-            <InputBase
-              className={classes.input}
-              placeholder="Добавить должность"
-              inputProps={{ 'aria-label': 'новая должность' }}
-              type="text"
-              value={newPos}
-              onChange={handleChangeAddPos}
+        <DialogTitle>Настройка должностей</DialogTitle>
+        <DialogContent dividers ref={listRef} >
+            <PositionsList
+              open={open}
+              positions={positions}
+              onEdit={handleEditPos}
+              onDel={handleDelPos}
             />
-            <IconButton edge="end" aria-label="Add" onClick={handleAddPos}>
-              <AddIcon />
-            </IconButton>
-          </Paper>
+        </DialogContent>
+
+        <div className={classes.possitionAdd}>
+          <PositionAdd onAdd={handleAddPos} />
+
           {
             errors.general && (
               <Typography variant="body2" className={classes.customError}>
@@ -121,7 +130,9 @@ const PositionsContainer = ({ open, onClose, UI: { loading, errors, messages }, 
               </Typography>
             )
           }
-        </DialogContent>
+
+        </div>
+
         <DialogActions className={classes.dialog}>
           <Button onClick={handleClose} >
             Отмена

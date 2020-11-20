@@ -1,5 +1,7 @@
 import React, {useState} from 'react';
 import pt from 'prop-types';
+import dayjs from 'dayjs';
+import 'dayjs/locale/ru';
 import withStyles from '@material-ui/core/styles/withStyles';
 // Readux Stuff
 import {connect} from 'react-redux';
@@ -62,6 +64,8 @@ const ProfielCompanyEdit = ({ classes, open, onClose, user: { userProfile, compa
   if (!open) {
     return null;
   }
+  // dayjs.extend(relativeTime);
+
   const [newCP, setNewCP] = useState(companyProfile);
 
   const handleChange = (e) => {
@@ -80,9 +84,8 @@ const ProfielCompanyEdit = ({ classes, open, onClose, user: { userProfile, compa
   };
 
   const handleDeleteCompanyAccount = () => {
-    console.log(`deleteCompany`);
-    // deleteCompany();
-    // onClose();
+    deleteCompany();
+    onClose();
   };
 
   return (
@@ -114,8 +117,8 @@ const ProfielCompanyEdit = ({ classes, open, onClose, user: { userProfile, compa
               value={companyProfile.owner} onChange={() => { }} fullWidth
             />
             <TextField
-              name="createdAt" type="text" label="Дата регистраци" className={classes.textField} disabled
-              value={newCP.createdAt} onChange={() => { }} fullWidth
+              name="createdAt" type="text" label="Зарегистрирован" className={classes.textField} disabled
+              value={dayjs(companyProfile.createdAt).locale(`ru`).format('DD MMMM YYYY')} onChange={() => { }} fullWidth
             />
 
             {

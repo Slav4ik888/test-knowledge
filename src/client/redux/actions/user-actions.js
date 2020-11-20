@@ -200,7 +200,6 @@ export const deleteCompany = () => (dispatch) => {
   dispatch({type: userActionType.LOADING_USER});
   return axios.get(`/deleteCompany`)
     .then(() => {
-      console.log(`Должен произойти выход`);
       dispatch(logoutUser());
     })
     .catch((err) => {

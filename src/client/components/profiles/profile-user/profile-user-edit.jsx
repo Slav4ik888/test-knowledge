@@ -1,5 +1,7 @@
 import React, {useState} from 'react';
 import pt from 'prop-types';
+import dayjs from 'dayjs';
+import 'dayjs/locale/ru';
 import withStyles from '@material-ui/core/styles/withStyles';
 // Readux Stuff
 import {connect} from 'react-redux';
@@ -61,7 +63,7 @@ const ProfielUserEdit = ({classes, open, onClose, userProfile, updateUserDetails
   if (!open) {
     return null;
   }
-  
+
   const [newUP, setNewUP] = useState(userProfile);
 
   const handleChange = (e) => {
@@ -102,6 +104,10 @@ const ProfielUserEdit = ({classes, open, onClose, userProfile, updateUserDetails
                   <EditIcon color="primary" />
               </MyButton>
             </div>
+            <TextField
+              name="createdAt" type="text" label="Зарегистрирован" className={classes.textField} disabled
+              value={dayjs(userProfile.createdAt).locale(`ru`).format('DD MMMM YYYY')} onChange={() => { }} fullWidth
+            />
             <TextField
               name="firstName" type="text" label="Имя" className={classes.textField}
               value={newUP.firstName} onChange={handleChange} fullWidth

@@ -6,7 +6,7 @@ import List from '@material-ui/core/List';
 import PositionItem from '../position-item/position-item';
 
 
-const PositionsList = ({ positions, onEdit, onDel }) => {
+const PositionsList = ({ open, positions, onEdit, onDel }) => {
 
   if (!positions) {
     return null;
@@ -14,7 +14,7 @@ const PositionsList = ({ positions, onEdit, onDel }) => {
 
   return (
     <>
-      <List>
+      <List height={200}>
         {positions.map((pos) => <PositionItem key={pos.id}
             title={pos.title}
             id={pos.id}
@@ -28,6 +28,7 @@ const PositionsList = ({ positions, onEdit, onDel }) => {
 }
 
 PositionsList.propTypes = {
+  open: pt.bool.isRequired,
   onEdit: pt.func.isRequired,
   onDel: pt.func.isRequired,
   positions: pt.array.isRequired,

@@ -9,6 +9,7 @@ import ListItemSecondaryAction from '@material-ui/core/ListItemSecondaryAction';
 import ListItemText from '@material-ui/core/ListItemText';
 import Avatar from '@material-ui/core/Avatar';
 import IconButton from '@material-ui/core/IconButton';
+import Tooltip from '@material-ui/core/Tooltip';
 import Divider from '@material-ui/core/Divider';
 // Icons
 import Delete from '@material-ui/icons/Delete';
@@ -19,26 +20,43 @@ import FolderIcon from '@material-ui/icons/Folder';
 
 const useStyles = makeStyles((theme) => ({
   editIcon: {
-    marginRight: 60,
+    marginRight: 40,
   },
-  divider: {
-    height: 28,
-    margin: 4,
-    position: `absolute`,
-    right: 55,
-  },
+  hover: {
+    backgroundColor: `#e9f6fc`,
+  }
+  // divider: {
+  //   height: 28,
+  //   margin: 4,
+  //   position: `absolute`,
+  //   right: 55,
+  // },
 }));
 
 const PositionItem = ({ title, id, onEdit, onDel}) => {
 
   const classes = useStyles();
-  const handleClose = () => onClose();
+  const [showIcons, setShowIcons] = useState(false);
+  const handlePointerEnter = () => setShowIcons(true);
+  const handlePointerLeave = () => {
+    setShowIcons(false);
+    if (title !== newTitle) {
+      handleBlur();
+    }
+  };
+  const hover = showIcons ? classes.hover : ``;
 
   const [edit, setEdit] = useState(false);
   const handleSetEdit = () => setEdit(true);
 
   const [newTitle, setNewTitle] = useState(title);
   const handleEdit = (e) => {
+    if (e.keyCode === 13 || e.keyCode === 27) {
+      setEdit(false);
+      if (title !== newTitle) {
+        onEdit(id, newTitle);
+      }
+    }
     setNewTitle(e.target.value);
   };
 
@@ -47,23 +65,7 @@ const PositionItem = ({ title, id, onEdit, onDel}) => {
   const handleBlur = () => {
     setEdit(false);
     if (title !== newTitle) {
-      console.log('newTitle: ', newTitle);
-      console.log('title: ', title);
       onEdit(id, newTitle);
-    }
-  };
-
-  const handleEditSubmit = (e) => {
-    onEdit(newTitle);
-  };
-
-  const [showIcons, setShowIcons] = useState(false);
-  const handlePointerEnter = () => setShowIcons(true);
-  const handlePointerLeave = () => {
-    setShowIcons(false);
-    if (title !== newTitle) {
-      console.log(2);
-      handleBlur();
     }
   };
 
@@ -73,6 +75,7 @@ const PositionItem = ({ title, id, onEdit, onDel}) => {
     <ListItem
       onPointerEnter={handlePointerEnter}
       onPointerLeave={handlePointerLeave}
+      className={hover}
     >
       <ListItemAvatar>
         <Avatar>
@@ -86,6 +89,7 @@ const PositionItem = ({ title, id, onEdit, onDel}) => {
             value={newTitle} onChange={handleEdit} fullWidth
             onFocus={handleFocus}
             onBlur={handleBlur}
+            onKeyDown={handleEdit}
           />
           :
           <ListItemText primary={newTitle} />
@@ -94,17 +98,21 @@ const PositionItem = ({ title, id, onEdit, onDel}) => {
         showIcons &&
         <>
           <ListItemSecondaryAction onClick={handleSetEdit} className={classes.editIcon}>
-            <IconButton aria-label="Edit">
-              <EditIcon />
-            </IconButton>
+            <Tooltip title="Изменить" placement="bottom" arrow>
+              <IconButton aria-label="Edit">
+                <EditIcon />
+              </IconButton>
+            </Tooltip>
           </ListItemSecondaryAction>
 
-          <Divider className={classes.divider} orientation="vertical" />
+          {/* <Divider className={classes.divider} orientation="vertical" /> */}
 
           <ListItemSecondaryAction onClick={handleDelPos}>
-            <IconButton edge="end" aria-label="Delete">
-              <Delete />
-            </IconButton>
+            <Tooltip title="Удалить" placement="bottom" arrow>
+              <IconButton edge="end" aria-label="Delete">
+                <Delete />
+              </IconButton>
+            </Tooltip>
           </ListItemSecondaryAction>
         </>
       }
