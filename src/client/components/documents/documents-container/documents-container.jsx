@@ -4,7 +4,7 @@ import { makeStyles } from '@material-ui/core/styles';
 import { createId, getMaxOrder } from '../../../utils/utils';
 // Readux Stuff
 import { connect } from 'react-redux';
-import { updatePositions, updatePositionsServer } from '../../../redux/actions/data-actions';
+import { updateDocuments, updateDocumentsServer } from '../../../redux/actions/data-actions';
 // MUI Stuff
 import Button from '@material-ui/core/Button';
 import Typography from '@material-ui/core/Typography';
@@ -12,24 +12,17 @@ import Dialog from '@material-ui/core/Dialog';
 import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
 import DialogTitle from '@material-ui/core/DialogTitle';
-import IconButton from '@material-ui/core/IconButton';
 // Icons
 import CircularProgress from '@material-ui/core/CircularProgress';
 import CloseIcon from '@material-ui/icons/Close';
 // Component
-import PositionsList from '../positions-list/positions-list';
-import PositionAdd from '../position-add/position-add';
+import DocumentsList from '../documents-list/documents-list';
+import DocumentAdd from '../document-add/document-add';
 
 
 const useStyles = makeStyles((theme) => ({
   dialog: {
     padding: theme.spacing(4),
-  },
-  closeButton: {
-    position: 'absolute',
-    right: theme.spacing(2),
-    top: theme.spacing(1),
-    color: theme.palette.grey[500],
   },
   textField: {
     margin: `10px auto 10px auto`,
@@ -47,46 +40,46 @@ const useStyles = makeStyles((theme) => ({
     display: 'flex',
     flexWrap: 'wrap',
   },
-  possitionAdd: {
+  documentAdd: {
     paddingLeft: theme.spacing(4),
     paddingRight: theme.spacing(4),
     paddingTop: theme.spacing(1),
     paddingBottom: theme.spacing(1),
-  },
+  }
 }));
 
-const PositionsContainer = ({ open, onClose, UI: { loading, errors, messages }, positions,
-  updatePositions, updatePositionsServer }) => {
+const DoumentsContainer = ({ open, onClose, UI: { loading, errors, messages }, documents,
+  updateDocuments, updateDocumentsServer }) => {
 
   if (!open) {
     return null;
   }
   const classes = useStyles();
-  console.log(positions);
+  console.log(documents);
   
-  const handleEditPos = (id, newTitle) => {
-    let newPositions = [...positions];
-    const idx = positions.findIndex((pos) => pos.id === id);
-    newPositions[idx].title = newTitle;
-    updatePositions(newPositions);
+  const handleEditDoc = (id, newTitle) => {
+    let newDocuments = [...documents];
+    const idx = documents.findIndex((doc) => doc.id === id);
+    newDocuments[idx].title = newTitle;
+    updateDocuments(newDocuments);
   };
 
-  const handleDelPos = (id) => {
-    console.log(`handleDelPos id: `, id);
-    const idx = positions.findIndex((pos) => pos.id === id);
-    let newPositions = [...positions.slice(0, idx), ...positions.slice(idx + 1)];
-    updatePositionsServer(newPositions);
+  const handleDelDoc = (id) => {
+    console.log(`handleDelDoc id: `, id);
+    const idx = documents.findIndex((doc) => doc.id === id);
+    let newDocuments = [...documents.slice(0, idx), ...documents.slice(idx + 1)];
+    updateDocumentsServer(newDocuments);
   };
 
-  const handleAddPos = (title) => {
+  const handleAddDoc = (title) => {
     if (title.trim()) {
-      const newPos = {
+      const newDoc = {
         title,
-        id: createId(positions),
-        order: getMaxOrder(positions),
+        id: createId(documents),
+        sections: [],
       }
-      let newPositions = [newPos, ...positions];
-      updatePositions(newPositions);
+      let newDocuments = [newDoc, ...documents];
+      updateDocuments(newDocuments);
     }
   };
 
@@ -94,7 +87,7 @@ const PositionsContainer = ({ open, onClose, UI: { loading, errors, messages }, 
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    updatePositionsServer(positions);
+    updateDocumentsServer(documents);
   };
 
   const listRef = useRef(null);
@@ -119,23 +112,18 @@ const PositionsContainer = ({ open, onClose, UI: { loading, errors, messages }, 
         maxWidth="sm"
         scroll={`paper`}
       >
-        <DialogTitle>
-          Настройка должностей
-          <IconButton aria-label="close" className={classes.closeButton} onClick={handleClose}>
-            <CloseIcon />
-          </IconButton>
-        </DialogTitle>
+        <DialogTitle>Настройка документов</DialogTitle>
         <DialogContent dividers ref={listRef} >
-            <PositionsList
+            <DocumentsList
               open={open}
-              positions={positions}
-              onEdit={handleEditPos}
-              onDel={handleDelPos}
+              documents={documents}
+              onEdit={handleEditDoc}
+              onDel={handleDelDoc}
             />
         </DialogContent>
 
-        <div className={classes.possitionAdd}>
-          <PositionAdd onAdd={handleAddPos} />
+        <div className={classes.documentAdd}>
+          <DocumentAdd onAdd={handleAddDoc} />
 
           {
             errors.general && (
@@ -165,18 +153,18 @@ const PositionsContainer = ({ open, onClose, UI: { loading, errors, messages }, 
   );
 }
 
-PositionsContainer.propTypes = {
-  updatePositions: pt.func.isRequired,
-  updatePositionsServer: pt.func.isRequired,
+DoumentsContainer.propTypes = {
+  updateDocuments: pt.func.isRequired,
+  updateDocumentsServer: pt.func.isRequired,
   open: pt.bool.isRequired,
   onClose: pt.func.isRequired,
   UI: pt.object.isRequired,
-  positions: pt.array.isRequired,
+  documents: pt.array.isRequired,
 };
 
 const mapStateToProps = (state) => ({
   UI: state.UI,
-  positions: state.data.positions,
+  documents: state.data.documents,
 });
 
-export default connect(mapStateToProps, {updatePositions, updatePositionsServer})(PositionsContainer);
+export default connect(mapStateToProps, {updateDocuments, updateDocumentsServer})(DoumentsContainer);

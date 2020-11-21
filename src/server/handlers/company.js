@@ -4,10 +4,8 @@ const firebaseConfig = require('../firebase/config');
 
 const { uuid } = require("uuidv4");
 const { role } = require('../../types');
-const { positions } = require('../utils/templates');
-const newPositions = {
-  positions,
-};
+const { newPositions, newDocuments } = require('../utils/templates');
+console.log('newDocuments: ', newDocuments);
 
 const { validationSignupData, reduceCompanyData, validationCompanyAuthority } = require('../utils/validators');
 const { deleteDocument, deleteUsersCollection } = require('../utils/deletes');
@@ -35,8 +33,7 @@ exports.signupCompany = (req, res) => {
 
   let userToken, userId, companyId;
 
-  db // Проверяем свободен ли email
-    .collectionGroup(`users`)
+  db.collectionGroup(`users`) // Проверяем свободен ли email
     .where(`email`, `==`, newUser.email)
     .get()
     .then(doc => {
@@ -60,8 +57,7 @@ exports.signupCompany = (req, res) => {
         createdAt: new Date().toISOString(),
       });
 
-      return db // Добавляем компанию в коллекцию
-        .collection(`companies`)
+      return db.collection(`companies`) // Добавляем компанию в коллекцию
         .add(newCompany) 
     })
     .then((doc) => {
@@ -81,21 +77,24 @@ exports.signupCompany = (req, res) => {
       delete newUser.password;
       delete newUser.confirmPassword;
 
-      return db // Сохраняем данные по новому пользователю
-        .collection(`users`)
+      return db.collection(`users`) // Сохраняем данные по новому пользователю
         .doc(companyId)
         .collection(`users`)
         .doc(newUser.email)
         .set(newUser) 
     })
     .then(() => {
-      return db // Сохраняем начальные positions
-        .collection(`positions`)
+      return db.collection(`positions`) // Сохраняем начальные positions
         .doc(companyId)
         .set(newPositions)
     })
     .then(() => {
-      return res.status(201).json({ userToken, newUser, newCompany, newPositions });
+      return db.collection(`documents`) // Сохраняем начальные documents
+        .doc(companyId)
+        .set(newDocuments)
+    })
+    .then(() => {
+      return res.status(201).json({ userToken, newUser, newCompany, newPositions, newDocuments });
     })
     .catch(err => {
       console.error(err);

@@ -4,7 +4,7 @@ import {extend} from '../../utils/utils';
 const initialState = {
   users: [],
   positions: [],
-  docs: [],
+  documents: [],
   rules: [],
   questions: [],
   loading: false,
@@ -44,6 +44,12 @@ export default function (state = initialState, action) {
     case dataActionType.SET_POSITIONS:
       return extend(state, {
         positions: action.payload,
+        loading: false,
+      });
+    
+    case dataActionType.SET_DOCUMENTS:
+      return extend(state, {
+        documents: action.payload,
         loading: false,
       });
     

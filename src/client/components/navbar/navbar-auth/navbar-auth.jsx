@@ -23,6 +23,7 @@ import MyButton from '../../buttons/button-icon/button-icon';
 import ProfilesMenu from '../../profiles/profiles-menu/profiles-menu';
 import UsersMenu from '../../users/users-menu/users-menu';
 import PositionsContainer from '../../positions/positions-container/positions-container';
+import DocumentsContainer from '../../documents/documents-container/documents-container';
 
 
 const useStyles = makeStyles((theme) => ({
@@ -96,14 +97,19 @@ const NavbarAuth = () => {
   const handleProfilesMenuClose = () => setAnchorPro(null);
   
   const [anchorUsr, setAnchorUsr] = useState(null);
-  const isUsersOpen = Boolean(anchorUsr);
+  const isUsers = Boolean(anchorUsr);
   const usersMenuId = `users-menu`
   const handleUserMenuOpen = (event) => setAnchorUsr(event.currentTarget);
   const handleUserMenuClose = () => setAnchorUsr(null);
 
-  const [posMenu, setPosMenu] = useState(false);
-  const handlePosMenuOpen = () => setPosMenu(true);
-  const handlePosMenuClose = () => setPosMenu(false);
+  const [isPositions, setIsPositions] = useState(false);
+  const handlePositionsOpen = () => setIsPositions(true);
+  const handlePositionsClose = () => setIsPositions(false);
+
+  const [isDocuments, setIsDocuments] = useState(false);
+  const handleDocumentsOpen = () => setIsDocuments(true);
+  const handleDocumentsClose = () => setIsDocuments(false);
+  
   
   // const renderMenu = (
   //   <Menu
@@ -136,6 +142,7 @@ const NavbarAuth = () => {
       <Typography className={classes.title} variant="h6" noWrap>
         T-Knowledge
       </Typography>
+
       <div className={classes.search}>
         <div className={classes.searchIcon}>
           <SearchIcon />
@@ -149,14 +156,15 @@ const NavbarAuth = () => {
           inputProps={{ 'aria-label': 'search' }}
         />
       </div>
-      {/* <Tooltip title="Управление пользователями" placement="bottom" arrow> */}
-      {/* variant="contained" color="primary" */}
+
       <Button onClick={handleUserMenuOpen} >
         Сотрудники
       </Button>
-      {/* </Tooltip> */}
-      <Button onClick={handlePosMenuOpen} >
+      <Button onClick={handlePositionsOpen} >
         Должности
+      </Button>
+      <Button onClick={handleDocumentsOpen} >
+        Документы
       </Button>
       <div className={classes.grow} />
 
@@ -190,14 +198,18 @@ const NavbarAuth = () => {
         anchorEl={anchorPro}
       />
       <UsersMenu
-        open={isUsersOpen}
+        open={isUsers}
         onClose={handleUserMenuClose}
         usersMenuId={usersMenuId}
         anchorEl={anchorUsr}
       />
       <PositionsContainer
-        open={posMenu}
-        onClose={handlePosMenuClose}
+        open={isPositions}
+        onClose={handlePositionsClose}
+      />
+      <DocumentsContainer
+        open={isDocuments}
+        onClose={handleDocumentsClose}
       />
       {/* {renderMenu} */}
     </>

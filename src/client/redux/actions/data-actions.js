@@ -75,15 +75,56 @@ export const updatePositionsServer = (newPositions) => (dispatch) => {
     });
 };
 
-// Like a scream
-// export const likeScream = (screamId) => (dispatch) => {
-//   return axios.get(`/scream/${screamId}/like`)
-//     .then((res) => {
-//       console.log(`likeScream res.data: `, res.data);
-//       dispatch({
-//         type: dataActionType.LIKE_SCREAM,
-//         payload: res.data,
-//       })
-//     })
-//     .catch((err) => console.log(err));
-// };
+// Получаем documents
+export const getDocuments = () => (dispatch) => {
+  console.log(`getDocuments`);
+  dispatch({ type: uiActionType.LOADING_UI });
+  return axios.get(`/getDocuments`)
+    .then((res) => {
+      console.log(`Полученные documents: `, res.data.documents);
+      dispatch({
+        type: dataActionType.SET_DOCUMENTS,
+        payload: res.data.documents,
+      })
+      dispatch({ type: uiActionType.CLEAR_ERRORS });
+    })
+    .catch((err) => {
+      console.log(err);
+      dispatch({
+        type: uiActionType.SET_ERRORS,
+        payload: err.response.data,
+      })
+      dispatch(logoutUser());
+    });
+};
+
+
+// Обновляем positions только в store, без сервера
+export const updateDocuments = (newDocuments) => (dispatch) => {
+  dispatch({
+    type: dataActionType.SET_DOCUMENTS,
+    payload: newDocuments,
+  })
+};
+
+
+// Обновляем positions на сервере
+export const updateDocumentsServer = (newDocuments) => (dispatch) => {
+  dispatch({ type: uiActionType.LOADING_UI });
+  return axios.post(`/updateDocuments`, newDocuments)
+    .then((res) => {
+      console.log(`Обновлённые documents: `, res.data);
+      dispatch({
+        type: dataActionType.SET_DOCUMENTS,
+        payload: res.data.documents,
+      })
+      dispatch({ type: uiActionType.CLEAR_ERRORS });
+    })
+    .catch((err) => {
+      console.log(err);
+      dispatch({
+        type: uiActionType.SET_ERRORS,
+        payload: err.data,
+      })
+    });
+};

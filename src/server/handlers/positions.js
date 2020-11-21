@@ -4,8 +4,8 @@ const { validationCompanyAuthority } = require('../utils/validators');
 
 // Обновляем список должностей
 async function updatePositions(req, res) {
-
-  const validData = await validationCompanyAuthority(req.user); // является ли пользователь Владельцем аккаунта
+  // является ли пользователь Владельцем аккаунта
+  const validData = await validationCompanyAuthority(req.user);
   const { valid, errors } = validData;
   console.log('validUpdatePositions: ', valid);
   if (!valid) return res.status(400).json(errors);
@@ -13,7 +13,7 @@ async function updatePositions(req, res) {
   let newPositions = {
     positions: req.body ? req.body : [],
   };
-
+  // TODO: проверку на удаление id, чтобы среди пользователей не было должностей, у которых есть этот id
   try {
     const updateRes = await db.doc(`positions/${req.user.companyId}`).update(newPositions);
     // getPositions сообщаем, что это обновление и нужно вернуть данные сюда, а не пользователю
@@ -21,7 +21,7 @@ async function updatePositions(req, res) {
     
     const positions = await getPositions(req, res);
     // console.log('Обновлённые positions: ', JSON.stringify(positions));
-    return res.json({ positions, message: `Список должностей успешно добавлён` });
+    return res.json({ positions, message: `Список должностей успешно обновлён` });
 
   } catch(err) {
       console.error(err);

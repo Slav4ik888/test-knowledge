@@ -25,4 +25,5 @@ export const dataActionType = {
   SET_USERS: `SET_USERS`,
   DEL_USER: `DEL_USER`,
   SET_POSITIONS: `SET_POSITIONS`,
+  SET_DOCUMENTS: `SET_DOCUMENTS`,
 };

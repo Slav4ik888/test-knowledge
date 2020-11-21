@@ -8,7 +8,7 @@ import IconButton from '@material-ui/core/IconButton';
 import Avatar from '@material-ui/core/Avatar';
 // Icons
 import AddIcon from '@material-ui/icons/Add';
-import SupervisedUserCircleIcon from '@material-ui/icons/SupervisedUserCircle';
+import FolderIcon from '@material-ui/icons/Folder';
 
 
 const useStyles = makeStyles((theme) => ({
@@ -28,26 +28,26 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const PositionAdd = ({ onAdd}) => {
+const DocumentAdd = ({ onAdd}) => {
 
   const classes = useStyles();
 
-  const [newPos, setNewPos] = useState(``);
+  const [newDoc, setNewDoc] = useState(``);
 
   const handleEdit = (e) => {
     switch (e.keyCode) {
       case 13:
-        if (newPos !== ``) {
-          onAdd(newPos);
+        if (newDoc !== ``) {
+          onAdd(newDoc);
         }
         break;
     } 
-    setNewPos(e.target.value);
+    setNewDoc(e.target.value);
   };
 
   const handleAdd = () => {
-    onAdd(newPos);
-    setNewPos(``);
+    onAdd(newDoc);
+    setNewDoc(``);
   };
 
   const handleSubmit = (e) => {
@@ -59,14 +59,14 @@ const PositionAdd = ({ onAdd}) => {
     <form onSubmit={handleSubmit}>
       <Paper className={classes.formControl}>
         <Avatar>
-          <SupervisedUserCircleIcon />
+          <FolderIcon />
         </Avatar>
         <InputBase
           className={classes.input}
-          placeholder="Добавить должность"
-          inputProps={{ 'aria-label': 'Новая должность' }}
+          placeholder="Добавить документ"
+          inputProps={{ 'aria-label': 'Новый документ' }}
           type="text"
-          value={newPos}
+          value={newDoc}
           onChange={handleEdit}
         />
         <IconButton aria-label="Add" onClick={handleAdd}>
@@ -77,8 +77,8 @@ const PositionAdd = ({ onAdd}) => {
   );
 }
 
-PositionAdd.propTypes = {
+DocumentAdd.propTypes = {
   onAdd: pt.func.isRequired,
 };
 
-export default PositionAdd;
+export default DocumentAdd;

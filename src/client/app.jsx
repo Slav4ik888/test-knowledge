@@ -6,7 +6,7 @@ import axios from 'axios';
 // Redux
 import store from './redux/store';
 import { logoutUser, getUserAndCompanyData } from './redux/actions/user-actions';
-import { getAllUsersData, getPositions } from './redux/actions/data-actions';
+import { getAllUsersData, getPositions, getDocuments } from './redux/actions/data-actions';
 import { userActionType } from './redux/types';
 // MUI Stuff
 import { ThemeProvider } from '@material-ui/core/styles';
@@ -34,7 +34,7 @@ if (token && !token.includes(`Bearer undefined`)) {
     store.dispatch(getUserAndCompanyData());
     store.dispatch(getAllUsersData());// Загружаем данные обо всех пользователях
     store.dispatch(getPositions());// Загружаем данные обо всех positions
-    
+    store.dispatch(getDocuments());// Загружаем данные обо всех documents
   }
 };
 

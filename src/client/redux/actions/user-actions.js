@@ -1,5 +1,5 @@
 import { userActionType, uiActionType, dataActionType } from '../types';
-import { getAllUsersData, getPositions } from './data-actions';
+import { getAllUsersData, getPositions, getDocuments } from './data-actions';
 
 import axios from 'axios';
 // const api = axios.create({
@@ -40,9 +40,12 @@ export const signupCompany = (newCompanyData, history) => (dispatch) => {
         type: dataActionType.SET_POSITIONS,
         payload: res.data.newPositions.positions,
       });
-      // dispatch(getUserData());
-      // dispatch(getCompanyData());
-      dispatch({type: uiActionType.CLEAR_ERRORS});
+      dispatch({
+        type: dataActionType.SET_POSITIONS,
+        payload: res.data.newDocuments.documents,
+      });
+
+      dispatch({ type: uiActionType.CLEAR_ERRORS });
       history.push(route.HOME);
     })
     .catch((err) => {
@@ -90,6 +93,8 @@ export const loginUser = (userData, history) => (dispatch) => {
       dispatch(getUserAndCompanyData()); // Загружаем данные по user & company
       dispatch(getAllUsersData()); // Загружаем данные по всем пользователям 
       dispatch(getPositions());// Загружаем данные обо всех positions
+      dispatch(getDocuments());// Загружаем данные обо всех documents
+      
       dispatch({type: uiActionType.CLEAR_ERRORS});
       history.push(route.HOME);
     })

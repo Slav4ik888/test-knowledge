@@ -10,6 +10,7 @@ const { addUser, login, getUserData, updateUserData, deleteUser } = require('./h
 const { signupCompany, getCompanyData, getUserAndCompanyData, updateCompanyData, deleteCompany } = require('./handlers/company');
 const { getPositions, updatePositions } = require('./handlers/positions');
 const { getAllUsersData } = require('./handlers/data');
+const { getDocuments, updateDocuments } = require('./handlers/documents');
 
 
 app.use(bodyParser.json());
@@ -22,20 +23,27 @@ app.post(`/api/addUser`, FBAuth, addUser);
 // get data user and company routes 
 app.get(`/api/user`, FBAuth, getUserData);
 app.post(`/api/user`, FBAuth, updateUserData);
+app.post(`/api/deleteUser`, FBAuth, deleteUser)
 app.get(`/api/usersData`, FBAuth, getAllUsersData);
 app.get(`/api/userAndCompany`, FBAuth, getUserAndCompanyData);
-app.post(`/api/deleteUser`, FBAuth, deleteUser)
 
 // post data user and company routes
 app.get(`/api/company`, FBAuth, getCompanyData);
 app.post(`/api/company`, FBAuth, updateCompanyData);
 app.get(`/api/deleteCompany`, FBAuth, deleteCompany);
+
+// positions
 app.post(`/api/updatePositions`, FBAuth, updatePositions);
 app.get(`/api/getPositions`, FBAuth, getPositions);
+
+// documents
+app.get(`/api/getDocuments`, FBAuth, getDocuments);
+app.post(`/api/updateDocuments`, FBAuth, updateDocuments);
+
 
 app.use(express.static('dist'));
 // app.get('/api/getUsername', (req, res) => res.send({ username: os.userInfo().username }));
 
 app.listen(process.env.PORT || 8080, () => console.log(`Listening on port ${process.env.PORT || 8080}!`));
 
-// git add . && git commit -m "update position to server" && git push origin master
+// git add . && git commit -m "update documents to server & document components" && git push origin master

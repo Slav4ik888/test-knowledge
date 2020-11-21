@@ -14,8 +14,7 @@ import Divider from '@material-ui/core/Divider';
 // Icons
 import Delete from '@material-ui/icons/Delete';
 import EditIcon from '@material-ui/icons/Edit';
-import SupervisedUserCircleIcon from '@material-ui/icons/SupervisedUserCircle';
-// Component
+import FolderIcon from '@material-ui/icons/Folder';
 
 
 const useStyles = makeStyles((theme) => ({
@@ -33,7 +32,7 @@ const useStyles = makeStyles((theme) => ({
   // },
 }));
 
-const PositionItem = ({ title, id, onEdit, onDel}) => {
+const DocumentItem = ({ title, id, onEdit, onDel}) => {
 
   const classes = useStyles();
   const [showIcons, setShowIcons] = useState(false);
@@ -69,7 +68,7 @@ const PositionItem = ({ title, id, onEdit, onDel}) => {
     }
   };
 
-  const handleDelPos = () => onDel(id);
+  const handleDelDoc = () => onDel(id);
 
   return (
     <ListItem
@@ -79,7 +78,7 @@ const PositionItem = ({ title, id, onEdit, onDel}) => {
     >
       <ListItemAvatar>
         <Avatar>
-          <SupervisedUserCircleIcon />
+          <FolderIcon />
         </Avatar>
       </ListItemAvatar>
       {
@@ -107,7 +106,7 @@ const PositionItem = ({ title, id, onEdit, onDel}) => {
 
           {/* <Divider className={classes.divider} orientation="vertical" /> */}
 
-          <ListItemSecondaryAction onClick={handleDelPos}>
+          <ListItemSecondaryAction onClick={handleDelDoc}>
             <Tooltip title="Удалить" placement="bottom" arrow>
               <IconButton edge="end" aria-label="Delete">
                 <Delete />
@@ -121,11 +120,11 @@ const PositionItem = ({ title, id, onEdit, onDel}) => {
   );
 }
 
-PositionItem.propTypes = {
+DocumentItem.propTypes = {
   title: pt.string.isRequired,
   id: pt.string.isRequired,
   onEdit: pt.func.isRequired,
   onDel: pt.func.isRequired,
 };
 
-export default PositionItem;
+export default DocumentItem;

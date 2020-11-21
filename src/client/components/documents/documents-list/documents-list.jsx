@@ -3,21 +3,21 @@ import pt from 'prop-types';
 // MUI Stuff
 import List from '@material-ui/core/List';
 // Component
-import PositionItem from '../position-item/position-item';
+import DocumentItem from '../document-item/document-item';
 
 
-const PositionsList = ({ positions, onEdit, onDel }) => {
+const DocumentsList = ({ documents, onEdit, onDel }) => {
 
-  if (!positions) {
+  if (!documents) {
     return null;
   }
 
   return (
     <>
       <List height={200}>
-        {positions.map((pos) => <PositionItem key={pos.id}
-            title={pos.title}
-            id={pos.id}
+        {documents.map((doc) => <DocumentItem key={doc.id}
+            title={doc.title}
+            id={doc.id}
             onEdit={onEdit}
             onDel={onDel}
           />)
@@ -27,10 +27,10 @@ const PositionsList = ({ positions, onEdit, onDel }) => {
   );
 }
 
-PositionsList.propTypes = {
+DocumentsList.propTypes = {
   onEdit: pt.func.isRequired,
   onDel: pt.func.isRequired,
-  positions: pt.array.isRequired,
+  documents: pt.array.isRequired,
 };
 
-export default PositionsList;
+export default DocumentsList;
