@@ -30,7 +30,7 @@ app.post(`/api/deleteUser`, FBAuth, deleteUser)
 app.get(`/api/company`, FBAuth, getCompanyData);
 app.post(`/api/company`, FBAuth, updateCompanyData);
 app.get(`/api/deleteCompany`, FBAuth, deleteCompany);
-app.post(`/api/positions`, FBAuth, updatePositions);
+app.post(`/api/updatePositions`, FBAuth, updatePositions);
 app.get(`/api/getPositions`, FBAuth, getPositions);
 
 app.use(express.static('dist'));
@@ -38,4 +38,4 @@ app.use(express.static('dist'));
 
 app.listen(process.env.PORT || 8080, () => console.log(`Listening on port ${process.env.PORT || 8080}!`));
 
-// git add . && git commit -m "add position & tooltip & scroll" && git push origin master
+// git add . && git commit -m "update position to server" && git push origin master

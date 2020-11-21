@@ -51,7 +51,7 @@ const validationLoginData = (data) => {
   }
 };
 
-const reduceUserDetails = (data) => {
+const reduceUserData = (data) => {
   let userDetails = {};
 
   if (!isEmpty(data.firstName.trim())) userDetails.firstName = data.firstName;
@@ -61,7 +61,7 @@ const reduceUserDetails = (data) => {
   return userDetails;
 };
 
-const reduceCompanyDetails = (data) => {
+const reduceCompanyData = (data) => {
   let companyDetails = {};
   if (!isEmpty(data.companyName.trim())) companyDetails.companyName = data.companyName;
 
@@ -72,13 +72,12 @@ const reduceCompanyDetails = (data) => {
 async function validationCompanyAuthority(user) {
   let errors = {};
   let ownerId = ``;
-  const doc = await db.doc(`/companies/${user.companyId}`)
-    .get();
+  const doc = await db.doc(`/companies/${user.companyId}`).get();
   
   ownerId = doc.data().ownerId;
   if (user.userId !== ownerId) {
-    console.log(`Не владелец пытается изменить данные в профиле компании`);
-    errors.general = `Извините, у вас недостаточно прав для редактирования профиля компании`;
+    console.log(`Не владелец пытается изменить данные компании`);
+    errors.general = `Извините, у вас недостаточно прав для редактирования компании`;
   }
 
   return {
@@ -90,6 +89,7 @@ async function validationCompanyAuthority(user) {
 module.exports = {
   validationCompanyAuthority,
   validationLoginData,
-  reduceCompanyDetails,
-  validationSignupData
+  reduceCompanyData,
+  reduceUserData,
+  validationSignupData,
 };

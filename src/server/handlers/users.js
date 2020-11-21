@@ -5,7 +5,7 @@ const firebaseConfig = require('../firebase/config');
 const { uuid } = require("uuidv4");
 const { role } = require('../../types');
 
-const { validationSignupData, validationLoginData, reduceUserDetails } = require('../utils/validators');
+const { validationSignupData, validationLoginData, reduceUserData } = require('../utils/validators');
 
 // Create new user
 exports.addUser = (req, res) => {
@@ -148,20 +148,20 @@ exports.getUserData = (req, res) => {
 
 // Update user details
 exports.updateUserData = (req, res) => {
-  let userDetails = reduceUserDetails(req.body);
+  let newUserData = reduceUserData(req.body);
 
   // Те значения которые не меняются, оставляем как были
-  userDetails.email = req.user.email;
-  userDetails.userId = req.user.userId;
-  userDetails.companyId = req.user.companyId;
-  userDetails.createdAt = req.user.createdAt;
-  userDetails.positions = req.user.positions || [];
-  userDetails.role = req.user.role;
-  console.log('userDetails: ', userDetails);
+  newUserData.email = req.user.email;
+  newUserData.userId = req.user.userId;
+  newUserData.companyId = req.user.companyId;
+  newUserData.createdAt = req.user.createdAt;
+  newUserData.positions = req.user.positions || [];
+  newUserData.role = req.user.role;
+  console.log('newUserData: ', newUserData);
 
   db
     .doc(`users/${req.user.companyId}/users/${req.user.email}`)
-    .update(userDetails)
+    .update(newUserData)
     .then(() => {
       return res.json({ message: `Данные пользователя успешно добавлены` });
     })

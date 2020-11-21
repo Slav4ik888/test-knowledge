@@ -4,7 +4,7 @@ import { makeStyles } from '@material-ui/core/styles';
 import { createId, getMaxOrder } from '../utils';
 // Readux Stuff
 import { connect } from 'react-redux';
-import { updatePositions } from '../../../redux/actions/data-actions';
+import { updatePositions, updatePositionsServer } from '../../../redux/actions/data-actions';
 // MUI Stuff
 import Button from '@material-ui/core/Button';
 import Typography from '@material-ui/core/Typography';
@@ -47,7 +47,8 @@ const useStyles = makeStyles((theme) => ({
   }
 }));
 
-const PositionsContainer = ({ open, onClose, UI: { loading, errors, messages }, positions, updatePositions}) => {
+const PositionsContainer = ({ open, onClose, UI: { loading, errors, messages }, positions,
+  updatePositions, updatePositionsServer }) => {
 
   if (!open) {
     return null;
@@ -66,7 +67,7 @@ const PositionsContainer = ({ open, onClose, UI: { loading, errors, messages }, 
     console.log(`handleDelPos id: `, id);
     const idx = positions.findIndex((pos) => pos.id === id);
     let newPositions = [...positions.slice(0, idx), ...positions.slice(idx + 1)];
-    updatePositions(newPositions);
+    updatePositionsServer(newPositions);
   };
 
   const handleAddPos = (title) => {
@@ -85,7 +86,7 @@ const PositionsContainer = ({ open, onClose, UI: { loading, errors, messages }, 
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    // addUser(email);
+    updatePositionsServer(positions);
   };
 
   const listRef = useRef(null);
@@ -153,6 +154,7 @@ const PositionsContainer = ({ open, onClose, UI: { loading, errors, messages }, 
 
 PositionsContainer.propTypes = {
   updatePositions: pt.func.isRequired,
+  updatePositionsServer: pt.func.isRequired,
   open: pt.bool.isRequired,
   onClose: pt.func.isRequired,
   UI: pt.object.isRequired,
@@ -164,4 +166,4 @@ const mapStateToProps = (state) => ({
   positions: state.data.positions,
 });
 
-export default connect(mapStateToProps, {updatePositions})(PositionsContainer);
+export default connect(mapStateToProps, {updatePositions, updatePositionsServer})(PositionsContainer);

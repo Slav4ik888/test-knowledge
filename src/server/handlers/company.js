@@ -9,7 +9,7 @@ const newPositions = {
   positions,
 };
 
-const { validationSignupData, reduceCompanyDetails, validationCompanyAuthority } = require('../utils/validators');
+const { validationSignupData, reduceCompanyData, validationCompanyAuthority } = require('../utils/validators');
 const { deleteDocument, deleteUsersCollection } = require('../utils/deletes');
 
 // Create new company
@@ -169,7 +169,7 @@ exports.updateCompanyData = (req, res) => {
       console.log('valid: ', valid);
       if (!valid) return res.status(400).json(errors);
 
-      let companyDetails = reduceCompanyDetails(req.body);
+      let companyDetails = reduceCompanyData(req.body);
 
       db
         .doc(`/companies/${req.user.companyId}`)
