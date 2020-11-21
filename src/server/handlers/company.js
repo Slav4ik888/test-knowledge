@@ -122,7 +122,7 @@ exports.getCompanyData = (req, res) => {
     })
     .catch(err => {
       console.error(err);
-      return res.status(500).json({ error: err.code });
+      return res.status(500).json({ general: err.code });
     })
 };
 
@@ -154,7 +154,7 @@ exports.getUserAndCompanyData = (req, res) => {
     })
     .catch(err => {
       console.error(err);
-      return res.status(500).json({ error: err.code });
+      return res.status(500).json({ general: err.code });
     })
 };
 
@@ -180,7 +180,7 @@ exports.updateCompanyData = (req, res) => {
         })
         .catch(err => {
           console.error(err);
-          return res.status(500).json({ error: err.code });
+          return res.status(500).json({ general: err.code });
         })
     });
   
@@ -195,7 +195,8 @@ exports.deleteCompany = (req, res) => {
 
       // удаляем positions
       deleteDocument(db, `positions`, req.user.companyId);// db.doc(`positions/${req.user.companyId}`);
-      
+      // удаляем documents
+      deleteDocument(db, `documents`, req.user.companyId);
       // удаляем всех users
       let users = [];
       db.collection(`users`).doc(`${req.user.companyId}`).collection(`users`).get()
@@ -210,9 +211,8 @@ exports.deleteCompany = (req, res) => {
           // удаляем users
           deleteUsersCollection(db, req.user.companyId, 50)
             .then(() => {
-              console.log(22);
               deleteDocument(db, `users`, req.user.companyId);
-          })
+            })
         })
         .then(() => {
           return res.json({ message: `Данные по компании успешно удалены` });
@@ -220,8 +220,6 @@ exports.deleteCompany = (req, res) => {
     })
     .catch(err => {
       console.error(err);
-      return res.status(500).json({ error: err.code });
+      return res.status(500).json({ general: err.code });
     })
-      // TODO: удаляем documents
-  
 };

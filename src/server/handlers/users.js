@@ -107,7 +107,7 @@ exports.deleteUser = (req, res) => {
   
   if (req.user.userId === req.body.userId && req.user.role === `Владелец`) {
     console.log(`Попытка удалить аккаунт компании`);
-    return res.status(400).json({ error: `Вы являетесь Владельцем аккаунта и не можете удалить себя как пользователя. Вы можете назначить другого пользователя Владельцем, либо удалить аккаунт компании из "Профиля компании"` });
+    return res.status(400).json({ general: `Вы являетесь Владельцем аккаунта и не можете удалить себя как пользователя. Вы можете назначить другого пользователя Владельцем, либо удалить аккаунт компании из "Профиля компании"` });
   }
 
   
@@ -123,7 +123,7 @@ exports.deleteUser = (req, res) => {
     })
     .catch((err) => {
       console.log('Error deleting user:', err);
-      return res.status(500).json({ err: err.code });
+      return res.status(500).json({ general: err.code });
     });
 };
 
@@ -142,7 +142,7 @@ exports.getUserData = (req, res) => {
     })
     .catch(err => {
       console.error(err);
-      return res.status(500).json({ error: err.code });
+      return res.status(500).json({ general: err.code });
     })
 };
 
@@ -167,6 +167,6 @@ exports.updateUserData = (req, res) => {
     })
     .catch(err => {
       console.error(err);
-      return res.status(500).json({ error: err.code });
+      return res.status(500).json({ general: err.code });
     })
 };

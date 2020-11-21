@@ -31,7 +31,8 @@ module.exports = (req, res, next) => {
       return next();
     })
     .catch(err => {
-      console.error(`Ошибка в верификации токена: `, err);
-      return res.status(403).json({ error: err });
+      // 'auth/id-token-expired'
+      console.error(`Ошибка в верификации токена: `, err.code);
+      return res.status(403).json({ general: err.code });
     });
 };
