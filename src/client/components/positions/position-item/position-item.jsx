@@ -24,6 +24,10 @@ const useStyles = makeStyles((theme) => ({
   },
   hover: {
     backgroundColor: `#e9f6fc`,
+  },
+  avatarIcon: {
+    height: `34px`,
+    width: `34px`,
   }
   // divider: {
   //   height: 28,
@@ -79,7 +83,7 @@ const PositionItem = ({ title, id, onEdit, onDel}) => {
     >
       <ListItemAvatar>
         <Avatar>
-          <SupervisedUserCircleIcon />
+          <SupervisedUserCircleIcon className={classes.avatarIcon}/>
         </Avatar>
       </ListItemAvatar>
       {

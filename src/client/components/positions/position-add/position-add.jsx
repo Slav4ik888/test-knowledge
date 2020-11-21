@@ -26,6 +26,10 @@ const useStyles = makeStyles((theme) => ({
     flex: 1,
     padding: theme.spacing(1),
   },
+  avatarIcon: {
+    height: `34px`,
+    width: `34px`,
+  }
 }));
 
 const PositionAdd = ({ onAdd}) => {
@@ -59,7 +63,7 @@ const PositionAdd = ({ onAdd}) => {
     <form onSubmit={handleSubmit}>
       <Paper className={classes.formControl}>
         <Avatar>
-          <SupervisedUserCircleIcon />
+          <SupervisedUserCircleIcon className={classes.avatarIcon}/>
         </Avatar>
         <InputBase
           className={classes.input}

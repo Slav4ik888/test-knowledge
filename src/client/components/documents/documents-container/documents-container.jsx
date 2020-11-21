@@ -11,13 +11,12 @@ import Typography from '@material-ui/core/Typography';
 import Dialog from '@material-ui/core/Dialog';
 import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
-import DialogTitle from '@material-ui/core/DialogTitle';
 // Icons
 import CircularProgress from '@material-ui/core/CircularProgress';
-import CloseIcon from '@material-ui/icons/Close';
 // Component
 import DocumentsList from '../documents-list/documents-list';
 import DocumentAdd from '../document-add/document-add';
+import DialogTitle from '../../dialogs/dialog-title/dialog-title';
 
 
 const useStyles = makeStyles((theme) => ({
@@ -27,7 +26,6 @@ const useStyles = makeStyles((theme) => ({
   textField: {
     margin: `10px auto 10px auto`,
   },
-  
   iconButton: {
     padding: 10,
   },
@@ -103,16 +101,11 @@ const DoumentsContainer = ({ open, onClose, UI: { loading, errors, messages }, d
   return (
     <>
       <Dialog
-        disableBackdropClick
-        disableEscapeKeyDown
-        className={classes.dialog}
-        open={open}
-        onClose={handleClose}
-        fullWidth
-        maxWidth="sm"
-        scroll={`paper`}
+        disableBackdropClick fullWidth
+        className={classes.dialog} maxWidth="sm" scroll={`paper`}
+        open={open} onClose={handleClose}
       >
-        <DialogTitle>Настройка документов</DialogTitle>
+        <DialogTitle onClose={handleClose}>Настройка документов</DialogTitle>
         <DialogContent dividers ref={listRef} >
             <DocumentsList
               open={open}

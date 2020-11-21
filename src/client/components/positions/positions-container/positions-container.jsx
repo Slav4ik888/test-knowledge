@@ -1,17 +1,16 @@
 import React, {useState, useRef, useEffect} from 'react';
 import pt from 'prop-types';
-import { makeStyles } from '@material-ui/core/styles';
 import { createId, getMaxOrder } from '../../../utils/utils';
 // Readux Stuff
 import { connect } from 'react-redux';
 import { updatePositions, updatePositionsServer } from '../../../redux/actions/data-actions';
 // MUI Stuff
+import { makeStyles } from '@material-ui/core/styles';
 import Button from '@material-ui/core/Button';
 import Typography from '@material-ui/core/Typography';
 import Dialog from '@material-ui/core/Dialog';
 import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
-import DialogTitle from '@material-ui/core/DialogTitle';
 import IconButton from '@material-ui/core/IconButton';
 // Icons
 import CircularProgress from '@material-ui/core/CircularProgress';
@@ -19,22 +18,16 @@ import CloseIcon from '@material-ui/icons/Close';
 // Component
 import PositionsList from '../positions-list/positions-list';
 import PositionAdd from '../position-add/position-add';
+import DialogTitle from '../../dialogs/dialog-title/dialog-title';
 
 
 const useStyles = makeStyles((theme) => ({
   dialog: {
     padding: theme.spacing(4),
   },
-  closeButton: {
-    position: 'absolute',
-    right: theme.spacing(2),
-    top: theme.spacing(1),
-    color: theme.palette.grey[500],
-  },
   textField: {
     margin: `10px auto 10px auto`,
   },
-  
   iconButton: {
     padding: 10,
   },
@@ -110,21 +103,11 @@ const PositionsContainer = ({ open, onClose, UI: { loading, errors, messages }, 
   return (
     <>
       <Dialog
-        disableBackdropClick
-        disableEscapeKeyDown
-        className={classes.dialog}
-        open={open}
-        onClose={handleClose}
-        fullWidth
-        maxWidth="sm"
-        scroll={`paper`}
+        disableBackdropClick fullWidth
+        className={classes.dialog} maxWidth="sm" scroll={`paper`}
+        open={open} onClose={handleClose}
       >
-        <DialogTitle>
-          Настройка должностей
-          <IconButton aria-label="close" className={classes.closeButton} onClick={handleClose}>
-            <CloseIcon />
-          </IconButton>
-        </DialogTitle>
+        <DialogTitle onClose={handleClose}>Настройка должностей</DialogTitle>
         <DialogContent dividers ref={listRef} >
             <PositionsList
               open={open}
