@@ -59,6 +59,7 @@ const DoumentsContainer = ({ open, onClose, UI: { loading, errors, messages }, d
     let newDocuments = [...documents];
     const idx = documents.findIndex((doc) => doc.id === id);
     newDocuments[idx].title = newTitle;
+    newDocuments[idx].lastChange = new Date().toISOString(),
     updateDocuments(newDocuments);
   };
 
@@ -74,6 +75,8 @@ const DoumentsContainer = ({ open, onClose, UI: { loading, errors, messages }, d
       const newDoc = {
         title,
         id: createId(documents),
+        createdAt: new Date().toISOString(),
+        lastChange: new Date().toISOString(),
         sections: [],
       }
       let newDocuments = [newDoc, ...documents];

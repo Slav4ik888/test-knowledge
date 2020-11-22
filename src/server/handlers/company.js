@@ -5,7 +5,6 @@ const firebaseConfig = require('../firebase/config');
 const { uuid } = require("uuidv4");
 const { role } = require('../../types');
 const { newPositions, newDocuments } = require('../utils/templates');
-console.log('newDocuments: ', newDocuments);
 
 const { validationSignupData, reduceCompanyData, validationCompanyAuthority } = require('../utils/validators');
 const { deleteDocument, deleteUsersCollection } = require('../utils/deletes');
@@ -55,6 +54,7 @@ exports.signupCompany = (req, res) => {
         owner: newUser.email,
         imageUrl: `https://firebasestorage.googleapis.com/v0/b/${firebaseConfig.storageBucket}/o/${moImgCompany}?alt=media`,
         createdAt: new Date().toISOString(),
+        lastChange: new Date().toISOString(),
       });
 
       return db.collection(`companies`) // Добавляем компанию в коллекцию
@@ -68,6 +68,7 @@ exports.signupCompany = (req, res) => {
         secondName: ``,
         middleName: ``,
         createdAt: new Date().toISOString(),
+        lastChange: new Date().toISOString(),
         imageUrl: `https://firebasestorage.googleapis.com/v0/b/${firebaseConfig.storageBucket}/o/${moImgUser}?alt=media`,
         userId,
         role: role.OWNER,
@@ -174,6 +175,7 @@ exports.updateCompanyData = (req, res) => {
         .doc(`/companies/${req.user.companyId}`)
         .update({
           companyName: companyDetails.companyName,
+          lastChange: new Date().toISOString(),
         })
         .then(() => {
           return res.json({ message: `Данные компании успешно обновлены` });

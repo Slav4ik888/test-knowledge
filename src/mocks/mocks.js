@@ -6,21 +6,31 @@ import { typeQuestions } from '../types';
 export const documents = [
   {
     id: `1`,
+    createdAt: `2020-11-04T18:16:54.385Z`,
+    lastChange: `2020-11-04T18:16:54.385Z`,
     title: `Должностная папка Кладовщика`,
     sections: [{
       id: `1`,
+      createdAt: `2020-11-04T18:16:54.385Z`,
+      lastChange: `2020-11-04T18:16:54.385Z`,
       title: `Приёмка товара`, // Раздел в документе 
       order: 10,
     }, {
       id: `2`,
+      createdAt: `2020-11-04T18:16:54.385Z`,
+      lastChange: `2020-11-04T18:16:54.385Z`,
       title: `Хранение товара`, // Раздел в документе 
       order: 20,
     }],
   }, {
     id: `2`,
+    createdAt: `2020-11-04T18:16:54.385Z`,
+    lastChange: `2020-11-04T18:16:54.385Z`,
     title: `Должностная папка Супервайзера`,
     sections: [{
       id: `1`,
+      createdAt: `2020-11-04T18:16:54.385Z`,
+      lastChange: `2020-11-04T18:16:54.385Z`,
       title: `Проведение тестирования`, // Раздел в документе 
       order: 10,
     }],
@@ -31,6 +41,8 @@ export const documents = [
 export const rules = [
   {
     id: `3fdr3df`,
+    createdAt: `2020-11-04T18:16:54.385Z`,
+    lastChange: `2020-11-04T18:16:54.385Z`,
     documentId: `1`, // docs[0].id - в каком документе находится это правило
     document_section: `Приёмка товара`, // Раздел в документе в котором находится правило
     
@@ -57,8 +69,10 @@ export const rules = [
 // Вопросы для тестирования
 export const questions = [
   {
+    id: `fh29320`, // id вопроса
     idRule: `3fdr3`, // id правила - для которого пишется вопрос
-    idQuestion: `fh29320`, // id вопроса
+    createdAt: `2020-11-04T18:16:54.385Z`,
+    lastChange: `2020-11-04T18:16:54.385Z`,
     typeQuestion: typeQuestions.ONE_ANSWER, // Тип вопроса: 1 или несколько ответов и прочие варианты
     question: `Что должен сделать Кладовщик, если товар пришёл с повреждениями?`,
     answers: [
@@ -76,8 +90,10 @@ export const questions = [
     ],
     answerTrue: [1],
   }, {
-    idRule: `3fdr3`,
-    idQuestion: `fh29320`, // id вопроса
+    id: `bg29d0`, // id вопроса
+    idRule: `3fdr3`, // id правила - для которого пишется вопрос
+    createdAt: `2020-11-04T18:16:54.385Z`,
+    lastChange: `2020-11-04T18:16:54.385Z`,
     typeQuestion: typeQuestions.MANY_ANSWERS, // Тип вопроса: 1 или несколько ответов и прочие варианты
     question: `Если товар пришёл с повреждениями, для чего Кладовщик должен сообщить Менеджеру об этом?`,
     forPositions: [positions.director, positions.storekeeper, positions.manager], // Для каких должностей
@@ -92,7 +108,10 @@ export const questions = [
     ],
     answerTrue: [0, 2],
   }, {
-    idRule: `3fdr3`,
+    id: `fh29320`, // id вопроса
+    idRule: `3fdr3`, // id правила - для которого пишется вопрос
+    createdAt: `2020-11-04T18:16:54.385Z`,
+    lastChange: `2020-11-04T18:16:54.385Z`,
     question: `Если товар пришёл с повреждениями, что Кладовщик должен сообщить Менеджеру?`,
     forPositions: [positions.director, positions.storekeeper, positions.manager], // Для каких должностей
     typeQuestion: typeQuestions.ONE_ANSWER, // Тип вопроса: 1 или несколько ответов и прочие варианты

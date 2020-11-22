@@ -7,7 +7,6 @@ async function updateDocuments(req, res) {
   // является ли пользователь Владельцем аккаунта
   const validData = await validationCompanyAuthority(req.user); 
   const { valid, errors } = validData;
-  console.log('validUpdateDocuments: ', valid);
   if (!valid) return res.status(400).json(errors);
 
   let newDocuments = {
@@ -36,10 +35,13 @@ async function getDocuments(req, res) {
     const docRes = await db.doc(`documents/${req.user.companyId}`).get();
     if (docRes.exists) {
       const data = docRes.data();
+      console.log('data: ', data);
       let documents = [];
       data.documents.forEach(doc => {
         documents.push({
           id: doc.id,
+          createdAt: doc.createdAt,
+          lastChange: doc.lastChange,
           sections: doc.sections,
           title: doc.title,
         });

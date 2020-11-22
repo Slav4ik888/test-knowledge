@@ -4,37 +4,37 @@ import pt from 'prop-types';
 // import {connect} from 'react-redux';
 // import {getScreams} from '../redux/actions/data-actions';
 // MUI Stuff
+import { makeStyles } from '@material-ui/core/styles';  
 import Grid from '@material-ui/core/Grid';
 // Component
-// import Scream from '../components/scream';
+import RulesContainer from '../components/rules/rules-container/rules-container';
 // import Profile from '../components/profile';
 
 
-class Home extends Component {
-  // componentDidMount() {
-  //   this.props.getScreams();
-  // }
+const useStyles = makeStyles((theme) => ({
+  root: {
+    flexGrow: 1,
+    display: `flex`,
+    justifyContent: `center`,
+  },
+  paper: {
+    padding: theme.spacing(2),
+    textAlign: 'center',
+    color: theme.palette.text.secondary,
+  },
+}));
 
-  render() {
-    // const {screams, loading} = this.props.data;
-    // console.log('screams: ', screams);
-    
-    // let recentScreamsMarkup = !loading ? (
-    //   screams.map((scream) => (
-    //     <Scream key={scream.screamId} scream={scream} />
-    //   ))
-    // ) : <p>Loading...</p>;
-    return (
-      <Grid container spacing={2}>
-        <Grid item sm={4} xs={12}>
-          Меню...
-        </Grid>
+
+const Home = () => {
+  const classes = useStyles();
+
+  return (
+      <Grid container spacing={2} className={classes.root}>
         <Grid item sm={8} xs={12}>
-          Блок для работы
+          <RulesContainer />
         </Grid>
       </Grid>
-    );
-  }
+  );
 };
 
 Home.propTypes = {

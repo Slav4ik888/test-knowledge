@@ -92,4 +92,5 @@ module.exports = {
   reduceCompanyData,
   reduceUserData,
   validationSignupData,
+  isEmpty,
 };

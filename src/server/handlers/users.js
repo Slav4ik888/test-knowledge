@@ -5,7 +5,7 @@ const firebaseConfig = require('../firebase/config');
 const { uuid } = require("uuidv4");
 const { role } = require('../../types');
 
-const { validationSignupData, validationLoginData, reduceUserData } = require('../utils/validators');
+const { validationSignupData, validationLoginData, isEmpty } = require('../utils/validators');
 
 // Create new user
 exports.addUser = (req, res) => {
@@ -148,20 +148,28 @@ exports.getUserData = (req, res) => {
 
 // Update user details
 exports.updateUserData = (req, res) => {
-  let newUserData = reduceUserData(req.body);
+  // let newUserData = reduceUserData(req.body);
 
   // Те значения которые не меняются, оставляем как были
-  newUserData.email = req.user.email;
-  newUserData.userId = req.user.userId;
-  newUserData.companyId = req.user.companyId;
-  newUserData.createdAt = req.user.createdAt;
-  newUserData.positions = req.user.positions || [];
-  newUserData.role = req.user.role;
-  console.log('newUserData: ', newUserData);
+  // newUserData.email = req.user.email;
+  // newUserData.userId = req.user.userId;
+  // newUserData.companyId = req.user.companyId;
+  // newUserData.createdAt = req.user.createdAt;
+  // newUserData.positions = req.user.positions || [];
+  // newUserData.role = req.user.role;
+  // newUserData.lastChange = new Date().toISOString(),
+  const firstName = !isEmpty(req.body.firstName.trim()) ? req.body.firstName : ``;
+  const secondName = !isEmpty(req.body.secondName.trim()) ? req.body.secondName : ``;
+  const middleName = !isEmpty(req.body.middleName.trim()) ? req.body.middleName : ``;
 
   db
     .doc(`users/${req.user.companyId}/users/${req.user.email}`)
-    .update(newUserData)
+    .update({
+      firstName,
+      secondName,
+      middleName,
+      lastChange: new Date().toISOString(),
+    })
     .then(() => {
       return res.json({ message: `Данные пользователя успешно добавлены` });
     })

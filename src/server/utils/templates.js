@@ -24,13 +24,19 @@ exports.newDocuments = {
   documents: [
     {
       id: `1`,
+      createdAt: new Date().toISOString(),
+      lastChange: new Date().toISOString(),
       title: `Общие правила компании`,
       sections: [{
         id: `1`,
+        createdAt: new Date().toISOString(),
+        lastChange: new Date().toISOString(),
         title: `Регламент рабочего времени`, // Раздел в документе 
         order: 10,
       }, {
         id: `2`,
+        createdAt: new Date().toISOString(),
+        lastChange: new Date().toISOString(),
         title: `Хранение товара`,
         order: 20,
       }],

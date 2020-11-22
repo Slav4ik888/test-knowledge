@@ -72,6 +72,7 @@ const ProfielCompanyEdit = ({ classes, open, onClose, user: { userProfile, compa
 
     let companyProfileUpdate = Object.assign({}, newCP);
     companyProfileUpdate[e.target.name] = e.target.value;
+    companyProfileUpdate.lastChange = new Date().toISOString();
     setNewCP(companyProfileUpdate); 
   };
 

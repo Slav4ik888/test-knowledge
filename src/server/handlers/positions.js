@@ -7,7 +7,6 @@ async function updatePositions(req, res) {
   // является ли пользователь Владельцем аккаунта
   const validData = await validationCompanyAuthority(req.user);
   const { valid, errors } = validData;
-  console.log('validUpdatePositions: ', valid);
   if (!valid) return res.status(400).json(errors);
 
   let newPositions = {
