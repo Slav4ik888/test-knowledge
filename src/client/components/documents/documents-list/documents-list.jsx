@@ -16,8 +16,7 @@ const DocumentsList = ({ documents, onEdit, onDel }) => {
     <>
       <List height={200}>
         {documents.map((doc) => <DocumentItem key={doc.id}
-            title={doc.title}
-            id={doc.id}
+            doc={doc}
             onEdit={onEdit}
             onDel={onDel}
           />)

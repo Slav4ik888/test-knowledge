@@ -1,11 +1,11 @@
 import React, {useState, useRef, useEffect} from 'react';
 import pt from 'prop-types';
-import { makeStyles } from '@material-ui/core/styles';
 import { createId, getMaxOrder } from '../../../utils/utils';
 // Readux Stuff
 import { connect } from 'react-redux';
 import { updateDocuments, updateDocumentsServer } from '../../../redux/actions/data-actions';
 // MUI Stuff
+import { makeStyles } from '@material-ui/core/styles';
 import Button from '@material-ui/core/Button';
 import Typography from '@material-ui/core/Typography';
 import Dialog from '@material-ui/core/Dialog';
@@ -64,7 +64,6 @@ const DoumentsContainer = ({ open, onClose, UI: { loading, errors, messages }, d
   };
 
   const handleDelDoc = (id) => {
-    console.log(`handleDelDoc id: `, id);
     const idx = documents.findIndex((doc) => doc.id === id);
     let newDocuments = [...documents.slice(0, idx), ...documents.slice(idx + 1)];
     updateDocumentsServer(newDocuments);
@@ -77,6 +76,7 @@ const DoumentsContainer = ({ open, onClose, UI: { loading, errors, messages }, d
         id: createId(documents),
         createdAt: new Date().toISOString(),
         lastChange: new Date().toISOString(),
+        positions: [],
         sections: [],
       }
       let newDocuments = [newDoc, ...documents];

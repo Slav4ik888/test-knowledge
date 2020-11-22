@@ -1,11 +1,11 @@
 const { db } = require('../firebase/admin');
-const { validationCompanyAuthority } = require('../utils/validators');
+const { validationAdminAuthority } = require('../utils/validators');
 
 
 // Обновляем список documents
 async function updateDocuments(req, res) {
-  // является ли пользователь Владельцем аккаунта
-  const validData = await validationCompanyAuthority(req.user); 
+  // является ли пользователь Админом или Владельцем аккаунта или 
+  const validData = await validationAdminAuthority(req.user); 
   const { valid, errors } = validData;
   if (!valid) return res.status(400).json(errors);
 
@@ -20,7 +20,7 @@ async function updateDocuments(req, res) {
     req.update = true; 
     
     const documents = await getDocuments(req, res);
-    console.log('Обновлённые documents: ', JSON.stringify(documents));
+    // console.log('Обновлённые documents: ', JSON.stringify(documents));
     return res.json({ documents, message: `Список документов успешно обновлён` });
 
   } catch(err) {
@@ -35,18 +35,18 @@ async function getDocuments(req, res) {
     const docRes = await db.doc(`documents/${req.user.companyId}`).get();
     if (docRes.exists) {
       const data = docRes.data();
-      console.log('data: ', data);
       let documents = [];
       data.documents.forEach(doc => {
         documents.push({
           id: doc.id,
           createdAt: doc.createdAt,
           lastChange: doc.lastChange,
+          positions: doc.positions,
           sections: doc.sections,
           title: doc.title,
         });
       });
-      console.log('documents: ', documents);
+
       if (req.update) {
         console.log(`Update documents`);
         return documents;

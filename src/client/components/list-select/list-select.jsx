@@ -39,7 +39,7 @@ const ListSelect = ({ items, valueField, title, placeholder, label, onSelected }
 
   return (
     <form className={classes.container}>
-      <FormControl className={classes.formControl}>
+      <FormControl variant="outlined" className={classes.formControl}>
         <InputLabel id={`${label}-label`}>{title}</InputLabel>
         <Select
           labelId={`${label}-label`}

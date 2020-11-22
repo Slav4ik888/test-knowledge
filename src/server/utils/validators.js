@@ -1,4 +1,5 @@
 const { db } = require('../firebase/admin');
+const { role } = require('../../types');
 
 const isEmail = (email) => {
   const emailRegEx = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
@@ -86,8 +87,27 @@ async function validationCompanyAuthority(user) {
   }
 };
 
+// является ли пользователь Администратором или Владельцем аккаунта
+async function validationAdminAuthority(user) {
+  let errors = {};
+  let ownerId = ``;
+  const doc = await db.doc(`/companies/${user.companyId}`).get();
+  
+  ownerId = doc.data().ownerId;
+  if (user.userId !== ownerId && user.role !== role.ADMIN) {
+    console.log(`Не админ и не владелец пытается изменить данные`);
+    errors.general = `Извините, у вас недостаточно прав для выполнения данной операции`;
+  }
+
+  return {
+    errors,
+    valid: Object.keys(errors).length === 0 ? true : false,
+  }
+};
+
 module.exports = {
   validationCompanyAuthority,
+  validationAdminAuthority,
   validationLoginData,
   reduceCompanyData,
   reduceUserData,

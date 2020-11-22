@@ -67,10 +67,10 @@ export const updatePositionsServer = (newPositions) => (dispatch) => {
       dispatch({ type: uiActionType.CLEAR_ERRORS });
     })
     .catch((err) => {
-      console.log(err);
+      console.log(err.response.data);
       dispatch({
         type: uiActionType.SET_ERRORS,
-        payload: err.data,
+        payload: err.response.data,
       })
     });
 };
@@ -89,7 +89,7 @@ export const getDocuments = () => (dispatch) => {
       dispatch({ type: uiActionType.CLEAR_ERRORS });
     })
     .catch((err) => {
-      console.log(err);
+      console.log(err.response);
       dispatch({
         type: uiActionType.SET_ERRORS,
         payload: err.response.data,
@@ -99,7 +99,7 @@ export const getDocuments = () => (dispatch) => {
 };
 
 
-// Обновляем positions только в store, без сервера
+// Обновляем documents только в store, без сервера
 export const updateDocuments = (newDocuments) => (dispatch) => {
   dispatch({
     type: dataActionType.SET_DOCUMENTS,
@@ -108,7 +108,7 @@ export const updateDocuments = (newDocuments) => (dispatch) => {
 };
 
 
-// Обновляем positions на сервере
+// Обновляем documents на сервере
 export const updateDocumentsServer = (newDocuments) => (dispatch) => {
   dispatch({ type: uiActionType.LOADING_UI });
   return axios.post(`/updateDocuments`, newDocuments)
@@ -121,10 +121,10 @@ export const updateDocumentsServer = (newDocuments) => (dispatch) => {
       dispatch({ type: uiActionType.CLEAR_ERRORS });
     })
     .catch((err) => {
-      console.log(err);
+      console.log(err.response.data);
       dispatch({
         type: uiActionType.SET_ERRORS,
-        payload: err.data,
+        payload: err.response.data,
       })
     });
 };

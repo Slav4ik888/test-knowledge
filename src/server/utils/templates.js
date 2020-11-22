@@ -27,6 +27,7 @@ exports.newDocuments = {
       createdAt: new Date().toISOString(),
       lastChange: new Date().toISOString(),
       title: `Общие правила компании`,
+      positions: [],
       sections: [{
         id: `1`,
         createdAt: new Date().toISOString(),
