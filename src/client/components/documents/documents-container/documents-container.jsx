@@ -29,31 +29,19 @@ const useStyles = makeStyles((theme) => ({
   iconButton: {
     padding: 10,
   },
-  customError: {
-    color: `red`,
-    fontSize: `0.8rem`,
-    marginTop: 10,
-  },
   container: {
     display: 'flex',
     flexWrap: 'wrap',
   },
-  documentAdd: {
-    paddingLeft: theme.spacing(4),
-    paddingRight: theme.spacing(4),
-    paddingTop: theme.spacing(1),
-    paddingBottom: theme.spacing(1),
-  }
 }));
 
-const DoumentsContainer = ({ open, onClose, UI: { loading, errors, messages }, documents,
-  updateDocuments, updateDocumentsServer }) => {
+const DoumentsContainer = ({ open, onClose, UI, documents, updateDocuments, updateDocumentsServer }) => {
 
   if (!open) {
     return null;
   }
   const classes = useStyles();
-  console.log(documents);
+  const { loading } = UI;
   
   const handleEditDoc = (id, newTitle) => {
     let newDocuments = [...documents];
@@ -110,26 +98,15 @@ const DoumentsContainer = ({ open, onClose, UI: { loading, errors, messages }, d
       >
         <DialogTitle onClose={handleClose}>Настройка документов</DialogTitle>
         <DialogContent dividers ref={listRef} >
-            <DocumentsList
-              open={open}
-              documents={documents}
-              onEdit={handleEditDoc}
-              onDel={handleDelDoc}
-            />
+          <DocumentsList
+            open={open}
+            documents={documents}
+            onEdit={handleEditDoc}
+            onDel={handleDelDoc}
+          />
         </DialogContent>
 
-        <div className={classes.documentAdd}>
-          <DocumentAdd onAdd={handleAddDoc} />
-
-          {
-            errors.general && (
-              <Typography variant="body2" className={classes.customError}>
-                {errors.general}
-              </Typography>
-            )
-          }
-
-        </div>
+        <DocumentAdd onAdd={handleAddDoc} UI={UI} />
 
         <DialogActions className={classes.dialog}>
           <Button onClick={handleClose} >

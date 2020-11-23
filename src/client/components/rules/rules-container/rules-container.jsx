@@ -50,7 +50,9 @@ const RulesContainer = ({ loading, documents }) => {
           placeholder={`Не указан`}
           onSelected={handleDocSelected}
         />
-        
+        <Paper className={classes.paper}>
+          
+        </Paper>
       </Paper>
     </div>
   );

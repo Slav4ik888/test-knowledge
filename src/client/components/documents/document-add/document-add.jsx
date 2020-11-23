@@ -12,6 +12,12 @@ import FolderIcon from '@material-ui/icons/Folder';
 
 
 const useStyles = makeStyles((theme) => ({
+  documentAdd: {
+    paddingLeft: theme.spacing(4),
+    paddingRight: theme.spacing(4),
+    paddingTop: theme.spacing(1),
+    paddingBottom: theme.spacing(1),
+  },
   formControl: {
     marginTop: theme.spacing(4),
     marginBottom: theme.spacing(2),
@@ -26,9 +32,14 @@ const useStyles = makeStyles((theme) => ({
     flex: 1,
     padding: theme.spacing(1),
   },
+  customError: {
+    color: `red`,
+    fontSize: `0.8rem`,
+    marginTop: 10,
+  },
 }));
 
-const DocumentAdd = ({ onAdd}) => {
+const DocumentAdd = ({ onAdd, UI: { errors } }) => {
 
   const classes = useStyles();
 
@@ -56,29 +67,41 @@ const DocumentAdd = ({ onAdd}) => {
   };
 
   return (
-    <form onSubmit={handleSubmit}>
-      <Paper className={classes.formControl}>
-        <Avatar>
-          <FolderIcon />
-        </Avatar>
-        <InputBase
-          className={classes.input}
-          placeholder="Добавить документ"
-          inputProps={{ 'aria-label': 'Новый документ' }}
-          type="text"
-          value={newDoc}
-          onChange={handleEdit}
-        />
-        <IconButton aria-label="Add" onClick={handleAdd}>
-          <AddIcon />
-        </IconButton>
-      </Paper>
-    </form>
+    <div className={classes.documentAdd}>   
+      <form onSubmit={handleSubmit}>
+        <Paper className={classes.formControl}>
+          <Avatar>
+            <FolderIcon />
+          </Avatar>
+          <InputBase
+            className={classes.input}
+            placeholder="Добавить документ"
+            inputProps={{ 'aria-label': 'Новый документ' }}
+            type="text"
+            value={newDoc}
+            onChange={handleEdit}
+          />
+          <IconButton aria-label="Add" onClick={handleAdd}>
+            <AddIcon />
+          </IconButton>
+        </Paper>
+      </form>
+
+      {
+        errors.general && (
+          <Typography variant="body2" className={classes.customError}>
+            {errors.general}
+          </Typography>
+        )
+      }
+
+    </div>
   );
 }
 
 DocumentAdd.propTypes = {
   onAdd: pt.func.isRequired,
+  UI: pt.object.isRequired,
 };
 
 export default DocumentAdd;
