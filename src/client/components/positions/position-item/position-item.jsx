@@ -16,7 +16,7 @@ import Delete from '@material-ui/icons/Delete';
 import EditIcon from '@material-ui/icons/Edit';
 import SupervisedUserCircleIcon from '@material-ui/icons/SupervisedUserCircle';
 // Component
-
+import DeletePositionAvatar from '../../buttons/delete-position-avatar/delete-position-avatar';
 
 const useStyles = makeStyles((theme) => ({
   editIcon: {
@@ -111,13 +111,7 @@ const PositionItem = ({ title, id, onEdit, onDel}) => {
 
           {/* <Divider className={classes.divider} orientation="vertical" /> */}
 
-          <ListItemSecondaryAction onClick={handleDelPos}>
-            <Tooltip title="Удалить" placement="bottom" arrow>
-              <IconButton edge="end" aria-label="Delete">
-                <Delete />
-              </IconButton>
-            </Tooltip>
-          </ListItemSecondaryAction>
+          <DeletePositionAvatar onDel={handleDelPos} />
         </>
       }
 

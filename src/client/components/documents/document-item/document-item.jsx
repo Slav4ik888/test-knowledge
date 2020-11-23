@@ -11,29 +11,27 @@ import Avatar from '@material-ui/core/Avatar';
 import IconButton from '@material-ui/core/IconButton';
 import Tooltip from '@material-ui/core/Tooltip';
 // Icons
-import Delete from '@material-ui/icons/Delete';
 import EditIcon from '@material-ui/icons/Edit';
 import FolderIcon from '@material-ui/icons/Folder';
 import SupervisedUserCircleIcon from '@material-ui/icons/SupervisedUserCircle';
 // Components
 import PositionsPopoverShow from '../../positions/positions-popover-show/positions-popover-show';
 import PositionsAddDocument from '../../positions/positions-add-document/positions-add-document';
+import DeleteDocumentAvatar from '../../buttons/delete-document-avatar/delete-document-avatar';
 
 
 const useStyles = makeStyles((theme) => ({
   editIcon: {
     marginRight: 70,
   },
-  delIcon: {
-    marginRight: 30,
-  },
   hover: {
     backgroundColor: `#e9f6fc`,
-  }
+  },
 }));
 
 const DocumentItem = ({ doc, onEdit, onDel}) => {
   const classes = useStyles();
+
   const { title, id } = doc;
   const [showIcons, setShowIcons] = useState(false);
   const handlePointerEnter = () => setShowIcons(true);
@@ -116,19 +114,14 @@ const DocumentItem = ({ doc, onEdit, onDel}) => {
             </Tooltip>
           </ListItemSecondaryAction>
 
-          <ListItemSecondaryAction onClick={handleDelDoc} className={classes.delIcon}>
-            <Tooltip title="Удалить" placement="bottom" arrow>
-              <IconButton aria-label="Delete">
-                <Delete />
-              </IconButton>
-            </Tooltip>
-          </ListItemSecondaryAction>
+          <DeleteDocumentAvatar onDel={handleDelDoc} />
 
           <ListItemSecondaryAction
             onMouseEnter={handleShowPosOpen}
+            onMouseLeave={handleShowPosClose}
             onClick={handlePosEditOpen}
           >
-            <Tooltip title="Изменить список закреплённых должностей" placement="bottom" arrow>
+            <Tooltip title="Изменить список закреплённых должностей" placement="top" arrow>
               <IconButton edge="end" aria-label="Positions">
                 <SupervisedUserCircleIcon />
               </IconButton>

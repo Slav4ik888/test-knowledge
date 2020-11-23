@@ -46,4 +46,4 @@ app.use(express.static('dist'));
 
 app.listen(process.env.PORT || 8080, () => console.log(`Listening on port ${process.env.PORT || 8080}!`));
 
-// git add . && git commit -m "Вынес отдельно PositionsListChip" && git push origin master
+// git add . && git commit -m "Add Confirm by del document or position, add update to server such submit" && git push origin master

@@ -63,10 +63,9 @@ const PositionsContainer = ({ open, onClose, UI: { loading, errors, messages }, 
   };
 
   const handleDelPos = (id) => {
-    console.log(`handleDelPos id: `, id);
     const idx = positions.findIndex((pos) => pos.id === id);
     let newPositions = [...positions.slice(0, idx), ...positions.slice(idx + 1)];
-    updatePositionsServer(newPositions);
+    updatePositions(newPositions);
   };
 
   const handleAddPos = (title) => {

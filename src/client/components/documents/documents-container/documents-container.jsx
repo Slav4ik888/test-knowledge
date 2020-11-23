@@ -66,7 +66,7 @@ const DoumentsContainer = ({ open, onClose, UI: { loading, errors, messages }, d
   const handleDelDoc = (id) => {
     const idx = documents.findIndex((doc) => doc.id === id);
     let newDocuments = [...documents.slice(0, idx), ...documents.slice(idx + 1)];
-    updateDocumentsServer(newDocuments);
+    updateDocuments(newDocuments);
   };
 
   const handleAddDoc = (title) => {
