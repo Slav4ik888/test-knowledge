@@ -43,7 +43,7 @@ const PositionsPopoverShow = ({ open, anchorEl, positions, onClose }) => {
         }}
         disableRestoreFocus
       >
-        <PositionsListChip positions={positions} />
+        <PositionsListChip positions={positions} column/>
       </Popover>
       
     </>

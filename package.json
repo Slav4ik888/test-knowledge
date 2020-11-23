@@ -19,6 +19,7 @@
     "babel-polyfill": "^6.26.0",
     "body-parser": "^1.19.0",
     "busboy": "0.3.1",
+    "classnames": "2.2.6",
     "dayjs": "1.9.5",
     "ejs": "3.1.5",
     "express": "^4.16.3",

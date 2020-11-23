@@ -46,4 +46,4 @@ app.use(express.static('dist'));
 
 app.listen(process.env.PORT || 8080, () => console.log(`Listening on port ${process.env.PORT || 8080}!`));
 
-// git add . && git commit -m "Перенёс из DocumentsContainer в DocumentAdd обёртку" && git push origin master
+// git add . && git commit -m "PositionsListChip in RulesContainer" && git push origin master
