@@ -6,7 +6,7 @@ import List from '@material-ui/core/List';
 import PositionItem from '../position-item/position-item';
 
 
-const PositionsList = ({ positions, onEdit, onDel }) => {
+const PositionsListItem = ({ positions, onEdit, onDel }) => {
 
   if (!positions) {
     return null;
@@ -27,10 +27,10 @@ const PositionsList = ({ positions, onEdit, onDel }) => {
   );
 }
 
-PositionsList.propTypes = {
+PositionsListItem.propTypes = {
   onEdit: pt.func.isRequired,
   onDel: pt.func.isRequired,
   positions: pt.array.isRequired,
 };
 
-export default PositionsList;
+export default PositionsListItem;

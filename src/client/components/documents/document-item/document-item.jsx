@@ -16,7 +16,7 @@ import EditIcon from '@material-ui/icons/Edit';
 import FolderIcon from '@material-ui/icons/Folder';
 import SupervisedUserCircleIcon from '@material-ui/icons/SupervisedUserCircle';
 // Components
-import PositionsListShow from '../../positions/positions-list-show/positions-list-show';
+import PositionsPopoverShow from '../../positions/positions-popover-show/positions-popover-show';
 import PositionsAddDocument from '../../positions/positions-add-document/positions-add-document';
 
 
@@ -137,7 +137,7 @@ const DocumentItem = ({ doc, onEdit, onDel}) => {
         </>
       }
 
-      <PositionsListShow
+      <PositionsPopoverShow
         open={openPos}
         anchorEl={anchorPos}
         onClose={handleShowPosClose}

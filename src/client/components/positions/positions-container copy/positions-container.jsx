@@ -1,4 +1,4 @@
-import React, {useRef, useEffect} from 'react';
+import React, {useState, useRef, useEffect} from 'react';
 import pt from 'prop-types';
 import { createId, getMaxOrder } from '../../../utils/utils';
 // Readux Stuff
@@ -11,10 +11,12 @@ import Typography from '@material-ui/core/Typography';
 import Dialog from '@material-ui/core/Dialog';
 import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
+import IconButton from '@material-ui/core/IconButton';
 // Icons
 import CircularProgress from '@material-ui/core/CircularProgress';
-// Components
-import PositionsListItem from '../positions-list-item/positions-list-item';
+import CloseIcon from '@material-ui/icons/Close';
+// Component
+import PositionsList from '../positions-list-item/positions-list-item';
 import PositionAdd from '../position-add/position-add';
 import DialogTitle from '../../dialogs/dialog-title/dialog-title';
 
@@ -107,12 +109,12 @@ const PositionsContainer = ({ open, onClose, UI: { loading, errors, messages }, 
       >
         <DialogTitle onClose={handleClose}>Настройка должностей</DialogTitle>
         <DialogContent dividers ref={listRef} >
-          <PositionsListItem
-            open={open}
-            positions={positions}
-            onEdit={handleEditPos}
-            onDel={handleDelPos}
-          />
+            <PositionsList
+              open={open}
+              positions={positions}
+              onEdit={handleEditPos}
+              onDel={handleDelPos}
+            />
         </DialogContent>
 
         <div className={classes.possitionAdd}>
