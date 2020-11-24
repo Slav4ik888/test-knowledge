@@ -1,14 +1,17 @@
 import React, { useState } from 'react';
 import pt from 'prop-types';
+import cl from 'classnames';
 // Readux Stuff
 import { connect } from 'react-redux';
 // MUI Stuff
 import { makeStyles } from '@material-ui/core/styles';
 import Paper from '@material-ui/core/Paper';
 import TextField from '@material-ui/core/TextField';
+import Button from '@material-ui/core/Button';
 // Components
 import ListSelect from '../../list-select/list-select';
 import PositionsListChip from '../../positions/positions-list-chip/positions-list-chip';
+import SectionsContainer from '../../sections/sections-container/sections-container';
 
 
 const useStyles = makeStyles((theme) => ({
@@ -17,17 +20,28 @@ const useStyles = makeStyles((theme) => ({
     flexWrap: 'wrap',
     justifyContent: `center`,
     width: `100%`,
-    minHeight: `maxcontent`,
-    '& > *': {
-      margin: theme.spacing(1),
-      width: theme.spacing(16),
-      height: theme.spacing(16),
-    },
+    height: `100%`,
+    // '& > *': {
+    //   margin: theme.spacing(1),
+    //   width: theme.spacing(16),
+    //   height: theme.spacing(16),
+    // },
   },
   paper: {
     width: `100%`,
     padding: theme.spacing(4),
+    marginTop: theme.spacing(2),
   },
+  paperChip: {
+    width: `100%`,
+    padding: theme.spacing(1),
+    marginTop: theme.spacing(2),
+    border: `1px solid #ccc`,
+    borderRadius: `5px`,
+  },
+  block: {
+    display: `block`,
+  }
 }));
 
 
@@ -41,20 +55,24 @@ const RulesContainer = ({ loading, documents, positions }) => {
 
   // Выбранный документ
   const [docSelected, setDocSelected] = useState(null);
-  // Должности закреплённые за выбранным документом
-  const [posFromDoc, setPosFromDoc] = useState([]);
-
   const handleDocSelected = (doc) => {
     setDocSelected(doc);
-    console.log('doc: ', doc);
-    if (doc) {
-      setPosFromDoc(positions.filter((pos) => doc.positions
-        .find((docPos) => docPos.id === pos.id)))
-      console.log('posFromDoc: ', posFromDoc);
+    if (doc) { // Выбираем должности закреплённые за данным документом
+      setPosFromDoc(positions.filter((pos) => doc.positions.find((docPos) => docPos.id === pos.id)))
+    } else {
+      setPosFromDoc([]);
     }
   };
 
+  // Должности закреплённые за выбранным документом
+  const [posFromDoc, setPosFromDoc] = useState([]);
+
+  // Выбранный раздел
+  const [sectionSelected, SetSectionSelected] = useState(null);
   
+  const [isSections, setIsSections] = useState(false);
+  const handleSectionsOpen = () => setIsSections(true);
+  const handleSectionsClose = () => setIsSections(false);
   
   return (
     <div className={classes.root}>
@@ -67,9 +85,27 @@ const RulesContainer = ({ loading, documents, positions }) => {
           placeholder={`Не указан`}
           onSelected={handleDocSelected}
         />
-        <Paper className={classes.paper}>
+        <Paper elevation={0} className={classes.paperChip}>
           <PositionsListChip positions={posFromDoc} />
         </Paper>
+
+        <ListSelect
+          title={`Раздел`}
+          items={docSelected && docSelected.sections}
+          valueField={`title`}
+          label={`sections`}
+          placeholder={`Не указан`}
+          disabled={!Boolean(docSelected)}
+          onSelected={SetSectionSelected}
+        />
+        <Button onClick={handleSectionsOpen} disabled={!docSelected}>
+          Разделы
+        </Button>
+        <SectionsContainer
+          open={isSections}
+          document={docSelected}
+          onClose={handleSectionsClose}
+        />
       </Paper>
     </div>
   );

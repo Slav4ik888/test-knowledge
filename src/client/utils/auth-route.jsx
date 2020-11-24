@@ -8,7 +8,7 @@ import route from './routes';
 const AuthRoute = ({component: Component, authenticated}) => (
   <Route
     render={(props) => authenticated === true ?
-      <Redirect to={route.HOME} /> :
+      <Redirect to={route.ROOT} /> :
       <Component {...props} />
     }
   />

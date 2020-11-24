@@ -14,8 +14,8 @@ import DialogContent from '@material-ui/core/DialogContent';
 // Icons
 import CircularProgress from '@material-ui/core/CircularProgress';
 // Component
-import DocumentsList from '../documents-list/documents-list';
-import DocumentAdd from '../document-add/document-add';
+import SectionsList from '../sections-list/sections-list';
+import SectionAdd from '../section-add/section-add';
 import DialogTitle from '../../dialogs/dialog-title/dialog-title';
 
 
@@ -35,40 +35,63 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const DoumentsContainer = ({ open, onClose, UI, documents, updateDocuments, updateDocumentsServer }) => {
+const SectionsContainer = ({ open, onClose, UI, document, documents, updateDocuments, updateDocumentsServer }) => {
+  console.log('document: ', document);
 
-  if (!open) {
-    return null;
-  }
+  if (!open) return null;
+  if (!document) return null;
+  
   const classes = useStyles();
   const { loading } = UI;
   
-  const handleEditDoc = (id, newTitle) => {
-    let newDocuments = [...documents];
-    const idx = documents.findIndex((doc) => doc.id === id);
-    newDocuments[idx].title = newTitle;
-    newDocuments[idx].lastChange = new Date().toISOString();
+  const idxDoc = documents.findIndex(doc => doc.id === document.id);
+  const [docEdit, setDocEdit] = useState(documents[idxDoc]);
+
+  const handleEditSection = (id, newTitle) => {
+    let newDocument = docEdit;
+    const idxSec = newDocument.sections.findIndex((section) => section.id === id);
+    newDocument.sections[idxSec].title = newTitle;
+    newDocument.sections[idxSec].lastChange = new Date().toISOString();
+    newDocument.lastChange = new Date().toISOString();
+    setDocEdit(newDocument);
+    console.log('newDocument: ', newDocument);
+
+    let newDocuments = documents;
+    newDocuments[idxDoc] = newDocument;
     updateDocuments(newDocuments);
   };
 
-  const handleDelDoc = (id) => {
-    const idx = documents.findIndex((doc) => doc.id === id);
-    let newDocuments = [...documents.slice(0, idx), ...documents.slice(idx + 1)];
+  const handleDelSection = (id) => {
+    let newDocument = docEdit;
+    const idxSec = newDocument.sections.findIndex((section) => section.id === id);
+    newDocument.sections = [...newDocument.sections.slice(0, idxSec), ...newDocument.sections.slice(idxSec + 1)];
+    newDocument.lastChange = new Date().toISOString();
+    setDocEdit(newDocument);
+    console.log('newDocument: ', newDocument);
+    
+    let newDocuments = documents;
+    newDocuments[idxDoc] = newDocument;
     updateDocuments(newDocuments);
   };
 
-  const handleAddDoc = (title) => {
+  const handleAddSection = (title) => {
     if (title.trim()) {
-      const newDoc = {
+      let newDocument = docEdit;
+      const newSection = {
         title,
-        id: createId(documents),
-        order: getMaxOrder(documents),
+        id: createId(newDocument.sections),
+        order: getMaxOrder(newDocument.sections),
         createdAt: new Date().toISOString(),
         lastChange: new Date().toISOString(),
-        positions: [],
-        sections: [],
-      }
-      let newDocuments = [newDoc, ...documents];
+      };
+      console.log('newSection: ', newSection);
+      newDocument.sections = [newSection, ...newDocument.sections];
+      newDocument.lastChange = new Date().toISOString();
+      setDocEdit(newDocument);
+      console.log('newDocument: ', newDocument);
+
+      let newDocuments = documents;
+      newDocuments[idxDoc] = newDocument;
       updateDocuments(newDocuments);
     }
   };
@@ -97,17 +120,18 @@ const DoumentsContainer = ({ open, onClose, UI, documents, updateDocuments, upda
         className={classes.dialog} maxWidth="sm" scroll={`paper`}
         open={open} onClose={handleClose}
       >
-        <DialogTitle onClose={handleClose}>Настройка документов</DialogTitle>
+        <DialogTitle onClose={handleClose}>Настройка разделов документа</DialogTitle>
         <DialogContent dividers ref={listRef} >
-          <DocumentsList
+          <SectionsList
             open={open}
             documents={documents}
-            onEdit={handleEditDoc}
-            onDel={handleDelDoc}
+            idxDoc={idxDoc}
+            onEdit={handleEditSection}
+            onDel={handleDelSection}
           />
         </DialogContent>
 
-        <DocumentAdd onAdd={handleAddDoc} UI={UI} />
+        <SectionAdd onAdd={handleAddSection} UI={UI} />
 
         <DialogActions className={classes.dialog}>
           <Button onClick={handleClose} >
@@ -127,13 +151,14 @@ const DoumentsContainer = ({ open, onClose, UI, documents, updateDocuments, upda
   );
 }
 
-DoumentsContainer.propTypes = {
+SectionsContainer.propTypes = {
   updateDocuments: pt.func.isRequired,
   updateDocumentsServer: pt.func.isRequired,
   open: pt.bool.isRequired,
   onClose: pt.func.isRequired,
-  UI: pt.object.isRequired,
+  document: pt.object,
   documents: pt.array.isRequired,
+  UI: pt.object.isRequired,
 };
 
 const mapStateToProps = (state) => ({
@@ -141,4 +166,4 @@ const mapStateToProps = (state) => ({
   documents: state.data.documents,
 });
 
-export default connect(mapStateToProps, {updateDocuments, updateDocumentsServer})(DoumentsContainer);
+export default connect(mapStateToProps, {updateDocuments, updateDocumentsServer})(SectionsContainer);

@@ -43,6 +43,7 @@ async function getDocuments(req, res) {
           lastChange: doc.lastChange,
           positions: doc.positions,
           sections: doc.sections,
+          order: doc.order,
           title: doc.title,
         });
       });

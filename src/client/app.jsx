@@ -1,5 +1,5 @@
 import React from 'react';
-import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
+import { BrowserRouter as Router, Route, Switch, Redirect } from 'react-router-dom';
 import route from './utils/routes';
 import jwtDecode from 'jwt-decode';
 import axios from 'axios';
@@ -62,6 +62,22 @@ const App = () => {
               exact
               path={route.LOGIN}
               component={Login}
+            />
+            <Route
+              exact
+              path={route.ROOT}
+            />
+            <Route
+              render={() => (
+                <>
+                  <h1>
+                    404.
+                    <br />
+                    <small>Page not found</small>
+                  </h1>
+                  <Redirect to={route.ROOT} />
+                </>
+              )}
             />
           </Switch>
         </div>

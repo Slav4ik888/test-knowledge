@@ -14,7 +14,7 @@ export const createId = (arr) => {
 };
 
 export const getMaxOrder = (arr) => {
-  let maxOrder = 1;
+  let maxOrder = 10;
   arr.forEach((item) => {
     if (item.order >= maxOrder) {
       maxOrder = item.order + 10;

@@ -14,7 +14,7 @@ import SupervisedUserCircleIcon from '@material-ui/icons/SupervisedUserCircle';
 const useStyles = makeStyles((theme) => ({
   root: {
     display: 'flex',
-    justifyContent: 'center',
+    justifyContent: 'flex-start',
     flexWrap: 'wrap',
     listStyle: 'none',
     padding: theme.spacing(0.5),
@@ -40,13 +40,13 @@ const PositionsListChip = ({ positions, column }) => {
           positions.length ? positions.map((pos) => <li key={pos.id}>
               <Chip
                 icon={<SupervisedUserCircleIcon />}
-                deleteIcon={<DoneIcon />}
                 label={pos.title}
                 variant="outlined"
                 size="small"
                 clickable
                 // color="default"
-                onDelete={() => {}}
+                // deleteIcon={<DoneIcon />}
+                // onDelete={() => {}}
                 className={classes.chip}
               />
             </li>

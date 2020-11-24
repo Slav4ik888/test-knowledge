@@ -25,7 +25,6 @@ import UsersMenu from '../../users/users-menu/users-menu';
 import PositionsContainer from '../../positions/positions-container/positions-container';
 import DocumentsContainer from '../../documents/documents-container/documents-container';
 
-
 const useStyles = makeStyles((theme) => ({
   grow: {
     flexGrow: 1,
@@ -110,7 +109,7 @@ const NavbarAuth = () => {
   const handleDocumentsOpen = () => setIsDocuments(true);
   const handleDocumentsClose = () => setIsDocuments(false);
   
-  
+
   // const renderMenu = (
   //   <Menu
   //     anchorEl={anchorEl}
@@ -166,6 +165,7 @@ const NavbarAuth = () => {
       <Button onClick={handleDocumentsOpen} >
         Документы
       </Button>
+      
       <div className={classes.grow} />
 
       <div className={classes.sectionUserBlock}>
@@ -211,6 +211,7 @@ const NavbarAuth = () => {
         open={isDocuments}
         onClose={handleDocumentsClose}
       />
+      
       {/* {renderMenu} */}
     </>
   );
