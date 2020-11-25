@@ -36,16 +36,17 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 const SectionsContainer = ({ open, onClose, UI, document, documents, updateDocuments, updateDocumentsServer }) => {
-  console.log('document: ', document);
 
   if (!open) return null;
   if (!document) return null;
   
   const classes = useStyles();
   const { loading } = UI;
-  
+  const [isChange, setIsChange] = useState(false);
+
   const idxDoc = documents.findIndex(doc => doc.id === document.id);
   const [docEdit, setDocEdit] = useState(documents[idxDoc]);
+  const [sections, setSections] = useState(documents[idxDoc].sections);
 
   const handleEditSection = (id, newTitle) => {
     let newDocument = docEdit;
@@ -54,7 +55,8 @@ const SectionsContainer = ({ open, onClose, UI, document, documents, updateDocum
     newDocument.sections[idxSec].lastChange = new Date().toISOString();
     newDocument.lastChange = new Date().toISOString();
     setDocEdit(newDocument);
-    console.log('newDocument: ', newDocument);
+    setSections(newDocument.sections);
+    setIsChange(true);
 
     let newDocuments = documents;
     newDocuments[idxDoc] = newDocument;
@@ -67,7 +69,8 @@ const SectionsContainer = ({ open, onClose, UI, document, documents, updateDocum
     newDocument.sections = [...newDocument.sections.slice(0, idxSec), ...newDocument.sections.slice(idxSec + 1)];
     newDocument.lastChange = new Date().toISOString();
     setDocEdit(newDocument);
-    console.log('newDocument: ', newDocument);
+    setSections(newDocument.sections);
+    setIsChange(true);
     
     let newDocuments = documents;
     newDocuments[idxDoc] = newDocument;
@@ -84,11 +87,11 @@ const SectionsContainer = ({ open, onClose, UI, document, documents, updateDocum
         createdAt: new Date().toISOString(),
         lastChange: new Date().toISOString(),
       };
-      console.log('newSection: ', newSection);
       newDocument.sections = [newSection, ...newDocument.sections];
       newDocument.lastChange = new Date().toISOString();
       setDocEdit(newDocument);
-      console.log('newDocument: ', newDocument);
+      setSections(newDocument.sections);
+      setIsChange(true);
 
       let newDocuments = documents;
       newDocuments[idxDoc] = newDocument;
@@ -100,6 +103,7 @@ const SectionsContainer = ({ open, onClose, UI, document, documents, updateDocum
 
   const handleSubmit = (e) => {
     e.preventDefault();
+    setIsChange(true);
     updateDocumentsServer(documents);
   };
 
@@ -124,8 +128,7 @@ const SectionsContainer = ({ open, onClose, UI, document, documents, updateDocum
         <DialogContent dividers ref={listRef} >
           <SectionsList
             open={open}
-            documents={documents}
-            idxDoc={idxDoc}
+            sections={sections}
             onEdit={handleEditSection}
             onDel={handleDelSection}
           />
@@ -137,7 +140,7 @@ const SectionsContainer = ({ open, onClose, UI, document, documents, updateDocum
           <Button onClick={handleClose} >
             Отмена
           </Button>
-          <Button onClick={handleSubmit} disabled={loading} variant="contained" color="primary">
+          <Button onClick={handleSubmit} disabled={loading || !isChange} variant="contained" color="primary">
             Сохранить
             {
               loading && (

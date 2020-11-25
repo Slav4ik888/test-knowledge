@@ -6,10 +6,7 @@ import List from '@material-ui/core/List';
 import SectionItem from '../section-item/section-item';
 
 
-const SectionsList = ({ documents, idxDoc, onEdit, onDel }) => {
-  const sections = documents[idxDoc].sections;
-  console.log('sections: ', sections);
-  if (!sections) return null;
+const SectionsList = ({ sections, onEdit, onDel }) => {
 
   return (
     <>
@@ -28,8 +25,7 @@ const SectionsList = ({ documents, idxDoc, onEdit, onDel }) => {
 SectionsList.propTypes = {
   onEdit: pt.func.isRequired,
   onDel: pt.func.isRequired,
-  documents: pt.array.isRequired,
-  idxDoc: pt.number.isRequired,
+  sections: pt.array.isRequired,
 };
 
 export default SectionsList;

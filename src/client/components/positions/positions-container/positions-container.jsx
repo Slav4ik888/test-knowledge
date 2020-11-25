@@ -1,4 +1,4 @@
-import React, {useRef, useEffect} from 'react';
+import React, {useRef, useEffect, useState} from 'react';
 import pt from 'prop-types';
 import { createId, getMaxOrder } from '../../../utils/utils';
 // Readux Stuff
@@ -53,18 +53,20 @@ const PositionsContainer = ({ open, onClose, UI: { loading, errors, messages }, 
     return null;
   }
   const classes = useStyles();
-  console.log(positions);
+  const [isChange, setIsChange] = useState(false);
   
   const handleEditPos = (id, newTitle) => {
     let newPositions = [...positions];
     const idx = positions.findIndex((pos) => pos.id === id);
     newPositions[idx].title = newTitle;
+    setIsChange(true);
     updatePositions(newPositions);
   };
 
   const handleDelPos = (id) => {
     const idx = positions.findIndex((pos) => pos.id === id);
     let newPositions = [...positions.slice(0, idx), ...positions.slice(idx + 1)];
+    setIsChange(true);
     updatePositions(newPositions);
   };
 
@@ -76,6 +78,7 @@ const PositionsContainer = ({ open, onClose, UI: { loading, errors, messages }, 
         order: getMaxOrder(positions),
       }
       let newPositions = [newPos, ...positions];
+      setIsChange(true);
       updatePositions(newPositions);
     }
   };
@@ -84,6 +87,7 @@ const PositionsContainer = ({ open, onClose, UI: { loading, errors, messages }, 
 
   const handleSubmit = (e) => {
     e.preventDefault();
+    setIsChange(true);
     updatePositionsServer(positions);
   };
 
@@ -131,7 +135,7 @@ const PositionsContainer = ({ open, onClose, UI: { loading, errors, messages }, 
           <Button onClick={handleClose} >
             Отмена
           </Button>
-          <Button onClick={handleSubmit} disabled={loading} variant="contained" color="primary">
+          <Button onClick={handleSubmit} disabled={loading || !isChange} variant="contained" color="primary">
             Сохранить
             {
               loading && (

@@ -51,7 +51,7 @@ const PositionsPopoverShow = ({ open, anchorEl, positions, onClose }) => {
 }
 
 PositionsPopoverShow.propTypes = {
-  // open: pt.bool.isRequired,
+  open: pt.bool.isRequired,
   onClose: pt.func.isRequired,
   positions: pt.array.isRequired,
 };

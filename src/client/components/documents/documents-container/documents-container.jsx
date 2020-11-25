@@ -43,17 +43,21 @@ const DoumentsContainer = ({ open, onClose, UI, documents, updateDocuments, upda
   const classes = useStyles();
   const { loading } = UI;
   
+  const [isChange, setIsChange] = useState(false);
+
   const handleEditDoc = (id, newTitle) => {
     let newDocuments = [...documents];
     const idx = documents.findIndex((doc) => doc.id === id);
     newDocuments[idx].title = newTitle;
     newDocuments[idx].lastChange = new Date().toISOString();
+    setIsChange(true);
     updateDocuments(newDocuments);
   };
 
   const handleDelDoc = (id) => {
     const idx = documents.findIndex((doc) => doc.id === id);
     let newDocuments = [...documents.slice(0, idx), ...documents.slice(idx + 1)];
+    setIsChange(true);
     updateDocuments(newDocuments);
   };
 
@@ -69,6 +73,7 @@ const DoumentsContainer = ({ open, onClose, UI, documents, updateDocuments, upda
         sections: [],
       }
       let newDocuments = [newDoc, ...documents];
+      setIsChange(true);
       updateDocuments(newDocuments);
     }
   };
@@ -77,6 +82,7 @@ const DoumentsContainer = ({ open, onClose, UI, documents, updateDocuments, upda
 
   const handleSubmit = (e) => {
     e.preventDefault();
+    setIsChange(true);
     updateDocumentsServer(documents);
   };
 
@@ -113,7 +119,7 @@ const DoumentsContainer = ({ open, onClose, UI, documents, updateDocuments, upda
           <Button onClick={handleClose} >
             Отмена
           </Button>
-          <Button onClick={handleSubmit} disabled={loading} variant="contained" color="primary">
+          <Button onClick={handleSubmit} disabled={loading || !isChange} variant="contained" color="primary">
             Сохранить
             {
               loading && (

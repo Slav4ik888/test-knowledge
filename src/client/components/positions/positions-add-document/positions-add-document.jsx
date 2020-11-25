@@ -64,6 +64,7 @@ const PositionsAddDocument = ({ open, onClose, UI: { loading }, doc, documents, 
   if (!open) return null;
 
   const classes = useStyles();
+  const [isChange, setIsChange] = useState(false);
 
   const idxDoc = documents.findIndex(document => document.id === doc.id);
   const positionsInDocument = documents[idxDoc].positions;
@@ -88,7 +89,6 @@ const PositionsAddDocument = ({ open, onClose, UI: { loading }, doc, documents, 
     } else {
       newChecked.splice(currentIndex, 1);
     }
-
     setChecked(newChecked);
   };
 
@@ -106,12 +106,14 @@ const PositionsAddDocument = ({ open, onClose, UI: { loading }, doc, documents, 
     setRight(right.concat(leftChecked));
     setLeft(not(left, leftChecked));
     setChecked(not(checked, leftChecked));
+    setIsChange(true);
   };
 
   const handleCheckedLeft = () => {
     setLeft(left.concat(rightChecked));
     setRight(not(right, rightChecked));
     setChecked(not(checked, rightChecked));
+    setIsChange(true);
   };
 
   const handleSetPosToDoc = () => {
@@ -213,7 +215,7 @@ const PositionsAddDocument = ({ open, onClose, UI: { loading }, doc, documents, 
         <Button onClick={onClose} >
           Отмена
         </Button>
-        <Button onClick={handleSetPosToDoc} disabled={loading} variant="contained" color="primary">
+        <Button onClick={handleSetPosToDoc} disabled={loading || !isChange} variant="contained" color="primary">
           Сохранить
           {
             loading && (
@@ -228,7 +230,7 @@ const PositionsAddDocument = ({ open, onClose, UI: { loading }, doc, documents, 
 };
 
 PositionsAddDocument.propTypes = {
-  doc: pt.object.isRequired,
+  doc: pt.object,
   documents: pt.array.isRequired,
   positions: pt.array.isRequired,
   updateDocumentsServer: pt.func.isRequired, 

@@ -46,4 +46,4 @@ app.use(express.static('dist'));
 
 app.listen(process.env.PORT || 8080, () => console.log(`Listening on port ${process.env.PORT || 8080}!`));
 
-// git add . && git commit -m "start SectionsContainer" && git push origin master
+// git add . && git commit -m "много правок в Rules-Container, иконки, блокировка сохранения без изменения и тд" && git push origin master

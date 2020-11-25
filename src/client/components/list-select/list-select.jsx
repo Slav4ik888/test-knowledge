@@ -7,6 +7,8 @@ import Input from '@material-ui/core/Input';
 import MenuItem from '@material-ui/core/MenuItem';
 import FormControl from '@material-ui/core/FormControl';
 import Select from '@material-ui/core/Select';
+// Icons
+import AddIcon from '@material-ui/icons/Add';
 // Component
 
 const useStyles = makeStyles((theme) => ({
@@ -18,11 +20,13 @@ const useStyles = makeStyles((theme) => ({
     width: `100%`,
     minWidth: 220,
   },
+  addIcon: {
+    marginRight: theme.spacing(2),
+  }
 }));
 
 
-const ListSelect = ({ items, valueField, title, placeholder, label, onSelected, disabled }) => {
-  // if (disabled) return null;
+const ListSelect = ({ items, valueField, title, placeholder, label, onSelected, onItemAdd, disabled }) => {
 
   const classes = useStyles();
 
@@ -59,6 +63,11 @@ const ListSelect = ({ items, valueField, title, placeholder, label, onSelected, 
             </MenuItem>
           )
         }
+        {
+          onItemAdd && <MenuItem value={`newItemAdd`} onClick={onItemAdd}>
+            <AddIcon className={classes.addIcon}/>добавить новый
+          </MenuItem>
+        }
       </Select>
     </FormControl>
   )
@@ -71,6 +80,7 @@ ListSelect.propTypes = {
   label: pt.string.isRequired,
   items: pt.array,
   onSelected: pt.func.isRequired,
+  onItemAdd: pt.func,
   disabled: pt.bool,  
 };
 
