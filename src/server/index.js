@@ -8,7 +8,7 @@ const FBAuth = require('./firebase/fb-auth');
 
 const { addUser, login, getUserData, updateUserData, deleteUser } = require('./handlers/users');
 const { signupCompany, getCompanyData, getUserAndCompanyData, updateCompanyData, deleteCompany } = require('./handlers/company');
-const { getPositions, updatePositions } = require('./handlers/positions');
+const { getPositions, updatePositions, delPosition } = require('./handlers/positions');
 const { getAllUsersData } = require('./handlers/data');
 const { getDocuments, updateDocuments } = require('./handlers/documents');
 
@@ -35,6 +35,7 @@ app.get(`/api/deleteCompany`, FBAuth, deleteCompany);
 // positions
 app.post(`/api/updatePositions`, FBAuth, updatePositions);
 app.get(`/api/getPositions`, FBAuth, getPositions);
+app.post(`/api/delPosition`, FBAuth, delPosition);
 
 // documents
 app.get(`/api/getDocuments`, FBAuth, getDocuments);
@@ -46,4 +47,4 @@ app.use(express.static('dist'));
 
 app.listen(process.env.PORT || 8080, () => console.log(`Listening on port ${process.env.PORT || 8080}!`));
 
-// git add . && git commit -m "много правок в Rules-Container, иконки, блокировка сохранения без изменения и тд" && git push origin master
+// git add . && git commit -m "/api/delPosition" && git push origin master

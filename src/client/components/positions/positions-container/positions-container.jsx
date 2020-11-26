@@ -48,10 +48,11 @@ const useStyles = makeStyles((theme) => ({
 
 const PositionsContainer = ({ open, onClose, UI: { loading, errors, messages }, positions,
   updatePositions, updatePositionsServer }) => {
-
   if (!open) {
     return null;
   }
+  console.log('positions: ', positions);
+
   const classes = useStyles();
   const [isChange, setIsChange] = useState(false);
   
@@ -66,8 +67,15 @@ const PositionsContainer = ({ open, onClose, UI: { loading, errors, messages }, 
   const handleDelPos = (id) => {
     const idx = positions.findIndex((pos) => pos.id === id);
     let newPositions = [...positions.slice(0, idx), ...positions.slice(idx + 1)];
-    setIsChange(true);
-    updatePositions(newPositions);
+
+    // Удаляем position из всех document`ов
+
+
+    // Удаляем position из всех user`ов
+
+
+    setIsChange(false);
+    updatePositions(newPositions); // TODO: изменить на updatePositionsServer
   };
 
   const handleAddPos = (title) => {

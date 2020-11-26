@@ -21,8 +21,12 @@ async function updateDocuments(req, res) {
     
     const documents = await getDocuments(req, res);
     // console.log('Обновлённые documents: ', JSON.stringify(documents));
-    return res.json({ documents, message: `Список документов успешно обновлён` });
-
+    if (req.delPosition) {
+      return documents;
+    } else {
+      return res.json({ documents, message: `Список документов успешно обновлён` });
+    }
+    
   } catch(err) {
       console.error(err);
       return res.status(500).json({ general: err.code });
