@@ -1,5 +1,6 @@
 import React, {useState} from 'react';
-// import pt from 'prop-types';
+import pt from 'prop-types';
+import cl from 'classnames';
 // Redux Stuff
 // import { connect } from 'react-redux';
 // import { getPositions } from '../../../redux/actions/data-actions';
@@ -25,12 +26,16 @@ import UsersMenu from '../../users/users-menu/users-menu';
 import PositionsContainer from '../../positions/positions-container/positions-container';
 import DocumentsContainer from '../../documents/documents-container/documents-container';
 
+
 const useStyles = makeStyles((theme) => ({
   grow: {
     flexGrow: 1,
   },
   menuButton: {
-    marginRight: theme.spacing(2),
+    marginRight: 36,
+  },
+  hide: {
+    display: 'none',
   },
   title: {
     display: 'none',
@@ -86,7 +91,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const NavbarAuth = () => {
+const NavbarAuth = ({ open, onOpen }) => {
   const classes = useStyles();
 
   const [anchorPro, setAnchorPro] = useState(null);
@@ -128,16 +133,19 @@ const NavbarAuth = () => {
   //   </Menu>
   // );
 
+
   return (
     <>
       <IconButton
-        edge="start"
-        className={classes.menuButton}
         color="inherit"
         aria-label="open drawer"
+        onClick={onOpen}
+        edge="start"
+        className={cl(classes.menuButton, { [classes.hide]: open })}
       >
         <MenuIcon />
       </IconButton>
+
       <Typography className={classes.title} variant="h6" noWrap>
         T-Knowledge
       </Typography>
@@ -217,9 +225,10 @@ const NavbarAuth = () => {
   );
 };
 
-// NavbarAuth.propTypes = {
-//   getPositions: pt.func.isRequired,
-// }
+NavbarAuth.propTypes = {
+  open: pt.bool.isRequired,
+  onOpen: pt.func.isRequired,
+};
 // const mapStateToProps = (state) => ({
 //   positions: state.data.positions,
 // });
