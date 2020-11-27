@@ -13,8 +13,9 @@ async function updateDocuments(req, res) {
     documents: req.body ? req.body : [],
   };
 
-  // TODO: Нельзя удалить документ, если в нём находятся "Правила". Вначале удалите или перенесите "Правила" в другой документ.
   try {
+    // TODO: Нельзя удалить документ, если в нём находятся "Правила". Вначале удалите или перенесите "Правила" в другой документ.
+
     const updateRes = await db.doc(`documents/${req.user.companyId}`).update(newDocuments);
     // getDocuments сообщаем, что это обновление и нужно вернуть данные сюда, а не пользователю
     req.update = true; 
@@ -37,6 +38,7 @@ async function updateDocuments(req, res) {
 async function getDocuments(req, res) {
   try {
     const docRes = await db.doc(`documents/${req.user.companyId}`).get();
+    
     if (docRes.exists) {
       const data = docRes.data();
       let documents = [];

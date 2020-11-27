@@ -68,6 +68,7 @@ async function delPosition(req, res) {
   if (!valid) return res.status(400).json(errors);
 
   let posId = req.body.id;
+  console.log('posId: ', posId);
   req.delPosition = true; // чтобы обновление вернулось сюда а не клиенту
 
   try {
@@ -75,7 +76,7 @@ async function delPosition(req, res) {
     req.update = true;
     let oldDocuments = await getDocuments(req, res);
 
-    // Находим документы где есть искомая должность
+    // Находим документы где есть удаляемая должность и удаляем её
     let isPosInDoc = false;
     oldDocuments.forEach(doc => {
       const idx = doc.positions.findIndex(pos => pos.id === posId);
@@ -94,7 +95,7 @@ async function delPosition(req, res) {
       documents = oldDocuments;
     }
 
-    // Удаляем должность из списка существующих
+    // Удаляем должность из списка существующих должностей
     let isPos = false;
     let oldPositions = await getPositions(req, res);
     const idx = oldPositions.findIndex(pos => pos.id === posId);
@@ -110,6 +111,11 @@ async function delPosition(req, res) {
     } else {
       positions = oldPositions;
     }
+
+    // TODO: Удаляем должность у всех пользователей
+
+    // TODO: Если у данного пользователя тоже была эта должность, то отдаём обновлённые данные
+
 
     return res.json({ documents, positions, message: `Список документов успешно обновлён` });
 

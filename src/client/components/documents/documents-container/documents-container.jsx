@@ -6,17 +6,14 @@ import { connect } from 'react-redux';
 import { updateDocuments, updateDocumentsServer } from '../../../redux/actions/data-actions';
 // MUI Stuff
 import { makeStyles } from '@material-ui/core/styles';
-import Button from '@material-ui/core/Button';
-import Typography from '@material-ui/core/Typography';
 import Dialog from '@material-ui/core/Dialog';
 import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
-// Icons
-import CircularProgress from '@material-ui/core/CircularProgress';
 // Component
 import DocumentsList from '../documents-list/documents-list';
 import DocumentAdd from '../document-add/document-add';
 import DialogTitle from '../../dialogs/dialog-title/dialog-title';
+import CancelSubmitBtn from '../../buttons/cancel-submit-btn/cancel-submit-btn';
 
 
 const useStyles = makeStyles((theme) => ({
@@ -84,6 +81,7 @@ const DoumentsContainer = ({ open, onClose, UI, documents, updateDocuments, upda
     e.preventDefault();
     setIsChange(true);
     updateDocumentsServer(documents);
+    handleClose();
   };
 
   const listRef = useRef(null);
@@ -116,17 +114,12 @@ const DoumentsContainer = ({ open, onClose, UI, documents, updateDocuments, upda
         <DocumentAdd onAdd={handleAddDoc} UI={UI} />
 
         <DialogActions className={classes.dialog}>
-          <Button onClick={handleClose} >
-            Отмена
-          </Button>
-          <Button onClick={handleSubmit} disabled={loading || !isChange} variant="contained" color="primary">
-            Сохранить
-            {
-              loading && (
-                <CircularProgress size={30} className={classes.progress}/>
-              )
-            }
-          </Button>
+          <CancelSubmitBtn
+            onCancel={handleClose}
+            onSubmit={handleSubmit}
+            disabled={loading || !isChange}
+            loading={loading}
+          />
         </DialogActions>
       </Dialog>
     </>

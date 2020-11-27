@@ -10,18 +10,16 @@ import Typography from '@material-ui/core/Typography';
 import Dialog from '@material-ui/core/Dialog';
 import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
-import DialogTitle from '@material-ui/core/DialogTitle';
-import InputLabel from '@material-ui/core/InputLabel';
-import Input from '@material-ui/core/Input';
-import MenuItem from '@material-ui/core/MenuItem';
-import FormControl from '@material-ui/core/FormControl';
-import Select from '@material-ui/core/Select';
 // Icons
-import CircularProgress from '@material-ui/core/CircularProgress';
-
-
+import UsersSelectList from '../users-select-list/users-select-list';
+// Components
+import DialogTitle from '../../dialogs/dialog-title/dialog-title';
+import CancelSubmitBtn from '../../buttons/cancel-submit-btn/cancel-submit-btn';
 
 const useStyles = makeStyles((theme) => ({
+  dialog: {
+    padding: theme.spacing(4),
+  },
   textField: {
     margin: `10px auto 10px auto`,
   },
@@ -30,20 +28,6 @@ const useStyles = makeStyles((theme) => ({
   //   position: `relative`,
   //   float: `right`,
   // },
-  
-  customError: {
-    color: `red`,
-    fontSize: `0.8rem`,
-    marginTop: 10,
-  },
-  container: {
-    display: 'flex',
-    flexWrap: 'wrap',
-  },
-  formControl: {
-    margin: theme.spacing(1),
-    minWidth: 120,
-  },
 }));
 
 const UserAdd = ({ open, onClose, UI: { loading, errors, messages }, addUser, deleteUser, users}) => {
@@ -52,17 +36,16 @@ const UserAdd = ({ open, onClose, UI: { loading, errors, messages }, addUser, de
     return null;
   }
   const classes = useStyles();
+  const [isChange, setIsChange] = useState(false);
 
   const [userSeleted, setUserSelected] = useState(``);
   const [userIdx, setUserIdx] = useState(null);
 
-  const handleChange = (e) => {
-    const email = e.target.value;
-    const newIdx = users.findIndex(user => user.email === email);
-    console.log('newIdx: ', newIdx);
+  const handleUserSelected = (email, userIndex) => {
     setUserSelected(email);
-    setUserIdx(newIdx);
+    setUserIdx(userIndex);
   };
+
   const handleClose = () => onClose();
 
   const handleSubmit = (e) => {
@@ -78,24 +61,13 @@ const UserAdd = ({ open, onClose, UI: { loading, errors, messages }, addUser, de
 
   return (
     <>
-      <Dialog disableBackdropClick disableEscapeKeyDown open={open} onClose={handleClose} fullWidth maxWidth="sm">
-        <DialogTitle>Настройки</DialogTitle>
+      <Dialog disableBackdropClick disableEscapeKeyDown className={classes.dialog}
+        open={open} onClose={handleClose} fullWidth maxWidth="sm"
+      >
+        <DialogTitle onClose={handleClose}>Настройки пользователей</DialogTitle>
         <DialogContent>
-          <form className={classes.container}>
-            <FormControl className={classes.formControl}>
-              <InputLabel id="users-label">Сотрудник</InputLabel>
-              <Select
-                labelId="users-label"
-                id="users-select"
-                value={userSeleted}
-                onChange={handleChange}
-                input={<Input />}
-              >
-                <MenuItem value=""><em>None</em></MenuItem>
-                {users.map((user) => <MenuItem key={user.email} value={user.email}>{user.email}</MenuItem>)}
-              </Select>
-            </FormControl>
-          </form>
+          <UsersSelectList userSeleted={userSeleted} onSelected={handleUserSelected} users={users}/>
+
           {userSeleted &&
             <>
               <Typography variant="h5" color="primary" >Занимаемые должности</Typography>
@@ -117,17 +89,12 @@ const UserAdd = ({ open, onClose, UI: { loading, errors, messages }, addUser, de
           }
         </DialogContent>
         <DialogActions>
-          <Button onClick={handleClose} >
-            Отмена
-          </Button>
-          <Button onClick={handleSubmit} disabled={loading} variant="contained" color="primary">
-            Сохранить
-            {
-              loading && (
-                <CircularProgress size={30} className={classes.progress}/>
-              )
-            }
-          </Button>
+          <CancelSubmitBtn
+            onCancel={handleClose}
+            onSubmit={handleSubmit}
+            disabled={loading || !isChange}
+            loading={loading}
+          />
         </DialogActions>
       </Dialog>
     </>

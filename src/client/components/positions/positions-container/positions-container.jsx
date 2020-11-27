@@ -3,7 +3,7 @@ import pt from 'prop-types';
 import { createId, getMaxOrder } from '../../../utils/utils';
 // Readux Stuff
 import { connect } from 'react-redux';
-import { updatePositions, updatePositionsServer } from '../../../redux/actions/data-actions';
+import { updatePositions, updatePositionsServer, delPositionServer } from '../../../redux/actions/data-actions';
 // MUI Stuff
 import { makeStyles } from '@material-ui/core/styles';
 import Button from '@material-ui/core/Button';
@@ -11,12 +11,11 @@ import Typography from '@material-ui/core/Typography';
 import Dialog from '@material-ui/core/Dialog';
 import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
-// Icons
-import CircularProgress from '@material-ui/core/CircularProgress';
 // Components
 import PositionsListItem from '../positions-list-item/positions-list-item';
 import PositionAdd from '../position-add/position-add';
 import DialogTitle from '../../dialogs/dialog-title/dialog-title';
+import CancelSubmitBtn from '../../buttons/cancel-submit-btn/cancel-submit-btn';
 
 
 const useStyles = makeStyles((theme) => ({
@@ -47,11 +46,10 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 const PositionsContainer = ({ open, onClose, UI: { loading, errors, messages }, positions,
-  updatePositions, updatePositionsServer }) => {
+  updatePositions, updatePositionsServer, delPositionServer }) => {
   if (!open) {
     return null;
   }
-  console.log('positions: ', positions);
 
   const classes = useStyles();
   const [isChange, setIsChange] = useState(false);
@@ -65,17 +63,8 @@ const PositionsContainer = ({ open, onClose, UI: { loading, errors, messages }, 
   };
 
   const handleDelPos = (id) => {
-    const idx = positions.findIndex((pos) => pos.id === id);
-    let newPositions = [...positions.slice(0, idx), ...positions.slice(idx + 1)];
-
-    // Удаляем position из всех document`ов
-
-
-    // Удаляем position из всех user`ов
-
-
     setIsChange(false);
-    updatePositions(newPositions); // TODO: изменить на updatePositionsServer
+    delPositionServer({ id });
   };
 
   const handleAddPos = (title) => {
@@ -97,6 +86,7 @@ const PositionsContainer = ({ open, onClose, UI: { loading, errors, messages }, 
     e.preventDefault();
     setIsChange(true);
     updatePositionsServer(positions);
+    handleClose();
   };
 
   const listRef = useRef(null);
@@ -140,17 +130,12 @@ const PositionsContainer = ({ open, onClose, UI: { loading, errors, messages }, 
         </div>
 
         <DialogActions className={classes.dialog}>
-          <Button onClick={handleClose} >
-            Отмена
-          </Button>
-          <Button onClick={handleSubmit} disabled={loading || !isChange} variant="contained" color="primary">
-            Сохранить
-            {
-              loading && (
-                <CircularProgress size={30} className={classes.progress}/>
-              )
-            }
-          </Button>
+          <CancelSubmitBtn
+            onCancel={handleClose}
+            onSubmit={handleSubmit}
+            disabled={loading || !isChange}
+            loading={loading}
+          />
         </DialogActions>
       </Dialog>
     </>
@@ -160,6 +145,7 @@ const PositionsContainer = ({ open, onClose, UI: { loading, errors, messages }, 
 PositionsContainer.propTypes = {
   updatePositions: pt.func.isRequired,
   updatePositionsServer: pt.func.isRequired,
+  delPositionServer: pt.func.isRequired,
   open: pt.bool.isRequired,
   onClose: pt.func.isRequired,
   UI: pt.object.isRequired,
@@ -171,4 +157,4 @@ const mapStateToProps = (state) => ({
   positions: state.data.positions,
 });
 
-export default connect(mapStateToProps, {updatePositions, updatePositionsServer})(PositionsContainer);
+export default connect(mapStateToProps, {updatePositions, updatePositionsServer, delPositionServer})(PositionsContainer);
