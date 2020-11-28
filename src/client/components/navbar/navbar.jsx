@@ -11,7 +11,7 @@ import CssBaseline from '@material-ui/core/CssBaseline';
 // Components
 import NavbarAuth from './navbar-auth/navbar-auth';
 import NavbarNoAuth from './navbar-no-auth/navbar-no-auth';
-import MiniDrawer from '../drawer/drawer';
+import MiniDrawer from '../drawer/drawer/drawer';
 import {drawerWidth} from '../../utils/consts';
 
 
@@ -41,7 +41,7 @@ const useStyles = makeStyles((theme) => ({
 
 const Navbar = ({authenticated}) => {
   const classes = useStyles();
-  const [open, setOpen] = useState(true);
+  const [open, setOpen] = useState(false);
   const handleDrawerOpen = () => setOpen(true);
   const handleDrawerClose = () => setOpen(false);
 
@@ -61,9 +61,9 @@ const Navbar = ({authenticated}) => {
           }
         </Toolbar>
       </AppBar>
-
-      <MiniDrawer onClose={handleDrawerClose} open={open} />
-
+      {
+        authenticated && <MiniDrawer onClose={handleDrawerClose} open={open} />
+      }
     </div>
   );
 };
