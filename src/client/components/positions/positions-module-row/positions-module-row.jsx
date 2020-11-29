@@ -23,22 +23,21 @@ const useStyles = makeStyles((theme) => {
   // console.log('theme: ', theme);
 
   return ({
+    row: {
+      display: 'flex',
+      alignItems: `center`,
+      margin: theme.spacing(2, 0, 2, 0),
+    },
     paperChip: {
       width: `100%`,
       padding: theme.spacing(1),
-      marginTop: theme.spacing(2),
       border: `1px solid #ccc`,
       borderRadius: `5px`,
     },
     block: {
       display: `block`,
     },
-    row: {
-      display: 'flex',
-      alignItems: `center`,
-    },
     avatar: {
-      marginTop: theme.spacing(1),
       marginRight: theme.spacing(3),
     },
     editIcon: {
