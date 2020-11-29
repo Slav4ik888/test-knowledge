@@ -36,3 +36,9 @@ exports.typeQuestions = {
     description: `Выберите все правильные ответы`,
   }
 };
+
+// Типы PositionsModuleRow
+exports.typePosModule = {
+  DOC: `DOC`,
+  USER: `USER`,
+};

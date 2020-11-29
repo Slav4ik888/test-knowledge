@@ -16,6 +16,8 @@ import CancelSubmitBtn from '../../buttons/cancel-submit-btn/cancel-submit-btn';
 import UserAdd from '../user-add/user-add';
 import ListSelect from '../../list-select/list-select';
 import DeleteUserButton from '../../buttons/delete-user-button/delete-user-button';
+import PositionsModuleRow from '../../positions/positions-module-row/positions-module-row';
+import { typePosModule } from '../../../../types';
 
 
 const useStyles = makeStyles((theme) => ({
@@ -25,6 +27,11 @@ const useStyles = makeStyles((theme) => ({
   textField: {
     margin: `10px auto 10px auto`,
   },
+  row: {
+    display: 'flex',
+    alignItems: `center`,
+  },
+  
   // button: {
   //   marginTop: 30,
   //   position: `relative`,
@@ -90,11 +97,14 @@ const UserChange = ({ open, onClose, UI: { loading, errors, messages }, addUser,
           {userSeleted &&
             <>
               <Typography variant="h5" color="primary" >Занимаемые должности</Typography>
-              {users[userIdx].positions.map((pos) => <Typography key={pos} variant="body1" >{pos}</Typography>)}
+              {/* {users[userIdx].positions.map((pos) => <Typography key={pos} variant="body1" >{pos}</Typography>)} */}
+              
+              <PositionsModuleRow item={users[userIdx]} type={typePosModule.USER} />
+            
               <Typography variant="h5" color="primary">Статус в приложении</Typography>
               <Typography variant="body1" >{users[userIdx].role}</Typography>
             
-              <DeleteUserButton onClick={handleDeleteAccount} />
+              <DeleteUserButton onDel={handleDeleteAccount} />
             </>
           }
 

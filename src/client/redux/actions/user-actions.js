@@ -170,6 +170,47 @@ export const getUserAndCompanyData = () => (dispatch) => {
     });
 };
 
+// Обновляем данные о пользователе
+export const updateUserDetails = (userProfile) => (dispatch) => {
+  console.log('userProfile: ', userProfile);
+  dispatch({type: userActionType.LOADING_USER});
+  return axios
+    .post(`/user`, userProfile)
+    .then(() => {
+      dispatch({
+        type: userActionType.SET_USER,
+        payload: userProfile,
+      });
+    })
+    .catch((err) => {
+      console.log(err);
+      dispatch({
+        type: uiActionType.SET_ERRORS,
+        payload: err.response.data,
+      });
+    });
+};
+
+// Обновляем данные о компании
+export const updateCompanyDetails = (companyProfile) => (dispatch) => {
+  dispatch({ type: userActionType.LOADING_USER });
+  return axios
+    .post(`/company`, companyProfile)
+    .then(() => {
+      dispatch({
+        type: userActionType.SET_COMPANY,
+        payload: companyProfile,
+      });
+    })
+    .catch((err) => {
+      console.log(err.response.data);
+      dispatch({
+        type: uiActionType.SET_ERRORS,
+        payload: err.response.data,
+      });
+    });
+};
+
 // Удаление пользователя
 export const deleteUser = (userProfile) => (dispatch) => {
   console.log('userProfile: ', userProfile);
@@ -227,7 +268,6 @@ const setAuthorizationHeader = (token) => {
 
 
 
-
 // export const uploadImage = (formData) => (dispatch) => {
 //   console.log('formData: ', formData);
 //   dispatch({type: userActionType.LOADING_USER});
@@ -237,45 +277,3 @@ const setAuthorizationHeader = (token) => {
 //     })
 //     .catch((err) => console.log(err));
 // };
-
-// Обновляем данные о пользователе
-export const updateUserDetails = (userProfile) => (dispatch) => {
-  console.log('userProfile: ', userProfile);
-  dispatch({type: userActionType.LOADING_USER});
-  return axios
-    .post(`/user`, userProfile)
-    .then(() => {
-      dispatch({
-        type: userActionType.SET_USER,
-        payload: userProfile,
-      });
-    })
-    .catch((err) => {
-      console.log(err);
-      dispatch({
-        type: uiActionType.SET_ERRORS,
-        payload: err.response.data,
-      });
-    });
-};
-
-// Обновляем данные о компании
-export const updateCompanyDetails = (companyProfile) => (dispatch) => {
-  dispatch({ type: userActionType.LOADING_USER });
-  return axios
-    .post(`/company`, companyProfile)
-    .then(() => {
-      dispatch({
-        type: userActionType.SET_COMPANY,
-        payload: companyProfile,
-      });
-    })
-    .catch((err) => {
-      console.log(err.response.data);
-      dispatch({
-        type: uiActionType.SET_ERRORS,
-        payload: err.response.data,
-      });
-    });
-};
-

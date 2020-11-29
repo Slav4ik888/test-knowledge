@@ -166,7 +166,6 @@ exports.updateCompanyData = (req, res) => {
   validationCompanyAuthority(req.user) // является ли пользователь Владельцем аккаунта
     .then((data) => {
       const { valid, errors } = data;
-      console.log('valid: ', valid);
       if (!valid) return res.status(400).json(errors);
 
       let companyDetails = reduceCompanyData(req.body);

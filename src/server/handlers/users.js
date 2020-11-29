@@ -90,27 +90,22 @@ exports.login = (req, res) => {
 // Delete user
 exports.deleteUser = (req, res) => { 
   let result;
-
   if (req.user.role !== `Владелец` && req.user.userId !== req.body.userId) {
     console.log(`Сотрудник пытается удалить другого сотрудника`);
     return res.status(400).json({ error: `Извините, у вас недостаточно прав для удаление другого сотрудника` });
   }
-
-  if (req.user.role === `Владелец` || req.user.userId !== req.body.userId) {
-    console.log(`Владелец, удаляет сотрудника`);
-    result = `worker`;
-  }
-
-  if (req.user.role !== `Владелец` || req.user.userId === req.body.userId) {
+  if (req.user.role !== `Владелец` && req.user.userId === req.body.userId) {
     console.log(`Сотрудник, удаляет себя`);
     result = `user`;
   }
-  
-  if (req.user.userId === req.body.userId && req.user.role === `Владелец`) {
+  if (req.user.role === `Владелец` && req.user.userId !== req.body.userId) {
+    console.log(`Владелец, удаляет сотрудника`);
+    result = `worker`;
+  }
+  if (req.user.role === `Владелец` && req.user.userId === req.body.userId ) {
     console.log(`Попытка удалить аккаунт компании`);
     return res.status(400).json({ general: `Вы являетесь Владельцем аккаунта и не можете удалить себя как пользователя. Вы можете назначить другого пользователя Владельцем, либо удалить аккаунт компании из "Профиля компании"` });
   }
-
   
   admin
     .auth()
@@ -149,30 +144,39 @@ exports.getUserData = (req, res) => {
 
 // Update user details
 exports.updateUserData = (req, res) => {
-  // let newUserData = reduceUserData(req.body);
-
-  // Те значения которые не меняются, оставляем как были
-  // newUserData.email = req.user.email;
-  // newUserData.userId = req.user.userId;
-  // newUserData.companyId = req.user.companyId;
-  // newUserData.createdAt = req.user.createdAt;
-  // newUserData.positions = req.user.positions || [];
-  // newUserData.role = req.user.role;
-  // newUserData.lastChange = new Date().toISOString(),
+  let result;
+  if (req.user.role !== `Владелец` && req.user.userId !== req.body.userId) {
+    console.log(`Сотрудник пытается обновить данные другого сотрудника`);
+    return res.status(400).json({ error: `Извините, у вас недостаточно прав для обновления данных другого сотрудника` });
+  }
+  if (req.user.role !== `Владелец` && req.user.userId === req.body.userId) {
+    console.log(`Сотрудник, обновляет свои данные`);
+    result = `user`;
+  }
+  if (req.user.role === `Владелец` && req.user.userId !== req.body.userId) {
+    console.log(`Владелец, обновляет данные сотрудника`);
+    result = `worker`;
+  }
+  if (req.user.role === `Владелец` && req.user.userId === req.body.userId) {
+    console.log(`Владелец, обновляет свои данные`);
+    result = `user`;
+  }
+  
   const firstName = !isEmpty(req.body.firstName.trim()) ? req.body.firstName : ``;
   const secondName = !isEmpty(req.body.secondName.trim()) ? req.body.secondName : ``;
   const middleName = !isEmpty(req.body.middleName.trim()) ? req.body.middleName : ``;
 
   db
-    .doc(`users/${req.user.companyId}/users/${req.user.email}`)
+    .doc(`users/${req.user.companyId}/users/${req.body.email}`)
     .update({
       firstName,
       secondName,
       middleName,
+      positions: req.body.positions,
       lastChange: new Date().toISOString(),
     })
     .then(() => {
-      return res.json({ message: `Данные пользователя успешно добавлены` });
+      return res.json({ message: `Данные пользователя успешно обновлены` });
     })
     .catch(err => {
       console.error(err);

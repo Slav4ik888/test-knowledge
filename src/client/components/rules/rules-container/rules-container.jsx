@@ -20,11 +20,10 @@ import SupervisedUserCircleIcon from '@material-ui/icons/SupervisedUserCircle';
 import InsertDriveFileIcon from '@material-ui/icons/InsertDriveFile';
 // Components
 import ListSelect from '../../list-select/list-select';
-import PositionsContainer from '../../positions/positions-container/positions-container';
-import PositionsListChip from '../../positions/positions-list-chip/positions-list-chip';
-import PositionsAddDocument from '../../positions/positions-add-document/positions-add-document';
+import PositionsModuleRow from '../../positions/positions-module-row/positions-module-row';
 import DocumentsContainer from '../../documents/documents-container/documents-container';
 import SectionsContainer from '../../sections/sections-container/sections-container';
+import { typePosModule } from '../../../../types';
 
 
 const useStyles = makeStyles((theme) => {
@@ -43,7 +42,6 @@ const useStyles = makeStyles((theme) => {
       //   height: theme.spacing(16),
       // },
     },
-    textPrimary: `#002980`,
     paper: {
       width: `100%`,
       padding: theme.spacing(4),
@@ -59,7 +57,7 @@ const useStyles = makeStyles((theme) => {
     block: {
       display: `block`,
     },
-    column: {
+    row: {
       display: 'flex',
       alignItems: `center`,
     },
@@ -75,43 +73,21 @@ const useStyles = makeStyles((theme) => {
 });
 
 
-const RulesContainer = ({ loading, documents, positions }) => {
-  
-  if (loading) {
-    return null;
-  }
+const RulesContainer = ({ loading, documents }) => {
+
+  if (loading) return null;
+
   const classes = useStyles();
-  console.log('classes: ', classes.header);
 
   // Выбранный документ
   const [docSelected, setDocSelected] = useState(null);
   const handleDocSelected = (doc) => {
     setDocSelected(doc);
-    if (doc) { // Выбираем должности закреплённые за данным документом
-      setPosFromDoc(positions.filter((pos) => doc.positions.find((docPos) => docPos.id === pos.id)))
-    } else {
-      setPosFromDoc([]);
-    }
   };
 
   const [isDocuments, setIsDocuments] = useState(false);
   const handleDocumentsOpen = () => setIsDocuments(true);
   const handleDocumentsClose = () => setIsDocuments(false);
-
-  // Должности закреплённые за выбранным документом
-  const [posFromDoc, setPosFromDoc] = useState([]);
-
-  const [isPositions, setIsPositions] = useState(false);
-  const handlePositionsOpen = () => setIsPositions(true);
-  const handlePositionsClose = () => setIsPositions(false);
-
-  const [posEdit, setPosEdit] = useState(false);
-  const handlePosEditOpen = () => {
-    if (docSelected) {
-      setPosEdit(true);
-    }
-  };
-  const handlePosEditClose = () => setPosEdit(false);
 
   // Выбранный раздел
   const [sectionSelected, SetSectionSelected] = useState(null);
@@ -127,7 +103,7 @@ const RulesContainer = ({ loading, documents, positions }) => {
           Новое правило
         </Typography>
 
-        <div className={classes.column}>
+        <div className={classes.row}>
           <Avatar className={classes.avatar}> 
             <FolderIcon />
           </Avatar>
@@ -154,7 +130,9 @@ const RulesContainer = ({ loading, documents, positions }) => {
           />
         </div>
 
-        <div className={classes.column}>
+        <PositionsModuleRow item={docSelected} type={typePosModule.DOC} />
+
+        {/* <div className={classes.row}>
           <Avatar className={classes.avatar}>
             <SupervisedUserCircleIcon />
           </Avatar>
@@ -181,9 +159,9 @@ const RulesContainer = ({ loading, documents, positions }) => {
             open={isPositions}
             onClose={handlePositionsClose}
           />
-        </div>
+        </div> */}
 
-        <div className={classes.column}>
+        <div className={classes.row}>
           <Avatar className={classes.avatar}>
             <InsertDriveFileIcon />
           </Avatar>
@@ -225,12 +203,10 @@ const RulesContainer = ({ loading, documents, positions }) => {
 
 RulesContainer.propTypes = {
   documents: pt.array.isRequired,
-  positions: pt.array.isRequired,
 };
 
 const mapStateToProps = (state) => ({
   documents: state.data.documents,
-  positions: state.data.positions,
   loading: state.UI.loading,
 });
 

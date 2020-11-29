@@ -16,8 +16,9 @@ import FolderIcon from '@material-ui/icons/Folder';
 import SupervisedUserCircleIcon from '@material-ui/icons/SupervisedUserCircle';
 // Components
 import PositionsPopoverShow from '../../positions/positions-popover-show/positions-popover-show';
-import PositionsAddDocument from '../../positions/positions-add-document/positions-add-document';
+import PositionsAddInItem from '../../positions/positions-add-in-item/positions-add-item';
 import DeleteDocumentAvatar from '../../buttons/delete-document-avatar/delete-document-avatar';
+import { typePosModule } from '../../../../types';
 
 
 const useStyles = makeStyles((theme) => ({
@@ -136,9 +137,10 @@ const DocumentItem = ({ doc, onEdit, onDel}) => {
         onClose={handleShowPosClose}
         positions={doc.positions}
       />
-      <PositionsAddDocument
+      <PositionsAddInItem
         open={posEdit}
-        doc={doc}
+        type={typePosModule.DOC}
+        item={doc}
         onClose={handlePosEditClose}
       />
     </ListItem>

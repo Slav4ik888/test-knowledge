@@ -30,6 +30,7 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 const PositionsListChip = ({ positions, column }) => {
+
   const classes = useStyles();
   const newClassName = cl(classes.root, { [classes.column]: column });
 

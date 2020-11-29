@@ -21,11 +21,7 @@ import MailIcon from '@material-ui/icons/Mail';
 import NotificationsIcon from '@material-ui/icons/Notifications';
 import MoreIcon from '@material-ui/icons/MoreVert';
 // Components
-import MyButton from '../../buttons/button-icon/button-icon';
 import ProfilesMenu from '../../profiles/profiles-menu/profiles-menu';
-import UsersMenu from '../../users/users-menu/users-menu';
-import PositionsContainer from '../../positions/positions-container/positions-container';
-import DocumentsContainer from '../../documents/documents-container/documents-container';
 import route from '../../../utils/routes';
 
 

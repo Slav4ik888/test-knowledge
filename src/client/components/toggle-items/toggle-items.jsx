@@ -1,13 +1,7 @@
 import React, { useState } from 'react';
 import pt from 'prop-types';
-// Readux Stuff
-import { connect } from 'react-redux';
-import { updateDocumentsServer } from '../../../redux/actions/data-actions';
 // MUI Stuff
 import { makeStyles } from '@material-ui/core/styles';
-import Dialog from '@material-ui/core/Dialog';
-import DialogActions from '@material-ui/core/DialogActions';
-import DialogContent from '@material-ui/core/DialogContent';
 import Grid from '@material-ui/core/Grid';
 import Card from '@material-ui/core/Card';
 import CardHeader from '@material-ui/core/CardHeader';
@@ -18,17 +12,9 @@ import ListItemIcon from '@material-ui/core/ListItemIcon';
 import Checkbox from '@material-ui/core/Checkbox';
 import Button from '@material-ui/core/Button';
 import Divider from '@material-ui/core/Divider';
-// Icons
-// Components
-import DialogTitle from '../../dialogs/dialog-title/dialog-title';
 
 
 const useStyles = makeStyles((theme) => ({
-  dialog: {
-    padding: theme.spacing(4),
-    // width: `100%`,
-    // maxWidth: `800px`,
-  },
   grid: {
     margin: 'auto',
   },
@@ -59,23 +45,12 @@ function union(a, b) {
   return [...a, ...not(b, a)];
 }
 
-const PositionsAddDocument = ({ open, onClose, UI: { loading }, doc, documents, positions, updateDocumentsServer }) => {
-  
-  if (!open) return null;
-
+const ToggleItems = ({ elemsLeft, elemsRight, onSelected, whatSelected }) => {
   const classes = useStyles();
-  const [isChange, setIsChange] = useState(false);
-
-  const idxDoc = documents.findIndex(document => document.id === doc.id);
-  const positionsInDocument = documents[idxDoc].positions;
-
-  const remainingPositions = positions
-    .filter((pos) => Boolean(positionsInDocument
-      .find((posInDoc) => posInDoc.id === pos.id)) === false);
 
   const [checked, setChecked] = useState([]);
-  const [left, setLeft] = useState(positionsInDocument);
-  const [right, setRight] = useState(remainingPositions);
+  const [left, setLeft] = useState(elemsLeft);
+  const [right, setRight] = useState(elemsRight);
 
   const leftChecked = intersection(checked, left);
   const rightChecked = intersection(checked, right);
@@ -106,22 +81,16 @@ const PositionsAddDocument = ({ open, onClose, UI: { loading }, doc, documents, 
     setRight(right.concat(leftChecked));
     setLeft(not(left, leftChecked));
     setChecked(not(checked, leftChecked));
-    setIsChange(true);
+    onSelected(not(left, leftChecked)); // Сообщаем, что изменилось в левой части
   };
 
   const handleCheckedLeft = () => {
     setLeft(left.concat(rightChecked));
     setRight(not(right, rightChecked));
     setChecked(not(checked, rightChecked));
-    setIsChange(true);
+    onSelected(left.concat(rightChecked)); // Сообщаем, что изменилось в левой части
   };
 
-  const handleSetPosToDoc = () => {
-    let newDocuments = documents;
-    newDocuments[idxDoc].positions = left;
-    updateDocumentsServer(newDocuments);
-    onClose();
-  };
 
   const customList = (title, items) => (
     <Card>
@@ -133,7 +102,7 @@ const PositionsAddDocument = ({ open, onClose, UI: { loading }, doc, documents, 
             checked={numberOfChecked(items) === items.length && items.length !== 0}
             indeterminate={numberOfChecked(items) !== items.length && numberOfChecked(items) !== 0}
             disabled={items.length === 0}
-            inputProps={{ 'aria-label': 'выбраны все должности' }}
+            inputProps={{ 'aria-label': `выбраны все ${whatSelected}` }}
           />
         }
         title={title}
@@ -165,14 +134,6 @@ const PositionsAddDocument = ({ open, onClose, UI: { loading }, doc, documents, 
   );
 
   return (
-    <Dialog
-      disableBackdropClick fullWidth
-      className={classes.dialog} maxWidth="xl" scroll={`paper`}
-      open={open} onClose={onClose}
-    >
-      <DialogTitle onClose={onClose}>Выберите те должности, которым нужно полностью знать этот документ</DialogTitle>
-      <DialogContent dividers>
-        
         <Grid container spacing={2} justify="center" alignItems="center" className={classes.grid}>
           <Grid item>{customList('Выбранные', left)}</Grid>
           <Grid item>
@@ -201,45 +162,22 @@ const PositionsAddDocument = ({ open, onClose, UI: { loading }, doc, documents, 
           </Grid>
           <Grid item>
             {
-              positions.length === 0 ?
-                `Для того, чтобы закрепить должность за документом - вначале нужно создайть хотя бы одну должность.`
+              right.length === 0 ?
+                `Нет элементов для выбора`
               :
               customList('Существующие', right)
             }
             
           </Grid>
         </Grid>
-
-      </DialogContent>
-      <DialogActions className={classes.dialog}>
-        <Button onClick={onClose} >
-          Отмена
-        </Button>
-        <Button onClick={handleSetPosToDoc} disabled={loading || !isChange} variant="contained" color="primary">
-          Сохранить
-          {
-            loading && (
-              <CircularProgress size={30} className={classes.progress}/>
-            )
-          }
-        </Button>
-      </DialogActions>
-
-    </Dialog>
   );
 };
 
-PositionsAddDocument.propTypes = {
-  doc: pt.object,
-  documents: pt.array.isRequired,
-  positions: pt.array.isRequired,
-  updateDocumentsServer: pt.func.isRequired, 
+ToggleItems.propTypes = {
+  whatSelected: pt.string.isRequired,
+  elemsLeft: pt.array.isRequired,
+  elemsRight: pt.array.isRequired,
+  onSelected: pt.func.isRequired,
 };
 
-const mapStateToProps = (state) => ({
-  UI: state.UI,
-  documents: state.data.documents,
-  positions: state.data.positions,
-});
-
-export default connect(mapStateToProps, { updateDocumentsServer })(PositionsAddDocument);
+export default ToggleItems;

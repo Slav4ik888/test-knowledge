@@ -127,6 +127,7 @@ export const getDocuments = () => (dispatch) => {
 
 // Обновляем documents только в store, без сервера
 export const updateDocuments = (newDocuments) => (dispatch) => {
+  console.log('newDocuments: ', newDocuments);
   dispatch({
     type: dataActionType.SET_DOCUMENTS,
     payload: newDocuments,
@@ -136,6 +137,7 @@ export const updateDocuments = (newDocuments) => (dispatch) => {
 
 // Обновляем documents на сервере
 export const updateDocumentsServer = (newDocuments) => (dispatch) => {
+  console.log('newDocuments: ', newDocuments);
   dispatch({ type: uiActionType.LOADING_UI });
   return axios.post(`/updateDocuments`, newDocuments)
     .then((res) => {
