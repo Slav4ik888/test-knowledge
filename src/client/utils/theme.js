@@ -12,6 +12,9 @@ export default {
       dark: `#b22a00`,
       contrastText: `#fff`,
     },
+    background: {
+      dialog: `#f0f8ff`,
+    },
   },
   typography: {
     useNextVariants: true

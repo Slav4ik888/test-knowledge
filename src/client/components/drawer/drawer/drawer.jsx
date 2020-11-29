@@ -1,6 +1,7 @@
 import React from 'react';
 import cl from 'classnames';
 import pt from 'prop-types';
+import { Link } from 'react-router-dom';
 // MUI Stuff
 import { makeStyles, useTheme } from '@material-ui/core/styles';
 import Drawer from '@material-ui/core/Drawer';
@@ -16,8 +17,6 @@ import ChevronRightIcon from '@material-ui/icons/ChevronRight';
 import InboxIcon from '@material-ui/icons/MoveToInbox';
 import MailIcon from '@material-ui/icons/Mail';
 import FolderIcon from '@material-ui/icons/Folder';
-import SupervisedUserCircleIcon from '@material-ui/icons/SupervisedUserCircle';
-import AccountCircle from '@material-ui/icons/AccountCircle';
 import DescriptionIcon from '@material-ui/icons/Description';
 import QueryBuilderIcon from '@material-ui/icons/QueryBuilder';
 import PlayArrowIcon from '@material-ui/icons/PlayArrow';
@@ -26,6 +25,10 @@ import AddIcon from '@material-ui/icons/Add';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 // Components
 import {drawerWidth} from '../../../utils/consts';
+import route from '../../../utils/routes';
+import DocumentsNavBtn from '../../documents/documents-nav-btn/documents-nav-btn';
+import PositionsNavBtn from '../../positions/positions-nav-btn/positions-nav-btn';
+import UsersNavBtn from '../../users/users-nav-btn/users-nav-btn';
 
 
 const useStyles = makeStyles((theme) => ({
@@ -128,67 +131,29 @@ const MiniDrawer = ({ onClose, open }) => {
           <ListItemIcon><DescriptionIcon /></ListItemIcon>
           <ListItemText primary="ПРАВИЛА" />
         </ListItem>
+
         {
-          open && <>
-            <ListItem button className={classes.subButton}>
-              <ListItemText primary="Создать" />
-            </ListItem>
-            <ListItem button className={cl(classes.subButton, classes.lastSubButton)}>
-              <ListItemText primary="Редактировать" />
-            </ListItem>
-            <Divider />
-          </>
+          open &&
+            <>
+              <Link to={route.CREATE_RULE} >
+                <ListItem button className={classes.subButton}>
+                  <ListItemText primary="Создать" />
+                </ListItem>
+              </Link>
+            
+              <ListItem button className={cl(classes.subButton, classes.lastSubButton)}>
+                <ListItemText primary="Редактировать" />
+              </ListItem>
+            
+              <Divider />
+            </>
         }
 
-        <ListItem button className={classes.button}>
-          <ListItemIcon><FolderIcon /></ListItemIcon>
-          <ListItemText primary="ДОКУМЕНТЫ" />
-        </ListItem>
-        {
-          open && <>
-            <ListItem button className={classes.subButton}>
-              <ListItemText primary="Создать" />
-            </ListItem>
-            <ListItem button className={cl(classes.subButton, classes.lastSubButton)}>
-              <ListItemText primary="Редактировать" />
-            </ListItem>
-            <Divider />
-          </>
-        }
-
-        <ListItem button className={classes.button}>
-          <ListItemIcon><SupervisedUserCircleIcon /></ListItemIcon>
-          <ListItemText primary="ДОЛЖНОСТИ" />
-        </ListItem>
-        {
-          open && <>
-            <ListItem button className={classes.subButton}>
-              <ListItemText primary="Создать" />
-            </ListItem>
-            <ListItem button className={cl(classes.subButton, classes.lastSubButton)}>
-              <ListItemText primary="Редактировать" />
-            </ListItem>
-            <Divider />
-          </>
-        }
-
-        <ListItem button className={classes.button}>
-          <ListItemIcon><AccountCircle /></ListItemIcon>
-          <ListItemText primary="СОТРУДНИКИ" />
-        </ListItem>
-        {
-          open && <>
-            <ListItem button className={classes.subButton}>
-              <ListItemText primary="Создать" />
-            </ListItem>
-            <ListItem button className={classes.subButton}>
-              <ListItemText primary="Тестирование" />
-            </ListItem>
-            <ListItem button className={cl(classes.subButton, classes.lastSubButton)}>
-              <ListItemText primary="Настроить" />
-            </ListItem>
-          </>
-        }
+        <DocumentsNavBtn />
+        <PositionsNavBtn />
+        <UsersNavBtn />
+        
+        
       </List>
 
       <Divider />

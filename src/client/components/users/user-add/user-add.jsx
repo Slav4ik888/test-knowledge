@@ -1,23 +1,26 @@
 import React, {useState} from 'react';
 import pt from 'prop-types';
-import withStyles from '@material-ui/core/styles/withStyles';
 // Readux Stuff
 import {connect} from 'react-redux';
 import {addUser} from '../../../redux/actions/user-actions';
 // MUI Stuff
-import Button from '@material-ui/core/Button';
+import { makeStyles } from '@material-ui/core/styles';
 import Typography from '@material-ui/core/Typography';
 import TextField from '@material-ui/core/TextField';
 import Dialog from '@material-ui/core/Dialog';
 import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
-import DialogTitle from '@material-ui/core/DialogTitle';
 // Icons
-import CircularProgress from '@material-ui/core/CircularProgress';
-// Component
+
+// Components
+import CancelSubmitBtn from '../../buttons/cancel-submit-btn/cancel-submit-btn';
+import DialogTitle from '../../dialogs/dialog-title/dialog-title';
 
 
-const styles = {
+const useStyles = makeStyles((theme) => ({
+  dialog: {
+    padding: theme.spacing(4),
+  },
   textField: {
     margin: `10px auto 10px auto`,
   },
@@ -59,26 +62,42 @@ const styles = {
     fontSize: `0.8rem`,
     marginTop: 10,
   },
-  progress: {
-    position: `absolute`,
-    color: `#147070`,
-  },
-};
+}));
 
-const UserAdd = ({ classes, open, onClose, UI: {errors, loading }, addUser}) => {
+
+const UserAdd = ({ open, onClose, UI: { errors, loading }, addUser}) => {
 
   if (!open) {
     return null;
   }
-  
-  const [email, setEmail] = useState(``);
+  const classes = useStyles();
+  const [isChange, setIsChange] = useState(false);
 
-  const handleChange = (e) => setEmail(e.target.value); 
+  const [newUP, setNewUP] = useState({
+    email: ``,
+    firstName: ``,
+    secondName: ``,
+    middleName: ``,
+  });
+
+  const handleChange = (e) => {
+    let userProfile = Object.assign({}, newUP);
+    userProfile[e.target.name] = e.target.value;
+    setIsChange(true);
+    setNewUP(userProfile); 
+  };
+
   const handleClose = () => onClose();
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    addUser(email);
+    addUser(newUP);
+    setNewUP({
+      email: ``,
+      firstName: ``,
+      secondName: ``,
+      middleName: ``,
+    });
   };
 
 
@@ -87,18 +106,34 @@ const UserAdd = ({ classes, open, onClose, UI: {errors, loading }, addUser}) => 
       <Dialog
         open={open}
         onClose={onClose}
+        className={classes.dialog}
         fullWidth
         maxWidth="sm"
       >
-        <DialogTitle>Добавление пользователя</DialogTitle>
+        <DialogTitle onClose={handleClose}>Добавление пользователя</DialogTitle>
         <DialogContent>
           <form>
-            <TextField
+            <TextField autoComplete="off"
               name="email" type="email" label="Email" className={classes.textField}
               placeholder="Введите email нового пользователя"
               helperText={errors.email}
               error={errors.email ? true : false}
-              value={email} onChange={handleChange} fullWidth
+              value={newUP.email} onChange={handleChange} fullWidth
+            />
+            <TextField autoComplete="off"
+              name="firstName" type="text" label="Имя" className={classes.textField}
+              placeholder="Введите имя"
+              value={newUP.firstName} onChange={handleChange} fullWidth
+            />
+            <TextField autoComplete="off"
+              name="secondName" type="text" label="Фамилия" className={classes.textField}
+              placeholder="Введите фамилию"
+              value={newUP.secondName} onChange={handleChange} fullWidth
+            />
+            <TextField autoComplete="off"
+              name="middleName" type="text" label="Отчество" className={classes.textField}
+              placeholder="Введите отчество"
+              value={newUP.middleName} onChange={handleChange} fullWidth
             />
           </form>
           {
@@ -109,18 +144,15 @@ const UserAdd = ({ classes, open, onClose, UI: {errors, loading }, addUser}) => 
             )
           }
         </DialogContent>
-        <DialogActions>
-          <Button onClick={handleClose} >
-            Отмена
-          </Button>
-          <Button onClick={handleSubmit} disabled={loading} variant="contained" color="primary">
-            Пригласить
-            {
-              loading && (
-                <CircularProgress size={30} className={classes.progress}/>
-              )
-            }
-          </Button>
+
+        <DialogActions className={classes.dialog}>
+          <CancelSubmitBtn
+            onCancel={handleClose}
+            onSubmit={handleSubmit}
+            submitText={`Пригласить`}
+            disabled={loading || !isChange}
+            loading={loading}
+          />
         </DialogActions>
       </Dialog>
     </>
@@ -130,9 +162,7 @@ const UserAdd = ({ classes, open, onClose, UI: {errors, loading }, addUser}) => 
 UserAdd.propTypes = {
   addUser: pt.func.isRequired,
   open: pt.bool.isRequired,
-  // loading: pt.bool.isRequired,
   onClose: pt.func.isRequired,
-  classes: pt.object.isRequired,
   UI: pt.object.isRequired,
 };
 
@@ -141,4 +171,4 @@ const mapStateToProps = (state) => ({
   // loading: state.user.loading,
 });
 
-export default connect(mapStateToProps, {addUser})(withStyles(styles)(UserAdd));
+export default connect(mapStateToProps, {addUser})(UserAdd);

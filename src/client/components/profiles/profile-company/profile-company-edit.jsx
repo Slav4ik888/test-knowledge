@@ -2,25 +2,29 @@ import React, {useState} from 'react';
 import pt from 'prop-types';
 import dayjs from 'dayjs';
 import 'dayjs/locale/ru';
-import withStyles from '@material-ui/core/styles/withStyles';
 // Readux Stuff
 import {connect} from 'react-redux';
 import {updateCompanyDetails, deleteCompany} from '../../../redux/actions/user-actions';
 // MUI Stuff
+import { makeStyles } from '@material-ui/core/styles';
 import Button from '@material-ui/core/Button';
 import TextField from '@material-ui/core/TextField';
 import Dialog from '@material-ui/core/Dialog';
 import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
-import DialogTitle from '@material-ui/core/DialogTitle';
 // Icons
 import EditIcon from '@material-ui/icons/Edit';
 // Component
 import MyButton from '../../buttons/button-icon/button-icon';
 import DeleteCompany from '../../buttons/delete-company/delete-company';
+import CancelSubmitBtn from '../../buttons/cancel-submit-btn/cancel-submit-btn';
+import DialogTitle from '../../dialogs/dialog-title/dialog-title';
 
 
-const styles = {
+const useStyles = makeStyles((theme) => ({
+  dialog: {
+    padding: theme.spacing(4),
+  },
   textField: {
     margin: `10px auto 10px auto`,
   },
@@ -57,15 +61,16 @@ const styles = {
       margin: `20px 10px`
     }
   }
-};
+}));
 
-const ProfielCompanyEdit = ({ classes, open, onClose, user: { userProfile, companyProfile }, updateCompanyDetails, deleteCompany}) => {
+const ProfielCompanyEdit = ({ open, onClose, user: { userProfile, companyProfile }, updateCompanyDetails, deleteCompany}) => {
 
   if (!open) {
     return null;
   }
   // dayjs.extend(relativeTime);
-
+  const classes = useStyles();
+  const [isChange, setIsChange] = useState(false);
   const [newCP, setNewCP] = useState(companyProfile);
 
   const handleChange = (e) => {
@@ -74,6 +79,7 @@ const ProfielCompanyEdit = ({ classes, open, onClose, user: { userProfile, compa
     companyProfileUpdate[e.target.name] = e.target.value;
     companyProfileUpdate.lastChange = new Date().toISOString();
     setNewCP(companyProfileUpdate); 
+    setIsChange(true);
   };
 
   const handleClose = () => onClose();
@@ -94,10 +100,11 @@ const ProfielCompanyEdit = ({ classes, open, onClose, user: { userProfile, compa
       <Dialog
         open={open}
         onClose={onClose}
+        className={classes.dialog}
         fullWidth
         maxWidth="sm"
       >
-        <DialogTitle>Профиль компани</DialogTitle>
+        <DialogTitle onClose={handleClose}>Профиль компани</DialogTitle>
         <DialogContent>
           <form>
             <div className={classes.imageWrapper}>
@@ -130,13 +137,13 @@ const ProfielCompanyEdit = ({ classes, open, onClose, user: { userProfile, compa
           </form>
           
         </DialogContent>
-        <DialogActions>
-          <Button onClick={handleClose} >
-            Отмена
-          </Button>
-          <Button onClick={handleSubmit} variant="contained" color="primary">
-            Сохранить
-          </Button>
+        <DialogActions className={classes.dialog}>
+          <CancelSubmitBtn
+            onCancel={handleClose}
+            onSubmit={handleSubmit}
+            disabled={!isChange}
+            loading={false}
+          />
         </DialogActions>
       </Dialog>
     </>
@@ -149,11 +156,10 @@ ProfielCompanyEdit.propTypes = {
   user: pt.object.isRequired,
   open: pt.bool.isRequired,
   onClose: pt.func.isRequired,
-  classes: pt.object.isRequired,
 };
 
 const mapStateToProps = (state) => ({
   user: state.user,
 });
 
-export default connect(mapStateToProps, {updateCompanyDetails, deleteCompany})(withStyles(styles)(ProfielCompanyEdit));
+export default connect(mapStateToProps, {updateCompanyDetails, deleteCompany})(ProfielCompanyEdit);

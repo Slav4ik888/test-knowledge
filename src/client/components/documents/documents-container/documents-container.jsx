@@ -32,7 +32,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const DoumentsContainer = ({ open, onClose, UI, documents, updateDocuments, updateDocumentsServer }) => {
+const DocumentsContainer = ({ open, onClose, UI, documents, updateDocuments, updateDocumentsServer }) => {
 
   if (!open) {
     return null;
@@ -126,7 +126,7 @@ const DoumentsContainer = ({ open, onClose, UI, documents, updateDocuments, upda
   );
 }
 
-DoumentsContainer.propTypes = {
+DocumentsContainer.propTypes = {
   updateDocuments: pt.func.isRequired,
   updateDocumentsServer: pt.func.isRequired,
   open: pt.bool.isRequired,
@@ -140,4 +140,4 @@ const mapStateToProps = (state) => ({
   documents: state.data.documents,
 });
 
-export default connect(mapStateToProps, {updateDocuments, updateDocumentsServer})(DoumentsContainer);
+export default connect(mapStateToProps, {updateDocuments, updateDocumentsServer})(DocumentsContainer);

@@ -1,8 +1,9 @@
 import React from 'react';
 import pt from 'prop-types';
 import {Route, Redirect} from 'react-router-dom';
-import {connect} from 'react-redux';
 import route from './routes';
+// Redux
+import {connect} from 'react-redux';
 
 
 const AuthRoute = ({component: Component, authenticated}) => (

@@ -25,7 +25,7 @@ const useStyles = makeStyles((theme) => ({
     marginRight: 70,
   },
   hover: {
-    backgroundColor: `#e9f6fc`,
+    backgroundColor: theme.palette.background.dialog,
   },
 }));
 

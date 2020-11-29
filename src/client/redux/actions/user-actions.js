@@ -58,10 +58,13 @@ export const signupCompany = (newCompanyData, history) => (dispatch) => {
 };
 
 // Приглашаем и регистрируем пользователя для компании
-export const addUser = (email) => (dispatch) => {
+export const addUser = (user) => (dispatch) => {
   dispatch({ type: uiActionType.LOADING_UI });
   const newUser = {
-    email,
+    email: user.email,
+    firstName: user.firstName,
+    secondName: user.secondName,
+    middleName: user.middleName,
     password: `qazwsx12`,
     confirmPassword: `qazwsx12`,
   };

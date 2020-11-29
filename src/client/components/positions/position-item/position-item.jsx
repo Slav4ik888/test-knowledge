@@ -23,7 +23,7 @@ const useStyles = makeStyles((theme) => ({
     marginRight: 40,
   },
   hover: {
-    backgroundColor: `#e9f6fc`,
+    backgroundColor: theme.palette.background.dialog,
   },
   avatarIcon: {
     height: `34px`,

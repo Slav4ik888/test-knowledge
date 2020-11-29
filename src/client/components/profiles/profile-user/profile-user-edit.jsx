@@ -2,24 +2,28 @@ import React, {useState} from 'react';
 import pt from 'prop-types';
 import dayjs from 'dayjs';
 import 'dayjs/locale/ru';
-import withStyles from '@material-ui/core/styles/withStyles';
 // Readux Stuff
 import {connect} from 'react-redux';
 import {updateUserDetails, deleteUser} from '../../../redux/actions/user-actions';
 // MUI Stuff
+import { makeStyles } from '@material-ui/core/styles';
 import Button from '@material-ui/core/Button';
 import TextField from '@material-ui/core/TextField';
 import Dialog from '@material-ui/core/Dialog';
 import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
-import DialogTitle from '@material-ui/core/DialogTitle';
 // Icons
 import EditIcon from '@material-ui/icons/Edit';
 // Component
 import MyButton from '../../buttons/button-icon/button-icon';
+import CancelSubmitBtn from '../../buttons/cancel-submit-btn/cancel-submit-btn';
+import DialogTitle from '../../dialogs/dialog-title/dialog-title';
 
 
-const styles = {
+const useStyles = makeStyles((theme) => ({
+  dialog: {
+    padding: theme.spacing(4),
+  },
   textField: {
     margin: `10px auto 10px auto`,
   },
@@ -56,14 +60,15 @@ const styles = {
       margin: `20px 10px`
     }
   },
-};
+}));
 
-const ProfielUserEdit = ({classes, open, onClose, userProfile, updateUserDetails, deleteUser}) => {
+const ProfielUserEdit = ({ open, onClose, userProfile, updateUserDetails, deleteUser}) => {
 
   if (!open) {
     return null;
   }
-
+  const classes = useStyles();
+  const [isChange, setIsChange] = useState(false);
   const [newUP, setNewUP] = useState(userProfile);
 
   const handleChange = (e) => {
@@ -71,6 +76,7 @@ const ProfielUserEdit = ({classes, open, onClose, userProfile, updateUserDetails
     let userProfileUpdate = Object.assign({}, newUP);
     userProfileUpdate[e.target.name] = e.target.value;
     setNewUP(userProfileUpdate); 
+    setIsChange(true);
   };
 
   const handleClose = () => onClose();
@@ -91,12 +97,13 @@ const ProfielUserEdit = ({classes, open, onClose, userProfile, updateUserDetails
       <Dialog
         open={open}
         onClose={onClose}
+        className={classes.dialog}
         fullWidth
         maxWidth="sm"
       >
-        <DialogTitle>Ваш профиль</DialogTitle>
+        <DialogTitle onClose={handleClose}>Ваш профиль</DialogTitle>
         <DialogContent>
-          <form>
+          <form> 
             <div className={classes.imageWrapper}>
               <img src={newUP.imageUrl} alt="profile" className={classes.profileImage} />
               <input type="file" id="imageInput" hidden="hidden" onChange={() => {}} />
@@ -108,15 +115,15 @@ const ProfielUserEdit = ({classes, open, onClose, userProfile, updateUserDetails
               name="createdAt" type="text" label="Зарегистрирован" className={classes.textField} disabled
               value={dayjs(userProfile.createdAt).locale(`ru`).format('DD MMMM YYYY')} onChange={() => { }} fullWidth
             />
-            <TextField
+            <TextField autoComplete="off"
               name="firstName" type="text" label="Имя" className={classes.textField}
               value={newUP.firstName} onChange={handleChange} fullWidth
             />
-            <TextField
+            <TextField autoComplete="off"
               name="secondName" type="text" label="Фамилия" className={classes.textField}
               value={newUP.secondName} onChange={handleChange} fullWidth
             />
-            <TextField
+            <TextField autoComplete="off"
               name="middleName" type="text" label="Отчество" className={classes.textField}
               value={newUP.middleName} onChange={handleChange} fullWidth
             />
@@ -131,13 +138,13 @@ const ProfielUserEdit = ({classes, open, onClose, userProfile, updateUserDetails
           </form>
           
         </DialogContent>
-        <DialogActions>
-          <Button onClick={handleClose} >
-            Отмена
-          </Button>
-          <Button onClick={handleSubmit} variant="contained" color="primary">
-            Сохранить
-          </Button>
+        <DialogActions className={classes.dialog}>
+          <CancelSubmitBtn
+            onCancel={handleClose}
+            onSubmit={handleSubmit}
+            disabled={!isChange}
+            loading={false}
+          />
         </DialogActions>
       </Dialog>
     </>
@@ -149,7 +156,6 @@ ProfielUserEdit.propTypes = {
   deleteUser: pt.func.isRequired,
   open: pt.bool.isRequired,
   onClose: pt.func.isRequired,
-  classes: pt.object.isRequired,
   userProfile: pt.object,
 };
 
@@ -157,4 +163,4 @@ const mapStateToProps = (state) => ({
   userProfile: state.user.userProfile,
 });
 
-export default connect(mapStateToProps, {updateUserDetails, deleteUser})(withStyles(styles)(ProfielUserEdit));
+export default connect(mapStateToProps, {updateUserDetails, deleteUser})(ProfielUserEdit);

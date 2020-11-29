@@ -26,7 +26,7 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 
-const ListSelect = ({ items, valueField, title, placeholder, label, onSelected, onItemAdd, disabled }) => {
+const ListSelect = ({ items, valueField, title, placeholder, label, onSelected, onItemAdd, itemTextAdd, disabled }) => {
 
   const classes = useStyles();
 
@@ -56,16 +56,17 @@ const ListSelect = ({ items, valueField, title, placeholder, label, onSelected, 
         onChange={handleChange}
         input={<Input />}
       >
-        <MenuItem value={placeholder}><em>Не указан</em></MenuItem>
+        <MenuItem value={placeholder}><em>{placeholder}</em></MenuItem>
         {
-          items && items.map((item) => <MenuItem key={item.id} value={item[valueField]}>
+          items && items.map((item, i) => <MenuItem key={item[valueField] + i} value={item[valueField]}>
               {item[valueField]}
             </MenuItem>
           )
         }
         {
           onItemAdd && <MenuItem value={`newItemAdd`} onClick={onItemAdd}>
-            <AddIcon className={classes.addIcon}/>добавить новый
+            <AddIcon className={classes.addIcon} />
+            {itemTextAdd ? itemTextAdd : `добавить новый`}
           </MenuItem>
         }
       </Select>
@@ -81,6 +82,7 @@ ListSelect.propTypes = {
   items: pt.array,
   onSelected: pt.func.isRequired,
   onItemAdd: pt.func,
+  itemTextAdd: pt.string,
   disabled: pt.bool,  
 };
 

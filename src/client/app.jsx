@@ -12,13 +12,15 @@ import { userActionType } from './redux/types';
 import { ThemeProvider } from '@material-ui/core/styles';
 import createMuiTheme from '@material-ui/core/styles/createMuiTheme';
 import themeFile from './utils/theme';
-// Components
-import Navbar from './components/navbar/navbar';
-import AuthRoute from './utils/auth-route';
 // Pages
 import Home from './pages/home';
 import SignupCompany from './pages/signup-company';
 import Login from './pages/login';
+import CreateRule from './pages/create-rule';
+// Components
+import Navbar from './components/navbar/navbar';
+import AuthRoute from './utils/auth-route';
+import PrivateRoute from './utils/private-route';
 
 
 const token = localStorage.TKidToken;
@@ -48,25 +50,14 @@ const App = () => {
         <div className="container">
           <Navbar />
           <Switch>
-            <Route
-              exact
-              path={route.HOME}
-              component={Home}
-            />
-            <AuthRoute
-              exact
-              path={route.SIGNUP_COMPANY}
-              component={SignupCompany}
-            />
-            <AuthRoute
-              exact
-              path={route.LOGIN}
-              component={Login}
-            />
-            <Route
-              exact
-              path={route.ROOT}
-            />
+            <Route exact path={route.HOME} component={Home} />
+            
+            <PrivateRoute exact path={route.CREATE_RULE} render={() => <CreateRule />} />
+
+            <AuthRoute exact path={route.SIGNUP_COMPANY} component={SignupCompany} />
+            <AuthRoute exact path={route.LOGIN} component={Login} />
+            <Route exact path={route.ROOT} />
+
             <Route
               render={() => (
                 <>

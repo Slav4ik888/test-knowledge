@@ -3,14 +3,14 @@ import pt from 'prop-types';
 // MUI Stuff
 import { makeStyles } from '@material-ui/core/styles';
 import Button from '@material-ui/core/Button';
-
+import CircularProgress from '@material-ui/core/CircularProgress';
 
 const useStyles = makeStyles((theme) => ({
 }));
 
 
-const CancelSubmitBtn = ({ onCancel, onSubmit, disabled, loading }) => {
-  const clases = useStyles();
+const CancelSubmitBtn = ({ onCancel, onSubmit, submitText, disabled, loading }) => {
+  const classes = useStyles();
 
   return (
     <>
@@ -18,7 +18,9 @@ const CancelSubmitBtn = ({ onCancel, onSubmit, disabled, loading }) => {
         Отмена
       </Button>
       <Button onClick={onSubmit} disabled={disabled} variant="contained" color="primary">
-        Сохранить
+        {
+          submitText ? submitText : `Сохранить`
+        }
         {
           loading && (
             <CircularProgress size={30} className={classes.progress} />
@@ -32,6 +34,7 @@ const CancelSubmitBtn = ({ onCancel, onSubmit, disabled, loading }) => {
 CancelSubmitBtn.propTypes = {
   onCancel: pt.func.isRequired,
   onSubmit: pt.func.isRequired,
+  submitText: pt.string,
   disabled: pt.bool.isRequired,
   loading: pt.bool.isRequired,
 }

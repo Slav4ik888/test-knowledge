@@ -5,16 +5,18 @@ import { makeStyles } from '@material-ui/core/styles';
 import {connect} from 'react-redux';
 import {addUser, deleteUser} from '../../../redux/actions/user-actions';
 // MUI Stuff
-import Button from '@material-ui/core/Button';
 import Typography from '@material-ui/core/Typography';
 import Dialog from '@material-ui/core/Dialog';
 import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
 // Icons
-import UsersSelectList from '../users-select-list/users-select-list';
 // Components
 import DialogTitle from '../../dialogs/dialog-title/dialog-title';
 import CancelSubmitBtn from '../../buttons/cancel-submit-btn/cancel-submit-btn';
+import UserAdd from '../user-add/user-add';
+import ListSelect from '../../list-select/list-select';
+import DeleteUserButton from '../../buttons/delete-user-button/delete-user-button';
+
 
 const useStyles = makeStyles((theme) => ({
   dialog: {
@@ -30,7 +32,7 @@ const useStyles = makeStyles((theme) => ({
   // },
 }));
 
-const UserAdd = ({ open, onClose, UI: { loading, errors, messages }, addUser, deleteUser, users}) => {
+const UserChange = ({ open, onClose, UI: { loading, errors, messages }, addUser, deleteUser, users}) => {
 
   if (!open) {
     return null;
@@ -38,12 +40,21 @@ const UserAdd = ({ open, onClose, UI: { loading, errors, messages }, addUser, de
   const classes = useStyles();
   const [isChange, setIsChange] = useState(false);
 
+  const [openAddUser, setOpenAddUser] = useState(false);
+  const handleAddUserOpen = () => setOpenAddUser(true);
+  const handleAddUserClose = () => setOpenAddUser(false);
+
   const [userSeleted, setUserSelected] = useState(``);
   const [userIdx, setUserIdx] = useState(null);
 
-  const handleUserSelected = (email, userIndex) => {
-    setUserSelected(email);
-    setUserIdx(userIndex);
+  const handleUserSelected = (user) => {
+    console.log('user: ', user);
+    if (user) {
+      const email = user.email;
+      setUserSelected(email);
+      const userIndex = users.findIndex(user => user.email === email);
+      setUserIdx(userIndex);
+    }
   };
 
   const handleClose = () => onClose();
@@ -61,22 +72,29 @@ const UserAdd = ({ open, onClose, UI: { loading, errors, messages }, addUser, de
 
   return (
     <>
-      <Dialog disableBackdropClick disableEscapeKeyDown className={classes.dialog}
+      <Dialog disableBackdropClick className={classes.dialog}
         open={open} onClose={handleClose} fullWidth maxWidth="sm"
       >
         <DialogTitle onClose={handleClose}>Настройки пользователей</DialogTitle>
         <DialogContent>
-          <UsersSelectList userSeleted={userSeleted} onSelected={handleUserSelected} users={users}/>
-
+          <ListSelect
+            title={`Выберите сотрудника`}
+            items={users}
+            valueField={`email`}
+            label={`users`}
+            placeholder={`Не выбран`}
+            onSelected={handleUserSelected}
+            onItemAdd={handleAddUserOpen}
+            itemTextAdd={`пригласить нового`}
+          />
           {userSeleted &&
             <>
               <Typography variant="h5" color="primary" >Занимаемые должности</Typography>
               {users[userIdx].positions.map((pos) => <Typography key={pos} variant="body1" >{pos}</Typography>)}
               <Typography variant="h5" color="primary">Статус в приложении</Typography>
               <Typography variant="body1" >{users[userIdx].role}</Typography>
-              <Button onClick={handleDeleteAccount}>
-                Удалить пользователя
-              </Button>
+            
+              <DeleteUserButton onClick={handleDeleteAccount} />
             </>
           }
 
@@ -88,7 +106,8 @@ const UserAdd = ({ open, onClose, UI: { loading, errors, messages }, addUser, de
             )
           }
         </DialogContent>
-        <DialogActions>
+
+        <DialogActions className={classes.dialog}>
           <CancelSubmitBtn
             onCancel={handleClose}
             onSubmit={handleSubmit}
@@ -97,11 +116,14 @@ const UserAdd = ({ open, onClose, UI: { loading, errors, messages }, addUser, de
           />
         </DialogActions>
       </Dialog>
+
+      <UserAdd open={openAddUser} onClose={handleAddUserClose}/>
+
     </>
   );
 }
 
-UserAdd.propTypes = {
+UserChange.propTypes = {
   addUser: pt.func.isRequired,
   deleteUser: pt.func.isRequired,
   open: pt.bool.isRequired,
@@ -115,4 +137,4 @@ const mapStateToProps = (state) => ({
   users: state.data.users,
 });
 
-export default connect(mapStateToProps, {addUser, deleteUser})(UserAdd);
+export default connect(mapStateToProps, {addUser, deleteUser})(UserChange);

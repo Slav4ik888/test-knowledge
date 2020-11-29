@@ -1,6 +1,7 @@
 import React, {useState} from 'react';
 import pt from 'prop-types';
 import cl from 'classnames';
+import { Link } from 'react-router-dom';
 // Redux Stuff
 // import { connect } from 'react-redux';
 // import { getPositions } from '../../../redux/actions/data-actions';
@@ -25,6 +26,7 @@ import ProfilesMenu from '../../profiles/profiles-menu/profiles-menu';
 import UsersMenu from '../../users/users-menu/users-menu';
 import PositionsContainer from '../../positions/positions-container/positions-container';
 import DocumentsContainer from '../../documents/documents-container/documents-container';
+import route from '../../../utils/routes';
 
 
 const useStyles = makeStyles((theme) => ({
@@ -100,19 +102,15 @@ const NavbarAuth = ({ open, onOpen }) => {
   const handleProfilesMenuOpen = (event) => setAnchorPro(event.currentTarget);
   const handleProfilesMenuClose = () => setAnchorPro(null);
   
-  const [anchorUsr, setAnchorUsr] = useState(null);
-  const isUsers = Boolean(anchorUsr);
-  const usersMenuId = `users-menu`
-  const handleUserMenuOpen = (event) => setAnchorUsr(event.currentTarget);
-  const handleUserMenuClose = () => setAnchorUsr(null);
+  // const [anchorUsr, setAnchorUsr] = useState(null);
+  // const isUsers = Boolean(anchorUsr);
+  // const usersMenuId = `users-menu`
+  // const handleUserMenuOpen = (event) => setAnchorUsr(event.currentTarget);
+  // const handleUserMenuClose = () => setAnchorUsr(null);
 
-  const [isPositions, setIsPositions] = useState(false);
-  const handlePositionsOpen = () => setIsPositions(true);
-  const handlePositionsClose = () => setIsPositions(false);
+  
 
-  const [isDocuments, setIsDocuments] = useState(false);
-  const handleDocumentsOpen = () => setIsDocuments(true);
-  const handleDocumentsClose = () => setIsDocuments(false);
+  
   
 
   // const renderMenu = (
@@ -146,9 +144,11 @@ const NavbarAuth = ({ open, onOpen }) => {
         <MenuIcon />
       </IconButton>
 
-      <Typography className={classes.title} variant="h6" noWrap>
-        T-Knowledge
-      </Typography>
+      <Link to={route.ROOT} >
+        <Button className={classes.title}>
+          T-Knowledge
+        </Button>
+      </Link>
 
       <div className={classes.search}>
         <div className={classes.searchIcon}>
@@ -164,15 +164,12 @@ const NavbarAuth = ({ open, onOpen }) => {
         />
       </div>
 
-      <Button onClick={handleUserMenuOpen} >
+      {/* <Button onClick={handleUserMenuOpen} >
         Сотрудники
       </Button>
       <Button onClick={handlePositionsOpen} >
         Должности
-      </Button>
-      <Button onClick={handleDocumentsOpen} >
-        Документы
-      </Button>
+      </Button>*/}
       
       <div className={classes.grow} />
 
@@ -205,20 +202,13 @@ const NavbarAuth = ({ open, onOpen }) => {
         profilesMenuId={profilesMenuId}
         anchorEl={anchorPro}
       />
-      <UsersMenu
+      {/* <UsersMenu
         open={isUsers}
         onClose={handleUserMenuClose}
         usersMenuId={usersMenuId}
         anchorEl={anchorUsr}
       />
-      <PositionsContainer
-        open={isPositions}
-        onClose={handlePositionsClose}
-      />
-      <DocumentsContainer
-        open={isDocuments}
-        onClose={handleDocumentsClose}
-      />
+      */}
       
       {/* {renderMenu} */}
     </>

@@ -7,6 +7,7 @@ import pt from 'prop-types';
 import { makeStyles } from '@material-ui/core/styles';  
 import Grid from '@material-ui/core/Grid';
 // Component
+import RulesContainer from '../components/rules/rules-container/rules-container';
 // import Profile from '../components/profile';
 
 
@@ -24,18 +25,19 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 
-const Home = () => {
+const CreateRule = () => {
   const classes = useStyles();
 
   return (
       <Grid container spacing={2} className={classes.root}>
         <Grid item sm={8} xs={12}>
+          <RulesContainer />
         </Grid>
       </Grid>
   );
 };
 
-Home.propTypes = {
+CreateRule.propTypes = {
   // getScreams: pt.func.isRequired,
   // data: pt.object.isRequired,
 }
@@ -44,4 +46,4 @@ Home.propTypes = {
 // })
 
 // export default connect(mapStateToProps, {getScreams})(Home);
-export default Home;
+export default CreateRule;
