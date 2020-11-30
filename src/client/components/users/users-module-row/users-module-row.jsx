@@ -27,7 +27,7 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 // item - переданный документ или пользователь
-const UsersModuleRow = ({ onUserSelected, users }) => {
+const UsersModuleRow = ({ onUserSelected, users, disabled }) => {
   const classes = useStyles();
   
   const [openAddUser, setOpenAddUser] = useState(false);
@@ -46,6 +46,7 @@ const UsersModuleRow = ({ onUserSelected, users }) => {
         <ListSelect
           type={`addUser`}
           // title={`Выберите сотрудника`}
+          disabled={disabled}
           items={users}
           valueField={`email`}
           label={`users`}
@@ -55,23 +56,19 @@ const UsersModuleRow = ({ onUserSelected, users }) => {
           itemTextAdd={`пригласить нового`}
         />
         
-        
       </div>
       <UserAdd open={openAddUser} onClose={handleAddUserClose}/>
     </>
   );
 };
 
-
 UsersModuleRow.propTypes = {
   users: pt.array.isRequired,
   onUserSelected: pt.func.isRequired,
-  
 };
 
 const mapStateToProps = (state) => ({
   users: state.data.users,
 });
-
 
 export default connect(mapStateToProps)(UsersModuleRow);

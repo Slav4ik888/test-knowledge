@@ -3,7 +3,7 @@ import pt from 'prop-types';
 import { makeStyles } from '@material-ui/core/styles';
 // Readux Stuff
 import { connect } from 'react-redux';
-import { deleteUser } from '../../../redux/actions/user-actions';
+import { deleteUser, updateUserDetails } from '../../../redux/actions/user-actions';
 // MUI Stuff
 import Typography from '@material-ui/core/Typography';
 import Dialog from '@material-ui/core/Dialog';
@@ -14,8 +14,9 @@ import DialogContent from '@material-ui/core/DialogContent';
 import DialogTitle from '../../dialogs/dialog-title/dialog-title';
 import UsersModuleRow from '../users-module-row/users-module-row';
 import PositionsModuleRow from '../../positions/positions-module-row/positions-module-row';
-import CancelSubmitBtn from '../../buttons/cancel-submit-btn/cancel-submit-btn';
+import UsersStatusRow from '../users-status-row/users-status-row';
 import DeleteUserButton from '../../buttons/delete-user-button/delete-user-button';
+import CancelSubmitBtn from '../../buttons/cancel-submit-btn/cancel-submit-btn';
 import { typePosModule } from '../../../../types';
 
 
@@ -38,7 +39,7 @@ const useStyles = makeStyles((theme) => ({
   // },
 }));
 
-const UserChange = ({ open, onClose, UI: { loading, errors, messages }, deleteUser}) => {
+const UserChange = ({ open, onClose, UI: { loading, errors, messages }, deleteUser, updateUserDetails}) => {
 
   if (!open) {
     return null;
@@ -49,26 +50,33 @@ const UserChange = ({ open, onClose, UI: { loading, errors, messages }, deleteUs
   const [userSeleted, setUserSelected] = useState(null);
 
   const handleUserSelected = (user) => {
-    console.log('user: ', user);
     if (user) {
       setUserSelected(user);
-      setIsChange(true);
+      setIsChange(false);
     } else {
       setUserSelected(null);
       setIsChange(false);
     }
   };
 
+  const handleSetUserRole = (role) => {
+    const userChangeRole = userSeleted;
+    userChangeRole.role = role;
+    setUserSelected(userChangeRole);
+    setIsChange(true);
+  };
+
+  const handleDeleteAccount = () => {
+    deleteUser(userSeleted);
+    onClose();
+  };
+
   const handleClose = () => onClose();
 
   const handleSubmit = (e) => {
     e.preventDefault();
-  };
-
-  const handleDeleteAccount = () => {
-    console.log(`user delete: `, userSeleted);
-    deleteUser(userSeleted);
-    onClose();
+    updateUserDetails(userSeleted);
+    setIsChange(false);
   };
 
   return (
@@ -78,7 +86,7 @@ const UserChange = ({ open, onClose, UI: { loading, errors, messages }, deleteUs
       >
         <DialogTitle onClose={handleClose}>Настройки пользователей</DialogTitle>
         <DialogContent className={classes.dialog}>
-          <Typography variant="h5" color="textPrimary">
+          <Typography variant="h5" color="primary">
             {userSeleted ? `Сотрудник` : `Выберите сотрудника`}
           </Typography>
           <UsersModuleRow onUserSelected={handleUserSelected} />
@@ -86,12 +94,11 @@ const UserChange = ({ open, onClose, UI: { loading, errors, messages }, deleteUs
           {
             userSeleted &&
               <>
-                <Typography variant="h5" color="textPrimary" >Занимаемые должности</Typography>
-                
+                <Typography variant="h5" color="primary" >Занимаемые должности</Typography>
                 <PositionsModuleRow item={userSeleted} type={typePosModule.USER} />
               
-                <Typography variant="h5" color="textSecondary">Статус в приложении</Typography>
-                <Typography variant="body1" >{userSeleted.role}</Typography>
+                <Typography variant="h5" color="primary">Статус в приложении</Typography>
+                <UsersStatusRow user={userSeleted} onSetRole={handleSetUserRole}/>
               
                 <DeleteUserButton onDel={handleDeleteAccount} />
               </>
@@ -121,6 +128,7 @@ const UserChange = ({ open, onClose, UI: { loading, errors, messages }, deleteUs
 
 UserChange.propTypes = {
   deleteUser: pt.func.isRequired,
+  updateUserDetails: pt.func.isRequired,
   open: pt.bool.isRequired,
   onClose: pt.func.isRequired,
   UI: pt.object.isRequired,
@@ -132,4 +140,4 @@ const mapStateToProps = (state) => ({
   // users: state.data.users,
 });
 
-export default connect(mapStateToProps, {deleteUser})(UserChange);
+export default connect(mapStateToProps, {deleteUser, updateUserDetails})(UserChange);

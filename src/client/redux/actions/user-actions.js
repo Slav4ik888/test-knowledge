@@ -174,8 +174,7 @@ export const getUserAndCompanyData = () => (dispatch) => {
 export const updateUserDetails = (userProfile) => (dispatch) => {
   console.log('userProfile: ', userProfile);
   dispatch({type: userActionType.LOADING_USER});
-  return axios
-    .post(`/user`, userProfile)
+  return axios.post(`/user`, userProfile)
     .then(() => {
       dispatch({
         type: userActionType.SET_USER,

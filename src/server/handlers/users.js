@@ -173,6 +173,7 @@ exports.updateUserData = (req, res) => {
       secondName,
       middleName,
       positions: req.body.positions,
+      role: req.body.role,
       lastChange: new Date().toISOString(),
     })
     .then(() => {
