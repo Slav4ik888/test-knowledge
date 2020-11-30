@@ -52,6 +52,7 @@ const DocumentsContainer = ({ open, onClose, UI, documents, updateDocuments, upd
   };
 
   const handleDelDoc = (id) => {
+    console.log('id: ', id);
     const idx = documents.findIndex((doc) => doc.id === id);
     let newDocuments = [...documents.slice(0, idx), ...documents.slice(idx + 1)];
     setIsChange(true);

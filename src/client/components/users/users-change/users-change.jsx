@@ -78,16 +78,19 @@ const UserChange = ({ open, onClose, UI: { loading, errors, messages }, deleteUs
       >
         <DialogTitle onClose={handleClose}>Настройки пользователей</DialogTitle>
         <DialogContent className={classes.dialog}>
+          <Typography variant="h5" color="textPrimary">
+            {userSeleted ? `Сотрудник` : `Выберите сотрудника`}
+          </Typography>
           <UsersModuleRow onUserSelected={handleUserSelected} />
           
           {
             userSeleted &&
               <>
-                <Typography variant="h5" color="primary" >Занимаемые должности</Typography>
+                <Typography variant="h5" color="textPrimary" >Занимаемые должности</Typography>
                 
                 <PositionsModuleRow item={userSeleted} type={typePosModule.USER} />
               
-                <Typography variant="h5" color="primary">Статус в приложении</Typography>
+                <Typography variant="h5" color="textSecondary">Статус в приложении</Typography>
                 <Typography variant="body1" >{userSeleted.role}</Typography>
               
                 <DeleteUserButton onDel={handleDeleteAccount} />

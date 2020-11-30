@@ -26,7 +26,7 @@ const useStyles = makeStyles((theme) => {
     row: {
       display: 'flex',
       alignItems: `center`,
-      margin: theme.spacing(2, 0, 2, 0),
+      margin: theme.spacing(2, 0, 4, 0),
     },
     paperChip: {
       width: `100%`,

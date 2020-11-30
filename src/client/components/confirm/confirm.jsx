@@ -25,7 +25,7 @@ const Confirm = ({ open, onOk, onCancel, title }) => {
         className={classes.dialog}
         maxWidth="xs"
       >
-        <DialogTitle>
+        <DialogTitle className={classes.dialog}>
           {title}
         </DialogTitle>
 

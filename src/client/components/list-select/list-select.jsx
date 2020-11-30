@@ -9,6 +9,7 @@ import FormControl from '@material-ui/core/FormControl';
 import Select from '@material-ui/core/Select';
 // Icons
 import AddIcon from '@material-ui/icons/Add';
+import PersonAddIcon from '@material-ui/icons/PersonAdd';
 // Component
 
 const useStyles = makeStyles((theme) => ({
@@ -17,6 +18,11 @@ const useStyles = makeStyles((theme) => ({
     flexWrap: 'wrap',
     width: `100%`,
     minWidth: 220,
+    color: theme.textSecondary,
+  },
+  lastItem: {
+    color: theme.palette.primary.dark,
+    fontStyle: `italic`,
   },
   addIcon: {
     marginRight: theme.spacing(2),
@@ -24,10 +30,12 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 
-const ListSelect = ({ items, valueField, title, placeholder, label, onSelected, onItemAdd, itemTextAdd, disabled }) => {
+const ListSelect = ({ type, items, valueField, title, placeholder, label, onSelected, onItemAdd, itemTextAdd, disabled }) => {
 
   const classes = useStyles();
 
+  const icon = type === `addUser` ? <PersonAddIcon className={classes.addIcon} /> : <AddIcon className={classes.addIcon} />;
+    
   const [valueSelected, setValueSelected] = useState(placeholder);
   const handleChange = (e) => {
     const id = e.target.value;
@@ -46,7 +54,8 @@ const ListSelect = ({ items, valueField, title, placeholder, label, onSelected, 
       className={classes.formControl}
       disabled={disabled}
     >
-      <InputLabel id={`${label}-label`}>{title}</InputLabel>
+      {title && <InputLabel id={`${label}-label`}>{title}</InputLabel>}
+
       <Select
         labelId={`${label}-label`}
         id={`${label}-select`}
@@ -62,8 +71,8 @@ const ListSelect = ({ items, valueField, title, placeholder, label, onSelected, 
           )
         }
         {
-          onItemAdd && <MenuItem value={`newItemAdd`} onClick={onItemAdd}>
-            <AddIcon className={classes.addIcon} />
+          onItemAdd && <MenuItem value={`newItemAdd`} onClick={onItemAdd} className={classes.lastItem}>
+            {icon}
             {itemTextAdd ? itemTextAdd : `добавить новый`}
           </MenuItem>
         }
@@ -73,7 +82,8 @@ const ListSelect = ({ items, valueField, title, placeholder, label, onSelected, 
 };
 
 ListSelect.propTypes = {
-  title: pt.string.isRequired,
+  type: pt.string,
+  title: pt.string,
   valueField: pt.string.isRequired,
   placeholder: pt.string.isRequired,
   label: pt.string.isRequired,

@@ -26,7 +26,6 @@ const useStyles = makeStyles((theme) => ({
 
 const PositionsAddInItem = ({ open, type, onClose, UI: { loading }, item,
   documents, positions, updateDocumentsServer, updateUserDetails }) => {
-  console.log('item: ', item);
   
   if (!open) return null;
 
@@ -74,7 +73,7 @@ const PositionsAddInItem = ({ open, type, onClose, UI: { loading }, item,
   return (
     <Dialog
       disableBackdropClick fullWidth
-      className={classes.dialog} maxWidth="xl" scroll={`paper`}
+      className={classes.dialog} maxWidth="md" scroll={`paper`}
       open={open} onClose={onClose}
     >
       <DialogTitle onClose={onClose}>{title}</DialogTitle>

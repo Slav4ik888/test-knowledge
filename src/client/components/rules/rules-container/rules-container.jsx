@@ -12,16 +12,14 @@ import IconButton from '@material-ui/core/IconButton';
 import Tooltip from '@material-ui/core/Tooltip';
 // Icons
 import EditIcon from '@material-ui/icons/Edit';
-import FolderIcon from '@material-ui/icons/Folder';
 import InsertDriveFileIcon from '@material-ui/icons/InsertDriveFile';
 // Components
 import DialogTitle from '../../dialogs/dialog-title/dialog-title';
-import ListSelect from '../../list-select/list-select';
+import DocumentsModuleRow from '../../documents/documents-module-row/documents-module-row';
 import PositionsModuleRow from '../../positions/positions-module-row/positions-module-row';
-import DocumentsContainer from '../../documents/documents-container/documents-container';
+import ListSelect from '../../list-select/list-select';
 import SectionsContainer from '../../sections/sections-container/sections-container';
 import { typePosModule } from '../../../../types';
-
 
 const useStyles = makeStyles((theme) => {
   // console.log('theme: ', theme);
@@ -49,9 +47,9 @@ const useStyles = makeStyles((theme) => {
     row: {
       display: 'flex',
       alignItems: `center`,
-      margin: theme.spacing(2, 0, 2, 0),
+      margin: theme.spacing(2, 0, 4, 0),
     },
-    avatar: {
+    avatar: { 
       marginRight: theme.spacing(3),
     },
     editIcon: {
@@ -74,10 +72,6 @@ const RulesContainer = ({ loading, documents }) => {
     setDocSelected(doc);
   };
 
-  const [isDocuments, setIsDocuments] = useState(false);
-  const handleDocumentsOpen = () => setIsDocuments(true);
-  const handleDocumentsClose = () => setIsDocuments(false);
-
   // Выбранный раздел
   const [sectionSelected, SetSectionSelected] = useState(null);
   
@@ -91,32 +85,7 @@ const RulesContainer = ({ loading, documents }) => {
         <DialogTitle >Новое правило</DialogTitle>
         <div className={classes.content}>
 
-          <div className={classes.row}>
-            <Avatar className={classes.avatar}> 
-              <FolderIcon />
-            </Avatar>
-
-            <ListSelect
-              title={`Документ`}
-              items={documents}
-              valueField={`title`}
-              label={`documents`}
-              placeholder={`Не указан`}
-              onSelected={handleDocSelected}
-              onItemAdd={handleDocumentsOpen}
-            />
-
-            <Tooltip title="Редактировать документы" placement="bottom" arrow>
-              <IconButton aria-label="Edit" onClick={handleDocumentsOpen} className={classes.editIcon}>
-                <EditIcon />
-              </IconButton>
-            </Tooltip>
-
-            <DocumentsContainer
-              open={isDocuments}
-              onClose={handleDocumentsClose}
-            />
-          </div>
+          <DocumentsModuleRow onDocumentSelected={handleDocSelected} />
 
           <PositionsModuleRow item={docSelected} type={typePosModule.DOC} />
 

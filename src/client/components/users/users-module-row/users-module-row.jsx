@@ -19,7 +19,7 @@ const useStyles = makeStyles((theme) => ({
   row: {
     display: 'flex',
     alignItems: `center`,
-    margin: theme.spacing(2, 0, 2, 0),
+    margin: theme.spacing(2, 0, 4, 0),
   },
   avatar: {
     marginRight: theme.spacing(3),
@@ -44,7 +44,8 @@ const UsersModuleRow = ({ onUserSelected, users }) => {
         </Avatar>
 
         <ListSelect
-          title={`Выберите сотрудника`}
+          type={`addUser`}
+          // title={`Выберите сотрудника`}
           items={users}
           valueField={`email`}
           label={`users`}

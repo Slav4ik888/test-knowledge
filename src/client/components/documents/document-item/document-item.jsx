@@ -78,7 +78,6 @@ const DocumentItem = ({ doc, onEdit, onDel}) => {
   };
   const openPos = Boolean(anchorPos);
 
-
   const handleDelDoc = () => onDel(id);
 
   return (

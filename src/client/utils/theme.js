@@ -1,23 +1,29 @@
 export default {
   palette: {
     primary: {
-      light: `#9fe2ff`,
-      main: `#a9dbf1`,
-      dark: `#85c1db`,
-      contrastText: `#013253`,
+      light: `#c1e5e2`,
+      main: `#b2dfdb`,
+      dark: `#7c9c99`,
+      contrastText: `#1e3331`,
     },
     secondary: {
-      light: `#d4d4d4`,
-      main: `#ff3d00`,
-      dark: `#b22a00`,
+      light: `#f6685e`,
+      main: `#f44336`,
+      dark: `#aa2e25`,
       contrastText: `#fff`,
     },
     background: {
-      dialog: `#f0f8ff`,
+      dialog: `#c1e5e2`,
     },
   },
   typography: {
     useNextVariants: true
+  },
+  textPrimary: {
+    color: `#1e3331`,
+  },
+  textSecondary: {
+    color: `#808080`
   },
   form: {
     textAlign: `center`,

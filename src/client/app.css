@@ -1,5 +1,27 @@
 h1 {
   color: #ff3d00;
   color: #a9dbf1;
+  color: #5d95ad;
   color: #002980;
+}
+primary {
+  color: #c1e5e2; /* light */
+  color: #b2dfdb; /* main */
+  color: #7c9c99; /* dark */
+  color: #1e3331; /* contrastText */
+}
+secondary {
+  color: #ffd453; /* light */
+  color: #ffca28; /* main */
+  color: #b28d1c; /* dark */
+  color: #fff; /* contrastText */
+}
+background {
+  color: #f0f8ff; /* dialog */
+}
+textPrimary {
+  color: #1e3331;
+}
+textSecondary {
+  color: #808080;
 }
