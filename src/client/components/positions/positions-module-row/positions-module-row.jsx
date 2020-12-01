@@ -17,6 +17,7 @@ import InsertDriveFileIcon from '@material-ui/icons/InsertDriveFile';
 import PositionsContainer from '../positions-container/positions-container';
 import PositionsListChip from '../positions-list-chip/positions-list-chip';
 import PositionsAddInItem from '../positions-add-in-item/positions-add-item';
+import { typePosModule } from '../../../../types';
 
 
 const useStyles = makeStyles((theme) => {
@@ -53,6 +54,8 @@ const PositionsModuleRow = ({ type, item, positions }) => {
   if (!item) return null;
 
   const classes = useStyles();
+  const titleItem = type === typePosModule.DOC ? `документом` : `сотрудником`;
+
   // Выбираем должности закреплённые за данным документом item
   const positionsInItem = positions.filter((pos) => item.positions.find((itemPos) => itemPos.id === pos.id));
   
@@ -76,7 +79,7 @@ const PositionsModuleRow = ({ type, item, positions }) => {
         <SupervisedUserCircleIcon />
       </Avatar>
 
-      <Tooltip title="Изменить закреплённые должности" placement="bottom" arrow>
+      <Tooltip title={`Изменить закреплённые за ${titleItem} должности`} placement="bottom" arrow>
         <Paper elevation={0} onClick={handlePosToggleOpen} className={classes.paperChip}>
           <PositionsListChip positions={positionsInItem} />
         </Paper>
