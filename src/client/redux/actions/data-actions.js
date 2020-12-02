@@ -102,10 +102,10 @@ export const delPositionServer = (id) => (dispatch) => {
 };
 
 // Получаем documents
-export const getDocuments = () => (dispatch) => {
-  console.log(`getDocuments`);
+export const getAllDocuments = () => (dispatch) => {
+  console.log(`getAllDocuments`);
   dispatch({ type: uiActionType.LOADING_UI });
-  return axios.get(`/getDocuments`)
+  return axios.get(`/getAllDocuments`)
     .then((res) => {
       console.log(`Полученные documents: `, res.data.documents);
       dispatch({

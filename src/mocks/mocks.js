@@ -10,6 +10,15 @@ export const documents = [
     lastChange: `2020-11-04T18:16:54.385Z`,
     title: `Должностная папка Кладовщика`,
     order: 10,
+    positions: [{
+      id: `2`,
+      order: 20,
+      title: `Супервайзер`,
+    }, {
+      id: `3`,
+      order: 30,
+      title: `Кладовщик`,
+    }],
     sections: [{
       id: `1`,
       createdAt: `2020-11-04T18:16:54.385Z`,
@@ -29,6 +38,7 @@ export const documents = [
     lastChange: `2020-11-04T18:16:54.385Z`,
     title: `Должностная папка Супервайзера`,
     order: 20,
+    positions: [],
     sections: [{
       id: `1`,
       createdAt: `2020-11-04T18:16:54.385Z`,

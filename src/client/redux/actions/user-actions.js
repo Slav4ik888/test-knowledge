@@ -96,16 +96,16 @@ export const loginUser = (userData, history) => (dispatch) => {
       dispatch(getUserAndCompanyData()); // Загружаем данные по user & company
       dispatch(getAllUsersData()); // Загружаем данные по всем пользователям 
       dispatch(getPositions());// Загружаем данные обо всех positions
-      dispatch(getDocuments());// Загружаем данные обо всех documents
+      dispatch(getAllDocuments());// Загружаем данные обо всех documents
       
       dispatch({type: uiActionType.CLEAR_ERRORS});
       history.push(route.HOME);
     })
     .catch((err) => {
-      console.log(err.response.data);
+      console.log(err.response);
       dispatch({
         type: uiActionType.SET_ERRORS,
-        payload: err.response.data,
+        payload: err.response,
       });
     });
 };

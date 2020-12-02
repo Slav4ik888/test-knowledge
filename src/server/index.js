@@ -10,7 +10,7 @@ const { addUser, login, getUserData, updateUserData, deleteUser } = require('./h
 const { signupCompany, getCompanyData, getUserAndCompanyData, updateCompanyData, deleteCompany } = require('./handlers/company');
 const { getPositions, updatePositions, delPosition } = require('./handlers/positions');
 const { getAllUsersData } = require('./handlers/data');
-const { createDocument, getDocuments, updateDocument } = require('./handlers/documents');
+const { createDocument, getDocument, getAllDocuments, updateDocument } = require('./handlers/documents');
 
 
 app.use(bodyParser.json());
@@ -39,8 +39,9 @@ app.post(`/api/delPosition`, FBAuth, delPosition);
 
 // documents
 app.post(`/api/createDocument`, FBAuth, createDocument);
-app.get(`/api/getDocuments`, FBAuth, getDocuments);
-app.post(`/api/updateDocument`, FBAuth, updateDocument);
+app.get(`/api/getDocument/:documentId`, FBAuth, getDocument);
+app.get(`/api/getAllDocuments`, FBAuth, getAllDocuments);
+app.post(`/api/updateDocument/:documentId`, FBAuth, updateDocument);
 // app.post(`/api/updateDocuments`, FBAuth, updateDocuments);
 
 
@@ -49,4 +50,4 @@ app.use(express.static('dist'));
 
 app.listen(process.env.PORT || 8080, () => console.log(`Listening on port ${process.env.PORT || 8080}!`));
 
-// git add . && git commit -m "start refact use documents in collentions" && git push origin master
+// git add . && git commit -m "refact createDocument getDocument getAllDocuments updateDocument" && git push origin master

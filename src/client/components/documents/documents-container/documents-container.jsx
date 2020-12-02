@@ -1,6 +1,5 @@
 import React, {useState, useRef, useEffect} from 'react';
 import pt from 'prop-types';
-import { createId, getMaxOrder } from '../../../utils/utils';
 // Readux Stuff
 import { connect } from 'react-redux';
 import { updateDocuments, updateDocumentsServer } from '../../../redux/actions/data-actions';
@@ -63,10 +62,6 @@ const DocumentsContainer = ({ open, onClose, UI, documents, updateDocuments, upd
     if (title.trim()) {
       const newDoc = {
         title,
-        id: createId(documents),
-        order: getMaxOrder(documents),
-        createdAt: new Date().toISOString(),
-        lastChange: new Date().toISOString(),
         positions: [],
         sections: [],
       }
