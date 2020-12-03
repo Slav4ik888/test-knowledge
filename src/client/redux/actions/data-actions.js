@@ -103,7 +103,6 @@ export const delPositionServer = (id) => (dispatch) => {
 
 // Получаем documents
 export const getAllDocuments = () => (dispatch) => {
-  console.log(`getAllDocuments`);
   dispatch({ type: uiActionType.LOADING_UI });
   return axios.get(`/getAllDocuments`)
     .then((res) => {
@@ -115,7 +114,7 @@ export const getAllDocuments = () => (dispatch) => {
       dispatch({ type: uiActionType.CLEAR_ERRORS });
     })
     .catch((err) => {
-      console.log(err.response);
+      console.log(err.response.data);
       dispatch({
         type: uiActionType.SET_ERRORS,
         payload: err.response.data,
@@ -124,27 +123,56 @@ export const getAllDocuments = () => (dispatch) => {
     });
 };
 
-
-// Обновляем documents только в store, без сервера
-export const updateDocuments = (newDocuments) => (dispatch) => {
-  console.log('newDocuments: ', newDocuments);
-  dispatch({
-    type: dataActionType.SET_DOCUMENTS,
-    payload: newDocuments,
-  })
+// Создаём document
+export const createDocument = (newDocument) => (dispatch) => {
+  dispatch({ type: uiActionType.LOADING_UI });
+  return axios.post(`/createDocument`, newDocument)
+    .then((res) => {
+      dispatch({
+        type: dataActionType.ADD_DOCUMENT,
+        payload: res.data.newDocument,
+      });
+      dispatch({ type: uiActionType.CLEAR_ERRORS });
+    })
+    .catch((err) => {
+      console.log(err.response.data);
+      dispatch({
+        type: uiActionType.SET_ERRORS,
+        payload: err.response.data,
+      })
+    });
 };
 
-
-// Обновляем documents на сервере
-export const updateDocumentsServer = (newDocuments) => (dispatch) => {
-  console.log('newDocuments: ', newDocuments);
+// Обновляем document
+export const updateDocument = (updateDocument) => (dispatch) => {
   dispatch({ type: uiActionType.LOADING_UI });
-  return axios.post(`/updateDocuments`, newDocuments)
+  return axios.post(`/updateDocument/${updateDocument.id}`, updateDocument)
     .then((res) => {
-      console.log(`Обновлённые documents: `, res.data);
       dispatch({
-        type: dataActionType.SET_DOCUMENTS,
-        payload: res.data.documents,
+        type: dataActionType.UPDATE_DOCUMENT,
+        payload: res.data.document,
+      });
+      dispatch({ type: uiActionType.CLEAR_ERRORS });
+    })
+    .catch((err) => {
+      console.log(err.response.data);
+      dispatch({
+        type: uiActionType.SET_ERRORS,
+        payload: err.response.data,
+      })
+    });
+};
+
+// Удаляем document
+export const deleteDocument = (deleteDocument) => (dispatch) => {
+  console.log('deleteDocument: ', deleteDocument);
+
+  dispatch({ type: uiActionType.LOADING_UI });
+  return axios.get(`/deleteDocument/${deleteDocument.id}`)
+    .then((res) => {
+      dispatch({
+        type: dataActionType.DELETE_DOCUMENT,
+        payload: deleteDocument,
       });
       dispatch({ type: uiActionType.CLEAR_ERRORS });
     })

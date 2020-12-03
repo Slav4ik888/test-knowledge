@@ -2,17 +2,17 @@ import React, {useState, useRef, useEffect} from 'react';
 import pt from 'prop-types';
 // Readux Stuff
 import { connect } from 'react-redux';
-import { updateDocuments, updateDocumentsServer } from '../../../redux/actions/data-actions';
+import { createDocument, updateDocument, deleteDocument } from '../../../redux/actions/data-actions';
 // MUI Stuff
 import { makeStyles } from '@material-ui/core/styles';
 import Dialog from '@material-ui/core/Dialog';
-import DialogActions from '@material-ui/core/DialogActions';
+// import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
 // Component
 import DocumentsList from '../documents-list/documents-list';
 import DocumentAdd from '../document-add/document-add';
 import DialogTitle from '../../dialogs/dialog-title/dialog-title';
-import CancelSubmitBtn from '../../buttons/cancel-submit-btn/cancel-submit-btn';
+// import CancelSubmitBtn from '../../buttons/cancel-submit-btn/cancel-submit-btn';
 
 
 const useStyles = makeStyles((theme) => ({
@@ -31,7 +31,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const DocumentsContainer = ({ open, onClose, UI, documents, updateDocuments, updateDocumentsServer }) => {
+const DocumentsContainer = ({ open, onClose, UI, documents, createDocument, updateDocument, deleteDocument }) => {
 
   if (!open) {
     return null;
@@ -39,46 +39,40 @@ const DocumentsContainer = ({ open, onClose, UI, documents, updateDocuments, upd
   const classes = useStyles();
   const { loading } = UI;
   
-  const [isChange, setIsChange] = useState(false);
+  // const [isChange, setIsChange] = useState(false);
 
   const handleEditDoc = (id, newTitle) => {
-    let newDocuments = [...documents];
     const idx = documents.findIndex((doc) => doc.id === id);
-    newDocuments[idx].title = newTitle;
-    newDocuments[idx].lastChange = new Date().toISOString();
-    setIsChange(true);
-    updateDocuments(newDocuments);
+    let newDocument = documents[idx];
+    newDocument.title = newTitle;
+    updateDocument(newDocument);
   };
 
   const handleDelDoc = (id) => {
-    console.log('id: ', id);
     const idx = documents.findIndex((doc) => doc.id === id);
-    let newDocuments = [...documents.slice(0, idx), ...documents.slice(idx + 1)];
-    setIsChange(true);
-    updateDocuments(newDocuments);
+    let newDocument = documents[idx];
+    deleteDocument(newDocument);
   };
 
   const handleAddDoc = (title) => {
     if (title.trim()) {
-      const newDoc = {
+      const newDocument = {
         title,
         positions: [],
         sections: [],
       }
-      let newDocuments = [newDoc, ...documents];
-      setIsChange(true);
-      updateDocuments(newDocuments);
+      createDocument(newDocument);
     }
   };
 
   const handleClose = () => onClose();
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    setIsChange(true);
-    updateDocumentsServer(documents);
-    handleClose();
-  };
+  // const handleSubmit = (e) => {
+  //   e.preventDefault();
+  //   setIsChange(true);
+  //   updateDocumentsServer(documents);
+  //   handleClose();
+  // };
 
   const listRef = useRef(null);
   useEffect(() => {
@@ -109,22 +103,23 @@ const DocumentsContainer = ({ open, onClose, UI, documents, updateDocuments, upd
 
         <DocumentAdd onAdd={handleAddDoc} UI={UI} />
 
-        <DialogActions className={classes.dialog}>
+        {/* <DialogActions className={classes.dialog}>
           <CancelSubmitBtn
             onCancel={handleClose}
             onSubmit={handleSubmit}
             disabled={loading || !isChange}
             loading={loading}
           />
-        </DialogActions>
+        </DialogActions> */}
       </Dialog>
     </>
   );
 }
 
 DocumentsContainer.propTypes = {
-  updateDocuments: pt.func.isRequired,
-  updateDocumentsServer: pt.func.isRequired,
+  createDocument: pt.func.isRequired,
+  updateDocument: pt.func.isRequired,
+  deleteDocument: pt.func.isRequired,
   open: pt.bool.isRequired,
   onClose: pt.func.isRequired,
   UI: pt.object.isRequired,
@@ -136,4 +131,10 @@ const mapStateToProps = (state) => ({
   documents: state.data.documents,
 });
 
-export default connect(mapStateToProps, {updateDocuments, updateDocumentsServer})(DocumentsContainer);
+const mapActionsToProps = {
+  createDocument,
+  updateDocument,
+  deleteDocument,
+};
+
+export default connect(mapStateToProps, mapActionsToProps)(DocumentsContainer);

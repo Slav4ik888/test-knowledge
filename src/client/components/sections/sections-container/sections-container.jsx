@@ -1,9 +1,9 @@
 import React, {useState, useRef, useEffect} from 'react';
 import pt from 'prop-types';
-import { createId, getMaxOrder } from '../../../utils/utils';
+import { createId, getMaxOrder } from '../../../../server/utils/utils';
 // Readux Stuff
 import { connect } from 'react-redux';
-import { updateDocuments, updateDocumentsServer } from '../../../redux/actions/data-actions';
+import { updateDocument } from '../../../redux/actions/data-actions';
 // MUI Stuff
 import { makeStyles } from '@material-ui/core/styles';
 import Button from '@material-ui/core/Button';
@@ -60,7 +60,7 @@ const SectionsContainer = ({ open, onClose, UI, document, documents, updateDocum
 
     let newDocuments = documents;
     newDocuments[idxDoc] = newDocument;
-    updateDocuments(newDocuments);
+    // TODO: updateDocument(newDocument);
   };
 
   const handleDelSection = (id) => {
@@ -74,7 +74,7 @@ const SectionsContainer = ({ open, onClose, UI, document, documents, updateDocum
     
     let newDocuments = documents;
     newDocuments[idxDoc] = newDocument;
-    updateDocuments(newDocuments);
+    // TODO: updateDocuments(newDocuments);
   };
 
   const handleAddSection = (title) => {
@@ -95,7 +95,7 @@ const SectionsContainer = ({ open, onClose, UI, document, documents, updateDocum
 
       let newDocuments = documents;
       newDocuments[idxDoc] = newDocument;
-      updateDocuments(newDocuments);
+      // TODO: updateDocuments(newDocuments);
     }
   };
 
@@ -104,7 +104,7 @@ const SectionsContainer = ({ open, onClose, UI, document, documents, updateDocum
   const handleSubmit = (e) => {
     e.preventDefault();
     setIsChange(true);
-    updateDocumentsServer(documents);
+    // TODO: updateDocumentsServer(documents);
   };
 
   const listRef = useRef(null);
@@ -155,8 +155,7 @@ const SectionsContainer = ({ open, onClose, UI, document, documents, updateDocum
 }
 
 SectionsContainer.propTypes = {
-  updateDocuments: pt.func.isRequired,
-  updateDocumentsServer: pt.func.isRequired,
+  updateDocument: pt.func.isRequired,
   open: pt.bool.isRequired,
   onClose: pt.func.isRequired,
   document: pt.object,
@@ -169,4 +168,4 @@ const mapStateToProps = (state) => ({
   documents: state.data.documents,
 });
 
-export default connect(mapStateToProps, {updateDocuments, updateDocumentsServer})(SectionsContainer);
+export default connect(mapStateToProps, {updateDocument})(SectionsContainer);

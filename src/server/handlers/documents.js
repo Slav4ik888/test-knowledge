@@ -41,7 +41,7 @@ async function createDocument(req, res) {
       .doc(createRes.id)
       .update(newDocument);
     
-    return res.json({ message: `Документо успешно создан` });
+    return res.json({ newDocument, message: `Документо успешно создан` });
     
   } catch(err) {
       console.error(err);
@@ -51,7 +51,6 @@ async function createDocument(req, res) {
 
 // Обновляем One document
 async function updateDocument(req, res) {
-  console.log('req: ', req.body);
   // является ли пользователь Админом или Владельцем аккаунта или 
   const validData = await validationAdminAuthority(req.user); 
   const { valid, errors } = validData;
@@ -66,21 +65,9 @@ async function updateDocument(req, res) {
   };
 
   try {
-    // TODO: Нельзя удалить документ, если в нём находятся "Правила". Вначале удалите или перенесите "Правила" в другой документ.
-
     const updateRes = await db.doc(`documents/${req.user.companyId}/documents/${req.params.documentId}`)
       .update(document);
     
-    // getDocuments сообщаем, что это обновление и нужно вернуть данные сюда, а не пользователю
-    // req.update = true; 
-    
-    // const documents = await getDocuments(req, res);
-    // // console.log('Обновлённые documents: ', JSON.stringify(documents));
-    // if (req.delPosition) {
-    //   return documents;
-    // } else {
-    //   return res.json({ documents, message: `Список документов успешно обновлён` });
-    // }
     return res.json({ document, message: `Документ успешно обновлён` });
     
   } catch(err) {
@@ -123,9 +110,11 @@ async function getAllDocuments(req, res) {
     
     if (docRes.empty) {
       if (req.update) {
-        return [];
+        const documents = [];
+        return documents;
       } else {
-        return res.status(400).json({ error: `Документы не найдены` });
+        const documents = [];
+        return res.json({ documents, message: `Нет ни одного документа` });
       }
     } else {
       let documents = [];
@@ -157,5 +146,24 @@ async function getAllDocuments(req, res) {
   };
 };
 
-// TODO: deleteDocument
-module.exports = { createDocument, updateDocument, getDocument, getAllDocuments };
+// deleteDocument
+async function deleteDocument(req, res) {
+  // является ли пользователь Админом или Владельцем аккаунта или 
+  const validData = await validationAdminAuthority(req.user); 
+  const { valid, errors } = validData;
+  if (!valid) return res.status(400).json(errors);
+
+  try {
+    const updateRes = await db.doc(`documents/${req.user.companyId}/documents/${req.params.documentId}`)
+      .delete();
+    
+    return res.json({ message: `Документ успешно удалён` });
+    
+  } catch(err) {
+      console.error(err);
+      return res.status(500).json({ general: err.code });
+  };
+};
+// TODO: Нельзя удалить документ, если в нём находятся "Правила". Вначале удалите или перенесите "Правила" в другой документ.
+
+module.exports = { createDocument, updateDocument, getDocument, getAllDocuments, deleteDocument };

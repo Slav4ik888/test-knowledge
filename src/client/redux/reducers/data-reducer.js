@@ -53,6 +53,48 @@ export default function (state = initialState, action) {
         loading: false,
       });
     
+    case dataActionType.ADD_DOCUMENT:
+      let newDocsAdd = state.documents;
+      newDocsAdd.push(action.payload);
+
+      return extend(state, {
+        documents: newDocsAdd,
+        loading: false,
+      });
+    
+    case dataActionType.UPDATE_DOCUMENT:
+      let upDoc = action.payload;
+      let newDocsUp = state.documents;
+      const resUp = newDocsUp.findIndex((doc) => doc.id === upDoc.id);
+      if (resUp !== -1) {
+        newDocsUp = [...newDocsUp.slice(0, resUp), upDoc, ...newDocsUp.slice(resUp + 1)];
+
+        return extend(state, {
+          documents: newDocsUp,
+          loading: false,
+        });
+
+      } else {
+        return state;
+      };
+
+    case dataActionType.DELETE_DOCUMENT:
+      let delDoc = action.payload;
+      let newDocsDel = state.documents;
+      const resDel = newDocsDel.findIndex((doc) => doc.id === delDoc.id);
+      if (resDel !== -1) {
+        newDocsDel = [...newDocsDel.slice(0, resDel), ...newDocsDel.slice(resDel + 1)];
+
+        return extend(state, {
+          documents: newDocsDel,
+          loading: false,
+        });
+
+      } else {
+        return state;
+      };
+      
+        
     default: return state;
   }
 };

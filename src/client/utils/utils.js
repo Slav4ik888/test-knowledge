@@ -16,3 +16,9 @@ export const arrFromObj = (obj) => {
   }
   return arr;
 };
+
+// Возвращает массив positions по id из documents.positions
+export const getPositionsFromDocPosId = (docPositions, allPositions) => {
+  let positions = allPositions.filter((pos) => Boolean(docPositions.find((doc) => doc === pos.id) ))
+  return positions;
+};

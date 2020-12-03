@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import pt from 'prop-types';
 // Readux Stuff
 import { connect } from 'react-redux';
-import { updateDocumentsServer } from '../../../redux/actions/data-actions';
+import { updateDocument} from '../../../redux/actions/data-actions';
 import { updateUserDetails } from '../../../redux/actions/user-actions';
 // MUI Stuff
 import { makeStyles } from '@material-ui/core/styles';
@@ -15,6 +15,7 @@ import DialogTitle from '../../dialogs/dialog-title/dialog-title';
 import ToggleItems from '../../toggle-items/toggle-items';
 import CancelSubmitBtn from '../../buttons/cancel-submit-btn/cancel-submit-btn';
 import { typePosModule } from '../../../../types';
+import { getPositionsFromDocPosId } from '../../../utils/utils';
 
 
 const useStyles = makeStyles((theme) => ({
@@ -25,7 +26,7 @@ const useStyles = makeStyles((theme) => ({
 
 
 const PositionsAddInItem = ({ open, type, onClose, UI: { loading }, item,
-  documents, positions, updateDocumentsServer, updateUserDetails }) => {
+  documents, positions, updateDocument, updateUserDetails }) => {
   
   if (!open) return null;
 
@@ -36,7 +37,7 @@ const PositionsAddInItem = ({ open, type, onClose, UI: { loading }, item,
     `Выберите те должности, которым нужно полностью знать этот документ` :
     `Выберите должности, которые занимает данный сотрудник`;
   
-  const positionsInItem = item.positions; // Те должности которые есть в item
+  const positionsInItem = getPositionsFromDocPosId(item.positions, positions); // Те должности которые есть в item
   
   const remainingPositions = positions // Не использованные positions
     .filter((pos) => Boolean(positionsInItem
@@ -48,19 +49,16 @@ const PositionsAddInItem = ({ open, type, onClose, UI: { loading }, item,
     setIsChange(true); // Произошло изменение
   };
 
-  const handleSetPosToDoc = () => {
+  const handleSetPosToItem = () => {
     switch (type) {
       case typePosModule.DOC:
-        console.log(1);
-        // Индекс документа doc в documents
-        const idxDoc = documents.findIndex(document => document.id === item.id);
-        let newDocuments = documents;
-        newDocuments[idxDoc].positions = selected;
-        updateDocumentsServer(newDocuments);
+        let doc = item;
+        doc.positions = selected.map(pos => pos.id);
+        console.log('doc.positions: ', doc.positions);
+        updateDocument(doc);
         break;
       
       case typePosModule.USER:
-        console.log(2);
         let newUserDetails = item;
         newUserDetails.positions = selected;
         updateUserDetails(newUserDetails);
@@ -90,7 +88,7 @@ const PositionsAddInItem = ({ open, type, onClose, UI: { loading }, item,
       <DialogActions className={classes.dialog}>
         <CancelSubmitBtn
           onCancel={onClose}
-          onSubmit={handleSetPosToDoc}
+          onSubmit={handleSetPosToItem}
           disabled={loading || !isChange}
           loading={loading}
         />
@@ -104,7 +102,7 @@ PositionsAddInItem.propTypes = {
   doc: pt.object,
   documents: pt.array.isRequired,
   positions: pt.array.isRequired,
-  updateDocumentsServer: pt.func.isRequired, 
+  updateDocument: pt.func.isRequired, 
   updateUserDetails: pt.func.isRequired, 
 };
 
@@ -115,7 +113,7 @@ const mapStateToProps = (state) => ({
 });
 
 const mapActionsToProps = {
-  updateDocumentsServer,
+  updateDocument,
   updateUserDetails
 };
 

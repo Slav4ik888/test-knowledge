@@ -1,5 +1,7 @@
 import React, {useState} from 'react';
 import pt from 'prop-types';
+// Readux Stuff
+import { connect } from 'react-redux';
 // MUI Stuff
 import { makeStyles } from '@material-ui/core/styles';
 import TextField from '@material-ui/core/TextField';
@@ -19,18 +21,19 @@ import PositionsPopoverShow from '../../positions/positions-popover-show/positio
 import PositionsAddInItem from '../../positions/positions-add-in-item/positions-add-item';
 import DeleteDocumentAvatar from '../../buttons/delete-document-avatar/delete-document-avatar';
 import { typePosModule } from '../../../../types';
-
+import { getPositionsFromDocPosId } from '../../../utils/utils';
 
 const useStyles = makeStyles((theme) => ({
   editIcon: {
     marginRight: 70,
   },
   hover: {
-    backgroundColor: theme.palette.background.dialog,
+    backgroundColor: theme.palette.background.hover,
   },
 }));
 
-const DocumentItem = ({ doc, onEdit, onDel}) => {
+const DocumentItem = ({ doc, onEdit, onDel, positions}) => {
+  console.log('doc: ', doc.positions);
   const classes = useStyles();
 
   const { title, id } = doc;
@@ -134,7 +137,7 @@ const DocumentItem = ({ doc, onEdit, onDel}) => {
         open={openPos}
         anchorEl={anchorPos}
         onClose={handleShowPosClose}
-        positions={doc.positions}
+        positions={getPositionsFromDocPosId(doc.positions, positions)}
       />
       <PositionsAddInItem
         open={posEdit}
@@ -150,6 +153,11 @@ DocumentItem.propTypes = {
   doc: pt.object.isRequired,
   onEdit: pt.func.isRequired,
   onDel: pt.func.isRequired,
+  positions: pt.array.isRequired,
 };
 
-export default DocumentItem;
+const mapStateToProps = (state) => ({
+  positions: state.data.positions,
+});
+
+export default connect(mapStateToProps)(DocumentItem);

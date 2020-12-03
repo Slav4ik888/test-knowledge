@@ -1,6 +1,6 @@
 import React, {useRef, useEffect, useState} from 'react';
 import pt from 'prop-types';
-import { createId, getMaxOrder } from '../../../utils/utils';
+import { createId, getMaxOrder } from '../../../../server/utils/utils';
 // Readux Stuff
 import { connect } from 'react-redux';
 import { updatePositions, updatePositionsServer, delPositionServer } from '../../../redux/actions/data-actions';

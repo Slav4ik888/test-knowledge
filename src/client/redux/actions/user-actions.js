@@ -1,5 +1,5 @@
 import { userActionType, uiActionType, dataActionType } from '../types';
-import { getAllUsersData, getPositions, getDocuments } from './data-actions';
+import { getAllUsersData, getPositions, getAllDocuments } from './data-actions';
 
 import axios from 'axios';
 // const api = axios.create({
@@ -102,10 +102,10 @@ export const loginUser = (userData, history) => (dispatch) => {
       history.push(route.HOME);
     })
     .catch((err) => {
-      console.log(err.response);
+      console.log(err);
       dispatch({
         type: uiActionType.SET_ERRORS,
-        payload: err.response,
+        payload: err.response.data,
       });
     });
 };

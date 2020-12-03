@@ -14,6 +14,7 @@ export default {
     },
     background: {
       dialog: `#c1e5e2`,
+      hover: `#e6f4f3`,
     },
   },
   typography: {
