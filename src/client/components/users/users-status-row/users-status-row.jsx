@@ -36,18 +36,21 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-
-// item - переданный документ или пользователь
+// TODO: FIX При смене пользователя не меняется роль, стоит та что была у первого пользователя
 const UsersModuleRow = ({ user, onSetRole, companyProfile }) => {
   const classes = useStyles();
 
   // Создаём массив из объекта
   const roles = arrFromObj(role); 
-  
+  const [rol, setRol] = useState(user.role);
+
   // Если выбранный пользователь является Владельцем компании
   const disabled = Boolean(companyProfile.owner === user.email);
 
-  const handleSetRole = (e) => onSetRole(e.target.value);
+  const handleSetRole = (e) => {
+    setRol(e.target.value)
+    onSetRole(e.target.value);
+  };
 
   return (
     <>      
@@ -63,7 +66,7 @@ const UsersModuleRow = ({ user, onSetRole, companyProfile }) => {
             <Select
               labelId={`role-label`}
               id={`role-select`}
-              value={user.role}
+              value={rol}
               onChange={handleSetRole}
               disabled={disabled}
               input={<Input />}

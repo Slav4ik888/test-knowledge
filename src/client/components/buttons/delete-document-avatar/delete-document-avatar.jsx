@@ -18,8 +18,10 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 
-const DeleteDocumentAvatar = ({ onDel }) => {
+const DeleteDocumentAvatar = ({ onDel, title }) => {
   const classes = useStyles();
+
+  const titleValue = `Вы действительно хотите удалить ${title} без возможности восстановления?`;
 
   const [isOpen, setIsOpen] = useState(false);
   const handleClose = () => setIsOpen(false);
@@ -44,7 +46,7 @@ const DeleteDocumentAvatar = ({ onDel }) => {
         open={isOpen}
         onOk={handleOk}
         onCancel={handleClose}
-        title="Вы действительно хотите удалить документ без возможности восстановления?"
+        title={titleValue}
       />
 
     </>

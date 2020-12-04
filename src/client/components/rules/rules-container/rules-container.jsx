@@ -3,6 +3,7 @@ import pt from 'prop-types';
 import cl from 'classnames';
 // Readux Stuff
 import { connect } from 'react-redux';
+import { setRuleStored } from '../../../redux/actions/ui-actions';
 // MUI Stuff
 import { makeStyles } from '@material-ui/core/styles';
 import Paper from '@material-ui/core/Paper';
@@ -10,6 +11,7 @@ import Typography from '@material-ui/core/Typography';
 import Avatar from '@material-ui/core/Avatar';
 import IconButton from '@material-ui/core/IconButton';
 import Tooltip from '@material-ui/core/Tooltip';
+import CircularProgress from '@material-ui/core/CircularProgress';
 // Icons
 import EditIcon from '@material-ui/icons/Edit';
 import InsertDriveFileIcon from '@material-ui/icons/InsertDriveFile';
@@ -60,21 +62,32 @@ const useStyles = makeStyles((theme) => {
 });
 
 
-const RulesContainer = ({ loading, documents }) => {
-
-  if (loading) return null;
+const RulesContainer = ({ loading, setRuleStored, ruleStored }) => {
+  if (loading) return <CircularProgress disableShrink />;
 
   const classes = useStyles();
 
   // Выбранный документ
-  const [docSelected, setDocSelected] = useState(null);
+  const [docSelected, setDocSelected] = useState(ruleStored.docSelected);
   const handleDocSelected = (doc) => {
     setDocSelected(doc);
+    // Запоминаем выбранное 
+    setRuleStored({
+      sectionSelected,
+      docSelected: doc,
+    })
   };
 
   // Выбранный раздел
-  const [sectionSelected, SetSectionSelected] = useState(null);
-  
+  const [sectionSelected, setSectionSelected] = useState(ruleStored.sectionSelected);
+  const handleSectionSelected = (section) => {
+    setSectionSelected(section);
+    // Запоминаем выбранное 
+    setRuleStored({
+      sectionSelected: section,
+      docSelected,
+    })
+  }
   const [isSections, setIsSections] = useState(false);
   const handleSectionsOpen = () => setIsSections(true);
   const handleSectionsClose = () => setIsSections(false);
@@ -99,9 +112,9 @@ const RulesContainer = ({ loading, documents }) => {
               items={docSelected && docSelected.sections}
               valueField={`title`}
               label={`sections`}
-              placeholder={`Не указан`}
+              placeholder={sectionSelected ? sectionSelected.title : `Не указан`}
               disabled={!Boolean(docSelected)}
-              onSelected={SetSectionSelected}
+              onSelected={handleSectionSelected}
               onItemAdd={handleSectionsOpen}
             />
 
@@ -121,7 +134,6 @@ const RulesContainer = ({ loading, documents }) => {
           {/* <Button onClick={handleSectionsOpen} disabled={!docSelected}>
             Разделы
           </Button> */}
-        
         </div>
       </Paper>
     </div>
@@ -130,16 +142,17 @@ const RulesContainer = ({ loading, documents }) => {
 
 
 RulesContainer.propTypes = {
-  documents: pt.array.isRequired,
+  ruleStored: pt.object.isRequired,
+  setRuleStored: pt.func.isRequired,
 };
 
 const mapStateToProps = (state) => ({
-  documents: state.data.documents,
+  ruleStored: state.UI.ruleStored,
   loading: state.UI.loading,
 });
 
 const mapActionsToProps = {
-  
+  setRuleStored,
 };
 
 export default connect(mapStateToProps, mapActionsToProps)(RulesContainer);

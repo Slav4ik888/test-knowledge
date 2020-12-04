@@ -16,7 +16,7 @@ import UsersModuleRow from '../users-module-row/users-module-row';
 import PositionsModuleRow from '../../positions/positions-module-row/positions-module-row';
 import UsersStatusRow from '../users-status-row/users-status-row';
 import DeleteUserButton from '../../buttons/delete-user-button/delete-user-button';
-import CancelSubmitBtn from '../../buttons/cancel-submit-btn/cancel-submit-btn';
+// import CancelSubmitBtn from '../../buttons/cancel-submit-btn/cancel-submit-btn';
 import { typePosModule } from '../../../../types';
 
 
@@ -45,25 +45,28 @@ const UserChange = ({ open, onClose, UI: { loading, errors, messages }, deleteUs
     return null;
   }
   const classes = useStyles();
-  const [isChange, setIsChange] = useState(false);
+  // const [isChange, setIsChange] = useState(false);
 
   const [userSeleted, setUserSelected] = useState(null);
 
   const handleUserSelected = (user) => {
     if (user) {
       setUserSelected(user);
-      setIsChange(false);
+      // setIsChange(false);
     } else {
       setUserSelected(null);
-      setIsChange(false);
+      // setIsChange(false);
     }
   };
 
   const handleSetUserRole = (role) => {
-    const userChangeRole = userSeleted;
-    userChangeRole.role = role;
-    setUserSelected(userChangeRole);
-    setIsChange(true);
+    if (role !== userSeleted.role) {
+      const userChangeRole = userSeleted;
+      userChangeRole.role = role;
+      setUserSelected(userChangeRole);
+      updateUserDetails(userChangeRole);
+      // setIsChange(true);
+    }
   };
 
   const handleDeleteAccount = () => {
@@ -73,11 +76,11 @@ const UserChange = ({ open, onClose, UI: { loading, errors, messages }, deleteUs
 
   const handleClose = () => onClose();
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    updateUserDetails(userSeleted);
-    setIsChange(false);
-  };
+  // const handleSubmit = (e) => {
+  //   e.preventDefault();
+  //   updateUserDetails(userSeleted);
+  //   // setIsChange(false);
+  // };
 
   return (
     <>
@@ -114,12 +117,12 @@ const UserChange = ({ open, onClose, UI: { loading, errors, messages }, deleteUs
         </DialogContent>
 
         <DialogActions className={classes.dialog}>
-          <CancelSubmitBtn
+          {/* <CancelSubmitBtn
             onCancel={handleClose}
             onSubmit={handleSubmit}
             disabled={loading || !isChange}
             loading={loading}
-          />
+          /> */}
         </DialogActions>
       </Dialog>
     </>

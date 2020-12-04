@@ -35,46 +35,40 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const SectionsContainer = ({ open, onClose, UI, document, documents, updateDocuments, updateDocumentsServer }) => {
-
+const SectionsContainer = ({ open, UI, onClose, document, documents, updateDocument }) => {
   if (!open) return null;
   if (!document) return null;
   
   const classes = useStyles();
-  const { loading } = UI;
-  const [isChange, setIsChange] = useState(false);
 
   const idxDoc = documents.findIndex(doc => doc.id === document.id);
-  const [docEdit, setDocEdit] = useState(documents[idxDoc]);
-  const [sections, setSections] = useState(documents[idxDoc].sections);
+  const [docEdit, setDocEdit] = useState(documents[idxDoc]); // Выбранный документ
+  const [sections, setSections] = useState(documents[idxDoc].sections); // Секции в выбранном документе
 
   const handleEditSection = (id, newTitle) => {
     let newDocument = docEdit;
     const idxSec = newDocument.sections.findIndex((section) => section.id === id);
-    newDocument.sections[idxSec].title = newTitle;
-    newDocument.sections[idxSec].lastChange = new Date().toISOString();
-    newDocument.lastChange = new Date().toISOString();
-    setDocEdit(newDocument);
-    setSections(newDocument.sections);
-    setIsChange(true);
-
-    let newDocuments = documents;
-    newDocuments[idxDoc] = newDocument;
-    // TODO: updateDocument(newDocument);
+    // Если было изменение title
+    if (newDocument.sections[idxSec].title !== newTitle) {
+      newDocument.sections[idxSec].title = newTitle;
+      newDocument.sections[idxSec].lastChange = new Date().toISOString();
+      setDocEdit(newDocument);
+      setSections(newDocument.sections);
+      updateDocument(newDocument);
+    }
   };
 
   const handleDelSection = (id) => {
+    // TODO: Проверить есть ли rules в данной секции
+    // TODO: Проверить есть ли questions для данной секци или сделать проверку при обращении к вопросам на наличии правил
+
     let newDocument = docEdit;
     const idxSec = newDocument.sections.findIndex((section) => section.id === id);
     newDocument.sections = [...newDocument.sections.slice(0, idxSec), ...newDocument.sections.slice(idxSec + 1)];
     newDocument.lastChange = new Date().toISOString();
     setDocEdit(newDocument);
     setSections(newDocument.sections);
-    setIsChange(true);
-    
-    let newDocuments = documents;
-    newDocuments[idxDoc] = newDocument;
-    // TODO: updateDocuments(newDocuments);
+    updateDocument(newDocument);
   };
 
   const handleAddSection = (title) => {
@@ -82,30 +76,25 @@ const SectionsContainer = ({ open, onClose, UI, document, documents, updateDocum
       let newDocument = docEdit;
       const newSection = {
         title,
-        id: createId(newDocument.sections),
+        id: createId(newDocument.sections), // TODO: перенести на server, если 2 пользователя буду создавать секции возникнет проблема
         order: getMaxOrder(newDocument.sections),
         createdAt: new Date().toISOString(),
         lastChange: new Date().toISOString(),
       };
       newDocument.sections = [newSection, ...newDocument.sections];
-      newDocument.lastChange = new Date().toISOString();
       setDocEdit(newDocument);
       setSections(newDocument.sections);
-      setIsChange(true);
-
-      let newDocuments = documents;
-      newDocuments[idxDoc] = newDocument;
-      // TODO: updateDocuments(newDocuments);
+      updateDocument(newDocument);
     }
   };
 
   const handleClose = () => onClose();
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    setIsChange(true);
-    // TODO: updateDocumentsServer(documents);
-  };
+  // const handleSubmit = (e) => {
+  //   e.preventDefault();
+  //   setIsChange(true);
+  //   // TODO: updateDocumentsServer(documents);
+  // };
 
   const listRef = useRef(null);
   useEffect(() => {
@@ -137,17 +126,6 @@ const SectionsContainer = ({ open, onClose, UI, document, documents, updateDocum
         <SectionAdd onAdd={handleAddSection} UI={UI} />
 
         <DialogActions className={classes.dialog}>
-          <Button onClick={handleClose} >
-            Отмена
-          </Button>
-          <Button onClick={handleSubmit} disabled={loading || !isChange} variant="contained" color="primary">
-            Сохранить
-            {
-              loading && (
-                <CircularProgress size={30} className={classes.progress}/>
-              )
-            }
-          </Button>
         </DialogActions>
       </Dialog>
     </>
@@ -156,16 +134,16 @@ const SectionsContainer = ({ open, onClose, UI, document, documents, updateDocum
 
 SectionsContainer.propTypes = {
   updateDocument: pt.func.isRequired,
+  UI: pt.object.isRequired,
   open: pt.bool.isRequired,
   onClose: pt.func.isRequired,
   document: pt.object,
   documents: pt.array.isRequired,
-  UI: pt.object.isRequired,
 };
 
 const mapStateToProps = (state) => ({
-  UI: state.UI,
   documents: state.data.documents,
+  UI: state.UI,
 });
 
 export default connect(mapStateToProps, {updateDocument})(SectionsContainer);

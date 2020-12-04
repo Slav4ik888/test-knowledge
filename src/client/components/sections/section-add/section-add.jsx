@@ -44,6 +44,7 @@ const SectionAdd = ({ onAdd, UI: { errors } }) => {
 
   const [newSection, setNewSection] = useState(``);
   const handleEdit = (e) => {
+    e.preventDefault();
     switch (e.keyCode) {
       case 13:
         if (newSection !== ``) {

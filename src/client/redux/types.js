@@ -16,6 +16,7 @@ export const uiActionType = {
   CLEAR_ERRORS: `CLEAR_ERRORS`,
   SET_MESSAGES: `SET_MESSAGES`,
   CLEAR_MESSAGES: `CLEAR_MESSAGES`,
+  SET_RULES_STORED: `SET_RULES_STORED`,
 };
 
 // Data reducer types

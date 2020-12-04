@@ -27,9 +27,11 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 // item - переданный документ или пользователь
-const DocumentsModuleRow = ({ onDocumentSelected, documents }) => {
+const DocumentsModuleRow = ({ onDocumentSelected, documents, ruleStored }) => {
   const classes = useStyles();
-  
+
+  const placeholder = ruleStored.docSelected ? ruleStored.docSelected.title : `Не указан`;
+
   const [isDocuments, setIsDocuments] = useState(false);
   const handleDocumentsOpen = () => setIsDocuments(true);
   const handleDocumentsClose = () => setIsDocuments(false);
@@ -46,7 +48,7 @@ const DocumentsModuleRow = ({ onDocumentSelected, documents }) => {
           items={documents}
           valueField={`title`}
           label={`documents`}
-          placeholder={`Не указан`}
+          placeholder={placeholder}
           onSelected={onDocumentSelected}
           onItemAdd={handleDocumentsOpen}
         />
@@ -67,11 +69,12 @@ const DocumentsModuleRow = ({ onDocumentSelected, documents }) => {
 DocumentsModuleRow.propTypes = {
   documents: pt.array.isRequired,
   onDocumentSelected: pt.func.isRequired,
-  
+  ruleStored: pt.object,
 };
 
 const mapStateToProps = (state) => ({
   documents: state.data.documents,
+  ruleStored: state.UI.ruleStored,
 });
 
 

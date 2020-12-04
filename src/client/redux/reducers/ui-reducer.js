@@ -4,21 +4,28 @@ import {extend} from '../../utils/utils';
 
 const initialState = {
   loading: false,
+  ruleStored: {
+    sectionSelected: null,
+    docSelected: null,
+  },
   messages: {},
   errors: {},
 };
 
 export default function (state = initialState, action) {
+
   switch (action.type) {
     case uiActionType.LOADING_UI:
       return extend(state, {
         loading: true,
       });
+    
     case uiActionType.SET_ERRORS:
       return extend(state, {
         loading: false,
         errors: action.payload,
       });
+    
     case uiActionType.CLEAR_ERRORS:
       return extend(state, {
         loading: false,
@@ -36,6 +43,12 @@ export default function (state = initialState, action) {
         loading: false,
         messages: {},
       });
+    
+    case uiActionType.SET_RULES_STORED:
+      return extend(state, {
+        ruleStored: action.payload,
+      });
+    
     default: return state;
   }
 }

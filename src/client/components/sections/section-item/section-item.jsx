@@ -22,7 +22,7 @@ const useStyles = makeStyles((theme) => ({
     marginRight: 70,
   },
   hover: {
-    backgroundColor: `#e9f6fc`,
+    backgroundColor: theme.palette.background.hover, // `#e9f6fc`,
   },
 }));
 
@@ -99,7 +99,7 @@ const SectionItem = ({ section, onEdit, onDel}) => {
             </Tooltip>
           </ListItemSecondaryAction>
 
-          <DeleteDocumentAvatar onDel={handleDelSection} />
+          <DeleteDocumentAvatar onDel={handleDelSection} title={`раздел`} />
         </>
       }
 

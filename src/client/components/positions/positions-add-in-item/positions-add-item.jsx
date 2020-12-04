@@ -50,18 +50,16 @@ const PositionsAddInItem = ({ open, type, onClose, UI: { loading }, item,
   };
 
   const handleSetPosToItem = () => {
+    let newItem = item;
+    newItem.positions = selected.map(pos => pos.id);
+
     switch (type) {
       case typePosModule.DOC:
-        let doc = item;
-        doc.positions = selected.map(pos => pos.id);
-        console.log('doc.positions: ', doc.positions);
-        updateDocument(doc);
+        updateDocument(newItem);
         break;
       
       case typePosModule.USER:
-        let newUserDetails = item;
-        newUserDetails.positions = selected;
-        updateUserDetails(newUserDetails);
+        updateUserDetails(newItem);
         break;
     };
     onClose();

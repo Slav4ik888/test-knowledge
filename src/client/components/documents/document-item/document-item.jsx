@@ -33,7 +33,6 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 const DocumentItem = ({ doc, onEdit, onDel, positions}) => {
-  console.log('doc: ', doc.positions);
   const classes = useStyles();
 
   const { title, id } = doc;
@@ -117,7 +116,7 @@ const DocumentItem = ({ doc, onEdit, onDel, positions}) => {
             </Tooltip>
           </ListItemSecondaryAction>
 
-          <DeleteDocumentAvatar onDel={handleDelDoc} />
+          <DeleteDocumentAvatar onDel={handleDelDoc} title={`документ`} />
 
           <ListItemSecondaryAction
             onMouseEnter={handleShowPosOpen}

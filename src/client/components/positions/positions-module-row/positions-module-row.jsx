@@ -50,20 +50,20 @@ const useStyles = makeStyles((theme) => {
 
 // item - переданный документ или пользователь
 const PositionsModuleRow = ({ type, item, positions }) => {
-  console.log('item: ', item);
   if (!item) return null;
 
   const classes = useStyles();
   const titleItem = type === typePosModule.DOC ? `документом` : `сотрудником`;
 
   // Выбираем должности закреплённые за данным документом item
-  const positionsInItem = positions.filter((pos) => item.positions.find((itemPos) => itemPos.id === pos.id));
+  const positionsInItem = positions.filter((pos) => item.positions.find((itemPos) => itemPos === pos.id));
   
   // Открыт ли контейнер для редактирования должностей
   const [isPosEdit, setIsPosEdit] = useState(false);
   const handlePosEditOpen = () => setIsPosEdit(true);
   const handlePosEditClose = () => setIsPosEdit(false);
 
+  // Открыто ли добавление/удаление должностей
   const [posToggle, setPosToggle] = useState(false);
   const handlePosToggleOpen = () => {
     if (item) {

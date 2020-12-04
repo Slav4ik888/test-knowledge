@@ -63,7 +63,7 @@ const ListSelect = ({ type, items, valueField, title, placeholder, label, onSele
         onChange={handleChange}
         input={<Input />}
       >
-        <MenuItem value={placeholder}><em>{placeholder}</em></MenuItem>
+        <MenuItem value={`Не указан`}><em>Не указан</em></MenuItem>
         {
           items && items.map((item, i) => <MenuItem key={item[valueField] + i} value={item[valueField]}>
               {item[valueField]}

@@ -6,7 +6,7 @@ import { createDocument, updateDocument, deleteDocument } from '../../../redux/a
 // MUI Stuff
 import { makeStyles } from '@material-ui/core/styles';
 import Dialog from '@material-ui/core/Dialog';
-// import DialogActions from '@material-ui/core/DialogActions';
+import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
 // Component
 import DocumentsList from '../documents-list/documents-list';
@@ -103,14 +103,14 @@ const DocumentsContainer = ({ open, onClose, UI, documents, createDocument, upda
 
         <DocumentAdd onAdd={handleAddDoc} UI={UI} />
 
-        {/* <DialogActions className={classes.dialog}>
-          <CancelSubmitBtn
+        <DialogActions className={classes.dialog}>
+          {/* <CancelSubmitBtn
             onCancel={handleClose}
             onSubmit={handleSubmit}
             disabled={loading || !isChange}
             loading={loading}
-          />
-        </DialogActions> */}
+          /> */}
+        </DialogActions>
       </Dialog>
     </>
   );
