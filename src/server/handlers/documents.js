@@ -81,11 +81,6 @@ async function getDocument(req, res) {
   try {
     const docRes = await db.doc(`documents/${req.user.companyId}/documents/${req.params.documentId}`)
       .get();
-    // const docRes = await db.collection(`documents`)
-    //   .doc(req.user.companyId)
-    //   .collection(`documents`)
-    //   .where(`id`, `==`, req.params.documentId)
-    //   .get();
     
     if (docRes.empty) {
       return res.status(400).json({ error: `Документ не найден` });
@@ -120,15 +115,16 @@ async function getAllDocuments(req, res) {
       let documents = [];
 
       docRes.forEach(doc => {
-        const document = {
-          id,
-          createdAt,
-          lastChange,
-          positions,
-          sections,
-          order,
-          title
-        } = doc.data();
+        // const document = {
+        //   id,
+        //   createdAt,
+        //   lastChange,
+        //   positions,
+        //   sections,
+        //   order,
+        //   title
+        // } = doc.data();
+        const document = doc.data();
 
         documents.push(document);
       });

@@ -23,9 +23,6 @@ async function createRule(req, res) {
     lastChange: new Date().toISOString(),
     title: req.body.title,
     rule: req.body.rule,
-    forPositions: req.body.forPositions,
-    isQuestion: false,
-    idQuestions: [],
   };
 
   try {
@@ -80,19 +77,17 @@ async function getAllRulesById(req, res) {
       let rules = [];
 
       rulesRes.forEach(rule => {
-        const obj = {
-          id,
-          docId,
-          sectionId,
-          order,
-          createdAt,
-          lastChange,
-          title,
-          rule,
-          forPositions,
-          isQuestion,
-          idQuestions,
-        } = rule.data();
+        // const obj = {
+        //   id,
+        //   docId,
+        //   sectionId,
+        //   order,
+        //   createdAt,
+        //   lastChange,
+        //   title,
+        //   rule,
+        // } = rule.data();
+        const obj = rule.data();
 
         rules.push(obj);
       });
@@ -111,11 +106,48 @@ async function getAllRulesById(req, res) {
 };
 
 async function updateRule(req, res) {
+  // является ли пользователь Админом или Владельцем аккаунта или 
+  const validData = await validationAdminAuthority(req.user); 
+  const { valid, errors } = validData;
+  if (!valid) return res.status(400).json(errors);
 
+  let rule = {
+    docId: req.body.docId,
+    sectionId: req.body.sectionId,
+    order: req.body.order,
+    lastChange: new Date().toISOString(),
+    title: req.body.title,
+    rule: req.body.rule,
+  };
+
+  try {
+    const updateRes = await db.doc(`rules/${req.user.companyId}/rules/${req.params.ruleId}`)
+      .update(rule);
+    
+    return res.json({ rule, message: `Правило успешно обновлено` });
+    
+  } catch(err) {
+      console.error(err);
+      return res.status(500).json({ general: err.code });
+  };
 };
 
 async function deleteRule(req, res) {
+  // является ли пользователь Админом или Владельцем аккаунта или 
+  const validData = await validationAdminAuthority(req.user); 
+  const { valid, errors } = validData;
+  if (!valid) return res.status(400).json(errors);
 
+  try {
+    const updateRes = await db.doc(`rules/${req.user.companyId}/rules/${req.params.ruleId}`)
+      .delete();
+    
+    return res.json({ message: `Правило успешно удалено` });
+    
+  } catch(err) {
+      console.error(err);
+      return res.status(500).json({ general: err.code });
+  };
 };
 
 module.exports = { createRule, getRule, getAllRulesById, updateRule, deleteRule };
