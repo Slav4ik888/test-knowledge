@@ -11,7 +11,7 @@ const { signupCompany, getCompanyData, getUserAndCompanyData, updateCompanyData,
 const { getPositions, updatePositions, delPosition } = require('./handlers/positions');
 const { getAllUsersData } = require('./handlers/data');
 const { createDocument, getDocument, getAllDocuments, updateDocument, deleteDocument } = require('./handlers/documents');
-
+const { createRule, getRule, getAllRulesById, updateRule, deleteRule } = require('./handlers/rules');
 
 app.use(bodyParser.json());
 
@@ -44,6 +44,12 @@ app.get(`/api/getAllDocuments`, FBAuth, getAllDocuments);
 app.post(`/api/updateDocument/:documentId`, FBAuth, updateDocument);
 app.get(`/api/deleteDocument/:documentId`, FBAuth, deleteDocument);
 
+// rules
+app.post(`/api/createRule/:documentId/:sectionId`, FBAuth, createRule);
+app.get(`/api/getRule/:ruleId`, FBAuth, getRule);
+app.get(`/api/getAllRulesById/:documentId/:sectionId`, FBAuth, getAllRulesById);
+app.post(`/api/updateRule/:ruleId`, FBAuth, updateRule);
+app.get(`/api/deleteRule/:ruleId`, FBAuth, deleteRule);
 
 
 app.use(express.static('dist'));
@@ -51,4 +57,4 @@ app.use(express.static('dist'));
 
 app.listen(process.env.PORT || 8080, () => console.log(`Listening on port ${process.env.PORT || 8080}!`));
 
-// git add . && git commit -m "move TestsNavBtn & RulesNavBtn from MiniDrawer, & add body BColor" && git push origin master
+// git add . && git commit -m "getAllRulesById, createRule" && git push origin master

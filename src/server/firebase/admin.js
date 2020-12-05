@@ -1,4 +1,3 @@
-// export GOOGLE_APPLICATION_CREDENTIALS = "/users/vyacheslav/programming/testing-knowledge/src/server/firebase/key-service-acount.json";
 const admin = require('firebase-admin');
 const serviceAccount = require("./service-account-key.json");
 

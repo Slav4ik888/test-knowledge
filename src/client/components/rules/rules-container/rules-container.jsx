@@ -86,7 +86,7 @@ const RulesContainer = ({ loading, setRuleStored, ruleStored }) => {
 
           <SectionsModuleRow docSelected={docSelected} onSectionSelected={handleSectionSelected} />
           
-
+          {/* <Rules */}
           {/* <Button onClick={handleSectionsOpen} disabled={!docSelected}>
             Разделы
           </Button> */}

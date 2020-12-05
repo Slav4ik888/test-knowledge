@@ -1,6 +1,6 @@
 const { db } = require('../firebase/admin');
 const { validationAdminAuthority } = require('../utils/validators');
-const { createId, getMaxOrder } = require('../utils/utils');
+const { getMaxOrder } = require('../utils/utils');
 
 // Создаём One document
 async function createDocument(req, res) {
@@ -41,7 +41,7 @@ async function createDocument(req, res) {
       .doc(createRes.id)
       .update(newDocument);
     
-    return res.json({ newDocument, message: `Документо успешно создан` });
+    return res.json({ newDocument, message: `Документ успешно создан` });
     
   } catch(err) {
       console.error(err);
