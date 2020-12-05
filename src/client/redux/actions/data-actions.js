@@ -53,7 +53,6 @@ export const updatePositions = (newPositions) => (dispatch) => {
   })
 };
 
-
 // Обновляем positions на сервере
 export const updatePositionsServer = (newPositions) => (dispatch) => {
   dispatch({ type: uiActionType.LOADING_UI });
@@ -126,6 +125,7 @@ export const getAllDocuments = () => (dispatch) => {
 // Создаём document
 export const createDocument = (newDocument) => (dispatch) => {
   dispatch({ type: uiActionType.LOADING_UI });
+  
   return axios.post(`/createDocument`, newDocument)
     .then((res) => {
       dispatch({
@@ -146,6 +146,7 @@ export const createDocument = (newDocument) => (dispatch) => {
 // Обновляем document
 export const updateDocument = (updateDocument) => (dispatch) => {
   dispatch({ type: uiActionType.LOADING_UI });
+
   return axios.post(`/updateDocument/${updateDocument.id}`, updateDocument)
     .then((res) => {
       dispatch({
@@ -165,9 +166,8 @@ export const updateDocument = (updateDocument) => (dispatch) => {
 
 // Удаляем document
 export const deleteDocument = (deleteDocument) => (dispatch) => {
-  console.log('deleteDocument: ', deleteDocument);
-
   dispatch({ type: uiActionType.LOADING_UI });
+
   return axios.get(`/deleteDocument/${deleteDocument.id}`)
     .then((res) => {
       dispatch({
