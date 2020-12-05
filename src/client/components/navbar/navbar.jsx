@@ -62,7 +62,7 @@ const Navbar = ({authenticated}) => {
         </Toolbar>
       </AppBar>
       {
-        authenticated && <MiniDrawer onClose={handleDrawerClose} open={open} />
+        authenticated && <MiniDrawer open={open} onOpen={handleDrawerOpen} onClose={handleDrawerClose} />
       }
     </div>
   );

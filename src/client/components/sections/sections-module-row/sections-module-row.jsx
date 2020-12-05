@@ -73,7 +73,7 @@ const SectionsModuleRow = ({ onSectionSelected, docSelected, ruleStored }) => {
 
 
 SectionsModuleRow.propTypes = {
-  docSelected: pt.object.isRequired,
+  docSelected: pt.object,
   onSectionSelected: pt.func.isRequired,
   ruleStored: pt.object,
 };

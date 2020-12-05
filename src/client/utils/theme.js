@@ -13,6 +13,7 @@ export default {
       contrastText: `#fff`,
     },
     background: {
+      default: `#e4e9ea`, // Для body
       dialog: `#c1e5e2`,
       hover: `#e6f4f3`,
     },

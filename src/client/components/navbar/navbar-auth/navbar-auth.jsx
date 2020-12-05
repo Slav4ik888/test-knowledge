@@ -104,11 +104,6 @@ const NavbarAuth = ({ open, onOpen }) => {
   // const handleUserMenuOpen = (event) => setAnchorUsr(event.currentTarget);
   // const handleUserMenuClose = () => setAnchorUsr(null);
 
-  
-
-  
-  
-
   // const renderMenu = (
   //   <Menu
   //     anchorEl={anchorEl}

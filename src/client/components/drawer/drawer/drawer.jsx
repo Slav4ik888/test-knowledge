@@ -1,31 +1,19 @@
 import React from 'react';
 import cl from 'classnames';
 import pt from 'prop-types';
-import { Link } from 'react-router-dom';
 // MUI Stuff
 import { makeStyles, useTheme } from '@material-ui/core/styles';
 import Drawer from '@material-ui/core/Drawer';
 import Divider from '@material-ui/core/Divider';
 import IconButton from '@material-ui/core/IconButton';
 import List from '@material-ui/core/List';
-import ListItem from '@material-ui/core/ListItem';
-import ListItemIcon from '@material-ui/core/ListItemIcon';
-import ListItemText from '@material-ui/core/ListItemText';
 // Icons
 import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
 import ChevronRightIcon from '@material-ui/icons/ChevronRight';
-import InboxIcon from '@material-ui/icons/MoveToInbox';
-import MailIcon from '@material-ui/icons/Mail';
-import FolderIcon from '@material-ui/icons/Folder';
-import DescriptionIcon from '@material-ui/icons/Description';
-import QueryBuilderIcon from '@material-ui/icons/QueryBuilder';
-import PlayArrowIcon from '@material-ui/icons/PlayArrow';
-import EditIcon from '@material-ui/icons/Edit';
-import AddIcon from '@material-ui/icons/Add';
-import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 // Components
 import {drawerWidth} from '../../../utils/consts';
-import route from '../../../utils/routes';
+import TestsNavBtn from '../../tests/tests-nav-btn/tests-nav-btn';
+import RulesNavBtn from '../../rules/rules-nav-btn/rules-nav-btn';
 import DocumentsNavBtn from '../../documents/documents-nav-btn/documents-nav-btn';
 import PositionsNavBtn from '../../positions/positions-nav-btn/positions-nav-btn';
 import UsersNavBtn from '../../users/users-nav-btn/users-nav-btn';
@@ -82,7 +70,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const MiniDrawer = ({ onClose, open }) => {
+const MiniDrawer = ({ open, onOpen, onClose}) => {
   const classes = useStyles();
   const theme = useTheme();
 
@@ -108,52 +96,11 @@ const MiniDrawer = ({ onClose, open }) => {
       <Divider />
 
       <List>
-        <ListItem button className={classes.button}>
-          <ListItemIcon><QueryBuilderIcon /></ListItemIcon>
-          <ListItemText primary="ТЕСТИРОВАНИЕ" />
-        </ListItem>
-        {
-          open && <>
-            <ListItem button className={classes.subButton}>
-              <ListItemText primary="Создать" />
-            </ListItem>
-            <ListItem button className={classes.subButton}>
-              <ListItemText primary="Редактировать" />
-            </ListItem>
-            <ListItem button className={cl(classes.subButton, classes.lastSubButton)}>
-              <ListItemText primary="Запустить" />
-            </ListItem>
-            <Divider />
-          </>
-        }
-
-        <ListItem button className={classes.button}>
-          <ListItemIcon><DescriptionIcon /></ListItemIcon>
-          <ListItemText primary="ПРАВИЛА" />
-        </ListItem>
-
-        {
-          open &&
-            <>
-              <Link to={route.CREATE_RULE} >
-                <ListItem button className={classes.subButton}>
-                  <ListItemText primary="Создать" />
-                </ListItem>
-              </Link>
-            
-              <ListItem button className={cl(classes.subButton, classes.lastSubButton)}>
-                <ListItemText primary="Редактировать" />
-              </ListItem>
-            
-              <Divider />
-            </>
-        }
-
+        <TestsNavBtn open={open} onDrawerOpen={onOpen} />
+        <RulesNavBtn open={open} onDrawerOpen={onOpen} />
         <DocumentsNavBtn />
         <PositionsNavBtn />
         <UsersNavBtn />
-        
-        
       </List>
 
       <Divider />
@@ -171,6 +118,7 @@ const MiniDrawer = ({ onClose, open }) => {
 
 MiniDrawer.propTypes = {
   open: pt.bool.isRequired,
+  onOpen: pt.func.isRequired,
   onClose: pt.func.isRequired,
 };
 

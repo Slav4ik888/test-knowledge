@@ -51,4 +51,4 @@ app.use(express.static('dist'));
 
 app.listen(process.env.PORT || 8080, () => console.log(`Listening on port ${process.env.PORT || 8080}!`));
 
-// git add . && git commit -m "move SectionsModuleRow from RulesContainer" && git push origin master
+// git add . && git commit -m "move TestsNavBtn & RulesNavBtn from MiniDrawer, & add body BColor" && git push origin master
