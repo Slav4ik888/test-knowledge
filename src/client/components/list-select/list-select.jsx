@@ -37,6 +37,7 @@ const ListSelect = ({ type, items, valueField, title, placeholder, label, onSele
   const icon = type === `addUser` ? <PersonAddIcon className={classes.addIcon} /> : <AddIcon className={classes.addIcon} />;
     
   const [valueSelected, setValueSelected] = useState(placeholder);
+
   const handleChange = (e) => {
     const id = e.target.value;
     const item = items.find(item => item[valueField] === id);

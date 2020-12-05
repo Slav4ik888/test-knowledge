@@ -212,8 +212,8 @@ export const updateCompanyDetails = (companyProfile) => (dispatch) => {
 
 // Удаление пользователя
 export const deleteUser = (userProfile) => (dispatch) => {
-  console.log('userProfile: ', userProfile);
-  dispatch({type: userActionType.LOADING_USER});
+  dispatch({ type: userActionType.LOADING_USER });
+  
   return axios.post(`/deleteUser`, userProfile)
     .then((res) => {
       // Определяем это сам пользователь себя удалил или его удалил Владелец

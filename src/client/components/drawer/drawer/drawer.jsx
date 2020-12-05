@@ -96,8 +96,8 @@ const MiniDrawer = ({ open, onOpen, onClose}) => {
       <Divider />
 
       <List>
-        <TestsNavBtn open={open} onDrawerOpen={onOpen} />
-        <RulesNavBtn open={open} onDrawerOpen={onOpen} />
+        <TestsNavBtn open={open} onDrawerOpen={onOpen} onDrawerClose={onClose} />
+        <RulesNavBtn open={open} onDrawerOpen={onOpen} onDrawerClose={onClose} />
         <DocumentsNavBtn />
         <PositionsNavBtn />
         <UsersNavBtn />

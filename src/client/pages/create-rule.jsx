@@ -1,14 +1,12 @@
-import React, {Component} from 'react';
+import React from 'react';
 import pt from 'prop-types';
 // Redux stuff
 // import {connect} from 'react-redux';
-// import {getScreams} from '../redux/actions/data-actions';
 // MUI Stuff
 import { makeStyles } from '@material-ui/core/styles';  
 import Grid from '@material-ui/core/Grid';
 // Component
 import RulesContainer from '../components/rules/rules-container/rules-container';
-// import Profile from '../components/profile';
 
 
 const useStyles = makeStyles((theme) => ({
@@ -17,11 +15,11 @@ const useStyles = makeStyles((theme) => ({
     display: `flex`,
     justifyContent: `center`,
   },
-  paper: {
-    padding: theme.spacing(2),
-    textAlign: 'center',
-    color: theme.palette.text.secondary,
-  },
+  // paper: {
+  //   padding: theme.spacing(2),
+  //   textAlign: 'center',
+  //   color: theme.palette.text.secondary,
+  // },
 }));
 
 

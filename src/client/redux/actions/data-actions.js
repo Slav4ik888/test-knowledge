@@ -9,8 +9,10 @@ export const getAllUsersData = () => (dispatch) => {
   dispatch({ type: uiActionType.LOADING_UI });
   return axios.get(`/usersData`)
     .then((res) => {
-      console.log(`Данные по всем пользователям: `, res.data);
-      dispatch({ type: dataActionType.SET_USERS, payload: res.data });
+      dispatch({
+        type: dataActionType.SET_USERS,
+        payload: res.data,
+      });
       dispatch({ type: uiActionType.CLEAR_ERRORS });
     })
     .catch((err) => {
@@ -125,11 +127,11 @@ export const getAllDocuments = () => (dispatch) => {
 // Создаём document
 export const createDocument = (newDocument) => (dispatch) => {
   dispatch({ type: uiActionType.LOADING_UI });
-  
+
   return axios.post(`/createDocument`, newDocument)
     .then((res) => {
       dispatch({
-        type: dataActionType.ADD_DOCUMENT,
+        type: dataActionType.CREATE_DOCUMENT,
         payload: res.data.newDocument,
       });
       dispatch({ type: uiActionType.CLEAR_ERRORS });
@@ -173,6 +175,49 @@ export const deleteDocument = (deleteDocument) => (dispatch) => {
       dispatch({
         type: dataActionType.DELETE_DOCUMENT,
         payload: deleteDocument,
+      });
+      dispatch({ type: uiActionType.CLEAR_ERRORS });
+    })
+    .catch((err) => {
+      console.log(err.response.data);
+      dispatch({
+        type: uiActionType.SET_ERRORS,
+        payload: err.response.data,
+      })
+    });
+};
+
+// Создаём rule
+export const createRule = (newRule) => (dispatch) => {
+  dispatch({ type: uiActionType.LOADING_UI });
+  
+  return axios.post(`/createRule/${newRule.docId}/${newRule.sectionId}`, newRule)
+    .then((res) => {
+      dispatch({
+        type: dataActionType.CREATE_RULE,
+        payload: res.data.newRule,
+      });
+      dispatch({ type: uiActionType.CLEAR_ERRORS });
+    })
+    .catch((err) => {
+      console.log(err.response.data);
+      dispatch({
+        type: uiActionType.SET_ERRORS,
+        payload: err.response.data,
+      })
+    });
+};
+
+// Загружаем rules
+export const getAllRulesById = ({ docId, sectionId }) => (dispatch) => {
+  console.log('docId, sectionId: ', docId, sectionId);
+  dispatch({ type: uiActionType.LOADING_UI });
+  
+  return axios.get(`/getAllRulesById/${docId}/${sectionId}`)
+    .then((res) => {
+      dispatch({
+        type: dataActionType.SET_RULES,
+        payload: res.data.rules,
       });
       dispatch({ type: uiActionType.CLEAR_ERRORS });
     })

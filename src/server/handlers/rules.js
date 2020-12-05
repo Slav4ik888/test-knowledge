@@ -10,10 +10,7 @@ async function createRule(req, res) {
 
   // getAllRulesById сообщаем, что это обновление и нужно вернуть данные сюда, а не пользователю
   req.update = true;
-  // req.params.documentId = 
-  // req.params.sectionId = 
   const rules = await getAllRulesById(req, res);
-  console.log('Все подходящие rules: ', rules);
 
   let newRule = {
     docId: req.params.documentId,

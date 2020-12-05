@@ -31,7 +31,7 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 
-const RulesNavBtn = ({ open, onDrawerOpen }) => {
+const RulesNavBtn = ({ open, onDrawerOpen, onDrawerClose }) => {
   const classes = useStyles();
 
   const [isRules, setIsRules] = useState(false);
@@ -48,7 +48,7 @@ const RulesNavBtn = ({ open, onDrawerOpen }) => {
       {
         open &&
           <>
-            <Link to={route.CREATE_RULE} >
+            <Link to={route.CREATE_RULE} onClick={onDrawerClose} >
               <ListItem button className={classes.subButton}>
                 <ListItemText primary="Создать" />
               </ListItem>
@@ -73,6 +73,7 @@ const RulesNavBtn = ({ open, onDrawerOpen }) => {
 RulesNavBtn.propTypes = {
   open: pt.bool.isRequired,
   onDrawerOpen: pt.func.isRequired,
+  onDrawerClose: pt.func.isRequired,
 };
 
 export default RulesNavBtn;
