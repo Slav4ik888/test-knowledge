@@ -20,6 +20,11 @@ export default function (state = initialState, action) {
         loading: true,
       });
     
+    case uiActionType.LOADING_UI_OFF:
+      return extend(state, {
+        loading: false,
+      });
+    
     case uiActionType.SET_ERRORS:
       return extend(state, {
         loading: false,

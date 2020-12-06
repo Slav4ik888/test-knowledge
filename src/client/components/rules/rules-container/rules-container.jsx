@@ -35,6 +35,7 @@ const useStyles = makeStyles((theme) => ({
   },
   paper: {
     width: `100%`,
+    // backgroundColor: theme.palette.background.default,
   },
   content: {
     padding: theme.spacing(4),
@@ -93,25 +94,25 @@ const RulesContainer = ({ loading, setRuleStored, ruleStored, getAllRulesById, r
       console.log('checkRule: ', checkRule);
       if (!checkRule) { // Если ещё не загружали
         getAllRulesById({ docId: docSelected.id, sectionId: section.id }); // Загружаем rules с db
-        
+
       } else { // Сохраняем rules из активной section
         setActiveRules({ docId: docSelected.id, sectionId: section.id }); 
       }
     }
   };
 
-  // Обновление title при редактировании правила
-  const handleEditTitle = (docId, sectionId, newTitle) => {
-    console.log('docId, sectionId, newTitle: ', docId, ` : `, sectionId, ` : `, newTitle);
-    // Поиск нужного правила и запись в него
+  // // Обновление title при редактировании правила
+  // const handleEditTitle = (docId, sectionId, newTitle) => {
+  //   console.log('docId, sectionId, newTitle: ', docId, ` : `, sectionId, ` : `, newTitle);
+  //   // Поиск нужного правила и запись в него
 
-  };
+  // };
 
-  // Обновление тела rule при редактировании правила
-  const handleEditRule = (docId, sectionId, newRule) => {
-    console.log('docId, sectionId, newRule: ', docId, ` : `, sectionId, ` : `, newRule);
-    // Поиск нужного правила и запись в него
-  };
+  // // Обновление тела rule при редактировании правила
+  // const handleEditRule = (docId, sectionId, newRule) => {
+  //   console.log('docId, sectionId, newRule: ', docId, ` : `, sectionId, ` : `, newRule);
+  //   // Поиск нужного правила и запись в него
+  // };
 
   const handleClose = () => {
     if (isChange) {
@@ -141,8 +142,8 @@ const RulesContainer = ({ loading, setRuleStored, ruleStored, getAllRulesById, r
           <RulesModuleRow
             docSelected={docSelected}
             sectionSelected={sectionSelected}
-            onEditTitle={handleEditTitle}
-            onEditRule={handleEditRule}
+            // onEditTitle={handleEditTitle}
+            // onEditRule={handleEditRule}
           />
 
           {/* <Button onClick={handleSectionsOpen} disabled={!docSelected}>

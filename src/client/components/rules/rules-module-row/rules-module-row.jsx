@@ -18,7 +18,6 @@ const useStyles = makeStyles((theme) => ({
     flexDirection: `column`,
     alignItems: `center`,
     marginTop: theme.spacing(2),
-    marginRight: theme.spacing(4),  
   },
 }));
 
@@ -52,8 +51,8 @@ const RulesModuleRow = ({ loading, onEditTitle, onEditRule, rules, activeRules: 
           rulesShow.length ?
             rulesShow.map((rule) => <RuleRow key={rule.id}
               rule={rule}
-              onEditTitle={onEditTitle}
-              onEditRule={onEditRule}
+              // onEditTitle={onEditTitle}
+              // onEditRule={onEditRule}
             />)
             : null
         }
@@ -66,8 +65,8 @@ const RulesModuleRow = ({ loading, onEditTitle, onEditRule, rules, activeRules: 
 
 RulesModuleRow.propTypes = {
   loading: pt.bool.isRequired,
-  onEditRule: pt.func.isRequired,
-  onEditTitle: pt.func.isRequired,
+  // onEditRule: pt.func.isRequired,
+  // onEditTitle: pt.func.isRequired,
   // ruleStored: pt.object,
   rules: pt.array.isRequired,
   activeRules: pt.object.isRequired,
