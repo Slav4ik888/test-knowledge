@@ -42,3 +42,10 @@ exports.typePosModule = {
   DOC: `DOC`,
   USER: `USER`,
 };
+
+// Типы для Confirm
+exports.typeConfirm = {
+  DEL: `Удалить`,
+  SAVE: `Сохранить`,
+  WITHOUT_SAVE: `Не сохранять`,
+}

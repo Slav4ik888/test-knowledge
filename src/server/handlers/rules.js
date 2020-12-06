@@ -49,7 +49,22 @@ async function createRule(req, res) {
 };
 
 async function getRule(req, res) {
+  try {
+    const ruleRes = await db.doc(`rules/${req.user.companyId}/rules/${req.params.ruleId}`).get();
+    
+    if (ruleRes.exists) {
+      const rule = ruleRes.data();
 
+      if (req.update) {
+        return rule;
+      } else {
+        return res.json({ rule, message: `Правило успешно передано  ` });
+      }
+    }
+  } catch(err) {
+      console.error(err);
+      return res.status(500).json({ general: err.code });
+  };
 };
 
 async function getAllRulesById(req, res) {
@@ -74,18 +89,7 @@ async function getAllRulesById(req, res) {
       let rules = [];
 
       rulesRes.forEach(rule => {
-        // const obj = {
-        //   id,
-        //   docId,
-        //   sectionId,
-        //   order,
-        //   createdAt,
-        //   lastChange,
-        //   title,
-        //   rule,
-        // } = rule.data();
         const obj = rule.data();
-
         rules.push(obj);
       });
 
@@ -108,8 +112,7 @@ async function updateRule(req, res) {
   const { valid, errors } = validData;
   if (!valid) return res.status(400).json(errors);
 
-  let rule = {
-    docId: req.body.docId,
+  let updateRule = {
     sectionId: req.body.sectionId,
     order: req.body.order,
     lastChange: new Date().toISOString(),
@@ -118,9 +121,12 @@ async function updateRule(req, res) {
   };
 
   try {
-    const updateRes = await db.doc(`rules/${req.user.companyId}/rules/${req.params.ruleId}`)
-      .update(rule);
-    
+    const updateRes = await db.doc(`rules/${req.user.companyId}/rules/${req.params.ruleId}`).update(updateRule);
+
+    req.update = true; // getRule сообщаем, что это обновление и нужно вернуть данные сюда, а не пользователю
+    const rule = await getRule(req, res);
+
+    console.log(`updateRule`);
     return res.json({ rule, message: `Правило успешно обновлено` });
     
   } catch(err) {

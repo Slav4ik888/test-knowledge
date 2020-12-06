@@ -7,6 +7,7 @@ import IconButton from '@material-ui/core/IconButton';
 import Delete from '@material-ui/icons/Delete';
 // Components
 import Confirm from '../../confirm/confirm';
+import { typeConfirm } from '../../../../types';
 
 
 const DeletePositionAvatar = ({ onDel }) => {
@@ -31,6 +32,7 @@ const DeletePositionAvatar = ({ onDel }) => {
       </ListItemSecondaryAction>
 
       <Confirm
+        typeOk={typeConfirm.DEL}
         open={isOpen}
         onOk={handleOk}
         onCancel={handleClose}

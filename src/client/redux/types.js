@@ -36,4 +36,6 @@ export const dataActionType = {
 
   CREATE_RULE: `CREATE_RULE`,
   SET_RULES: `SET_RULES`,
+  SET_ACTIVE_RULES: `SET_ACTIVE_RULES`,
+  UPDATE_RULE: `UPDATE_RULE`,
 };

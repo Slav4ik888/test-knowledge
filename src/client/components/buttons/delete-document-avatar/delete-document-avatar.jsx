@@ -9,6 +9,7 @@ import Delete from '@material-ui/icons/Delete';
 
 // Components
 import Confirm from '../../confirm/confirm';
+import { typeConfirm } from '../../../../types';
 
 
 const useStyles = makeStyles((theme) => ({
@@ -43,6 +44,7 @@ const DeleteDocumentAvatar = ({ onDel, title }) => {
       </ListItemSecondaryAction>
 
       <Confirm
+        typeOk={typeConfirm.DEL}
         open={isOpen}
         onOk={handleOk}
         onCancel={handleClose}

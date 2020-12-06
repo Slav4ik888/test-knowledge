@@ -32,7 +32,8 @@ const useStyles = makeStyles((theme) => {
     paperChip: {
       width: `100%`,
       padding: theme.spacing(1),
-      border: `1px solid #ccc`,
+      border: `1px solid`,
+      borderColor: theme.border.light,
       borderRadius: `5px`,
     },
     block: {

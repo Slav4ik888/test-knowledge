@@ -4,45 +4,60 @@ import pt from 'prop-types';
 import { connect } from 'react-redux';
 // MUI Stuff
 import { makeStyles } from '@material-ui/core/styles';
-import Avatar from '@material-ui/core/Avatar';
-import IconButton from '@material-ui/core/IconButton';
-import Tooltip from '@material-ui/core/Tooltip';
-import Typography from '@material-ui/core/Typography';
 // Icons
-import EditIcon from '@material-ui/icons/Edit';
-import DescriptionIcon from '@material-ui/icons/Description';
 import CircularProgress from '@material-ui/core/CircularProgress';
 // Components
 import RuleRow from '../rule-row/rule-row';
+import RuleRowAdd from '../rule-row-add/rule-row-add';
+import { getRulesFromDocAndSection } from '../../../utils/utils';
 
 
 const useStyles = makeStyles((theme) => ({
-  row: {
+  rows: {
     display: 'flex',
+    flexDirection: `column`,
     alignItems: `center`,
-    margin: theme.spacing(2, 0, 4, 0),
+    marginTop: theme.spacing(2),
+    marginRight: theme.spacing(4),  
   },
 }));
 
 
-const RulesModuleRow = ({ loading, docSelected, sectionSelected, rulesInSection }) => {
-  console.log('rulesInSection: ', rulesInSection);
-  console.log('docSelected: ', docSelected);
-  console.log('sectionSelected: ', sectionSelected);
-  if (!sectionSelected) return null;
+const RulesModuleRow = ({ loading, onEditTitle, onEditRule, rules, activeRules: {docId, sectionId} }) => {
+  
+  if (!sectionId) return null;
   if (loading) return <CircularProgress />;
 
+  console.log('rules: ', rules);
+  console.log('activeRules: ', docId, ` : `, sectionId);
   const classes = useStyles();
 
-  // const rulesShow = rules.find((rule) => rule.docId === docSelected.id && rule.sectionId === sectionSelected.id).rules;
+  let rulesShow = [];
+  let activeRuleObj = getRulesFromDocAndSection(rules, docId, sectionId); //rules.find((rule) => rule.docId === docId && rule.sectionId === sectionId);
+
+  console.log('activeRuleObj: ', activeRuleObj);
+  if (activeRuleObj) {
+    rulesShow = rulesShow.concat(activeRuleObj.rules);
+  };
+  console.log('rulesShow: ', rulesShow);
+  
+  const handleAddRule = () => {
+    // TODO: Добавление нового RuleRow
+  };
 
   return (
     <>
-      <div className={classes.row}>
+      <div className={classes.rows}>
         {
-          rulesInSection.length ? rulesInSection.map((rule) => <RuleRow key={rule.id} rule={rule} />)
-          : <RuleRow rule={null} />
+          rulesShow.length ?
+            rulesShow.map((rule) => <RuleRow key={rule.id}
+              rule={rule}
+              onEditTitle={onEditTitle}
+              onEditRule={onEditRule}
+            />)
+            : null
         }
+        <RuleRowAdd onAdd={handleAddRule} />
       </div>
     </>
   );
@@ -51,17 +66,18 @@ const RulesModuleRow = ({ loading, docSelected, sectionSelected, rulesInSection 
 
 RulesModuleRow.propTypes = {
   loading: pt.bool.isRequired,
-  docSelected: pt.object,
-  sectionSelected: pt.object,
-  // onSectionSelected: pt.func.isRequired,
-  ruleStored: pt.object,
-  rulesInSection: pt.array.isRequired,
+  onEditRule: pt.func.isRequired,
+  onEditTitle: pt.func.isRequired,
+  // ruleStored: pt.object,
+  rules: pt.array.isRequired,
+  activeRules: pt.object.isRequired,
 };
 
 const mapStateToProps = (state) => ({
-  ruleStored: state.UI.ruleStored,
+  // ruleStored: state.UI.ruleStored,
   loading: state.UI.loading,
-  // rules: state.data.rules,
+  rules: state.data.rules,
+  activeRules: state.data.activeRules,
 });
 
 

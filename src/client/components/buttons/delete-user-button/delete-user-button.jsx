@@ -9,6 +9,7 @@ import Button from '@material-ui/core/Button';
 import DeleteIcon from '@material-ui/icons/Delete';
 // Components
 import Confirm from '../../confirm/confirm';
+import { typeConfirm } from '../../../../types';
 
 
 const useStyles = makeStyles((theme) => ({
@@ -43,6 +44,7 @@ const DeleteUserButton = ({ onDel }) => {
       </Tooltip>
 
       <Confirm
+        typeOk={typeConfirm.DEL}
         open={isOpen}
         onOk={handleOk}
         onCancel={handleClose}

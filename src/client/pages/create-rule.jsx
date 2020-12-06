@@ -28,7 +28,7 @@ const CreateRule = () => {
 
   return (
       <Grid container spacing={2} className={classes.root}>
-        <Grid item sm={8} xs={12}>
+        <Grid item sm={10} xs={12}>
           <RulesContainer />
         </Grid>
       </Grid>

@@ -46,7 +46,7 @@ app.get(`/api/deleteDocument/:documentId`, FBAuth, deleteDocument);
 
 // rules
 app.post(`/api/createRule/:documentId/:sectionId`, FBAuth, createRule);
-app.get(`/api/getRule/:ruleId`, FBAuth, getRule); // TODO:
+app.get(`/api/getRule/:ruleId`, FBAuth, getRule);
 app.get(`/api/getAllRulesById/:documentId/:sectionId`, FBAuth, getAllRulesById);
 app.post(`/api/updateRule/:ruleId`, FBAuth, updateRule);
 app.get(`/api/deleteRule/:ruleId`, FBAuth, deleteRule);
@@ -57,4 +57,4 @@ app.use(express.static('dist'));
 
 app.listen(process.env.PORT || 8080, () => console.log(`Listening on port ${process.env.PORT || 8080}!`));
 
-// git add . && git commit -m "start RulesModuleRow, RulesRow with getAllRulesById" && git push origin master
+// git add . && git commit -m "Редактирование и обновление updateRule" && git push origin master

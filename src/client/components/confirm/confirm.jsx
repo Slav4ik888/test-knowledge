@@ -6,15 +6,20 @@ import Button from '@material-ui/core/Button';
 import Dialog from '@material-ui/core/Dialog';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import DialogActions from '@material-ui/core/DialogActions';
+// Components
+import { typeConfirm } from '../../../types';
 
 
 const useStyles = makeStyles((theme) => ({
   dialog: {
     padding: theme.spacing(4),
   },
+  button: {
+    marginRight: theme.spacing(2),
+  }
 }));
 
-const Confirm = ({ open, onOk, onCancel, title }) => {
+const Confirm = ({ open, typeOk, onOk, onCancel, title }) => {
   const classes = useStyles();
   
   return (
@@ -30,11 +35,11 @@ const Confirm = ({ open, onOk, onCancel, title }) => {
         </DialogTitle>
 
         <DialogActions className={classes.dialog}>
-          <Button variant="outlined" onClick={onCancel}>
+          <Button variant="outlined" onClick={onCancel} className={classes.button}>
             Отменить
           </Button>
           <Button variant="outlined" color="secondary" onClick={onOk}>
-            Удалить
+            {typeOk}
           </Button>
         </DialogActions>
       </Dialog>
@@ -43,6 +48,7 @@ const Confirm = ({ open, onOk, onCancel, title }) => {
 };
 
 Confirm.propTypes = {
+  typeOk: pt.string.isRequired,
   onOk: pt.func.isRequired,
   onCancel: pt.func.isRequired,
   open: pt.bool.isRequired,

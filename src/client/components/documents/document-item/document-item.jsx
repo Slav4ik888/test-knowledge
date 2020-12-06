@@ -30,6 +30,9 @@ const useStyles = makeStyles((theme) => ({
   hover: {
     backgroundColor: theme.palette.background.hover,
   },
+  textField: {
+
+  },
 }));
 
 const DocumentItem = ({ doc, onEdit, onDel, positions}) => {
@@ -60,8 +63,7 @@ const DocumentItem = ({ doc, onEdit, onDel, positions}) => {
     setNewTitle(e.target.value);
   };
 
-  const handleFocus = () => {
-  };
+  const handleFocus = () => {};
   const handleBlur = () => {
     setEdit(false);
     if (title !== newTitle) {

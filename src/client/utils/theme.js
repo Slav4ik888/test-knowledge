@@ -14,9 +14,13 @@ export default {
     },
     background: {
       default: `#e4e9ea`, // Для body
+      light: `#ececec`,
       dialog: `#c1e5e2`,
       hover: `#e6f4f3`,
     },
+  },
+  border: {
+    light: `#ececec`,
   },
   typography: {
     useNextVariants: true

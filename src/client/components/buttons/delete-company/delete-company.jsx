@@ -4,6 +4,7 @@ import Button from '@material-ui/core/Button';
 import Tooltip from '@material-ui/core/Tooltip';
 // Components
 import Confirm from '../../confirm/confirm';
+import { typeConfirm } from '../../../../types';
 
 
 const DeleteCompany = ({ callback }) => {
@@ -29,6 +30,7 @@ const DeleteCompany = ({ callback }) => {
       </Tooltip>
         
       <Confirm
+        typeOk={typeConfirm.DEL}
         open={isOpen}
         onOk={handleOk}
         onCancel={handleClose}

@@ -219,6 +219,39 @@ export const getAllRulesById = ({ docId, sectionId }) => (dispatch) => {
         type: dataActionType.SET_RULES,
         payload: res.data.rules,
       });
+      dispatch({ // Сохраняем rules из активной section
+        type: dataActionType.SET_ACTIVE_RULES,
+        payload: { docId, sectionId },
+      });
+      dispatch({ type: uiActionType.CLEAR_ERRORS });
+    })
+    .catch((err) => {
+      console.log(err.response.data);
+      dispatch({
+        type: uiActionType.SET_ERRORS,
+        payload: err.response.data,
+      })
+    });
+};
+
+// Сохраняем rules из активной section или обнуляем
+export const setActiveRules = ({ docId, sectionId }) => (dispatch) => {
+  dispatch({
+    type: dataActionType.SET_ACTIVE_RULES,
+    payload: { docId, sectionId },
+  });
+};
+
+// Обновляем rule
+export const updateRule = (rule) => (dispatch) => {
+  dispatch({ type: uiActionType.LOADING_UI });
+  
+  return axios.post(`/updateRule/${rule.id}`, rule)
+    .then((res) => {
+      dispatch({
+        type: dataActionType.UPDATE_RULE,
+        payload: res.data.rule,
+      });
       dispatch({ type: uiActionType.CLEAR_ERRORS });
     })
     .catch((err) => {
