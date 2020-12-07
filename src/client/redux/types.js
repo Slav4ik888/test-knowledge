@@ -38,4 +38,5 @@ export const dataActionType = {
   SET_RULES: `SET_RULES`,
   SET_ACTIVE_RULES: `SET_ACTIVE_RULES`,
   UPDATE_RULE: `UPDATE_RULE`,
+  DELETE_RULE: `DELETE_RULE`,
 };

@@ -8,7 +8,7 @@ import { makeStyles } from '@material-ui/core/styles';
 import CircularProgress from '@material-ui/core/CircularProgress';
 // Components
 import RuleRow from '../rule-row/rule-row';
-import RuleRowAdd from '../rule-row-add/rule-row-add';
+import RuleRowCreate from '../rule-row-create/rule-row-create';
 import { getRulesFromDocAndSection } from '../../../utils/utils';
 
 
@@ -25,7 +25,7 @@ const useStyles = makeStyles((theme) => ({
 const RulesModuleRow = ({ loading, onEditTitle, onEditRule, rules, activeRules: {docId, sectionId} }) => {
   
   if (!sectionId) return null;
-  if (loading) return <CircularProgress />;
+  // if (loading) return <CircularProgress />;
 
   console.log('rules: ', rules);
   console.log('activeRules: ', docId, ` : `, sectionId);
@@ -40,9 +40,6 @@ const RulesModuleRow = ({ loading, onEditTitle, onEditRule, rules, activeRules: 
   };
   console.log('rulesShow: ', rulesShow);
   
-  const handleAddRule = () => {
-    // TODO: Добавление нового RuleRow
-  };
 
   return (
     <>
@@ -56,7 +53,7 @@ const RulesModuleRow = ({ loading, onEditTitle, onEditRule, rules, activeRules: 
             />)
             : null
         }
-        <RuleRowAdd onAdd={handleAddRule} />
+        <RuleRowCreate />
       </div>
     </>
   );

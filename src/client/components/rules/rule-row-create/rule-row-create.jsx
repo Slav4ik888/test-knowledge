@@ -1,6 +1,9 @@
 import React, { useState } from 'react';
 import pt from 'prop-types';
 import cl from 'classnames';
+// Readux Stuff
+import { connect } from 'react-redux';
+import { createRule } from '../../../redux/actions/data-actions';
 // MUI Stuff
 import { makeStyles } from '@material-ui/core/styles';
 import Avatar from '@material-ui/core/Avatar';
@@ -34,17 +37,28 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 
-const RuleRowAdd = ({ onAdd }) => {
+const RuleRowCreate = ({ createRule, activeRules: {docId, sectionId} }) => {
 
   const classes = useStyles();
   const [isHover, setIsHover] = useState(false);
   const handleHoverOn = () => setIsHover(true);
   const handleHoverOff = () => setIsHover(false);
 
+  const handleCreateRule = () => {
+    const newRule = {
+      docId,
+      sectionId,
+      title: ``,
+      rule: ``,
+    }
+    createRule(newRule);
+  };
+
+
   return (
     <>
       <Tooltip title="Добавить правило" placement="bottom" arrow>
-        <div className={cl(classes.row, {[classes.hover]: isHover})} onClick={onAdd}
+        <div className={cl(classes.row, {[classes.hover]: isHover})} onClick={handleCreateRule}
           onPointerEnter={handleHoverOn}
           onPointerLeave={handleHoverOff}
         >
@@ -56,8 +70,18 @@ const RuleRowAdd = ({ onAdd }) => {
 };
 
 
-RuleRowAdd.propTypes = {
-  onAdd: pt.func.isRequired,
+RuleRowCreate.propTypes = {
+  createRule: pt.func.isRequired,
+  activeRules: pt.object.isRequired,
 };
 
-export default RuleRowAdd;
+const mapStateToProps = (state) => ({
+  ruleStored: state.UI.ruleStored,
+  activeRules: state.data.activeRules,
+});
+
+const mapActionsToProps = {
+  createRule,
+};
+
+export default connect(mapStateToProps, mapActionsToProps)(RuleRowCreate);

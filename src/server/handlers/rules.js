@@ -144,6 +144,7 @@ async function deleteRule(req, res) {
   try {
     const updateRes = await db.doc(`rules/${req.user.companyId}/rules/${req.params.ruleId}`)
       .delete();
+    console.log(`deleteRule`);
     
     return res.json({ message: `Правило успешно удалено` });
     

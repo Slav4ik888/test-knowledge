@@ -86,9 +86,10 @@ export default function (state = initialState, action) {
       let newRule = action.payload;
       let upRules = state.rules; 
       // const idxRuleSection = upRules.findIndex((item) => item.docId === newRule.docId && item.sectionId === newRule.sectionId);
+      // Находим индекс где храниться нужная секция
       const idxRuleSection = getIdxRulesFromDocAndSection(upRules, newRule, newRule);
 
-      if (idxRuleSection !== -1) { // Если в section уже есть rules
+      if (idxRuleSection !== -1) { // Если в section уже есть rules - добавляем
         console.log(`Найдена секция`);
         upRules[idxRuleSection].rules.push(newRule);
       } else { // Если это первое правило
@@ -104,9 +105,9 @@ export default function (state = initialState, action) {
         loading: false,
       });
     
+    // Сохраняем все правила из выбранной секции 
     case dataActionType.SET_RULES:
       let setRules = action.payload;
-      console.log('setRules: ', setRules);
 
       if (setRules.length) {
         let loadRules = state.rules; 
@@ -114,13 +115,14 @@ export default function (state = initialState, action) {
         const sectionId = setRules[0].sectionId;
 
         // const idxLoadRuleSection = loadRules.findIndex((item) => item.docId === docId && item.sectionId === sectionId);
+        // Находим индекс где храниться нужная секция
         const idxLoadRuleSection = getIdxRulesFromDocAndSection(loadRules, setRules[0], setRules[0]);
         console.log('idxLoadRuleSection: ', idxLoadRuleSection);
 
-        if (idxLoadRuleSection !== -1) { // Если в section уже есть rules
+        if (idxLoadRuleSection !== -1) { // Если в section уже есть rules, записываем поверх
           console.log(`Найдена секция`);
           loadRules[idxLoadRuleSection].rules = setRules;
-        } else { // Если это первое правило
+        } else { // Если это первые загруженные правила, создаём
           loadRules.push({
             docId,
             sectionId,
@@ -138,20 +140,18 @@ export default function (state = initialState, action) {
     case dataActionType.SET_ACTIVE_RULES:
       return extend(state, {
         activeRules: action.payload,
-        loading: false,
       });
       
     case dataActionType.UPDATE_RULE:
       const updRule = action.payload;
-      console.log('updRule: ', updRule);
 
       let updRules = state.rules;
-      const updIdxObj = updRules.findIndex((rule) => rule.docId === updRule.docId && rule.sectionId === updRule.sectionId);
-      console.log('updIdxObj: ', updIdxObj);
+      // const updIdxObj = updRules.findIndex((rule) => rule.docId === updRule.docId && rule.sectionId === updRule.sectionId);
+      // Находим индекс где храниться нужная секция
+      const updIdxObj = getIdxRulesFromDocAndSection(updRules, updRule, updRule);
 
       if (updIdxObj !== -1) { // Если совпали docId и sectionId
         const updIdxRule = updRules[updIdxObj].rules.findIndex((rule) => rule.id === updRule.id);
-        console.log('updIdxRule: ', updIdxRule);
         if (updIdxRule !== -1) {
           console.log(`Есть обновляемый rule`);
           updRules[updIdxObj].rules[updIdxRule] = updRule;
@@ -168,9 +168,34 @@ export default function (state = initialState, action) {
         loading: false,
       });
       
+    case dataActionType.DELETE_RULE:
+      const delRule = action.payload;
+      let delRules = state.rules;
 
-      
-      
+      // Находим индекс где храниться нужная секция
+      const delIdxObj = getIdxRulesFromDocAndSection(delRules, delRule, delRule);
+      console.log('delIdxObj: ', delIdxObj);
+
+      if (delIdxObj !== -1) { // Если совпали docId и sectionId
+        const delIdxRule = delRules[delIdxObj].rules.findIndex((rule) => rule.id === delRule.id);
+        console.log('delIdxRule: ', delIdxRule);
+        if (delIdxRule !== -1) {
+          console.log(`Удаляем rule`);
+          delRules[delIdxObj].rules = [
+            ...delRules[delIdxObj].rules.slice(0, delIdxRule),
+            ...delRules[delIdxObj].rules.slice(delIdxRule + 1)
+          ];
+
+          return extend(state, {
+            rules: delRules,
+            loading: false,
+          });
+        }
+      }
+      return extend(state, {
+        loading: false,
+      });
+    
     default: return state;
   }
 };

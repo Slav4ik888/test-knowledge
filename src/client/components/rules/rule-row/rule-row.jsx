@@ -3,7 +3,7 @@ import pt from 'prop-types';
 import cl from 'classnames';
 // Readux Stuff
 import { connect } from 'react-redux';
-import { updateRule } from '../../../redux/actions/data-actions';
+import { updateRule, deleteRule } from '../../../redux/actions/data-actions';
 // MUI Stuff
 import { makeStyles } from '@material-ui/core/styles';
 import Avatar from '@material-ui/core/Avatar';
@@ -71,7 +71,7 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 
-const RuleRow = ({ rule, onEditTitle, onEditRule, updateRule }) => {
+const RuleRow = ({ rule, onEditTitle, onEditRule, updateRule, deleteRule }) => {
   if (!rule) return null;
 
   const classes = useStyles();
@@ -123,7 +123,7 @@ const RuleRow = ({ rule, onEditTitle, onEditRule, updateRule }) => {
 
   const handleDeleteRule = () => {
     console.log(`Нажали удалить правило`);
-    // deleteRule(rule);
+    deleteRule(rule);
   };
   
   return (
@@ -137,6 +137,7 @@ const RuleRow = ({ rule, onEditTitle, onEditRule, updateRule }) => {
           <TextField 
             name={newTitle.id} type="text" className={classes.textFieldTitle} fullWidth
             value={newTitle}
+            placeholder="Введите заголовок правила"
             onChange={handleEditTitle} 
             // onBlur={handleBlur}
             onKeyDown={handleEditTitle}
@@ -175,9 +176,9 @@ const RuleRow = ({ rule, onEditTitle, onEditRule, updateRule }) => {
 
 RuleRow.propTypes = {
   rule: pt.object.isRequired,
-  // onEditTitle: pt.func.isRequired,
   // onEditRule: pt.func.isRequired,
   updateRule: pt.func.isRequired,
+  deleteRule: pt.func.isRequired,
 };
 
 const mapStateToProps = (state) => ({
@@ -186,6 +187,7 @@ const mapStateToProps = (state) => ({
 
 const mapActionsToProps = {
   updateRule,
+  deleteRule,
 };
 
 export default connect(mapStateToProps, mapActionsToProps)(RuleRow);

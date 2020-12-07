@@ -262,3 +262,24 @@ export const updateRule = (rule) => (dispatch) => {
       })
     });
 };
+
+// Удаляем rule
+export const deleteRule = (rule) => (dispatch) => {
+  dispatch({ type: uiActionType.LOADING_UI });
+  
+  return axios.get(`/deleteRule/${rule.id}`)
+    .then((res) => {
+      dispatch({
+        type: dataActionType.DELETE_RULE,
+        payload: rule,
+      });
+      dispatch({ type: uiActionType.CLEAR_ERRORS });
+    })
+    .catch((err) => {
+      console.log(err.response.data);
+      dispatch({
+        type: uiActionType.SET_ERRORS,
+        payload: err.response.data,
+      })
+    });
+};
