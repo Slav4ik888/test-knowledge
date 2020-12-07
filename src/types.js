@@ -48,4 +48,10 @@ exports.typeConfirm = {
   DEL: `Удалить`,
   SAVE: `Сохранить`,
   WITHOUT_SAVE: `Не сохранять`,
-}
+};
+
+// Типы для ListSelect
+exports.typeListSelect = {
+  DOC: `Документ`,
+  SECTION: `Обязанность`,
+};

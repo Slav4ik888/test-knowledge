@@ -23,6 +23,7 @@ const DeleteCompany = ({ callback }) => {
         title={`Удалить аккаунт, все созданые документы и данные по всем зарегистрированным пользователям`}
         placement="bottom"
         arrow
+        enterDelay={1000} enterNextDelay={1000}
       >
         <Button onClick={handleOpenConfirm}>
             Удалить аккаунт

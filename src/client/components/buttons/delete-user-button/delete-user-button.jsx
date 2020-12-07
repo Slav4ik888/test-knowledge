@@ -33,7 +33,7 @@ const DeleteUserButton = ({ onDel }) => {
 
   return (
     <>
-      <Tooltip title="Удалить аккаунт" placement="bottom" arrow>
+      <Tooltip title="Удалить аккаунт" placement="bottom" arrow enterDelay={1000} enterNextDelay={1000}>
         <Button
           className={classes.button}
           endIcon={<DeleteIcon />}

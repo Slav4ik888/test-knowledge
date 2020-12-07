@@ -117,15 +117,15 @@ const ProfielUserEdit = ({ open, onClose, userProfile, updateUserDetails, delete
             />
             <TextField autoComplete="off"
               name="firstName" type="text" label="Имя" className={classes.textField}
-              value={newUP.firstName} onChange={handleChange} fullWidth
+              value={newUP.firstName} onChange={handleChange} fullWidth autoComplete="off"
             />
             <TextField autoComplete="off"
               name="secondName" type="text" label="Фамилия" className={classes.textField}
-              value={newUP.secondName} onChange={handleChange} fullWidth
+              value={newUP.secondName} onChange={handleChange} fullWidth autoComplete="off"
             />
             <TextField autoComplete="off"
               name="middleName" type="text" label="Отчество" className={classes.textField}
-              value={newUP.middleName} onChange={handleChange} fullWidth
+              value={newUP.middleName} onChange={handleChange} fullWidth autoComplete="off"
             />
             <TextField
               name="email" type="email" label="Email" className={classes.textField} disabled

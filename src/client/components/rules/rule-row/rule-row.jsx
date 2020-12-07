@@ -44,8 +44,9 @@ const useStyles = makeStyles((theme) => ({
     marginTop: theme.spacing(0.5),
   },
   textFieldTitle: {
-    fontSize: `24px`,
-    fontWeight: `bold`,
+    fontSize: theme.fontSize.ruleTitle,
+    fontColor: theme.palette.fontColor.ruleTitle,
+    fontWeight: theme.fontWeight.ruleTitle,
   },
   body: {
     marginTop: theme.spacing(2),
@@ -53,7 +54,12 @@ const useStyles = makeStyles((theme) => ({
     resize: `vertical`,
     width: `100%`,
     borderColor: theme.border.light,
-    outline: 0,   
+    outline: 0,  
+  },
+  bodyStyle: {
+    fontSize: theme.fontSize.rule,
+    fontColor: theme.palette.fontColor.rule,
+    fontWeight: theme.fontWeight.rule,
   },
   helpBox: {
     marginLeft: theme.spacing(2),
@@ -135,12 +141,17 @@ const RuleRow = ({ rule, onEditTitle, onEditRule, updateRule, deleteRule }) => {
 
         <div className={classes.rule}>
           <TextField 
-            name={newTitle.id} type="text" className={classes.textFieldTitle} fullWidth
+            name={newTitle.id} type="text" fullWidth
             value={newTitle}
             placeholder="Введите заголовок правила"
             onChange={handleEditTitle} 
             // onBlur={handleBlur}
             onKeyDown={handleEditTitle}
+            InputProps={{
+              classes: {
+                input: classes.textFieldTitle,
+              },
+            }} 
           />
               
           <TextareaAutosize
@@ -149,18 +160,23 @@ const RuleRow = ({ rule, onEditTitle, onEditRule, updateRule, deleteRule }) => {
             value={newRule}
             // onBlur={handleBlur}
             onChange={handleEditRule} 
+            InputProps={{
+              classes: {
+                input: classes.bodyStyle,
+              },
+            }} 
           />
 
         </div>
 
         <div className={classes.helpBox}>
-          <Tooltip title="Сохранить изменения" placement="right" arrow enterDelay={500}>
+          <Tooltip title="Сохранить изменения" placement="right" arrow enterDelay={1000} enterNextDelay={1000}>
             <IconButton onClick={handleUpdateRule} className={cl(classes.icon, {[classes.iconActiveSave]: isChange})}>
               <SaveIcon />
             </IconButton>
           </Tooltip>
 
-          <Tooltip title="Удалить правило" placement="right" arrow enterDelay={500}>
+          <Tooltip title="Удалить правило" placement="right" arrow enterDelay={1000} enterNextDelay={1000}>
             <IconButton onClick={handleDeleteRule} className={cl(classes.icon, { [classes.iconActiveDel]: isHoverDel })}
               onMouseEnter={handleIsHoverDelOn} onMouseLeave={handleIsHoverDelOff}
             >

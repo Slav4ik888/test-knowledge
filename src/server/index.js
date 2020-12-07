@@ -57,4 +57,4 @@ app.use(express.static('dist'));
 
 app.listen(process.env.PORT || 8080, () => console.log(`Listening on port ${process.env.PORT || 8080}!`));
 
-// git add . && git commit -m "createRule, deleteRule" && git push origin master
+// git add . && git commit -m "в Tooltype добавил задержку вывода, в TextField добавить размер шрифта" && git push origin master

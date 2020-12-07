@@ -57,7 +57,7 @@ const RuleRowCreate = ({ createRule, activeRules: {docId, sectionId} }) => {
 
   return (
     <>
-      <Tooltip title="Добавить правило" placement="bottom" arrow>
+      <Tooltip title="Добавить правило" placement="bottom" arrow enterDelay={1000} enterNextDelay={1000}>
         <div className={cl(classes.row, {[classes.hover]: isHover})} onClick={handleCreateRule}
           onPointerEnter={handleHoverOn}
           onPointerLeave={handleHoverOff}

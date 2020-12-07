@@ -12,6 +12,12 @@ export default {
       dark: `#aa2e25`,
       contrastText: `#fff`,
     },
+    fontColor: {
+      document: ``,
+      section: ``,
+      ruleTitle: `#aa2e25`,
+      rule: `#666666`,
+    },
     background: {
       default: `#e4e9ea`, // Для body #ebecf0
       main: `#ffffff`,
@@ -19,6 +25,18 @@ export default {
       dialog: `#c1e5e2`,
       hover: `#e6f4f3`,
     },
+  },
+  fontSize: {
+    document: `28px`,
+    section: `24px`,
+    ruleTitle: `18px`,
+    rule: `14px`,
+  },
+  fontWeight: {
+    document: ``,
+    section: ``,
+    ruleTitle: `bold`,
+    rule: ``,
   },
   border: {
     light: `#ececec`,

@@ -36,7 +36,7 @@ const DeleteDocumentAvatar = ({ onDel, title }) => {
   return (
     <>
       <ListItemSecondaryAction onClick={handleOpenConfirm} className={classes.delIcon}>
-        <Tooltip title="Удалить" placement="bottom" arrow>
+        <Tooltip title="Удалить" placement="bottom" arrow enterDelay={1000} enterNextDelay={1000}>
           <IconButton aria-label="Delete">
             <Delete />
           </IconButton>

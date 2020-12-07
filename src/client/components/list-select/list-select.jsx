@@ -11,6 +11,8 @@ import Select from '@material-ui/core/Select';
 import AddIcon from '@material-ui/icons/Add';
 import PersonAddIcon from '@material-ui/icons/PersonAdd';
 // Component
+import { typeListSelect } from '../../../types';
+
 
 const useStyles = makeStyles((theme) => ({
   formControl: {
@@ -19,6 +21,16 @@ const useStyles = makeStyles((theme) => ({
     width: `100%`,
     minWidth: 220,
     color: theme.textSecondary,
+  },
+  docSelected: {
+    fontSize: theme.fontSize.document,
+    fontColor: theme.palette.fontColor.document,
+    fontWeight: theme.fontWeight.document,
+  },
+  sectionSelected: {
+    fontSize: theme.fontSize.section,
+    fontColor: theme.palette.fontColor.section,
+    fontWeight: theme.fontWeight.section,
   },
   lastItem: {
     color: theme.palette.primary.dark,
@@ -35,7 +47,8 @@ const ListSelect = ({ type, items, valueField, title, placeholder, label, onSele
   const classes = useStyles();
 
   const icon = type === `addUser` ? <PersonAddIcon className={classes.addIcon} /> : <AddIcon className={classes.addIcon} />;
-    
+  const classSelected = type === typeListSelect.DOC ? classes.docSelected : classes.sectionSelected;
+
   const [valueSelected, setValueSelected] = useState(placeholder);
 
   const handleChange = (e) => {
@@ -63,6 +76,7 @@ const ListSelect = ({ type, items, valueField, title, placeholder, label, onSele
         value={valueSelected}
         onChange={handleChange}
         input={<Input />}
+        className={classSelected}
       >
         <MenuItem value={`Не указан`}><em>Не указан</em></MenuItem>
         {

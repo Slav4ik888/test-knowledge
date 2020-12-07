@@ -23,7 +23,7 @@ const DeleteUserAvatar = ({ onDel }) => {
   return (
     <>
       <ListItemSecondaryAction onClick={handleOpenConfirm}>
-        <Tooltip title="Удалить аккаунт" placement="bottom" arrow>
+        <Tooltip title="Удалить аккаунт" placement="bottom" arrow enterDelay={1000} enterNextDelay={1000}>
           <IconButton edge="end" aria-label="Delete">
             <Delete />
           </IconButton>

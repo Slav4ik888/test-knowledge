@@ -13,6 +13,7 @@ import FolderIcon from '@material-ui/icons/Folder';
 // Components
 import DocumentsContainer from '../documents-container/documents-container';
 import ListSelect from '../../list-select/list-select';
+import { typeListSelect } from '../../../../types';
 
 
 const useStyles = makeStyles((theme) => ({
@@ -44,6 +45,7 @@ const DocumentsModuleRow = ({ onDocumentSelected, documents, ruleStored }) => {
         </Avatar>
 
         <ListSelect
+          type={typeListSelect.DOC}
           title={`Документ`}
           items={documents}
           valueField={`title`}
@@ -53,7 +55,7 @@ const DocumentsModuleRow = ({ onDocumentSelected, documents, ruleStored }) => {
           onItemAdd={handleDocumentsOpen}
         />
 
-        <Tooltip title="Редактировать документы" placement="bottom" arrow>
+        <Tooltip title="Редактировать документы" placement="bottom" arrow enterDelay={1000} enterNextDelay={1000}>
           <IconButton aria-label="Edit" onClick={handleDocumentsOpen} className={classes.editIcon}>
             <EditIcon />
           </IconButton>

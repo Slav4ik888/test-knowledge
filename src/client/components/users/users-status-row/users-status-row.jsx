@@ -59,7 +59,10 @@ const UsersModuleRow = ({ user, onSetRole, companyProfile }) => {
           <HowToRegIcon />
         </Avatar>
 
-        <Tooltip title="Нельзя изменить статус пользователя, на кого зарегистрирован аккаунт компании" disableHoverListener={!disabled} placement="bottom" arrow>
+        <Tooltip
+          title="Нельзя изменить статус пользователя, на кого зарегистрирован аккаунт компании"
+          disableHoverListener={!disabled} placement="bottom" arrow enterDelay={1000} enterNextDelay={1000}
+        >
           <FormControl variant="outlined" className={classes.formControl} >
             <InputLabel id={`role-label`}></InputLabel>
 

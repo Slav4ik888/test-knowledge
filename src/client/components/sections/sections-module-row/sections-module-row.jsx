@@ -14,6 +14,7 @@ import InsertDriveFileIcon from '@material-ui/icons/InsertDriveFile';
 // Components
 import ListSelect from '../../list-select/list-select';
 import SectionsContainer from '../../sections/sections-container/sections-container';
+import { typeListSelect } from '../../../../types';
 
 
 const useStyles = makeStyles((theme) => ({
@@ -45,6 +46,7 @@ const SectionsModuleRow = ({ onSectionSelected, docSelected, ruleStored }) => {
         </Avatar>
 
         <ListSelect
+          type={typeListSelect.SECTION}
           title={`Раздел`}
           items={docSelected && docSelected.sections}
           valueField={`title`}
@@ -55,7 +57,7 @@ const SectionsModuleRow = ({ onSectionSelected, docSelected, ruleStored }) => {
           onItemAdd={handleSectionsOpen}
         />
 
-        <Tooltip title="Редактировать разделы" placement="bottom" arrow>
+        <Tooltip title="Редактировать разделы" placement="bottom" arrow enterDelay={1000} enterNextDelay={1000}>
           <IconButton aria-label="Edit" onClick={handleSectionsOpen} className={classes.editIcon}>
             <EditIcon />
           </IconButton>

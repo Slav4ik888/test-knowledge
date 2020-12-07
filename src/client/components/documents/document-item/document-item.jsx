@@ -111,7 +111,7 @@ const DocumentItem = ({ doc, onEdit, onDel, positions}) => {
         showIcons &&
         <>
           <ListItemSecondaryAction onClick={handleSetEdit} className={classes.editIcon}>
-            <Tooltip title="Изменить" placement="bottom" arrow>
+            <Tooltip title="Изменить" placement="bottom" arrow enterDelay={1000} enterNextDelay={1000}>
               <IconButton aria-label="Edit">
                 <EditIcon />
               </IconButton>
@@ -125,7 +125,7 @@ const DocumentItem = ({ doc, onEdit, onDel, positions}) => {
             onMouseLeave={handleShowPosClose}
             onClick={handlePosEditOpen}
           >
-            <Tooltip title="Изменить список закреплённых должностей" placement="top" arrow>
+            <Tooltip title="Изменить список закреплённых должностей" placement="top" arrow enterDelay={1000} enterNextDelay={1000}>
               <IconButton edge="end" aria-label="Positions">
                 <SupervisedUserCircleIcon />
               </IconButton>

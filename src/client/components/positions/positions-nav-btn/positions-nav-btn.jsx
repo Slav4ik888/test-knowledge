@@ -1,9 +1,6 @@
 import React, { useState } from 'react';
-import cl from 'classnames';
-import pt from 'prop-types';
 // MUI Stuff
 import { makeStyles } from '@material-ui/core/styles';
-import Divider from '@material-ui/core/Divider';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListItemText from '@material-ui/core/ListItemText';
@@ -40,9 +37,6 @@ const PositionsNavBtn = () => {
       />
     </>
   )
-};
-
-PositionsNavBtn.propTypes = {
 };
 
 export default PositionsNavBtn;

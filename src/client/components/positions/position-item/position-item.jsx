@@ -102,7 +102,7 @@ const PositionItem = ({ title, id, onEdit, onDel}) => {
         showIcons &&
         <>
           <ListItemSecondaryAction onClick={handleSetEdit} className={classes.editIcon}>
-            <Tooltip title="Изменить" placement="bottom" arrow>
+            <Tooltip title="Изменить" placement="bottom" arrow enterDelay={1000} enterNextDelay={1000}>
               <IconButton aria-label="Edit">
                 <EditIcon />
               </IconButton>

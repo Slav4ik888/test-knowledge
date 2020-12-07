@@ -80,13 +80,13 @@ const PositionsModuleRow = ({ type, item, positions }) => {
         <SupervisedUserCircleIcon />
       </Avatar>
 
-      <Tooltip title={`Изменить закреплённые за ${titleItem} должности`} placement="bottom" arrow>
+      <Tooltip title={`Изменить закреплённые за ${titleItem} должности`} placement="bottom" arrow enterDelay={1000} enterNextDelay={1000}>
         <Paper elevation={0} onClick={handlePosToggleOpen} className={classes.paperChip}>
           <PositionsListChip positions={positionsInItem} />
         </Paper>
       </Tooltip>
 
-      <Tooltip title="Редактировать должности" placement="bottom" arrow>
+      <Tooltip title="Редактировать должности" placement="bottom" arrow enterDelay={1000} enterNextDelay={1000}>
         <IconButton aria-label="Edit" onClick={handlePosEditOpen} className={classes.editIcon}>
           <EditIcon />
         </IconButton>
