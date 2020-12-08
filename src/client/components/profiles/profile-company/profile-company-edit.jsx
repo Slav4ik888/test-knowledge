@@ -14,11 +14,11 @@ import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
 // Icons
 import EditIcon from '@material-ui/icons/Edit';
-// Component
+// Components
 import MyButton from '../../buttons/button-icon/button-icon';
-import DeleteCompany from '../../buttons/delete-company/delete-company';
 import CancelSubmitBtn from '../../buttons/cancel-submit-btn/cancel-submit-btn';
 import DialogTitle from '../../dialogs/dialog-title/dialog-title';
+import DeleteButton from '../../buttons/delete-button/delete-button';
 
 
 const useStyles = makeStyles((theme) => ({
@@ -131,7 +131,7 @@ const ProfielCompanyEdit = ({ open, onClose, user: { userProfile, companyProfile
 
             {
               userProfile.role === `Владелец` &&
-                <DeleteCompany callback={handleDeleteCompanyAccount} />
+                <DeleteButton type={`companyProfile`} button onDel={handleDeleteCompanyAccount} />
             }
 
           </form>

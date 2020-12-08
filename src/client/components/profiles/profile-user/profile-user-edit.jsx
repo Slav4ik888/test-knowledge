@@ -18,6 +18,7 @@ import EditIcon from '@material-ui/icons/Edit';
 import MyButton from '../../buttons/button-icon/button-icon';
 import CancelSubmitBtn from '../../buttons/cancel-submit-btn/cancel-submit-btn';
 import DialogTitle from '../../dialogs/dialog-title/dialog-title';
+import DeleteButton from '../../buttons/delete-button/delete-button';
 
 
 const useStyles = makeStyles((theme) => ({
@@ -132,9 +133,8 @@ const ProfielUserEdit = ({ open, onClose, userProfile, updateUserDetails, delete
               value={newUP.email} onChange={handleChange} fullWidth
             />
 
-            <Button onClick={handleDeleteAccount}>
-              Удалить аккаунт
-            </Button>
+            <DeleteButton type={`userProfile`} button onDel={handleDeleteAccount} />
+            
           </form>
           
         </DialogContent>

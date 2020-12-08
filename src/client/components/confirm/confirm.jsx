@@ -48,7 +48,7 @@ const Confirm = ({ open, typeOk, onOk, onCancel, title }) => {
 };
 
 Confirm.propTypes = {
-  typeOk: pt.string.isRequired,
+  typeOk: pt.oneOf([typeConfirm.DEL, typeConfirm.SAVE, typeConfirm.WITHOUT_SAVE]).isRequired,
   onOk: pt.func.isRequired,
   onCancel: pt.func.isRequired,
   open: pt.bool.isRequired,

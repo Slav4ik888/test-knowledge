@@ -9,7 +9,7 @@ import CircularProgress from '@material-ui/core/CircularProgress';
 // Components
 import RuleRow from '../rule-row/rule-row';
 import RuleRowCreate from '../rule-row-create/rule-row-create';
-import { getRulesFromDocAndSection } from '../../../utils/utils';
+import { getRulesFromDocAndSection, sortingArr } from '../../../utils/utils';
 
 
 const useStyles = makeStyles((theme) => ({
@@ -32,11 +32,14 @@ const RulesModuleRow = ({ loading, onEditTitle, onEditRule, rules, activeRules: 
   const classes = useStyles();
 
   let rulesShow = [];
-  let activeRuleObj = getRulesFromDocAndSection(rules, docId, sectionId); //rules.find((rule) => rule.docId === docId && rule.sectionId === sectionId);
-
+  // Получаем объект с правилами для секции
+  let activeRuleObj = getRulesFromDocAndSection(rules, docId, sectionId); 
   console.log('activeRuleObj: ', activeRuleObj);
+
+
   if (activeRuleObj) {
-    rulesShow = rulesShow.concat(activeRuleObj.rules);
+    // Получаем rules отсортированные по order
+    rulesShow = sortingArr(rulesShow.concat(activeRuleObj.rules), `order`);
   };
   console.log('rulesShow: ', rulesShow);
   

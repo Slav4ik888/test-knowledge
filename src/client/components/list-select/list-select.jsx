@@ -17,7 +17,7 @@ import { typeListSelect } from '../../../types';
 const useStyles = makeStyles((theme) => ({
   formControl: {
     display: 'flex',
-    flexWrap: 'wrap',
+    // flexWrap: 'wrap', // Убрал, чтобы при длинном тексте появлялось многоточие
     width: `100%`,
     minWidth: 220,
     color: theme.textSecondary,

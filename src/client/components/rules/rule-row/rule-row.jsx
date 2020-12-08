@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
 import pt from 'prop-types';
-import cl from 'classnames';
 // Readux Stuff
 import { connect } from 'react-redux';
 import { updateRule, deleteRule } from '../../../redux/actions/data-actions';
@@ -9,14 +8,15 @@ import { makeStyles } from '@material-ui/core/styles';
 import Avatar from '@material-ui/core/Avatar';
 import TextareaAutosize from '@material-ui/core/TextareaAutosize';
 import TextField from '@material-ui/core/TextField';
-import Button from '@material-ui/core/Button';
-import IconButton from '@material-ui/core/IconButton';
-import Tooltip from '@material-ui/core/Tooltip';
+// import Button from '@material-ui/core/Button';
+// import IconButton from '@material-ui/core/IconButton';
+// import Tooltip from '@material-ui/core/Tooltip';
 // Icons
-import SaveIcon from '@material-ui/icons/Save';
+// import SaveIcon from '@material-ui/icons/Save';
 import DescriptionIcon from '@material-ui/icons/Description';
 import Delete from '@material-ui/icons/Delete';
 // Components
+import DeleteButton from '../../buttons/delete-button/delete-button';
 
 
 const useStyles = makeStyles((theme) => ({
@@ -65,27 +65,13 @@ const useStyles = makeStyles((theme) => ({
     marginLeft: theme.spacing(2),
     width: `50px`,
   },
-  icon: {
-    color: theme.palette.background.default,
-  },
-  iconActiveSave: {
-    color: theme.palette.primary.main,
-  },
-  iconActiveDel: {
-    color: theme.palette.secondary.main,
-  },
 }));
 
 
-const RuleRow = ({ rule, onEditTitle, onEditRule, updateRule, deleteRule }) => {
+const RuleRow = ({ rule, updateRule, deleteRule }) => {
   if (!rule) return null;
 
   const classes = useStyles();
-
-  const [isChange, setIsChange] = useState(false);
-  const [isHoverDel, setIsHoverDel] = useState(false);
-  const handleIsHoverDelOn = () => setIsHoverDel(true);
-  const handleIsHoverDelOff = () => setIsHoverDel(false);
 
   const [newTitle, setNewTitle] = useState(rule.title);
   const handleEditTitle = (e) => {
@@ -108,15 +94,6 @@ const RuleRow = ({ rule, onEditTitle, onEditRule, updateRule, deleteRule }) => {
       setIsChange(true);
     }
   };
-  
-  // const handleBlur = () => {
-  //   if (rule.title !== newTitle) {
-  //     onEditTitle(rule.docId, rule.sectionSelected, newTitle);
-  //   }
-  //   if (rule.rule !== newRule) {
-  //     onEditRule(rule.docId, rule.sectionSelected, newRule);
-  //   }
-  // };
 
   const handleUpdateRule = () => {
     if (newTitle !== rule.title || newRule !== rule.rule) {
@@ -134,7 +111,9 @@ const RuleRow = ({ rule, onEditTitle, onEditRule, updateRule, deleteRule }) => {
   
   return (
     <>
-      <div className={classes.row}>
+      <div className={classes.row}
+        onMouseLeave={handleUpdateRule}
+      >
         <Avatar className={classes.avatar}>
           <DescriptionIcon />
         </Avatar>
@@ -145,7 +124,6 @@ const RuleRow = ({ rule, onEditTitle, onEditRule, updateRule, deleteRule }) => {
             value={newTitle}
             placeholder="Введите заголовок правила"
             onChange={handleEditTitle} 
-            // onBlur={handleBlur}
             onKeyDown={handleEditTitle}
             InputProps={{
               classes: {
@@ -153,37 +131,20 @@ const RuleRow = ({ rule, onEditTitle, onEditRule, updateRule, deleteRule }) => {
               },
             }} 
           />
-              
+          Положение - {rule.order}    
           <TextareaAutosize
             className={classes.body}
             placeholder="Введите текст правила"
             value={newRule}
-            // onBlur={handleBlur}
             onChange={handleEditRule} 
-            InputProps={{
-              classes: {
-                input: classes.bodyStyle,
-              },
-            }} 
           />
 
         </div>
 
         <div className={classes.helpBox}>
-          <Tooltip title="Сохранить изменения" placement="right" arrow enterDelay={1000} enterNextDelay={1000}>
-            <IconButton onClick={handleUpdateRule} className={cl(classes.icon, {[classes.iconActiveSave]: isChange})}>
-              <SaveIcon />
-            </IconButton>
-          </Tooltip>
-
-          <Tooltip title="Удалить правило" placement="right" arrow enterDelay={1000} enterNextDelay={1000}>
-            <IconButton onClick={handleDeleteRule} className={cl(classes.icon, { [classes.iconActiveDel]: isHoverDel })}
-              onMouseEnter={handleIsHoverDelOn} onMouseLeave={handleIsHoverDelOff}
-            >
-              <Delete />
-            </IconButton>
-          </Tooltip>
+          <DeleteButton type={`rule`} icon placement="right" onDel={handleDeleteRule} />
         </div>
+
       </div>
     </>
   );
@@ -192,7 +153,6 @@ const RuleRow = ({ rule, onEditTitle, onEditRule, updateRule, deleteRule }) => {
 
 RuleRow.propTypes = {
   rule: pt.object.isRequired,
-  // onEditRule: pt.func.isRequired,
   updateRule: pt.func.isRequired,
   deleteRule: pt.func.isRequired,
 };

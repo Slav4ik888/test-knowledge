@@ -46,3 +46,27 @@ export const getRulesFromDocAndSection = (rules, docId, sectionId) => {
 export const getIdxRulesFromDocAndSection = (rules, doc, section) => {
   return rules.findIndex((item) => item.docId === doc.docId && item.sectionId === section.sectionId)
 };
+
+/**
+ * Сортируем по arr по полю fieldName
+ * @param {array} arr 
+ * @param {string} fieldName 
+ * 
+ * @return {array} - result
+ */
+
+export const sortingArr = (arr, fieldName) => {
+  let result = [];
+  result = result.concat(arr);
+  console.log('result: ', result);
+
+  return result.sort((a, b) => {
+    if (a[fieldName] < b[fieldName]) {
+      return -1;
+    }
+    if (a[fieldName] > b[fieldName]) {
+      return 1;
+    }
+    return 0;
+  }); 
+};
