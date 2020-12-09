@@ -1,127 +1,169 @@
 const { db } = require('../firebase/admin');
 const { validationCompanyAuthority, validationAdminAuthority } = require('../utils/validators');
-const { getDocuments, updateDocuments } = require('../handlers/documents');
+const { getMaxOrder } = require('../utils/utils');
 
-// Обновляем список должностей
-async function updatePositions(req, res) {
-  // является ли пользователь Владельцем аккаунта
-  const validData = await validationCompanyAuthority(req.user);
-  const { valid, errors } = validData;
-  if (!valid) return res.status(400).json(errors);
-
-  let newPositions = {
-    positions: req.body ? req.body : [],
-  };
-  // TODO: проверку на удаление id, чтобы среди пользователей не было должностей, у которых есть этот id
-  try {
-    const updateRes = await db.doc(`positions/${req.user.companyId}`).update(newPositions);
-    // getPositions сообщаем, что это обновление и нужно вернуть данные сюда, а не пользователю
-    req.update = true; 
-    
-    const positions = await getPositions(req, res);
-    // console.log('Обновлённые positions: ', JSON.stringify(positions));
-    if (req.delPosition) {
-      return positions;
-    } else {
-      return res.json({ positions, message: `Список должностей успешно обновлён` });
-    }
-
-  } catch(err) {
-      console.error(err);
-      return res.status(500).json({ general: err.code });
-  };
-};
-
-// Обновляем список должностей
-async function getPositions(req, res) {
-  try {
-    const docRes = await db.doc(`positions/${req.user.companyId}`).get();
-    if (docRes.exists) {
-      const data = docRes.data();
-      let positions = [];
-      data.positions.forEach(doc => {
-        positions.push({
-          id: doc.id,
-          order: doc.order,
-          title: doc.title,
-        });
-      });
-      // console.log('positions: ', positions);
-      if (req.update) {
-        console.log(`Update positions`);
-        return positions;
-      } else {
-        console.log(`Get positions`);
-        return res.json({ positions });
-      }
-    }
-  } catch(err) {
-      console.error(err);
-      return res.status(500).json({ general: err.code });
-  };
-};
-
-async function delPosition(req, res) {
-  // является ли пользователь Админом или Владельцем аккаунта или 
+async function createPosition(req, res) {
+  // является ли пользователь Админом или Владельцем аккаунта 
   const validData = await validationAdminAuthority(req.user); 
   const { valid, errors } = validData;
   if (!valid) return res.status(400).json(errors);
 
-  let posId = req.body.id;
-  console.log('posId: ', posId);
-  req.delPosition = true; // чтобы обновление вернулось сюда а не клиенту
+  // getAllPositions сообщаем, что это обновление и нужно вернуть данные сюда, а не пользователю
+  req.update = true;
+  const positions = await getAllPositions(req, res);
+
+  let newPos = {
+    order: getMaxOrder(positions),
+    createdAt: new Date().toISOString(),
+    lastChange: new Date().toISOString(),
+    title: req.body.title,
+    documents: [],
+    rules: [],
+  };
 
   try {
-    // getDocuments сообщаем, что это обновление и нужно вернуть данные сюда, а не пользователю
-    req.update = true;
-    let oldDocuments = await getDocuments(req, res);
 
-    // Находим документы где есть удаляемая должность и удаляем её
-    let isPosInDoc = false;
-    oldDocuments.forEach(doc => {
-      const idx = doc.positions.findIndex(pos => pos.id === posId);
-      if (idx !== -1) {
-        isPosInDoc = true;
-        doc.positions = [...doc.positions.slice(0, idx), ...doc.positions.slice(idx + 1)];
-      }
-    });
+    // Сохраняем newPos 
+    const createRes = await db.collection(`positions`)
+      .doc(req.user.companyId)
+      .collection(`positions`)
+      .add(newPos);
+    
+    // const position = newPos;
+    newPos.id = createRes.id;
 
-    // Обновляем документы без удалённой должности
-    let documents = {};
-    if (isPosInDoc) {
-      req.body = oldDocuments;
-      documents = await updateDocuments(req, res);
-    } else {
-      documents = oldDocuments;
-    }
-
-    // Удаляем должность из списка существующих должностей
-    let isPos = false;
-    let oldPositions = await getPositions(req, res);
-    const idx = oldPositions.findIndex(pos => pos.id === posId);
-    if (idx !== -1) {
-      isPos = true;
-      oldPositions = [...oldPositions.slice(0, idx), ...oldPositions.slice(idx + 1)];
-    }
-    // Обновляем должности без удалённой должности
-    let positions = [];
-    if (isPos) {
-      req.body = oldPositions;
-      positions = await updatePositions(req, res);
-    } else {
-      positions = oldPositions;
-    }
-
-    // TODO: Удаляем должность у всех пользователей
-
-    // TODO: Если у данного пользователя тоже была эта должность, то отдаём обновлённые данные
-
-
-    return res.json({ documents, positions, message: `Список документов успешно обновлён` });
-
-  } catch (err) {
+    // Сохраняем newPos с добавленным id
+    const updateRes = await db.collection(`positions`)
+      .doc(req.user.companyId)
+      .collection(`positions`)
+      .doc(createRes.id)
+      .update(newPos);
+    
+    return res.json({ newPos, message: `Должность успешно создана` });
+    
+  } catch(err) {
       console.error(err);
       return res.status(500).json({ general: err.code });
   };
+
+};
+
+// Получаем должность
+async function getPosition(req, res) {
+  try {
+    const posRes = await db.doc(`positions/${req.user.companyId}/positions/${req.params.positionId}`).get();
+    
+    if (posRes.exists) {
+      const position = posRes.data();
+
+      if (req.update) {
+        return position;
+      } else {
+        return res.json({ position, message: `Должность успешно передана` });
+      }
+    }
+  } catch (err) {
+    if (err.code === 5) {
+      return res.status(500).json({ general: `Должность не найдена` });
+    }
+    console.error(err);
+    return res.status(500).json({ general: err.code });
+  };
+};
+
+// Обновляем список должностей
+async function getAllPositions(req, res) {
+  try {
+    const posRes = await db.collection(`positions`)
+      .doc(req.user.companyId)
+      .collection(`positions`)
+      .get();
+    
+    if (posRes.empty) {
+      if (req.update) {
+        console.log(`Get all positions - Empty`);
+        return [];
+      } else {
+        console.log(`Get all positions - Empty`);
+        const positions = [];
+        return res.json({ positions, message: `Нет ни одной должности` });
+      }
+
+    } else {
+      let positions = [];
+
+      posRes.forEach(pos => {
+        const obj = pos.data();
+        positions.push(obj);
+      });
+      
+      if (req.update) {
+        console.log(`Get all positions`);
+        return positions;
+      } else {
+        console.log(`Get all positions`);
+        return res.json({ positions });
+      }
+    } 
+
+  } catch(err) {
+      console.error(err);
+      return res.status(500).json({ general: err.code });
+  };
+};
+
+ // Обновляем одну должность
+async function updatePosition(req, res) {
+  // является ли пользователь Админом или Владельцем аккаунта 
+  const validData = await validationCompanyAuthority(req.user);
+  const { valid, errors } = validData;
+  if (!valid) return res.status(400).json(errors);
+
+  let updatePosition = {
+    documents: req.body.documents,
+    rules: req.body.rules,
+    title: req.body.title,
+    order: req.body.order,
+    lastChange: new Date().toISOString(),
+  };
+
+  try {
+    const updateRes = await db.doc(`positions/${req.user.companyId}/positions/${req.params.positionId}`).update(updatePosition);
+    // getPosition сообщаем, что это обновление и нужно вернуть данные сюда, а не пользователю
+    req.update = true; 
+    const position = await getPosition(req, res);
+
+    return res.json({ position, message: `Должность успешно обновлена` });
+
+  } catch (err) {
+    if (err.code === 5) {
+      return res.status(500).json({ general: `Должность не найдена` });
+    }
+    console.error(err);
+    return res.status(500).json({ general: err.code });
+  };
+};
+
+// Удаляем должность
+async function delPosition(req, res) {
+  // является ли пользователь Админом или Владельцем аккаунта 
+  const validData = await validationAdminAuthority(req.user); 
+  const { valid, errors } = validData;
+  if (!valid) return res.status(400).json(errors);
+
+  try {
+    const updateRes = await db.doc(`positions/${req.user.companyId}/positions/${req.params.positionId}`)
+      .delete();
+
+    console.log(`deletePosition`);
+    return res.json({ message: `Должность успешно удалена` });
+
+  } catch (err) {
+    if (err.code === 5) {
+      return res.status(500).json({ general: `Должность не найдена` });
+    }
+    console.error(err);
+    return res.status(500).json({ general: err.code });
+  };
 }
-module.exports = { updatePositions, getPositions, delPosition };
+module.exports = { createPosition, getPosition, getAllPositions, updatePosition, delPosition };

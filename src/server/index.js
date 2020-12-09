@@ -8,7 +8,7 @@ const FBAuth = require('./firebase/fb-auth');
 
 const { addUser, login, getUserData, updateUserData, deleteUser } = require('./handlers/users');
 const { signupCompany, getCompanyData, getUserAndCompanyData, updateCompanyData, deleteCompany } = require('./handlers/company');
-const { getPositions, updatePositions, delPosition } = require('./handlers/positions');
+const { createPosition, getPosition, getAllPositions, updatePosition, delPosition } = require('./handlers/positions');
 const { getAllUsersData } = require('./handlers/data');
 const { createDocument, getDocument, getAllDocuments, updateDocument, deleteDocument } = require('./handlers/documents');
 const { createRule, getRule, getAllRulesById, updateRule, deleteRule } = require('./handlers/rules');
@@ -33,9 +33,11 @@ app.post(`/api/company`, FBAuth, updateCompanyData);
 app.get(`/api/deleteCompany`, FBAuth, deleteCompany);
 
 // positions
-app.post(`/api/updatePositions`, FBAuth, updatePositions);
-app.get(`/api/getPositions`, FBAuth, getPositions);
-app.post(`/api/delPosition`, FBAuth, delPosition);
+app.post(`/api/createPosition`, FBAuth, createPosition);
+app.get(`/api/getPosition/:positionId`, FBAuth, getPosition);
+app.get(`/api/getAllPositions`, FBAuth, getAllPositions);
+app.post(`/api/updatePosition/:positionId`, FBAuth, updatePosition);
+app.get(`/api/delPosition/:positionId`, FBAuth, delPosition);
 
 // documents
 app.post(`/api/createDocument`, FBAuth, createDocument);
@@ -57,4 +59,4 @@ app.use(express.static('dist'));
 
 app.listen(process.env.PORT || 8080, () => console.log(`Listening on port ${process.env.PORT || 8080}!`));
 
-//  git add . && git commit -m "sortingArr & DeleteButton + Confirm & wrap длинный текст в Select" && git push origin master
+//  git add . && git commit -m "refact server position to collection" && git push origin master

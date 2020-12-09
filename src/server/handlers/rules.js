@@ -3,7 +3,7 @@ const { validationAdminAuthority } = require('../utils/validators');
 const { getMaxOrder } = require('../utils/utils');
 
 async function createRule(req, res) {
-  // является ли пользователь Админом или Владельцем аккаунта или 
+  // является ли пользователь Админом или Владельцем аккаунта
   const validData = await validationAdminAuthority(req.user); 
   const { valid, errors } = validData;
   if (!valid) return res.status(400).json(errors);
@@ -58,12 +58,15 @@ async function getRule(req, res) {
       if (req.update) {
         return rule;
       } else {
-        return res.json({ rule, message: `Правило успешно передано  ` });
+        return res.json({ rule, message: `Правило успешно передано` });
       }
     }
-  } catch(err) {
-      console.error(err);
-      return res.status(500).json({ general: err.code });
+  } catch (err) {
+    if (err.code === 5) {
+      return res.status(500).json({ general: `Правило не найдено` });
+    }
+    console.error(err);
+    return res.status(500).json({ general: err.code });
   };
 };
 
@@ -129,9 +132,12 @@ async function updateRule(req, res) {
     console.log(`updateRule`);
     return res.json({ rule, message: `Правило успешно обновлено` });
     
-  } catch(err) {
-      console.error(err);
-      return res.status(500).json({ general: err.code });
+  } catch (err) {
+    if (err.code === 5) {
+      return res.status(500).json({ general: `Правило не найдено` });
+    }
+    console.error(err);
+    return res.status(500).json({ general: err.code });
   };
 };
 
@@ -148,9 +154,12 @@ async function deleteRule(req, res) {
     
     return res.json({ message: `Правило успешно удалено` });
     
-  } catch(err) {
-      console.error(err);
-      return res.status(500).json({ general: err.code });
+  } catch (err) {
+    if (err.code === 5) {
+      return res.status(500).json({ general: `Правило не найдено` });
+    }
+    console.error(err);
+    return res.status(500).json({ general: err.code });
   };
 };
 

@@ -10,15 +10,6 @@ export const documents = [
     lastChange: `2020-11-04T18:16:54.385Z`,
     title: `Должностная папка Кладовщика`,
     order: 10,
-    positions: [{
-      id: `2`,
-      order: 20,
-      title: `Супервайзер`,
-    }, {
-      id: `3`,
-      order: 30,
-      title: `Кладовщик`,
-    }],
     sections: [{
       id: `1`,
       createdAt: `2020-11-04T18:16:54.385Z`,
@@ -42,7 +33,6 @@ export const documents = [
     lastChange: `2020-11-04T18:16:54.385Z`,
     title: `Должностная папка Супервайзера`,
     order: 20,
-    positions: [],
     sections: [{
       id: `1`,
       createdAt: `2020-11-04T18:16:54.385Z`,
@@ -52,6 +42,17 @@ export const documents = [
     }],
   },
 ];
+
+// Должности
+const position = {
+  id: `2`,
+  order: 20,
+  title: `Супервайзер`,
+  documents: [`docId1`, `docId2`], // Закреплённые за должностью документы
+  rules: [`ruleId41`, `ruleId23`, `ruleId12`], // Закреплённые за должностью правила
+  createdAt: `2020-11-04T18:16:54.385Z`,
+  lastChange: `2020-11-04T18:16:54.385Z`,
+};
 
 // Правила и обязанности в отношении которох будет проводится тестирование
 // documents[0].sections[0].rules[0].rule
