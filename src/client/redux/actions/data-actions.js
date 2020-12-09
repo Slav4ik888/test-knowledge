@@ -25,10 +25,32 @@ export const getAllUsersData = () => (dispatch) => {
     });
 };
 
-// Получаем positions
-export const getPositions = () => (dispatch) => {
+// Создаём position
+export const createPosition = (position) => (dispatch) => {
+  console.log('position: ', position);
   dispatch({ type: uiActionType.LOADING_UI });
-  return axios.get(`/getPositions`)
+
+  return axios.post(`/createPosition`, position)
+    .then((res) => {
+      dispatch({
+        type: dataActionType.CREATE_POSITION,
+        payload: res.data.newPos,
+      });
+      dispatch({ type: uiActionType.CLEAR_ERRORS });
+    })
+    .catch((err) => {
+      console.log(err.response.data);
+      dispatch({
+        type: uiActionType.SET_ERRORS,
+        payload: err.response.data,
+      })
+    });
+};
+
+// Получаем positions
+export const getAllPositions = () => (dispatch) => {
+  dispatch({ type: uiActionType.LOADING_UI });
+  return axios.get(`/getAllPositions`)
     .then((res) => {
       console.log(`Полученные positions: `, res.data.positions);
       dispatch({
@@ -48,22 +70,22 @@ export const getPositions = () => (dispatch) => {
 };
 
 // Обновляем positions только в store, без сервера
-export const updatePositions = (newPositions) => (dispatch) => {
-  dispatch({
-    type: dataActionType.SET_POSITIONS,
-    payload: newPositions,
-  })
-};
+// export const updatePositions = (newPositions) => (dispatch) => {
+//   dispatch({
+//     type: dataActionType.SET_POSITIONS,
+//     payload: newPositions,
+//   })
+// };
 
-// Обновляем positions на сервере
-export const updatePositionsServer = (newPositions) => (dispatch) => {
+// Обновляем position
+export const updatePosition = (position) => (dispatch) => {
   dispatch({ type: uiActionType.LOADING_UI });
-  return axios.post(`/updatePositions`, newPositions)
+
+  return axios.post(`/updatePosition/${position.id}`, position)
     .then((res) => {
-      console.log(`Обновлённые positions: `, res.data);
       dispatch({
-        type: dataActionType.SET_POSITIONS,
-        payload: res.data.positions,
+        type: dataActionType.UPDATE_POSITION,
+        payload: res.data.position,
       });
       dispatch({ type: uiActionType.CLEAR_ERRORS });
     })
@@ -76,20 +98,15 @@ export const updatePositionsServer = (newPositions) => (dispatch) => {
     });
 };
 
-// Удаляем position на сервере
-export const delPositionServer = (id) => (dispatch) => {
+// Удаляем position
+export const deletePosition = (position) => (dispatch) => {
   dispatch({ type: uiActionType.LOADING_UI });
-  return axios.post(`/delPosition`, id)
-    .then((res) => {
-      console.log(`Обновлённые positions: `, res.data);
+
+  return axios.get(`/deletePosition/${position.id}`)
+    .then(() => {
       dispatch({
-        type: dataActionType.SET_POSITIONS,
-        payload: res.data.positions,
-      });
-      console.log(`Обновлённые documents: `, res.data);
-      dispatch({
-        type: dataActionType.SET_DOCUMENTS,
-        payload: res.data.documents,
+        type: dataActionType.DEL_POSITION,
+        payload: position,
       });
       dispatch({ type: uiActionType.CLEAR_ERRORS });
     })

@@ -1,5 +1,5 @@
 import { userActionType, uiActionType, dataActionType } from '../types';
-import { getAllUsersData, getPositions, getAllDocuments } from './data-actions';
+import { getAllUsersData, getAllPositions, getAllDocuments } from './data-actions';
 
 import axios from 'axios';
 // const api = axios.create({
@@ -95,7 +95,7 @@ export const loginUser = (userData, history) => (dispatch) => {
       setAuthorizationHeader(res.data.token);
       dispatch(getUserAndCompanyData()); // Загружаем данные по user & company
       dispatch(getAllUsersData()); // Загружаем данные по всем пользователям 
-      dispatch(getPositions());// Загружаем данные обо всех positions
+      dispatch(getAllPositions());// Загружаем данные обо всех positions
       dispatch(getAllDocuments());// Загружаем данные обо всех documents
       
       dispatch({type: uiActionType.CLEAR_ERRORS});

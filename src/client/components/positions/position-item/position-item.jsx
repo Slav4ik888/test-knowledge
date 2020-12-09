@@ -1,6 +1,9 @@
 import React, {useState} from 'react';
 import pt from 'prop-types';
 import { makeStyles } from '@material-ui/core/styles';
+// Readux Stuff
+import { connect } from 'react-redux';
+import { updatePosition, deletePosition } from '../../../redux/actions/data-actions';
 // MUI Stuff
 import TextField from '@material-ui/core/TextField';
 import ListItem from '@material-ui/core/ListItem';
@@ -23,12 +26,13 @@ const useStyles = makeStyles((theme) => ({
     marginRight: 40,
   },
   hover: {
-    backgroundColor: theme.palette.background.dialog,
+    backgroundColor: theme.palette.background.hover,
   },
   avatarIcon: {
     height: `34px`,
     width: `34px`,
-  }
+  },
+  
   // divider: {
   //   height: 28,
   //   margin: 4,
@@ -37,43 +41,44 @@ const useStyles = makeStyles((theme) => ({
   // },
 }));
 
-const PositionItem = ({ title, id, onEdit, onDel}) => {
+const PositionItem = ({ position, updatePosition, deletePosition}) => {
 
   const classes = useStyles();
+
   const [showIcons, setShowIcons] = useState(false);
   const handlePointerEnter = () => setShowIcons(true);
   const handlePointerLeave = () => {
     setShowIcons(false);
-    if (title !== newTitle) {
-      handleBlur();
-    }
+    handleUpdatePos();
   };
   const hover = showIcons ? classes.hover : ``;
 
   const [edit, setEdit] = useState(false);
   const handleSetEdit = () => setEdit(true);
 
-  const [newTitle, setNewTitle] = useState(title);
+  const [newTitle, setNewTitle] = useState(position.title);
   const handleEdit = (e) => {
     if (e.keyCode === 13 || e.keyCode === 27) {
       setEdit(false);
-      if (title !== newTitle) {
-        onEdit(id, newTitle);
-      }
+      e.target.blur();
+      handleUpdatePos();
     }
     setNewTitle(e.target.value);
   };
 
-  const handleFocus = () => {
-  };
   const handleBlur = () => {
     setEdit(false);
-    if (title !== newTitle) {
-      onEdit(id, newTitle);
-    }
+    handleUpdatePos();
   };
 
-  const handleDelPos = () => onDel(id);
+  const handleUpdatePos = () => {
+    if (position.title !== newTitle) {
+      let newPos = position;
+      newPos.title = newTitle;
+      updatePosition(newPos);
+    }
+  };
+  const handleDelPos = () => deletePosition(position);
 
   return (
     <ListItem
@@ -89,14 +94,15 @@ const PositionItem = ({ title, id, onEdit, onDel}) => {
       {
         edit ?
           <TextField
-            name={id} type="text" className={classes.textField}
-            value={newTitle} onChange={handleEdit} fullWidth
-            onFocus={handleFocus}
+            type="text" fullWidth
+            value={newTitle}
+            placeholder="Введите название должности"
+            onChange={handleEdit} 
             onBlur={handleBlur}
             onKeyDown={handleEdit}
           />
           :
-          <ListItemText primary={newTitle} />
+          <ListItemText primary={newTitle} onClick={handleSetEdit} />
       }
       {
         showIcons &&
@@ -120,10 +126,18 @@ const PositionItem = ({ title, id, onEdit, onDel}) => {
 }
 
 PositionItem.propTypes = {
-  title: pt.string.isRequired,
-  id: pt.string.isRequired,
-  onEdit: pt.func.isRequired,
-  onDel: pt.func.isRequired,
+  position: pt.object.isRequired,
+  updatePosition: pt.func.isRequired,
+  deletePosition: pt.func.isRequired,
 };
 
-export default PositionItem;
+const mapStateToProps = (state) => ({
+  loading: state.UI.loading,
+});
+
+const mapActionsToProps = {
+  updatePosition,
+  deletePosition
+};
+
+export default connect(mapStateToProps, mapActionsToProps)(PositionItem);

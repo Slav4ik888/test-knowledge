@@ -6,7 +6,7 @@ import axios from 'axios';
 // Redux
 import store from './redux/store';
 import { logoutUser, getUserAndCompanyData } from './redux/actions/user-actions';
-import { getAllUsersData, getPositions, getAllDocuments } from './redux/actions/data-actions';
+import { getAllUsersData, getAllPositions, getAllDocuments } from './redux/actions/data-actions';
 import { userActionType } from './redux/types';
 // MUI Stuff
 import { ThemeProvider } from '@material-ui/core/styles';
@@ -35,7 +35,7 @@ if (token && !token.includes(`Bearer undefined`)) {
     axios.defaults.headers.common[`Authorization`] = token;
     store.dispatch(getUserAndCompanyData());
     store.dispatch(getAllUsersData());// Загружаем данные обо всех пользователях
-    store.dispatch(getPositions());// Загружаем данные обо всех positions
+    store.dispatch(getAllPositions());// Загружаем данные обо всех positions
     store.dispatch(getAllDocuments());// Загружаем данные обо всех documents
   }
 };

@@ -26,6 +26,26 @@ const getArrWithoutItem = (items, itemField, delItem) => {
   return newItems;
 };
 
+// Возвращает массив без указанного элемента по itemField
+const getArrWithoutItemByField = (items, itemField, delItem) => {
+  const idx = items.findIndex((item) => item[itemField] === delItem[itemField]);
+  let newItems = items;
+  if (idx !== -1) {
+    newItems = [...newItems.slice(0, idx), ...newItems.slice(idx + 1)];
+  }
+  return newItems;
+};
+
+// Возвращает массив с обновлённым item
+const updateArrWithItemByField = (items, updateField, updateItem) => {
+  const idx = items.findIndex((item) => item[updateField] === updateItem[updateField]);
+  let newItems = items;
+  if (idx !== -1) {
+    newItems = [...newItems.slice(0, idx), updateItem, ...newItems.slice(idx + 1)];
+  }
+  return newItems;
+};
+
 
 export default function (state = initialState, action) {
   switch (action.type) {
@@ -49,12 +69,35 @@ export default function (state = initialState, action) {
         loading: false,
       });
     
+    case dataActionType.CREATE_POSITION:
+      console.log('action.payload: ', action.payload);
+      const createPos = state.positions;
+      createPos.push(action.payload)
+      
+      return extend(state, {
+        positions: createPos,
+        loading: false,
+      });
+    
+      
     case dataActionType.SET_POSITIONS:
       return extend(state, {
         positions: action.payload,
         loading: false,
       });
     
+    case dataActionType.UPDATE_POSITION:
+      return extend(state, {
+        positions: updateArrWithItemByField(state.positions, `id`, action.payload),
+        loading: false,
+      });
+    
+    case dataActionType.DEL_POSITION:
+      return extend(state, {
+        positions: getArrWithoutItemByField(state.positions, `id`, action.payload),
+        loading: false,
+      });
+      
     case dataActionType.SET_DOCUMENTS:
       return extend(state, {
         documents: action.payload,

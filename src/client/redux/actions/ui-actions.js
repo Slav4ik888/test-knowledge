@@ -8,3 +8,11 @@ export const setRuleStored = (ruleState) => (dispatch) => {
     payload: ruleState,
   })
 };
+
+// Сохраняем выбранные значения rule в store
+export const setErrors = (general) => (dispatch) => {
+  dispatch({
+    type: uiActionType.SET_ERRORS,
+    payload: general,
+  })
+};

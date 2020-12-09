@@ -1,11 +1,16 @@
 import React, {useState} from 'react';
 import pt from 'prop-types';
 import { makeStyles } from '@material-ui/core/styles';
+// Readux Stuff
+import { connect } from 'react-redux';
+import { createPosition } from '../../../redux/actions/data-actions';
+import { setErrors } from '../../../redux/actions/ui-actions';
 // MUI Stuff
 import Paper from '@material-ui/core/Paper';
 import InputBase from '@material-ui/core/InputBase';
 import IconButton from '@material-ui/core/IconButton';
 import Avatar from '@material-ui/core/Avatar';
+import Typography from '@material-ui/core/Typography';
 // Icons
 import AddIcon from '@material-ui/icons/Add';
 import SupervisedUserCircleIcon from '@material-ui/icons/SupervisedUserCircle';
@@ -13,15 +18,15 @@ import SupervisedUserCircleIcon from '@material-ui/icons/SupervisedUserCircle';
 
 const useStyles = makeStyles((theme) => ({
   formControl: {
-    marginTop: theme.spacing(4),
-    marginBottom: theme.spacing(2),
-    padding: theme.spacing(1),
+    margin: theme.spacing(4, 3, 2, 3),
+    padding: theme.spacing(2, 4, 2, 2),
     minWidth: 300,
     display: `flex`,
     alignItems: `center`,
+    backgroundColor: `#fff8f1`,
   },
   input: {
-    marginLeft: theme.spacing(1),
+    // marginLeft: theme.spacing(1),
     width: `calc(100% - 120px)`,
     flex: 1,
     padding: theme.spacing(1),
@@ -29,10 +34,15 @@ const useStyles = makeStyles((theme) => ({
   avatarIcon: {
     height: `34px`,
     width: `34px`,
-  }
+  },
+  customError: {
+    color: `red`,
+    fontSize: `0.8rem`,
+    padding: theme.spacing(1, 4, 0, 12),
+  },
 }));
 
-const PositionAdd = ({ onAdd}) => {
+const PositionAdd = ({ createPosition, setErrors, UI: { errors, loading } }) => {
 
   const classes = useStyles();
 
@@ -41,16 +51,19 @@ const PositionAdd = ({ onAdd}) => {
   const handleEdit = (e) => {
     switch (e.keyCode) {
       case 13:
-        if (newPos !== ``) {
-          onAdd(newPos);
-        }
+        handleAdd();
         break;
     } 
     setNewPos(e.target.value);
   };
 
   const handleAdd = () => {
-    onAdd(newPos);
+    if (newPos !== ``) {
+      const newPosition = { title: newPos };
+      createPosition(newPosition);
+    } else {
+      setErrors({ general: `Введите название должности` });
+    }
     setNewPos(``);
   };
 
@@ -77,12 +90,33 @@ const PositionAdd = ({ onAdd}) => {
           <AddIcon />
         </IconButton>
       </Paper>
+
+      {
+        errors.general && (
+          <Typography variant="body2" className={classes.customError}>
+            {errors.general}
+          </Typography>
+        )
+      }
+
     </form>
   );
 }
 
 PositionAdd.propTypes = {
-  onAdd: pt.func.isRequired,
+  createPosition: pt.func.isRequired,
+  setErrors: pt.func.isRequired,
 };
 
-export default PositionAdd;
+const mapStateToProps = (state) => ({
+  UI: state.UI,
+  positions: state.data.positions,
+  createPosition: pt.func.isRequired,
+});
+
+const mapActionsToProps = {
+  createPosition,
+  setErrors,
+};
+
+export default connect(mapStateToProps, mapActionsToProps)(PositionAdd);

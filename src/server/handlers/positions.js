@@ -12,7 +12,7 @@ async function createPosition(req, res) {
   req.update = true;
   const positions = await getAllPositions(req, res);
 
-  let newPos = {
+  const newPos = {
     order: getMaxOrder(positions),
     createdAt: new Date().toISOString(),
     lastChange: new Date().toISOString(),
@@ -20,7 +20,7 @@ async function createPosition(req, res) {
     documents: [],
     rules: [],
   };
-
+console.log('newPos: ', newPos);
   try {
 
     // Сохраняем newPos 
@@ -145,7 +145,7 @@ async function updatePosition(req, res) {
 };
 
 // Удаляем должность
-async function delPosition(req, res) {
+async function deletePosition(req, res) {
   // является ли пользователь Админом или Владельцем аккаунта 
   const validData = await validationAdminAuthority(req.user); 
   const { valid, errors } = validData;
@@ -166,4 +166,4 @@ async function delPosition(req, res) {
     return res.status(500).json({ general: err.code });
   };
 }
-module.exports = { createPosition, getPosition, getAllPositions, updatePosition, delPosition };
+module.exports = { createPosition, getPosition, getAllPositions, updatePosition, deletePosition };
