@@ -103,14 +103,6 @@ const DocumentsContainer = ({ open, onClose, UI, documents, createDocument, upda
 
         <DocumentAdd onAdd={handleAddDoc} UI={UI} />
 
-        <DialogActions className={classes.dialog}>
-          {/* <CancelSubmitBtn
-            onCancel={handleClose}
-            onSubmit={handleSubmit}
-            disabled={loading || !isChange}
-            loading={loading}
-          /> */}
-        </DialogActions>
       </Dialog>
     </>
   );

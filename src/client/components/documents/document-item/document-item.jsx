@@ -21,7 +21,7 @@ import PositionsPopoverShow from '../../positions/positions-popover-show/positio
 import PositionsAddInItem from '../../positions/positions-add-in-item/positions-add-item';
 import DeleteDocumentAvatar from '../../buttons/delete-document-avatar/delete-document-avatar';
 import { typePosModule } from '../../../../types';
-import { getPositionsFromDocPosId } from '../../../utils/utils';
+import { getPositionsByDocId } from '../../../utils/utils';
 
 const useStyles = makeStyles((theme) => ({
   editIcon: {
@@ -105,7 +105,7 @@ const DocumentItem = ({ doc, onEdit, onDel, positions}) => {
             onKeyDown={handleEdit}
           />
           :
-          <ListItemText primary={newTitle} />
+          <ListItemText primary={newTitle} onClick={handleSetEdit}/>
       }
       {
         showIcons &&
@@ -138,7 +138,7 @@ const DocumentItem = ({ doc, onEdit, onDel, positions}) => {
         open={openPos}
         anchorEl={anchorPos}
         onClose={handleShowPosClose}
-        positions={getPositionsFromDocPosId(doc.positions, positions)}
+        positions={getPositionsByDocId(doc.id, positions)}
       />
       <PositionsAddInItem
         open={posEdit}

@@ -24,6 +24,7 @@ const useStyles = makeStyles((theme) => ({
 
 
 const PositionsPopoverShow = ({ open, anchorEl, positions, onClose }) => {
+  
   const classes = useStyles();
 
   return (

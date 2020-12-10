@@ -12,25 +12,21 @@ import FolderIcon from '@material-ui/icons/Folder';
 
 
 const useStyles = makeStyles((theme) => ({
-  documentAdd: {
-    paddingLeft: theme.spacing(4),
-    paddingRight: theme.spacing(4),
-    paddingTop: theme.spacing(1),
-    paddingBottom: theme.spacing(1),
-  },
   formControl: {
-    marginTop: theme.spacing(4),
-    marginBottom: theme.spacing(2),
-    padding: theme.spacing(1),
+    margin: theme.spacing(4, 3, 4, 3),
+    padding: theme.spacing(2, 4, 2, 2),
     minWidth: 300,
     display: `flex`,
     alignItems: `center`,
+    backgroundColor: theme.palette.background.moduleAdd,
   },
   input: {
-    marginLeft: theme.spacing(1),
+    margin: theme.spacing(0, 2, 0, 2),
     width: `calc(100% - 120px)`,
     flex: 1,
-    padding: theme.spacing(1),
+    padding: theme.spacing(1, 3, 1, 3),
+    backgroundColor: theme.palette.background.moduleAddInput,
+    borderRadius: `35px`,
   },
   customError: {
     color: `red`,
@@ -67,7 +63,7 @@ const DocumentAdd = ({ onAdd, UI: { errors } }) => {
   };
 
   return (
-    <div className={classes.documentAdd}>   
+    <>
       <form onSubmit={handleSubmit}>
         <Paper className={classes.formControl}>
           <Avatar>
@@ -95,7 +91,7 @@ const DocumentAdd = ({ onAdd, UI: { errors } }) => {
         )
       }
 
-    </div>
+    </>
   );
 }
 

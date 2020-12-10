@@ -28,6 +28,16 @@ export const getPositionsFromDocPosId = (docPositions, allPositions) => {
 };
 
 /**
+ * Возвращает массив positions закреплённых за document
+ * @param {array} docPositions 
+ * @param {array} positions 
+ */
+export const getPositionsByDocId = (documentId, positions) => positions.filter((pos) => {
+  const result = pos.documents.find((docId) => docId === documentId);
+  if (result) return true;
+});
+
+/**
  * Возвращает правила которые находятся в doc и section
  * @param {array} rules 
  * @param {object} docId 

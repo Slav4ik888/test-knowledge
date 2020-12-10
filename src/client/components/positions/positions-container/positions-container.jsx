@@ -69,7 +69,7 @@ const PositionsContainer = ({ open, onClose, UI: { loading, errors, messages }, 
 
         <PositionAdd onAdd={handleAddPos} />
         
-        <DialogActions className={classes.dialog}></DialogActions>
+        {/* <DialogActions className={classes.dialog}></DialogActions> */}
       </Dialog>
     </>
   );

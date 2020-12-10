@@ -18,18 +18,20 @@ import SupervisedUserCircleIcon from '@material-ui/icons/SupervisedUserCircle';
 
 const useStyles = makeStyles((theme) => ({
   formControl: {
-    margin: theme.spacing(4, 3, 2, 3),
+    margin: theme.spacing(4, 3, 4, 3),
     padding: theme.spacing(2, 4, 2, 2),
     minWidth: 300,
     display: `flex`,
     alignItems: `center`,
-    backgroundColor: `#fff8f1`,
+    backgroundColor: theme.palette.background.moduleAdd,
   },
   input: {
-    // marginLeft: theme.spacing(1),
+    margin: theme.spacing(0, 2, 0, 2),
     width: `calc(100% - 120px)`,
     flex: 1,
-    padding: theme.spacing(1),
+    padding: theme.spacing(1, 3, 1, 3),
+    backgroundColor: theme.palette.background.moduleAddInput,
+    borderRadius: `35px`,
   },
   avatarIcon: {
     height: `34px`,

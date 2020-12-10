@@ -69,20 +69,13 @@ export const getAllPositions = () => (dispatch) => {
     });
 };
 
-// Обновляем positions только в store, без сервера
-// export const updatePositions = (newPositions) => (dispatch) => {
-//   dispatch({
-//     type: dataActionType.SET_POSITIONS,
-//     payload: newPositions,
-//   })
-// };
-
 // Обновляем position
 export const updatePosition = (position) => (dispatch) => {
   dispatch({ type: uiActionType.LOADING_UI });
 
   return axios.post(`/updatePosition/${position.id}`, position)
     .then((res) => {
+      console.log(`res.data.position: `, res.data.position);
       dispatch({
         type: dataActionType.UPDATE_POSITION,
         payload: res.data.position,

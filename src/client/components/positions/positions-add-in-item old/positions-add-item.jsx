@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import pt from 'prop-types';
 // Readux Stuff
 import { connect } from 'react-redux';
-import { updatePosition } from '../../../redux/actions/data-actions';
+import { updateDocument} from '../../../redux/actions/data-actions';
 import { updateUserDetails } from '../../../redux/actions/user-actions';
 // MUI Stuff
 import { makeStyles } from '@material-ui/core/styles';
@@ -15,7 +15,7 @@ import DialogTitle from '../../dialogs/dialog-title/dialog-title';
 import ToggleItems from '../../toggle-items/toggle-items';
 import CancelSubmitBtn from '../../buttons/cancel-submit-btn/cancel-submit-btn';
 import { typePosModule } from '../../../../types';
-import { getPositionsByDocId } from '../../../utils/utils';
+import { getPositionsFromDocPosId } from '../../../utils/utils';
 
 
 const useStyles = makeStyles((theme) => ({
@@ -25,7 +25,8 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 
-const PositionsAddInItem = ({ open, type, onClose, UI: { loading }, item, positions, updatePosition, updateUserDetails }) => {
+const PositionsAddInItem = ({ open, type, onClose, UI: { loading }, item,
+  documents, positions, updateDocument, updateUserDetails }) => {
   
   if (!open) return null;
 
@@ -36,11 +37,9 @@ const PositionsAddInItem = ({ open, type, onClose, UI: { loading }, item, positi
     `Выберите те должности, которым нужно полностью знать этот документ` :
     `Выберите должности, которые занимает данный сотрудник`;
   
-  // Должности закреплённые за item
-  const positionsInItem = getPositionsByDocId(item.id, positions); 
+  const positionsInItem = getPositionsFromDocPosId(item.positions, positions); // Те должности которые есть в item
   
-  // Не использованные positions
-  const remainingPositions = positions 
+  const remainingPositions = positions // Не использованные positions
     .filter((pos) => Boolean(positionsInItem
       .find((posInItem) => posInItem.id === pos.id)) === false);
 
@@ -50,35 +49,13 @@ const PositionsAddInItem = ({ open, type, onClose, UI: { loading }, item, positi
     setIsChange(true); // Произошло изменение
   };
 
-  // Сохраняем обновлённые данные
   const handleSetPosToItem = () => {
-     
+    let newItem = item;
+    newItem.positions = selected.map(pos => pos.id);
 
     switch (type) {
       case typePosModule.DOC:
-        // Проверяем открепили ли должность от документа
-        positionsInItem.forEach((pos) => {
-          const resOut = selected.find((selPos) => pos.id === selPos.id);
-          if (!resOut) { // Убрали
-            const resOutDoc = pos.documents.findIndex((docId) => docId === item.id);
-            if (resOutDoc !== -1) {
-              let updateDocList = [...pos.documents.slice(0, resOutDoc), ...pos.documents.slice(resOutDoc + 1)];
-              pos.documents = updateDocList;
-              console.log('Открепили: ', pos);
-              updatePosition(pos);
-            }
-          }
-        });
-
-        // Проверяем закрепили ли должность за документом
-        selected.forEach((pos) => {
-          const resIn = positionsInItem.find((selPos) => pos.id === selPos.id);
-          if (!resIn) { // Добавили
-            pos.documents.push(item.id);
-            console.log('Добавили: ', pos);
-            updatePosition(pos);
-          }
-        });
+        updateDocument(newItem);
         break;
       
       case typePosModule.USER:
@@ -121,18 +98,20 @@ const PositionsAddInItem = ({ open, type, onClose, UI: { loading }, item, positi
 
 PositionsAddInItem.propTypes = {
   doc: pt.object,
+  documents: pt.array.isRequired,
   positions: pt.array.isRequired,
-  updatePosition: pt.func.isRequired, 
+  updateDocument: pt.func.isRequired, 
   updateUserDetails: pt.func.isRequired, 
 };
 
 const mapStateToProps = (state) => ({
   UI: state.UI,
+  documents: state.data.documents,
   positions: state.data.positions,
 });
 
 const mapActionsToProps = {
-  updatePosition,
+  updateDocument,
   updateUserDetails
 };
 
