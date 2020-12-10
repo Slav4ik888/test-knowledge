@@ -29,13 +29,17 @@ export const getPositionsFromDocPosId = (docPositions, allPositions) => {
 
 /**
  * Возвращает массив positions закреплённых за document
- * @param {array} docPositions 
+ * @param {array} documentId 
  * @param {array} positions 
  */
-export const getPositionsByDocId = (documentId, positions) => positions.filter((pos) => {
-  const result = pos.documents.find((docId) => docId === documentId);
-  if (result) return true;
-});
+export const getPositionsByDocId = (documentId, positions) => positions.filter((pos) => pos.documents.find((docId) => docId === documentId));
+
+/**
+ * Возвращает массив positions закреплённых за user
+ * @param {array} userPositions 
+ * @param {array} positions 
+ */
+export const getPositionsByUser = (userPositions, positions) => positions.filter((pos) => userPositions.find((userPosId) => userPosId === pos.id));
 
 /**
  * Возвращает правила которые находятся в doc и section

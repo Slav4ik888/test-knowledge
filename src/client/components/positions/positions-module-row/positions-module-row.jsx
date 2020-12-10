@@ -20,34 +20,30 @@ import PositionsAddInItem from '../positions-add-in-item/positions-add-item';
 import { typePosModule } from '../../../../types';
 
 
-const useStyles = makeStyles((theme) => {
-  // console.log('theme: ', theme);
-
-  return ({
-    row: {
-      display: 'flex',
-      alignItems: `center`,
-      margin: theme.spacing(2, 0, 4, 0),
-    },
-    paperChip: {
-      width: `100%`,
-      padding: theme.spacing(1),
-      border: `1px solid`,
-      borderColor: theme.border.light,
-      borderRadius: `5px`,
-    },
-    block: {
-      display: `block`,
-    },
-    avatar: {
-      marginRight: theme.spacing(3),
-    },
-    editIcon: {
-      marginTop: theme.spacing(1),
-      marginLeft: theme.spacing(3),
-    },
-  })
-});
+const useStyles = makeStyles((theme) => ({
+  row: {
+    display: 'flex',
+    alignItems: `center`,
+    margin: theme.spacing(2, 0, 4, 0),
+  },
+  paperChip: {
+    width: `100%`,
+    padding: theme.spacing(1),
+    border: `1px solid`,
+    borderColor: theme.border.light,
+    borderRadius: `5px`,
+  },
+  block: {
+    display: `block`,
+  },
+  avatar: {
+    marginRight: theme.spacing(3),
+  },
+  editIcon: {
+    marginTop: theme.spacing(1),
+    marginLeft: theme.spacing(3),
+  },
+}));
 
 // item - переданный документ или пользователь
 const PositionsModuleRow = ({ type, item, positions }) => {
@@ -56,7 +52,7 @@ const PositionsModuleRow = ({ type, item, positions }) => {
   const classes = useStyles();
   const titleItem = type === typePosModule.DOC ? `документом` : `сотрудником`;
 
-  // Выбираем должности закреплённые за данным документом item
+  // Выбираем должности закреплённые за данным item
   const positionsInItem = positions.filter((pos) => item.positions.find((itemPos) => itemPos === pos.id));
   
   // Открыт ли контейнер для редактирования должностей

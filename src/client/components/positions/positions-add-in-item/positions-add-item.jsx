@@ -15,7 +15,7 @@ import DialogTitle from '../../dialogs/dialog-title/dialog-title';
 import ToggleItems from '../../toggle-items/toggle-items';
 import CancelSubmitBtn from '../../buttons/cancel-submit-btn/cancel-submit-btn';
 import { typePosModule } from '../../../../types';
-import { getPositionsByDocId } from '../../../utils/utils';
+import { getPositionsByDocId, getPositionsByUser } from '../../../utils/utils';
 
 
 const useStyles = makeStyles((theme) => ({
@@ -24,7 +24,6 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-
 const PositionsAddInItem = ({ open, type, onClose, UI: { loading }, item, positions, updatePosition, updateUserDetails }) => {
   
   if (!open) return null;
@@ -32,12 +31,24 @@ const PositionsAddInItem = ({ open, type, onClose, UI: { loading }, item, positi
   const classes = useStyles();
   const [isChange, setIsChange] = useState(false);
 
-  const title = type === typePosModule.DOC ?
-    `Выберите те должности, которым нужно полностью знать этот документ` :
-    `Выберите должности, которые занимает данный сотрудник`;
+  let title = ``;
+  let positionsInItem = []; // Должности закреплённые за item
   
-  // Должности закреплённые за item
-  const positionsInItem = getPositionsByDocId(item.id, positions); 
+  switch (type) {
+    case typePosModule.DOC:
+      title = `Выберите те должности, которым нужно полностью знать этот документ`;
+      positionsInItem = getPositionsByDocId(item.id, positions);
+      break;
+    
+    case typePosModule.USER:
+      title = `Выберите должности, которые занимает данный сотрудник`;
+      positionsInItem = getPositionsByUser(item.positions, positions);
+      console.log('USER positionsInItem: ', positionsInItem);
+      break;
+    
+    default: break;
+  };
+  
   
   // Не использованные positions
   const remainingPositions = positions 
@@ -50,6 +61,7 @@ const PositionsAddInItem = ({ open, type, onClose, UI: { loading }, item, positi
     setIsChange(true); // Произошло изменение
   };
 
+  
   // Сохраняем обновлённые данные
   const handleSetPosToItem = () => {
      
@@ -59,7 +71,7 @@ const PositionsAddInItem = ({ open, type, onClose, UI: { loading }, item, positi
         // Проверяем открепили ли должность от документа
         positionsInItem.forEach((pos) => {
           const resOut = selected.find((selPos) => pos.id === selPos.id);
-          if (!resOut) { // Убрали
+          if (!resOut) { // Открепили
             const resOutDoc = pos.documents.findIndex((docId) => docId === item.id);
             if (resOutDoc !== -1) {
               let updateDocList = [...pos.documents.slice(0, resOutDoc), ...pos.documents.slice(resOutDoc + 1)];
@@ -82,7 +94,10 @@ const PositionsAddInItem = ({ open, type, onClose, UI: { loading }, item, positi
         break;
       
       case typePosModule.USER:
-        updateUserDetails(newItem);
+        let newUserDetails = Object.assign({}, item);
+        newUserDetails.positions = selected.map((sel) => sel.id);
+        updateUserDetails(newUserDetails);
+        
         break;
     };
     onClose();

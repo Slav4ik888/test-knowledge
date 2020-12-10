@@ -43,7 +43,7 @@ export const documents = [
   },
 ];
 
-// Должности
+// Должность
 const position = {
   id: `2`,
   order: 20,

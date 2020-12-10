@@ -1,21 +1,4 @@
-import { role, authority } from '../types';
-
-// Должности
-export const positions = [
-  {
-    id: `1`,
-    order: 10,
-    title: `Директор`,
-  }, {
-    id: `2`,
-    order: 20,
-    title: `Супервайзер`,
-  }, {
-    id: `3`,
-    order: 30,
-    title: `Кладовщик`,
-  }
-];
+import { role } from '../types';
 
 export const profileUser = {
   firstName: `Вячеслав`,
