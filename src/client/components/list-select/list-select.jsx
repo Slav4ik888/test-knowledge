@@ -43,7 +43,6 @@ const useStyles = makeStyles((theme) => ({
 
 
 const ListSelect = ({ type, items, valueField, title, placeholder, label, onSelected, onItemAdd, itemTextAdd, disabled }) => {
-
   const classes = useStyles();
 
   const icon = type === `addUser` ? <PersonAddIcon className={classes.addIcon} /> : <AddIcon className={classes.addIcon} />;

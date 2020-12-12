@@ -47,13 +47,12 @@ const useStyles = makeStyles((theme) => ({
 
 // item - переданный документ или пользователь
 const PositionsModuleRow = ({ type, item, employees, positions }) => {
-  console.log('item: ', item);
   if (!item) return null;
 
   const classes = useStyles();
   let updatedItem = Object.assign({}, item);
   let titleItem = ``;
-  let positionsInItem = [];
+  let positionsInItem = []; // Контейнер для positions которые есть в item
 
   switch (type) {
     case typePosModule.DOC:

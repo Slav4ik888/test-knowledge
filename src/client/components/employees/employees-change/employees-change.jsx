@@ -3,8 +3,7 @@ import pt from 'prop-types';
 import { makeStyles } from '@material-ui/core/styles';
 // Readux Stuff
 import { connect } from 'react-redux';
-// import { deleteUser, updateUserDetails } from '../../../redux/actions/user-actions';
-import { deleteEmployee, updateEmployee } from '../../../redux/actions/data-actions';
+import { deleteEmployee } from '../../../redux/actions/data-actions';
 // MUI Stuff
 import Typography from '@material-ui/core/Typography';
 import Dialog from '@material-ui/core/Dialog';
@@ -17,7 +16,6 @@ import EmployeesModuleRow from '../employees-module-row/employees-module-row';
 import PositionsModuleRow from '../../positions/positions-module-row/positions-module-row';
 import EmployeesStatusRow from '../employees-status-row/employees-status-row';
 import DeleteUserButton from '../../buttons/delete-user-button/delete-user-button';
-// import CancelSubmitBtn from '../../buttons/cancel-submit-btn/cancel-submit-btn';
 import { typePosModule } from '../../../../types';
 
 
@@ -32,56 +30,32 @@ const useStyles = makeStyles((theme) => ({
     display: 'flex',
     alignItems: `center`,
   },
-  
-  // button: {
-  //   marginTop: 30,
-  //   position: `relative`,
-  //   float: `right`,
-  // },
 }));
 
-const EmployeesChange = ({ open, onClose, UI: { loading, errors, messages }, deleteEmployee, updateEmployee}) => {
+const EmployeesChange = ({ open, onClose, UI: { loading, errors, messages }, deleteEmployee}) => {
 
   if (!open) {
     return null;
   }
   const classes = useStyles();
-  // const [isChange, setIsChange] = useState(false);
 
   const [employeeSeleted, setEmployeeSelected] = useState(null);
 
   const handleEmployeeSelected = (user) => {
     if (user) {
       setEmployeeSelected(user);
-      // setIsChange(false);
     } else {
       setEmployeeSelected(null);
-      // setIsChange(false);
-    }
-  };
-
-  const handleSetEmployeeRole = (role) => {
-    if (role !== employeeSeleted.role) {
-      const employeeChangeRole = employeeSeleted;
-      employeeChangeRole.role = role;
-      setEmployeeSelected(employeeChangeRole);
-      updateEmployee(employeeChangeRole);
-      // setIsChange(true);
     }
   };
 
   const handleDeleteEmployee = () => {
     deleteEmployee(employeeSeleted);
-    onClose();
+    handleEmployeeSelected(null);
   };
 
   const handleClose = () => onClose();
 
-  // const handleSubmit = (e) => {
-  //   e.preventDefault();
-  //   updateUserDetails(userSeleted);
-  //   // setIsChange(false);
-  // };
 
   return (
     <>
@@ -102,7 +76,7 @@ const EmployeesChange = ({ open, onClose, UI: { loading, errors, messages }, del
                 <PositionsModuleRow item={employeeSeleted} type={typePosModule.EMPLOYEE} />
               
                 <Typography variant="h5" color="primary">Статус в приложении</Typography>
-                <EmployeesStatusRow employee={employeeSeleted} onSetRole={handleSetEmployeeRole}/>
+                <EmployeesStatusRow employee={employeeSeleted} />
               
                 <DeleteUserButton onDel={handleDeleteEmployee} />
               </>
@@ -116,15 +90,6 @@ const EmployeesChange = ({ open, onClose, UI: { loading, errors, messages }, del
             )
           }
         </DialogContent>
-
-        <DialogActions className={classes.dialog}>
-          {/* <CancelSubmitBtn
-            onCancel={handleClose}
-            onSubmit={handleSubmit}
-            disabled={loading || !isChange}
-            loading={loading}
-          /> */}
-        </DialogActions>
       </Dialog>
     </>
   );
@@ -132,16 +97,13 @@ const EmployeesChange = ({ open, onClose, UI: { loading, errors, messages }, del
 
 EmployeesChange.propTypes = {
   deleteEmployee: pt.func.isRequired,
-  updateEmployee: pt.func.isRequired,
   open: pt.bool.isRequired,
   onClose: pt.func.isRequired,
   UI: pt.object.isRequired,
-  // users: pt.array.isRequired,
 };
 
 const mapStateToProps = (state) => ({
   UI: state.UI,
-  // users: state.data.users,
 });
 
-export default connect(mapStateToProps, {deleteEmployee, updateEmployee})(EmployeesChange);
+export default connect(mapStateToProps, {deleteEmployee})(EmployeesChange);

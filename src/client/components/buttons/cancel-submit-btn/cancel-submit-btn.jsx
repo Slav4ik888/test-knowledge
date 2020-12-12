@@ -6,6 +6,9 @@ import Button from '@material-ui/core/Button';
 import CircularProgress from '@material-ui/core/CircularProgress';
 
 const useStyles = makeStyles((theme) => ({
+  onCancel: {
+    marginRight: theme.spacing(2),
+  },
 }));
 
 
@@ -14,7 +17,7 @@ const CancelSubmitBtn = ({ onCancel, onSubmit, submitText, disabled, loading }) 
 
   return (
     <>
-      <Button onClick={onCancel} >
+      <Button onClick={onCancel} className={classes.onCancel}>
         Отмена
       </Button>
       <Button onClick={onSubmit} disabled={disabled} variant="contained" color="primary">

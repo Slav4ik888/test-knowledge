@@ -91,42 +91,6 @@ exports.login = (req, res) => {
 // TODO: changeOwner
 
 
-// Delete user
-exports.deleteUser = (req, res) => { 
-  let result;
-  if (req.user.role !== `Владелец` && req.user.userId !== req.body.userId) {
-    console.log(`Сотрудник пытается удалить другого сотрудника`);
-    return res.status(400).json({ error: `Извините, у вас недостаточно прав для удаление другого сотрудника` });
-  }
-  if (req.user.role !== `Владелец` && req.user.userId === req.body.userId) {
-    console.log(`Сотрудник, удаляет себя`);
-    result = `user`;
-  }
-  if (req.user.role === `Владелец` && req.user.userId !== req.body.userId) {
-    console.log(`Владелец, удаляет сотрудника`);
-    result = `worker`;
-  }
-  if (req.user.role === `Владелец` && req.user.userId === req.body.userId ) {
-    console.log(`Попытка удалить аккаунт компании`);
-    return res.status(400).json({ general: `Вы являетесь Владельцем аккаунта и не можете удалить себя как пользователя. Вы можете назначить другого пользователя Владельцем, либо удалить аккаунт компании из "Профиля компании"` });
-  }
-  
-  admin
-    .auth()
-    .deleteUser(req.body.userId)
-    .then(() => {
-      console.log('Successfully deleted user');
-      return db.doc(`/users/${req.user.companyId}/users/${req.body.email}`).delete();
-    })
-    .then(() => {
-      return res.json({ result, message: `Пользователь ${req.body.email} успешно удалён` });
-    })
-    .catch((err) => {
-      console.log('Error deleting user:', err);
-      return res.status(500).json({ general: err.code });
-    });
-};
-
 // Get own user details
 exports.getUserData = (req, res) => {
   db
@@ -152,11 +116,6 @@ exports.getUserData = (req, res) => {
 
 // Update user details
 exports.updateUserData = (req, res) => {
-  // getUserData сообщаем, что это обновление и нужно вернуть данные сюда, а не пользователю
-  // req.update = true;
-  // const userData = await getUserData(req, res);
-  // console.log('userData: ', userData);
-  console.log(`req.user: `, req.user);
 
   let result;
   if (req.user.role !== `Владелец` && req.user.userId !== req.body.userId) {
@@ -180,9 +139,7 @@ exports.updateUserData = (req, res) => {
   const secondName = !isEmpty(req.body.secondName.trim()) ? req.body.secondName : ``;
   const middleName = !isEmpty(req.body.middleName.trim()) ? req.body.middleName : ``;
 
-  
-
-  const employee = {
+  const updateEmployee = {
     firstName,
     secondName,
     middleName,
@@ -193,7 +150,7 @@ exports.updateUserData = (req, res) => {
 
   db
     .doc(`users/${req.user.companyId}/users/${req.body.email}`)
-    .update(employee)
+    .update(updateEmployee)
     .then(() => {
       return res.json({ message: `Данные пользователя успешно обновлены` });
     })
@@ -201,4 +158,41 @@ exports.updateUserData = (req, res) => {
       console.error(err);
       return res.status(500).json({ general: err.code });
     })
+};
+
+// Delete user
+exports.deleteUser = (req, res) => { 
+
+  let result;
+  if (req.user.role !== `Владелец` && req.user.userId !== req.body.userId) {
+    console.log(`Сотрудник пытается удалить другого сотрудника`);
+    return res.status(400).json({ error: `Извините, у вас недостаточно прав для удаление другого сотрудника` });
+  }
+  if (req.user.role !== `Владелец` && req.user.userId === req.body.userId) {
+    console.log(`Сотрудник, удаляет себя`);
+    result = `user`;
+  }
+  if (req.user.role === `Владелец` && req.user.userId !== req.body.userId) {
+    console.log(`Владелец, удаляет сотрудника`);
+    result = `employee`;
+  }
+  if (req.user.role === `Владелец` && req.user.userId === req.body.userId ) {
+    console.log(`Попытка удалить аккаунт компании`);
+    return res.status(400).json({ general: `Вы являетесь Владельцем аккаунта и не можете удалить себя как пользователя. Вы можете назначить другого пользователя Владельцем, либо удалить аккаунт компании из "Профиля компании"` });
+  }
+  
+  admin
+    .auth()
+    .deleteUser(req.body.userId)
+    .then(() => {
+      console.log('Successfully deleted user');
+      return db.doc(`/users/${req.user.companyId}/users/${req.body.email}`).delete();
+    })
+    .then(() => {
+      return res.json({ result, message: `Пользователь ${req.body.email} успешно удалён` });
+    })
+    .catch((err) => {
+      console.log('Error deleting user:', err);
+      return res.status(500).json({ general: err.code });
+    });
 };

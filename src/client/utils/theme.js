@@ -24,8 +24,8 @@ export default {
       light: `#ececec`,
       dialog: `#c1e5e2`,
       hover: `#e6f4f3`,
-      moduleAdd: `#ffebd6`,
-      moduleAddInput: `#fffcf2`,
+      moduleAdd: `#e6f4f3`,
+      moduleAddInput: `#fafafa`,
     },
   },
   fontSize: {

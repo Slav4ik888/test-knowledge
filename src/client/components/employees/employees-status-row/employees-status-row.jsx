@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import pt from 'prop-types';
 // Readux Stuff
 import { connect } from 'react-redux';
+import { updateEmployee } from '../../../redux/actions/data-actions';
 // MUI Stuff
 import { makeStyles } from '@material-ui/core/styles';
 import Avatar from '@material-ui/core/Avatar';
@@ -36,20 +37,28 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-// TODO: FIX При смене пользователя не меняется роль, стоит та что была у первого пользователя
-const EmployeesStatusRow = ({ employee, onSetRole, companyProfile }) => {
-  const classes = useStyles();
 
-  // Создаём массив из объекта
-  const roles = arrFromObj(role); 
-  const [rol, setRol] = useState(employee.role);
+const EmployeesStatusRow = ({ employee, updateEmployee, companyProfile }) => {
+  const classes = useStyles();
 
   // Если выбранный пользователь является Владельцем компании
   const disabled = Boolean(companyProfile.owner === employee.email);
 
+  // Создаём массив из объекта
+  const roles = arrFromObj(role); 
+
+  const [rol, setRol] = useState(employee.role);
   const handleSetRole = (e) => {
-    setRol(e.target.value)
-    onSetRole(e.target.value);
+    setRol(e.target.value);
+    handleSetEmployeeRole(e.target.value);
+  };
+
+  const handleSetEmployeeRole = (role) => {
+    if (role !== employee.role) {
+      const employeeChangeRole = employee;
+      employeeChangeRole.role = role;
+      updateEmployee(employeeChangeRole);
+    }
   };
 
   return (
@@ -69,7 +78,7 @@ const EmployeesStatusRow = ({ employee, onSetRole, companyProfile }) => {
             <Select
               labelId={`role-label`}
               id={`role-select`}
-              value={rol}
+              value={employee.role}
               onChange={handleSetRole}
               disabled={disabled}
               input={<Input />}
@@ -88,11 +97,11 @@ const EmployeesStatusRow = ({ employee, onSetRole, companyProfile }) => {
 EmployeesStatusRow.propTypes = {
   employee: pt.object.isRequired,
   companyProfile: pt.object.isRequired,
-  onSetRole: pt.func.isRequired,
+  updateEmployee: pt.func.isRequired,
 };
 
 const mapStateToProps = (state) => ({
   companyProfile: state.user.companyProfile,
 });
 
-export default connect(mapStateToProps)(EmployeesStatusRow);
+export default connect(mapStateToProps, {updateEmployee})(EmployeesStatusRow);

@@ -24,8 +24,6 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 const PositionsAddInItem = ({ open, type, onClose, UI: { loading }, item, positions, updatePosition, updateEmployee }) => {
-  console.log('item: ', item);
-  
   if (!open) return null;
 
   const classes = useStyles();

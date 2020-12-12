@@ -48,7 +48,35 @@ export const updateEmployee = (employee) => (dispatch) => {
 
 // Удаляем аккаунт работника
 export const deleteEmployee = (employee) => (dispatch) => {
+  dispatch({ type: dataActionType.LOADING_DATA });
+  
+  return axios.post(`/deleteUser`, employee)
+    .then((res) => {
+      // Определяем это сам пользователь себя удалил или его удалил Владелец
+      switch (res.data.result) {
+        case `user`:
+          console.log(`Удалили user`);
+          dispatch(logoutUser());
+          break;
+        
+        case `employee`:
+          console.log(`Удалили employee`);
+          dispatch({
+            type: dataActionType.DEL_EMPLOYEE,
+            payload: employee,
+          });
+          break;
+        
+        default: return;
+      };
 
+    })
+    .catch((err) => {
+      dispatch({
+        type: uiActionType.SET_ERRORS,
+        payload: err.response.data,
+      });
+    });
 };
 
 // Создаём position
