@@ -40,7 +40,7 @@ exports.typeQuestions = {
 // Типы PositionsModuleRow
 exports.typePosModule = {
   DOC: `DOC`,
-  USER: `USER`,
+  EMPLOYEE: `EMPLOYEE`,
 };
 
 // Типы для Confirm

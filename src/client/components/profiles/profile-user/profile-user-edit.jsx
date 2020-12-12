@@ -4,7 +4,7 @@ import dayjs from 'dayjs';
 import 'dayjs/locale/ru';
 // Readux Stuff
 import {connect} from 'react-redux';
-import {updateUserDetails, deleteUser} from '../../../redux/actions/user-actions';
+import {updateUserData, deleteUser} from '../../../redux/actions/user-actions';
 // MUI Stuff
 import { makeStyles } from '@material-ui/core/styles';
 import Button from '@material-ui/core/Button';
@@ -63,7 +63,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const ProfielUserEdit = ({ open, onClose, userProfile, updateUserDetails, deleteUser}) => {
+const ProfielUserEdit = ({ open, onClose, userProfile, updateUserData, deleteUser}) => {
 
   if (!open) {
     return null;
@@ -84,7 +84,7 @@ const ProfielUserEdit = ({ open, onClose, userProfile, updateUserDetails, delete
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    updateUserDetails(newUP);
+    updateUserData(newUP);
     onClose();
   };
 
@@ -152,7 +152,7 @@ const ProfielUserEdit = ({ open, onClose, userProfile, updateUserDetails, delete
 }
 
 ProfielUserEdit.propTypes = {
-  updateUserDetails: pt.func.isRequired,
+  updateUserData: pt.func.isRequired,
   deleteUser: pt.func.isRequired,
   open: pt.bool.isRequired,
   onClose: pt.func.isRequired,
@@ -163,4 +163,4 @@ const mapStateToProps = (state) => ({
   userProfile: state.user.userProfile,
 });
 
-export default connect(mapStateToProps, {updateUserDetails, deleteUser})(ProfielUserEdit);
+export default connect(mapStateToProps, {updateUserData, deleteUser})(ProfielUserEdit);

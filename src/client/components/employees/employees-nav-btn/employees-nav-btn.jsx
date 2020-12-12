@@ -9,7 +9,7 @@ import ListItemText from '@material-ui/core/ListItemText';
 // Icons
 import AccountCircle from '@material-ui/icons/AccountCircle';
 // Components
-import UserChange from '../users-change/users-change';
+import EmployeesChange from '../employees-change/employees-change';
 
 
 const useStyles = makeStyles((theme) => ({
@@ -19,7 +19,7 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 
-const UsersNavBtn = () => {
+const EmployeesNavBtn = () => {
   const classes = useStyles();
   const [isUsers, setIsUsers] = useState(false);
   const handleUsersOpen = () => setIsUsers(true);
@@ -33,7 +33,7 @@ const UsersNavBtn = () => {
         <ListItemText primary="СОТРУДНИКИ" />
       </ListItem>
         
-      <UserChange
+      <EmployeesChange
         open={isUsers}
         onClose={handleUsersClose}
       />
@@ -41,7 +41,7 @@ const UsersNavBtn = () => {
   )
 };
 
-UsersNavBtn.propTypes = {
+EmployeesNavBtn.propTypes = {
 };
 
-export default UsersNavBtn;
+export default EmployeesNavBtn;

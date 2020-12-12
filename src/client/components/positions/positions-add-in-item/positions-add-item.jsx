@@ -2,8 +2,7 @@ import React, { useState } from 'react';
 import pt from 'prop-types';
 // Readux Stuff
 import { connect } from 'react-redux';
-import { updatePosition } from '../../../redux/actions/data-actions';
-import { updateUserDetails } from '../../../redux/actions/user-actions';
+import { updatePosition, updateEmployee } from '../../../redux/actions/data-actions';
 // MUI Stuff
 import { makeStyles } from '@material-ui/core/styles';
 import Dialog from '@material-ui/core/Dialog';
@@ -24,7 +23,8 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const PositionsAddInItem = ({ open, type, onClose, UI: { loading }, item, positions, updatePosition, updateUserDetails }) => {
+const PositionsAddInItem = ({ open, type, onClose, UI: { loading }, item, positions, updatePosition, updateEmployee }) => {
+  console.log('item: ', item);
   
   if (!open) return null;
 
@@ -40,7 +40,7 @@ const PositionsAddInItem = ({ open, type, onClose, UI: { loading }, item, positi
       positionsInItem = getPositionsByDocId(item.id, positions);
       break;
     
-    case typePosModule.USER:
+    case typePosModule.EMPLOYEE:
       title = `Выберите должности, которые занимает данный сотрудник`;
       positionsInItem = getPositionsByUser(item.positions, positions);
       console.log('USER positionsInItem: ', positionsInItem);
@@ -93,10 +93,10 @@ const PositionsAddInItem = ({ open, type, onClose, UI: { loading }, item, positi
         });
         break;
       
-      case typePosModule.USER:
+      case typePosModule.EMPLOYEE:
         let newUserDetails = Object.assign({}, item);
         newUserDetails.positions = selected.map((sel) => sel.id);
-        updateUserDetails(newUserDetails);
+        updateEmployee(newUserDetails);
         
         break;
     };
@@ -138,7 +138,7 @@ PositionsAddInItem.propTypes = {
   doc: pt.object,
   positions: pt.array.isRequired,
   updatePosition: pt.func.isRequired, 
-  updateUserDetails: pt.func.isRequired, 
+  updateEmployee: pt.func.isRequired, 
 };
 
 const mapStateToProps = (state) => ({
@@ -148,7 +148,7 @@ const mapStateToProps = (state) => ({
 
 const mapActionsToProps = {
   updatePosition,
-  updateUserDetails
+  updateEmployee
 };
 
 export default connect(mapStateToProps, mapActionsToProps)(PositionsAddInItem);

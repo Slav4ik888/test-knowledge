@@ -16,7 +16,7 @@ import TestsNavBtn from '../../tests/tests-nav-btn/tests-nav-btn';
 import RulesNavBtn from '../../rules/rules-nav-btn/rules-nav-btn';
 import DocumentsNavBtn from '../../documents/documents-nav-btn/documents-nav-btn';
 import PositionsNavBtn from '../../positions/positions-nav-btn/positions-nav-btn';
-import UsersNavBtn from '../../users/users-nav-btn/users-nav-btn';
+import EmployeesNavBtn from '../../employees/employees-nav-btn/employees-nav-btn';
 
 
 const useStyles = makeStyles((theme) => ({
@@ -100,7 +100,7 @@ const MiniDrawer = ({ open, onOpen, onClose}) => {
         <RulesNavBtn open={open} onDrawerOpen={onOpen} onDrawerClose={onClose} />
         <DocumentsNavBtn />
         <PositionsNavBtn />
-        <UsersNavBtn />
+        <EmployeesNavBtn />
       </List>
 
       <Divider />

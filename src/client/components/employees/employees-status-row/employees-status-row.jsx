@@ -37,15 +37,15 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 // TODO: FIX При смене пользователя не меняется роль, стоит та что была у первого пользователя
-const UsersModuleRow = ({ user, onSetRole, companyProfile }) => {
+const EmployeesStatusRow = ({ employee, onSetRole, companyProfile }) => {
   const classes = useStyles();
 
   // Создаём массив из объекта
   const roles = arrFromObj(role); 
-  const [rol, setRol] = useState(user.role);
+  const [rol, setRol] = useState(employee.role);
 
   // Если выбранный пользователь является Владельцем компании
-  const disabled = Boolean(companyProfile.owner === user.email);
+  const disabled = Boolean(companyProfile.owner === employee.email);
 
   const handleSetRole = (e) => {
     setRol(e.target.value)
@@ -85,8 +85,8 @@ const UsersModuleRow = ({ user, onSetRole, companyProfile }) => {
   );
 };
 
-UsersModuleRow.propTypes = {
-  user: pt.object.isRequired,
+EmployeesStatusRow.propTypes = {
+  employee: pt.object.isRequired,
   companyProfile: pt.object.isRequired,
   onSetRole: pt.func.isRequired,
 };
@@ -95,4 +95,4 @@ const mapStateToProps = (state) => ({
   companyProfile: state.user.companyProfile,
 });
 
-export default connect(mapStateToProps)(UsersModuleRow);
+export default connect(mapStateToProps)(EmployeesStatusRow);

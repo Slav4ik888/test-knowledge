@@ -20,7 +20,7 @@ async function createPosition(req, res) {
     documents: [],
     rules: [],
   };
-console.log('newPos: ', newPos);
+
   try {
 
     // Сохраняем newPos 

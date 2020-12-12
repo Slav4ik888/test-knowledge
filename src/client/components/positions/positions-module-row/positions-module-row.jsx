@@ -46,15 +46,31 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 // item - переданный документ или пользователь
-const PositionsModuleRow = ({ type, item, positions }) => {
+const PositionsModuleRow = ({ type, item, employees, positions }) => {
+  console.log('item: ', item);
   if (!item) return null;
 
   const classes = useStyles();
-  const titleItem = type === typePosModule.DOC ? `документом` : `сотрудником`;
+  let updatedItem = Object.assign({}, item);
+  let titleItem = ``;
+  let positionsInItem = [];
 
-  // Выбираем должности закреплённые за данным item
-  const positionsInItem = positions.filter((pos) => item.positions.find((itemPos) => itemPos === pos.id));
-  
+  switch (type) {
+    case typePosModule.DOC:
+      titleItem = `документом`;
+      // Выбираем должности закреплённые за данным item
+      positionsInItem = positions.filter((pos) => item.positions.find((itemPos) => itemPos === pos.id));
+      break;
+    
+    case typePosModule.EMPLOYEE:
+      titleItem = `сотрудником`;
+      const upIdx = employees.findIndex((it) => it.userId === item.userId);
+      updatedItem = employees[upIdx];
+      // Выбираем должности закреплённые за данным item
+      positionsInItem = positions.filter((pos) => updatedItem.positions.find((itemPos) => itemPos === pos.id));
+      break;
+  }
+
   // Открыт ли контейнер для редактирования должностей
   const [isPosEdit, setIsPosEdit] = useState(false);
   const handlePosEditOpen = () => setIsPosEdit(true);
@@ -91,7 +107,7 @@ const PositionsModuleRow = ({ type, item, positions }) => {
       <PositionsAddInItem
         open={posToggle}
         type={type}
-        item={item}
+        item={updatedItem}
         onClose={handlePosToggleClose}
       />
 
@@ -106,10 +122,12 @@ const PositionsModuleRow = ({ type, item, positions }) => {
 
 PositionsModuleRow.propTypes = {
   positions: pt.array.isRequired,
+  employees: pt.array.isRequired,
 };
 
 const mapStateToProps = (state) => ({
   positions: state.data.positions,
+  employees: state.data.employees,
 });
 
 

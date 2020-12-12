@@ -20,10 +20,11 @@ exports.addUser = (req, res) => {
 
   const moImgUser = `no-img-user.png`;
 
+  let userCreadantials;
   return auth
     .createUserWithEmailAndPassword(newUser.email, newUser.password)
     .then(data => {
-      const userCreadantials = {
+      userCreadantials = {
         email: newUser.email,
         createdAt: new Date().toISOString(),
         lastChange: new Date().toISOString(),
@@ -39,7 +40,10 @@ exports.addUser = (req, res) => {
       return db.doc(`/users/${newUser.companyId}/users/${newUser.email}`).set(userCreadantials);
     })
     .then(() => {
-      return res.status(201).json({message: `Пользователь с email: ${newUser.email} - успешно добавлен!`});
+      return res.status(201).json({
+        newUser: userCreadantials,
+        message: `Пользователь с email: ${newUser.email} - успешно добавлен!`
+      });
     })
     .catch(err => {
       console.error(err);
@@ -134,7 +138,11 @@ exports.getUserData = (req, res) => {
       }
     })
     .then((userData) => {
-      return res.json(userData);
+      if (req.update) {
+        return userData;
+      } else {
+        return res.json(userData);
+      }
     })
     .catch(err => {
       console.error(err);
@@ -144,6 +152,12 @@ exports.getUserData = (req, res) => {
 
 // Update user details
 exports.updateUserData = (req, res) => {
+  // getUserData сообщаем, что это обновление и нужно вернуть данные сюда, а не пользователю
+  // req.update = true;
+  // const userData = await getUserData(req, res);
+  // console.log('userData: ', userData);
+  console.log(`req.user: `, req.user);
+
   let result;
   if (req.user.role !== `Владелец` && req.user.userId !== req.body.userId) {
     console.log(`Сотрудник пытается обновить данные другого сотрудника`);
@@ -166,16 +180,20 @@ exports.updateUserData = (req, res) => {
   const secondName = !isEmpty(req.body.secondName.trim()) ? req.body.secondName : ``;
   const middleName = !isEmpty(req.body.middleName.trim()) ? req.body.middleName : ``;
 
+  
+
+  const employee = {
+    firstName,
+    secondName,
+    middleName,
+    positions: req.body.positions,
+    role: req.body.role,
+    lastChange: new Date().toISOString(),
+  };
+
   db
     .doc(`users/${req.user.companyId}/users/${req.body.email}`)
-    .update({
-      firstName,
-      secondName,
-      middleName,
-      positions: req.body.positions,
-      role: req.body.role,
-      lastChange: new Date().toISOString(),
-    })
+    .update(employee)
     .then(() => {
       return res.json({ message: `Данные пользователя успешно обновлены` });
     })

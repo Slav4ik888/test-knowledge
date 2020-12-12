@@ -12,5 +12,5 @@ export const profileUser = {
 
   positions: [`1`, `3`],
   role: role.ADMIN,
-  companyId: `dfj3898fhdlkjf83`, // uid
+  // TODO: нужно убрать companyId: `dfj3898fhdlkjf83`, // uid
 };

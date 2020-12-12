@@ -11,7 +11,7 @@ import Tooltip from '@material-ui/core/Tooltip';
 // Icons
 import AccountCircle from '@material-ui/icons/AccountCircle';
 // Components
-import UserAdd from '../user-add/user-add';
+import EmployeeAdd from '../employee-add/employee-add';
 import ListSelect from '../../list-select/list-select';
 
 
@@ -26,15 +26,15 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-// item - переданный документ или пользователь
-const UsersModuleRow = ({ onUserSelected, users, disabled }) => {
+
+const EmployeesModuleRow = ({ onEmployeeSelected, employees, disabled }) => {
   const classes = useStyles();
   
-  const [openAddUser, setOpenAddUser] = useState(false);
-  const handleAddUserOpen = () => setOpenAddUser(true);
-  const handleAddUserClose = () => setOpenAddUser(false);
+  const [openAddEmployee, setOpenAddEmployee] = useState(false);
+  const handleAddEmployeeOpen = () => setOpenAddEmployee(true);
+  const handleAddEmployeeClose = () => setOpenAddEmployee(false);
 
-  const handleUserSelected = (user) => onUserSelected(user);
+  const handleUserSelected = (employee) => onEmployeeSelected(employee);
 
   return (
     <>
@@ -47,28 +47,28 @@ const UsersModuleRow = ({ onUserSelected, users, disabled }) => {
           type={`addUser`}
           // title={`Выберите сотрудника`}
           disabled={disabled}
-          items={users}
+          items={employees}
           valueField={`email`}
-          label={`users`}
+          label={`employees`}
           placeholder={`Не выбран`}
           onSelected={handleUserSelected}
-          onItemAdd={handleAddUserOpen}
+          onItemAdd={handleAddEmployeeOpen}
           itemTextAdd={`пригласить нового`}
         />
         
       </div>
-      <UserAdd open={openAddUser} onClose={handleAddUserClose}/>
+      <EmployeeAdd open={openAddEmployee} onClose={handleAddEmployeeClose}/>
     </>
   );
 };
 
-UsersModuleRow.propTypes = {
-  users: pt.array.isRequired,
-  onUserSelected: pt.func.isRequired,
+EmployeesModuleRow.propTypes = {
+  employees: pt.array.isRequired,
+  onEmployeeSelected: pt.func.isRequired,
 };
 
 const mapStateToProps = (state) => ({
-  users: state.data.users,
+  employees: state.data.employees,
 });
 
-export default connect(mapStateToProps)(UsersModuleRow);
+export default connect(mapStateToProps)(EmployeesModuleRow);

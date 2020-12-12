@@ -9,7 +9,7 @@ const FBAuth = require('./firebase/fb-auth');
 const { addUser, login, getUserData, updateUserData, deleteUser } = require('./handlers/users');
 const { signupCompany, getCompanyData, getUserAndCompanyData, updateCompanyData, deleteCompany } = require('./handlers/company');
 const { createPosition, getPosition, getAllPositions, updatePosition, deletePosition } = require('./handlers/positions');
-const { getAllUsersData } = require('./handlers/data');
+const { getAllEmployeesData } = require('./handlers/data');
 const { createDocument, getDocument, getAllDocuments, updateDocument, deleteDocument } = require('./handlers/documents');
 const { createRule, getRule, getAllRulesById, updateRule, deleteRule } = require('./handlers/rules');
 
@@ -21,16 +21,18 @@ app.post(`/api/login`, login);
 app.post(`/api/addUser`, FBAuth, addUser);
 
 // get data user and company routes 
-app.get(`/api/user`, FBAuth, getUserData);
-app.post(`/api/user`, FBAuth, updateUserData);
+app.get(`/api/getUserData`, FBAuth, getUserData);
+app.post(`/api/updateUserData`, FBAuth, updateUserData);
 app.post(`/api/deleteUser`, FBAuth, deleteUser)
-app.get(`/api/usersData`, FBAuth, getAllUsersData);
 app.get(`/api/userAndCompany`, FBAuth, getUserAndCompanyData);
 
 // post data user and company routes
 app.get(`/api/company`, FBAuth, getCompanyData);
 app.post(`/api/company`, FBAuth, updateCompanyData);
 app.get(`/api/deleteCompany`, FBAuth, deleteCompany);
+
+// employees
+app.get(`/api/getAllEmployeesData`, FBAuth, getAllEmployeesData);
 
 // positions
 app.post(`/api/createPosition`, FBAuth, createPosition);
@@ -59,4 +61,4 @@ app.use(express.static('dist'));
 
 app.listen(process.env.PORT || 8080, () => console.log(`Listening on port ${process.env.PORT || 8080}!`));
 
-//  git add . && git commit -m "start refact UpdateUserDetail with update positions" && git push origin master
+//  git add . && git commit -m "start refact usersto employees" && git push origin master

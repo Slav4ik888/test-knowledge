@@ -2,7 +2,7 @@ import {dataActionType} from '../types';
 import {extend, getIdxRulesFromDocAndSection} from '../../utils/utils';
 
 const initialState = {
-  users: [],
+  employees: [],
   positions: [],
   documents: [],
   rules: [], // хранить посекционно, то есть для каждой секции свой объект
@@ -17,14 +17,14 @@ const initialState = {
 };
 
 // Возвращает массив без указанного элемента
-const getArrWithoutItem = (items, itemField, delItem) => {
-  const idx = items.findIndex((item) => item[itemField] === delItem);
-  let newItems = items;
-  if (idx !== -1) {
-    newItems = [...newItems.slice(0, idx), ...newItems.slice(idx + 1)];
-  }
-  return newItems;
-};
+// const getArrWithoutItem = (items, itemField, delItem) => {
+//   const idx = items.findIndex((item) => item[itemField] === delItem);
+//   let newItems = items;
+//   if (idx !== -1) {
+//     newItems = [...newItems.slice(0, idx), ...newItems.slice(idx + 1)];
+//   }
+//   return newItems;
+// };
 
 // Возвращает массив без указанного элемента по itemField
 const getArrWithoutItemByField = (items, itemField, delItem) => {
@@ -57,29 +57,45 @@ export default function (state = initialState, action) {
     case dataActionType.SET_INITIAL:
       return initialState;
     
-    case dataActionType.SET_USERS:
+    case dataActionType.SET_EMPLOYEES:
       return extend(state, {
-        users: action.payload,
+        employees: action.payload,
         loading: false,
       });
     
-    case dataActionType.DEL_USER:
+    case dataActionType.CREATE_EMPLOYEE:
+      console.log('action.payload: ', action.payload);
+      const createEmployees = state.employees;
+      createEmployees.push(action.payload);
+
       return extend(state, {
-        users: getArrWithoutItem(state.users, `userId`, action.payload.userId),
+        employees: createEmployees,
+        loading: false,
+      });
+    
+    case dataActionType.UPDATE_EMPLOYEE:
+      console.log('action.payload: ', action.payload);
+
+      return extend(state, {
+        employees: updateArrWithItemByField(state.employees, `userId`, action.payload),
+        loading: false,
+      });
+    
+    case dataActionType.DEL_EMPLOYEE:
+      return extend(state, {
+        employees: getArrWithoutItemByField(state.employees, `userId`, action.payload),
         loading: false,
       });
     
     case dataActionType.CREATE_POSITION:
-      console.log('action.payload: ', action.payload);
       const createPos = state.positions;
-      createPos.push(action.payload)
+      createPos.push(action.payload);
       
       return extend(state, {
         positions: createPos,
         loading: false,
       });
     
-      
     case dataActionType.SET_POSITIONS:
       return extend(state, {
         positions: action.payload,
@@ -115,13 +131,13 @@ export default function (state = initialState, action) {
     
     case dataActionType.UPDATE_DOCUMENT:
       return extend(state, {
-        documents: getArrWithoutItem(state.documents, `id`, action.payload.id),
+        documents: getArrWithoutItemByField(state.documents, `id`, action.payload),
         loading: false,
       });
 
     case dataActionType.DELETE_DOCUMENT:
       return extend(state, {
-        documents: getArrWithoutItem(state.documents, `id`, action.payload.id),
+        documents: getArrWithoutItemByField(state.documents, `id`, action.payload),
         loading: false,
       });
 

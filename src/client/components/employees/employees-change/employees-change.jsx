@@ -3,7 +3,8 @@ import pt from 'prop-types';
 import { makeStyles } from '@material-ui/core/styles';
 // Readux Stuff
 import { connect } from 'react-redux';
-import { deleteUser, updateUserDetails } from '../../../redux/actions/user-actions';
+// import { deleteUser, updateUserDetails } from '../../../redux/actions/user-actions';
+import { deleteEmployee, updateEmployee } from '../../../redux/actions/data-actions';
 // MUI Stuff
 import Typography from '@material-ui/core/Typography';
 import Dialog from '@material-ui/core/Dialog';
@@ -12,9 +13,9 @@ import DialogContent from '@material-ui/core/DialogContent';
 // Icons
 // Components
 import DialogTitle from '../../dialogs/dialog-title/dialog-title';
-import UsersModuleRow from '../users-module-row/users-module-row';
+import EmployeesModuleRow from '../employees-module-row/employees-module-row';
 import PositionsModuleRow from '../../positions/positions-module-row/positions-module-row';
-import UsersStatusRow from '../users-status-row/users-status-row';
+import EmployeesStatusRow from '../employees-status-row/employees-status-row';
 import DeleteUserButton from '../../buttons/delete-user-button/delete-user-button';
 // import CancelSubmitBtn from '../../buttons/cancel-submit-btn/cancel-submit-btn';
 import { typePosModule } from '../../../../types';
@@ -39,7 +40,7 @@ const useStyles = makeStyles((theme) => ({
   // },
 }));
 
-const UserChange = ({ open, onClose, UI: { loading, errors, messages }, deleteUser, updateUserDetails}) => {
+const EmployeesChange = ({ open, onClose, UI: { loading, errors, messages }, deleteEmployee, updateEmployee}) => {
 
   if (!open) {
     return null;
@@ -47,30 +48,30 @@ const UserChange = ({ open, onClose, UI: { loading, errors, messages }, deleteUs
   const classes = useStyles();
   // const [isChange, setIsChange] = useState(false);
 
-  const [userSeleted, setUserSelected] = useState(null);
+  const [employeeSeleted, setEmployeeSelected] = useState(null);
 
-  const handleUserSelected = (user) => {
+  const handleEmployeeSelected = (user) => {
     if (user) {
-      setUserSelected(user);
+      setEmployeeSelected(user);
       // setIsChange(false);
     } else {
-      setUserSelected(null);
+      setEmployeeSelected(null);
       // setIsChange(false);
     }
   };
 
-  const handleSetUserRole = (role) => {
-    if (role !== userSeleted.role) {
-      const userChangeRole = userSeleted;
-      userChangeRole.role = role;
-      setUserSelected(userChangeRole);
-      updateUserDetails(userChangeRole);
+  const handleSetEmployeeRole = (role) => {
+    if (role !== employeeSeleted.role) {
+      const employeeChangeRole = employeeSeleted;
+      employeeChangeRole.role = role;
+      setEmployeeSelected(employeeChangeRole);
+      updateEmployee(employeeChangeRole);
       // setIsChange(true);
     }
   };
 
-  const handleDeleteAccount = () => {
-    deleteUser(userSeleted);
+  const handleDeleteEmployee = () => {
+    deleteEmployee(employeeSeleted);
     onClose();
   };
 
@@ -90,20 +91,20 @@ const UserChange = ({ open, onClose, UI: { loading, errors, messages }, deleteUs
         <DialogTitle onClose={handleClose}>Настройки пользователей</DialogTitle>
         <DialogContent className={classes.dialog}>
           <Typography variant="h5" color="primary">
-            {userSeleted ? `Сотрудник` : `Выберите сотрудника`}
+            {employeeSeleted ? `Сотрудник` : `Выберите сотрудника`}
           </Typography>
-          <UsersModuleRow onUserSelected={handleUserSelected} />
+          <EmployeesModuleRow onEmployeeSelected={handleEmployeeSelected} />
           
           {
-            userSeleted &&
+            employeeSeleted &&
               <>
                 <Typography variant="h5" color="primary" >Занимаемые должности</Typography>
-                <PositionsModuleRow item={userSeleted} type={typePosModule.USER} />
+                <PositionsModuleRow item={employeeSeleted} type={typePosModule.EMPLOYEE} />
               
                 <Typography variant="h5" color="primary">Статус в приложении</Typography>
-                <UsersStatusRow user={userSeleted} onSetRole={handleSetUserRole}/>
+                <EmployeesStatusRow employee={employeeSeleted} onSetRole={handleSetEmployeeRole}/>
               
-                <DeleteUserButton onDel={handleDeleteAccount} />
+                <DeleteUserButton onDel={handleDeleteEmployee} />
               </>
           }
 
@@ -129,9 +130,9 @@ const UserChange = ({ open, onClose, UI: { loading, errors, messages }, deleteUs
   );
 }
 
-UserChange.propTypes = {
-  deleteUser: pt.func.isRequired,
-  updateUserDetails: pt.func.isRequired,
+EmployeesChange.propTypes = {
+  deleteEmployee: pt.func.isRequired,
+  updateEmployee: pt.func.isRequired,
   open: pt.bool.isRequired,
   onClose: pt.func.isRequired,
   UI: pt.object.isRequired,
@@ -143,4 +144,4 @@ const mapStateToProps = (state) => ({
   // users: state.data.users,
 });
 
-export default connect(mapStateToProps, {deleteUser, updateUserDetails})(UserChange);
+export default connect(mapStateToProps, {deleteEmployee, updateEmployee})(EmployeesChange);

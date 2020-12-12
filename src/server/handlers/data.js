@@ -3,7 +3,7 @@ const { role } = require('../../types');
 
 
 // Получаем данные по всем пользователям компании
-exports.getAllUsersData = (req, res) => {
+exports.getAllEmployeesData = (req, res) => {
   let users = [];
   db
     .collection(`users`)

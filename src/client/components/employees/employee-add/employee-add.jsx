@@ -65,7 +65,7 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 
-const UserAdd = ({ open, onClose, UI: { errors, loading }, addUser}) => {
+const EmployeeAdd = ({ open, onClose, UI: { errors, loading }, addUser}) => {
 
   if (!open) {
     return null;
@@ -159,7 +159,7 @@ const UserAdd = ({ open, onClose, UI: { errors, loading }, addUser}) => {
   );
 }
 
-UserAdd.propTypes = {
+EmployeeAdd.propTypes = {
   addUser: pt.func.isRequired,
   open: pt.bool.isRequired,
   onClose: pt.func.isRequired,
@@ -171,4 +171,4 @@ const mapStateToProps = (state) => ({
   // loading: state.user.loading,
 });
 
-export default connect(mapStateToProps, {addUser})(UserAdd);
+export default connect(mapStateToProps, {addUser})(EmployeeAdd);

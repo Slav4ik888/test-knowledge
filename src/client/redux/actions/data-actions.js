@@ -5,12 +5,12 @@ import axios from 'axios';
 axios.defaults.baseURL = `/api`;
 
 // Получаем данные всех пользователей
-export const getAllUsersData = () => (dispatch) => {
+export const getAllEmployeesData = () => (dispatch) => {
   dispatch({ type: uiActionType.LOADING_UI });
-  return axios.get(`/usersData`)
+  return axios.get(`/getAllEmployeesData`)
     .then((res) => {
       dispatch({
-        type: dataActionType.SET_USERS,
+        type: dataActionType.SET_EMPLOYEES,
         payload: res.data,
       });
       dispatch({ type: uiActionType.CLEAR_ERRORS });
@@ -23,6 +23,32 @@ export const getAllUsersData = () => (dispatch) => {
       });
       dispatch(logoutUser());
     });
+};
+
+// Обновляем аккаунт работника
+export const updateEmployee = (employee) => (dispatch) => {
+  console.log('employee: ', employee);
+  dispatch({ type: dataActionType.LOADING_DATA });
+  
+  return axios.post(`/updateUserData`, employee)
+    .then(() => {
+      dispatch({
+        type: dataActionType.UPDATE_EMPLOYEE,
+        payload: employee,
+      });
+    })
+    .catch((err) => {
+      console.log(err);
+      dispatch({
+        type: uiActionType.SET_ERRORS,
+        payload: err.response.data,
+      });
+    });
+};
+
+// Удаляем аккаунт работника
+export const deleteEmployee = (employee) => (dispatch) => {
+
 };
 
 // Создаём position

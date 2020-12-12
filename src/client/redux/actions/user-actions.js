@@ -1,5 +1,5 @@
 import { userActionType, uiActionType, dataActionType } from '../types';
-import { getAllUsersData, getAllPositions, getAllDocuments } from './data-actions';
+import { getAllEmployeesData, getAllPositions, getAllDocuments } from './data-actions';
 
 import axios from 'axios';
 // const api = axios.create({
@@ -72,10 +72,15 @@ export const addUser = (user) => (dispatch) => {
   return axios
     .post(`/addUser`, newUser)
     .then((res) => {
-      const { message } = res.data;
+      const { newUser, message } = res.data;
+      dispatch({
+        type: dataActionType.CREATE_EMPLOYEE,
+        payload: newUser,
+      });
       dispatch({ type: uiActionType.SET_MESSAGES, payload: message });
       dispatch({ type: uiActionType.CLEAR_ERRORS });
-      dispatch(getAllUsersData());
+
+      // dispatch(getAllEmployeesData());
     })
     .catch((err) => {
       console.log(err);
@@ -94,7 +99,7 @@ export const loginUser = (userData, history) => (dispatch) => {
       // console.log(res.data.token);
       setAuthorizationHeader(res.data.token);
       dispatch(getUserAndCompanyData()); // Загружаем данные по user & company
-      dispatch(getAllUsersData()); // Загружаем данные по всем пользователям 
+      dispatch(getAllEmployeesData()); // Загружаем данные по всем пользователям 
       dispatch(getAllPositions());// Загружаем данные обо всех positions
       dispatch(getAllDocuments());// Загружаем данные обо всех documents
       
@@ -120,7 +125,7 @@ export const logoutUser = () => (dispatch) => {
 // Получение данных о пользователе
 export const getUserData = () => (dispatch) => {
   dispatch({type: userActionType.LOADING_USER});
-  return axios.get(`/user`)
+  return axios.get(`/getUserData`)
     .then((res) => {
       dispatch({
         type: userActionType.SET_USER,
@@ -171,10 +176,10 @@ export const getUserAndCompanyData = () => (dispatch) => {
 };
 
 // Обновляем данные о пользователе
-export const updateUserDetails = (userProfile) => (dispatch) => {
+export const updateUserData = (userProfile) => (dispatch) => {
   console.log('userProfile: ', userProfile);
   dispatch({type: userActionType.LOADING_USER});
-  return axios.post(`/user`, userProfile)
+  return axios.post(`/updateUserData`, userProfile)
     .then(() => {
       dispatch({
         type: userActionType.SET_USER,
