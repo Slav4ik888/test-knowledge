@@ -54,7 +54,7 @@ const typeComp = {
   },
 };
 
-const DeleteButton = ({ type, icon, button, placement, onDel }) => {
+const DeleteButton = ({ type, icon, button, placement, onDel, classname, classesActiveDel }) => {
 
   const classes = useStyles();
 
@@ -70,6 +70,8 @@ const DeleteButton = ({ type, icon, button, placement, onDel }) => {
   const handleIsHoverOn = () => setIsHover(true);
   const handleIsHoverOff = () => setIsHover(false);
 
+  const iconActiveDel = classesActiveDel ? classesActiveDel : classes.iconActiveDel;
+  
   return (
     <>
       {
@@ -83,7 +85,7 @@ const DeleteButton = ({ type, icon, button, placement, onDel }) => {
           >
             <IconButton
               edge="end" aria-label="Delete"
-              className={cl(classes.icon, { [classes.iconActiveDel]: isHover })}
+              className={cl(classes.icon, { [iconActiveDel]: isHover }, classname)}
               onMouseEnter={handleIsHoverOn} onMouseLeave={handleIsHoverOff}
               onClick={handleOpenConfirm}
             >

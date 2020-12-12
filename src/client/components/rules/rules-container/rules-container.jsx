@@ -12,6 +12,7 @@ import Paper from '@material-ui/core/Paper';
 import DialogTitle from '../../dialogs/dialog-title/dialog-title';
 import DocumentsModuleRow from '../../documents/documents-module-row/documents-module-row';
 import PositionsModuleRow from '../../positions/positions-module-row/positions-module-row';
+import SectionsListModule from '../../sections/sections-list-module/sections-list-module';
 import SectionsModuleRow from '../../sections/sections-module-row/sections-module-row';
 import RulesModuleRow from '../../rules/rules-module-row/rules-module-row';
 import CancelSubmitBtn from '../../buttons/cancel-submit-btn/cancel-submit-btn';
@@ -79,27 +80,27 @@ const RulesContainer = ({ loading, setRuleStored, ruleStored, getAllRulesById, r
   const [docSelected, setDocSelected] = useState(ruleStored.docSelected);
   const handleDocSelected = (doc) => {
     setDocSelected(doc);
-    setSectionSelected(null); // Обнуляем выбранную ранее section
+    // setSectionSelected(null); // Обнуляем выбранную ранее section
     setRuleStored({ docSelected: doc, sectionSelected: null }); // Запоминаем выбранное
     setActiveRules({ docId: ``, sectionId: `` }); // Обнуляем activeRules
   };
 
-  // Выбранный раздел - section
-  const [sectionSelected, setSectionSelected] = useState(ruleStored.sectionSelected);
-  const handleSectionSelected = (section) => {
-    setSectionSelected(section);
-    setRuleStored({ docSelected, sectionSelected: section }); // Запоминаем выбранное 
-    if (section) {
-      const checkRule = getRulesFromDocAndSection(rules, docSelected.id, section.id);
-      console.log('checkRule: ', checkRule);
-      if (!checkRule) { // Если ещё не загружали
-        getAllRulesById({ docId: docSelected.id, sectionId: section.id }); // Загружаем rules с db
+  // // Выбранный раздел - section
+  // const [sectionSelected, setSectionSelected] = useState(ruleStored.sectionSelected);
+  // const handleSectionSelected = (section) => {
+  //   setSectionSelected(section);
+  //   setRuleStored({ docSelected, sectionSelected: section }); // Запоминаем выбранное 
+  //   if (section) {
+  //     const checkRule = getRulesFromDocAndSection(rules, docSelected.id, section.id);
+  //     console.log('checkRule: ', checkRule);
+  //     if (!checkRule) { // Если ещё не загружали
+  //       getAllRulesById({ docId: docSelected.id, sectionId: section.id }); // Загружаем rules с db
 
-      } else { // Сохраняем rules из активной section
-        setActiveRules({ docId: docSelected.id, sectionId: section.id }); 
-      }
-    }
-  };
+  //     } else { // Сохраняем rules из активной section
+  //       setActiveRules({ docId: docSelected.id, sectionId: section.id }); 
+  //     }
+  //   }
+  // };
 
   // // Обновление title при редактировании правила
   // const handleEditTitle = (docId, sectionId, newTitle) => {
@@ -137,12 +138,15 @@ const RulesContainer = ({ loading, setRuleStored, ruleStored, getAllRulesById, r
 
           <PositionsModuleRow item={docSelected} type={typePosModule.DOC} />
 
-          <SectionsModuleRow docSelected={docSelected} onSectionSelected={handleSectionSelected} />
+          <SectionsListModule
+            docSelected={docSelected}
+            // onSectionSelected={handleSectionSelected}
+          />
           
-          <RulesModuleRow
+          {/* <RulesModuleRow
             docSelected={docSelected}
             sectionSelected={sectionSelected}
-          />
+          /> */}
 
 
           <div className={classes.cancelSubmitBtn}>
@@ -174,7 +178,7 @@ RulesContainer.propTypes = {
   setRuleStored: pt.func.isRequired,
   getAllRulesById: pt.func.isRequired,
   setActiveRules: pt.func.isRequired, 
-  rules: pt.array.isRequired,
+  // rules: pt.array.isRequired,
 };
 
 const mapStateToProps = (state) => ({

@@ -81,7 +81,7 @@ const RuleRow = ({ rule, updateRule, deleteRule }) => {
     }
     const value = e.target.value;
     if (value !== rule.rule) {
-      setIsChange(true);
+      handleUpdateRule();
     }
     setNewTitle(value);
   };
@@ -91,7 +91,7 @@ const RuleRow = ({ rule, updateRule, deleteRule }) => {
     const value = e.target.value;
     setNewRule(value);
     if (value !== rule.rule) {
-      setIsChange(true);
+      handleUpdateRule();
     }
   };
 

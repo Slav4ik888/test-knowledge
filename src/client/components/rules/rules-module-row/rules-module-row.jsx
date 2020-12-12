@@ -51,8 +51,6 @@ const RulesModuleRow = ({ loading, onEditTitle, onEditRule, rules, activeRules: 
           rulesShow.length ?
             rulesShow.map((rule) => <RuleRow key={rule.id}
               rule={rule}
-              // onEditTitle={onEditTitle}
-              // onEditRule={onEditRule}
             />)
             : null
         }
@@ -65,15 +63,11 @@ const RulesModuleRow = ({ loading, onEditTitle, onEditRule, rules, activeRules: 
 
 RulesModuleRow.propTypes = {
   loading: pt.bool.isRequired,
-  // onEditRule: pt.func.isRequired,
-  // onEditTitle: pt.func.isRequired,
-  // ruleStored: pt.object,
   rules: pt.array.isRequired,
   activeRules: pt.object.isRequired,
 };
 
 const mapStateToProps = (state) => ({
-  // ruleStored: state.UI.ruleStored,
   loading: state.UI.loading,
   rules: state.data.rules,
   activeRules: state.data.activeRules,
