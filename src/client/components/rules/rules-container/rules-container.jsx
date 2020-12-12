@@ -142,21 +142,22 @@ const RulesContainer = ({ loading, setRuleStored, ruleStored, getAllRulesById, r
           <RulesModuleRow
             docSelected={docSelected}
             sectionSelected={sectionSelected}
-            // onEditTitle={handleEditTitle}
-            // onEditRule={handleEditRule}
           />
 
-          {/* <Button onClick={handleSectionsOpen} disabled={!docSelected}>
-            Разделы
-          </Button> */}
 
           <div className={classes.cancelSubmitBtn}>
-            <CancelSubmitBtn onCancel={handleClose} onSubmit={handleSubmit}
+            <CancelSubmitBtn
+              onCancel={handleClose}
+              onSubmit={handleSubmit}
               disabled={loading || !isChange} loading={loading}
             />
           </div>
 
-          <Confirm open={isOpen} typeOk={typeConfirm.DEL} onOk={handleOkConfirm} onCancel={handleCloseConfirm}
+          <Confirm
+            open={isOpen}
+            typeOk={typeConfirm.DEL}
+            onOk={handleOkConfirm}
+            onCancel={handleCloseConfirm}
             title="Есть не сохранённые данные, выйти без сохранения?"
           />
 

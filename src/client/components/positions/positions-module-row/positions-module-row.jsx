@@ -10,14 +10,13 @@ import IconButton from '@material-ui/core/IconButton';
 import Tooltip from '@material-ui/core/Tooltip';
 // Icons
 import EditIcon from '@material-ui/icons/Edit';
-import FolderIcon from '@material-ui/icons/Folder';
 import SupervisedUserCircleIcon from '@material-ui/icons/SupervisedUserCircle';
-import InsertDriveFileIcon from '@material-ui/icons/InsertDriveFile';
 // Components
 import PositionsContainer from '../positions-container/positions-container';
 import PositionsListChip from '../positions-list-chip/positions-list-chip';
 import PositionsAddInItem from '../positions-add-in-item/positions-add-item';
 import { typePosModule } from '../../../../types';
+import { getPositionsByDocId } from '../../../utils/utils';
 
 
 const useStyles = makeStyles((theme) => ({
@@ -58,7 +57,8 @@ const PositionsModuleRow = ({ type, item, employees, positions }) => {
     case typePosModule.DOC:
       titleItem = `документом`;
       // Выбираем должности закреплённые за данным item
-      positionsInItem = positions.filter((pos) => item.positions.find((itemPos) => itemPos === pos.id));
+      positionsInItem = getPositionsByDocId(item.id, positions)
+      console.log('positionsInItem: ', positionsInItem);
       break;
     
     case typePosModule.EMPLOYEE:
