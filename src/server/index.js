@@ -11,7 +11,7 @@ const { signupCompany, getCompanyData, getUserAndCompanyData, updateCompanyData,
 const { createPosition, getPosition, getAllPositions, updatePosition, deletePosition } = require('./handlers/positions');
 const { getAllEmployeesData } = require('./handlers/data');
 const { createDocument, getDocument, getAllDocuments, updateDocument, deleteDocument } = require('./handlers/documents');
-const { createRule, getRule, getAllRulesById, updateRule, deleteRule } = require('./handlers/rules');
+const { createRule, getRule, getAllRulesById, updateRule, deleteRule, deleteAllRulesById } = require('./handlers/rules');
 
 app.use(bodyParser.json());
 
@@ -54,6 +54,7 @@ app.get(`/api/getRule/:ruleId`, FBAuth, getRule);
 app.get(`/api/getAllRulesById/:documentId/:sectionId`, FBAuth, getAllRulesById);
 app.post(`/api/updateRule/:ruleId`, FBAuth, updateRule);
 app.get(`/api/deleteRule/:ruleId`, FBAuth, deleteRule);
+app.get(`/api/deleteAllRulesById/:documentId/:sectionId`, FBAuth, deleteAllRulesById);
 
 
 app.use(express.static('dist'));
@@ -61,4 +62,4 @@ app.use(express.static('dist'));
 
 app.listen(process.env.PORT || 8080, () => console.log(`Listening on port ${process.env.PORT || 8080}!`));
 
-//  git add . && git commit -m "refact SectionModuleRow - add getNewOrder for UpAndDownArrows & newSection" && git push origin master
+//  git add . && git commit -m "refact SectionModuleRow - deleteAllRulesById" && git push origin master

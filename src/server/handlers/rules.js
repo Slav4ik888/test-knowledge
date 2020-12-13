@@ -71,7 +71,6 @@ async function getRule(req, res) {
 };
 
 async function getAllRulesById(req, res) {
-
   try {
     const rulesRes = await db.collection(`rules`)
       .doc(req.user.companyId)
@@ -163,4 +162,35 @@ async function deleteRule(req, res) {
   };
 };
 
-module.exports = { createRule, getRule, getAllRulesById, updateRule, deleteRule };
+async function deleteAllRulesById(req, res) {
+  // является ли пользователь Админом или Владельцем аккаунта или 
+  const validData = await validationAdminAuthority(req.user);
+  const { valid, errors } = validData;
+  if (!valid) return res.status(400).json(errors);
+
+  try {
+    req.update = true; // getAllRulesById сообщаем, что это обновление и нужно вернуть данные сюда, а не пользователю
+    const allRules = await getAllRulesById(req, res);
+
+    allRules.forEach((rule) => {
+      db.doc(`rules/${req.user.companyId}/rules/${rule.id}`).delete();
+      console.log(`deleteRule - ${rule.id}`);
+    });
+    if (allRules.length) {
+      console.log(`Правила успешно удалены`);
+      return res.json({ message: `Правила успешно удалены` });
+    } else {
+      console.log(`Правила в разделе отсутствовали`);
+      return res.json({ message: `Правила в разделе отсутствовали` });
+    }
+    
+  } catch (err) {
+    if (err.code === 5) {
+      return res.status(500).json({ general: `Правила не найдены` });
+    }
+    console.error(err);
+    return res.status(500).json({ general: err.code });
+  };
+};
+
+module.exports = { createRule, getRule, getAllRulesById, updateRule, deleteRule, deleteAllRulesById };

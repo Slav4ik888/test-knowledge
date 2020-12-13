@@ -72,11 +72,11 @@ const UpAndDownAdd = ({ loading, type, docSelected, section, up, down, updateDoc
 
   switch (type) {
     case typeUpDown.SECTION:
-      tooltip = up ? `Переместить раздел выше` : `Переместить раздел ниже`;
+      tooltip = up ? `Добавить раздел выше` : `Добавить раздел ниже`;
       break;
     
     case typeUpDown.RULE:
-      tooltip = down ? `Переместить правило выше` : `Переместить правило ниже`;
+      tooltip = down ? `Добавить правило выше` : `Добавить правило ниже`;
       break;
   }
   

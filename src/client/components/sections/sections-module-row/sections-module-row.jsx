@@ -3,7 +3,7 @@ import pt from 'prop-types';
 import cl from 'classnames';
 // Readux Stuff
 import { connect } from 'react-redux';
-import { updateDocument } from '../../../redux/actions/data-actions';
+import { updateDocument, deleteAllRulesById } from '../../../redux/actions/data-actions';
 // MUI Stuff
 import { makeStyles } from '@material-ui/core/styles';
 import Avatar from '@material-ui/core/Avatar';
@@ -78,7 +78,7 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 // item - переданный документ или пользователь
-const SectionsModuleRow = ({ docSelected, section, updateDocument }) => {
+const SectionsModuleRow = ({ docSelected, section, updateDocument, deleteAllRulesById }) => {
   const classes = useStyles();
 
   const [isShowRules, setIsShowRules] = useState(false);
@@ -95,35 +95,26 @@ const SectionsModuleRow = ({ docSelected, section, updateDocument }) => {
       handleUpdateSection();
     }
   };
-  
-  const [isHoverEditIcon, setIsHoverEditIcon] = useState(false);
-  const handlePointerEditIconOn = () => setIsHoverEditIcon(true);
-  const handlePointerEditIconOff = () => setIsHoverEditIcon(false);
-  
 
   const [newTitle, setNewTitle] = useState(section.title);
   const handleEditTitle = (e) => {
     if (e.keyCode === 13 || e.keyCode === 27) {
       e.target.blur();
-      // handleBlur();
     }
     const value = e.target.value;
-    // if (value !== section.title) {
-    //   handleUpdateSection();
-    // }
     setNewTitle(value);
   };
 
+  // Сохраняем при изменении title 
   const handleUpdateSection = () => {
     if (section.title !== newTitle) {
-      console.log(`Есть изменения, обновляем название секции`);
-      const newSection = Object.assign({}, section);
-      newSection.lastChange = new Date().toISOString();
-      newSection.title = newTitle;
+      const updatedSection = Object.assign({}, section);
+      updatedSection.lastChange = new Date().toISOString();
+      updatedSection.title = newTitle;
 
-      const idx = docSelected.sections.findIndex((sec) => sec.id === newSection.id);
+      const idx = docSelected.sections.findIndex((sec) => sec.id === updatedSection.id);
       if (idx !== -1) {
-        docSelected.sections = [...docSelected.sections.slice(0, idx), newSection, ...docSelected.sections.slice(idx + 1)];
+        docSelected.sections = [...docSelected.sections.slice(0, idx), updatedSection, ...docSelected.sections.slice(idx + 1)];
         updateDocument(docSelected);
       }
     }
@@ -131,7 +122,13 @@ const SectionsModuleRow = ({ docSelected, section, updateDocument }) => {
 
   const handleDeleteSection = () => {
     console.log(`Нажали удалить раздел`);
-    // TODO: deleteSection();
+    const idx = docSelected.sections.findIndex((sec) => sec.id === section.id);
+    if (idx !== -1) {
+      docSelected.sections = [...docSelected.sections.slice(0, idx), ...docSelected.sections.slice(idx + 1)];
+      updateDocument(docSelected);
+      // Удаление правил которые есть в данной секции
+      deleteAllRulesById({ docId: docSelected.id, sectionId: section.id });
+    }
   };
 
   
@@ -203,6 +200,7 @@ SectionsModuleRow.propTypes = {
   docSelected: pt.object,
   section: pt.object,
   updateDocument: pt.func.isRequired,
+  deleteAllRulesById: pt.func.isRequired,
   // ruleStored: pt.object,
 };
 
@@ -211,4 +209,4 @@ const mapStateToProps = (state) => ({
 });
 
 
-export default connect(mapStateToProps, { updateDocument })(SectionsModuleRow);
+export default connect(mapStateToProps, { updateDocument, deleteAllRulesById })(SectionsModuleRow);
