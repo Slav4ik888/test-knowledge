@@ -59,7 +59,6 @@ const PositionsModuleRow = ({ type, item, employees, positions }) => {
       titleItem = `документом`;
       // Выбираем должности закреплённые за данным item
       positionsInItem = getPositionsByDocId(item.id, positions)
-      console.log('positionsInItem: ', positionsInItem);
       break;
     
     case typePosModule.EMPLOYEE:

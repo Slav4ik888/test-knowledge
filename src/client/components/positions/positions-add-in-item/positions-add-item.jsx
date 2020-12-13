@@ -74,7 +74,6 @@ const PositionsAddInItem = ({ open, type, onClose, UI: { loading }, item, positi
             if (resOutDoc !== -1) {
               let updateDocList = [...pos.documents.slice(0, resOutDoc), ...pos.documents.slice(resOutDoc + 1)];
               pos.documents = updateDocList;
-              console.log('Открепили: ', pos);
               updatePosition(pos);
             }
           }
@@ -85,7 +84,6 @@ const PositionsAddInItem = ({ open, type, onClose, UI: { loading }, item, positi
           const resIn = positionsInItem.find((selPos) => pos.id === selPos.id);
           if (!resIn) { // Добавили
             pos.documents.push(item.id);
-            console.log('Добавили: ', pos);
             updatePosition(pos);
           }
         });

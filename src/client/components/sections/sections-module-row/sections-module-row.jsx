@@ -121,7 +121,6 @@ const SectionsModuleRow = ({ docSelected, section, updateDocument, deleteAllRule
   };
 
   const handleDeleteSection = () => {
-    console.log(`Нажали удалить раздел`);
     const idx = docSelected.sections.findIndex((sec) => sec.id === section.id);
     if (idx !== -1) {
       docSelected.sections = [...docSelected.sections.slice(0, idx), ...docSelected.sections.slice(idx + 1)];
@@ -130,7 +129,6 @@ const SectionsModuleRow = ({ docSelected, section, updateDocument, deleteAllRule
       deleteAllRulesById({ docId: docSelected.id, sectionId: section.id });
     }
   };
-
   
 
   return (
@@ -162,16 +160,6 @@ const SectionsModuleRow = ({ docSelected, section, updateDocument, deleteAllRule
                 {
                   isHover &&
                     <>
-                      {/* <Tooltip title="Редактировать заголовок раздела" placement="bottom" arrow enterDelay={1000} enterNextDelay={1000}>
-                        <IconButton aria-label="Edit"
-                          className={cl(classes.editIcon, { [classes.hoverIcon]: isHoverEditIcon })}
-                          onMouseEnter={handlePointerEditIconOn}
-                          onMouseLeave={handlePointerEditIconOff}
-                        >
-                          <EditIcon />
-                        </IconButton>
-                      </Tooltip> */}
-                    
                       <DeleteButton type={`section`} icon placement="right" onDel={handleDeleteSection}
                         classname={classes.delIcon} classesActiveDel={classes.hoverIcon} />
                     </>
@@ -186,7 +174,7 @@ const SectionsModuleRow = ({ docSelected, section, updateDocument, deleteAllRule
             </div>
           </div>
 
-          <UpAndDownArrows type={typeUpDown.SECTION} />
+          <UpAndDownArrows type={typeUpDown.SECTION} docSelected={docSelected} section={section} />
         </div>
 
         <UpAndDownAdd type={typeUpDown.SECTION} docSelected={docSelected} section={section} down/>

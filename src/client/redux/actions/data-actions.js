@@ -129,7 +129,6 @@ export const updatePosition = (position) => (dispatch) => {
 
   return axios.post(`/updatePosition/${position.id}`, position)
     .then((res) => {
-      console.log(`res.data.position: `, res.data.position);
       dispatch({
         type: dataActionType.UPDATE_POSITION,
         payload: res.data.position,

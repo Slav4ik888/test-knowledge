@@ -14,7 +14,7 @@ import ExpandLessIcon from '@material-ui/icons/ExpandLess';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 // Components
 import { typeUpDown } from '../../../../types';
-
+import { getNewOrderForMoveSection } from '../../../../server/utils/utils';
 
 
 const useStyles = makeStyles((theme) => ({
@@ -24,10 +24,11 @@ const useStyles = makeStyles((theme) => ({
     flexDirection: `column`,
     alignItems: `center`,
     justifyContent: `center`,
+    maxHeight: `max-content`,
   },
   addIcon: {
-    width: `14px`,
-    height: `14px`, 
+    width: `24px`,
+    height: `24px`, 
     // color: theme.palette.background.default,
     color: `#ffffff`,
   },
@@ -37,7 +38,7 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 // Выводит стрелки вверх и вниз, а при нажатии перемещает объект выше или ниже
-const UpAndDownArrows = ({ type }) => {
+const UpAndDownArrows = ({ loading, type, docSelected, section, updateDocument }) => {
   const classes = useStyles();
 
   const [isHover, setIsHover] = useState(false);
@@ -46,11 +47,26 @@ const UpAndDownArrows = ({ type }) => {
   
 
   const handleMoveItemUp = () => {
-    console.log(`Нажали переместить вверх`);
+    if (!loading) {
+      handleMoveSection(`up`);
+    }
   };
 
   const handleMoveItemDown = () => {
-    console.log(`Нажали переместить вниз`);
+    if (!loading) {
+      handleMoveSection(`down`);
+    }
+  };
+
+  const handleMoveSection = (type) => {
+    const idx = docSelected.sections.findIndex((sec) => sec.id === section.id);
+    const order = section.order;
+    const newOrder = getNewOrderForMoveSection(type, docSelected, section);
+
+    if (newOrder !== order) { // Сохраняем если есть изменения
+      docSelected.sections[idx].order = newOrder;
+      updateDocument(docSelected);
+    }
   };
 
   let tooltipUp = ``;
@@ -95,13 +111,15 @@ const UpAndDownArrows = ({ type }) => {
 
 
 UpAndDownArrows.propTypes = {
+  loading: pt.bool.isRequired,
   type: pt.string.isRequired,
-  // updateDocument: pt.func.isRequired,
-  // ruleStored: pt.object,
+  docSelected: pt.object.isRequired,
+  section: pt.object.isRequired,
+  updateDocument: pt.func.isRequired,
 };
 
 const mapStateToProps = (state) => ({
-  // ruleStored: state.UI.ruleStored,
+  loading: state.UI.loading,
 });
 
 

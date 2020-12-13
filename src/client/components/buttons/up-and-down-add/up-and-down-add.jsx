@@ -12,7 +12,7 @@ import Tooltip from '@material-ui/core/Tooltip';
 import AddIcon from '@material-ui/icons/Add';
 // Components
 import { typeUpDown } from '../../../../types';
-import { createId, getNewOrder } from '../../../../server/utils/utils';
+import { createId, getNewOrderForSection } from '../../../../server/utils/utils';
 
 
 
@@ -46,11 +46,9 @@ const UpAndDownAdd = ({ loading, type, docSelected, section, up, down, updateDoc
   const handleAddItem = () => {
     if (!loading) {
       if (up) {
-        console.log(`Нажали добавить выше`);
         handleAddSection(`up`);
       }
       if (down) {
-        console.log(`Нажали добавить ниже`);
         handleAddSection(`down`);
       }
     }
@@ -60,7 +58,7 @@ const UpAndDownAdd = ({ loading, type, docSelected, section, up, down, updateDoc
       const newSection = {
         title: ``,
         id: createId(docSelected.sections),
-        order: getNewOrder(type, docSelected, section),
+        order: getNewOrderForSection(type, docSelected, section),
         createdAt: new Date().toISOString(),
         lastChange: new Date().toISOString(),
       };
@@ -69,14 +67,17 @@ const UpAndDownAdd = ({ loading, type, docSelected, section, up, down, updateDoc
   };
 
   let tooltip = ``;
+  let placement = ``;
 
   switch (type) {
     case typeUpDown.SECTION:
       tooltip = up ? `Добавить раздел выше` : `Добавить раздел ниже`;
+      placement = up ? `top` : `bottom`;
       break;
     
     case typeUpDown.RULE:
       tooltip = down ? `Добавить правило выше` : `Добавить правило ниже`;
+      placement = down ? `top` : `bottom`;
       break;
   }
   
@@ -87,7 +88,7 @@ const UpAndDownAdd = ({ loading, type, docSelected, section, up, down, updateDoc
         onMouseEnter={handleIsHoverOn}
         onMouseLeave={handleIsHoverOff}
       >
-        <Tooltip title={tooltip} placement="right" arrow enterDelay={1000} enterNextDelay={1000}>
+        <Tooltip title={tooltip} placement={placement} arrow enterDelay={1000} enterNextDelay={1000}>
           <IconButton onClick={handleAddItem} className={cl(classes.addIcon, { [classes.hoverIcon]: isHover })}>
             <AddIcon />
           </IconButton>
