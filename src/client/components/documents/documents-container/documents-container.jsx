@@ -60,7 +60,15 @@ const DocumentsContainer = ({ open, onClose, UI, documents, createDocument, upda
         title,
         positions: [],
         sections: [],
-      }
+      };
+      const firstSection = {
+        title: ``,
+        id: `1`,
+        order: 100,
+        createdAt: new Date().toISOString(),
+        lastChange: new Date().toISOString(),
+      };
+      newDocument.sections.push(firstSection);
       createDocument(newDocument);
     }
   };

@@ -62,7 +62,7 @@ const useStyles = makeStyles((theme) => ({
 
 
 
-const RulesContainer = ({ loading, setRuleStored, ruleStored, getAllRulesById, rules, setActiveRules }) => {
+const RulesContainer = ({ loading, setRuleStored, ruleStored, setActiveRules }) => {
 
   const classes = useStyles();
   const [isChange, setIsChange] = useState(false);
@@ -80,27 +80,11 @@ const RulesContainer = ({ loading, setRuleStored, ruleStored, getAllRulesById, r
   const [docSelected, setDocSelected] = useState(ruleStored.docSelected);
   const handleDocSelected = (doc) => {
     setDocSelected(doc);
-    // setSectionSelected(null); // Обнуляем выбранную ранее section
     setRuleStored({ docSelected: doc, sectionSelected: null }); // Запоминаем выбранное
     setActiveRules({ docId: ``, sectionId: `` }); // Обнуляем activeRules
   };
 
-  // // Выбранный раздел - section
-  // const [sectionSelected, setSectionSelected] = useState(ruleStored.sectionSelected);
-  // const handleSectionSelected = (section) => {
-  //   setSectionSelected(section);
-  //   setRuleStored({ docSelected, sectionSelected: section }); // Запоминаем выбранное 
-  //   if (section) {
-  //     const checkRule = getRulesFromDocAndSection(rules, docSelected.id, section.id);
-  //     console.log('checkRule: ', checkRule);
-  //     if (!checkRule) { // Если ещё не загружали
-  //       getAllRulesById({ docId: docSelected.id, sectionId: section.id }); // Загружаем rules с db
-
-  //     } else { // Сохраняем rules из активной section
-  //       setActiveRules({ docId: docSelected.id, sectionId: section.id }); 
-  //     }
-  //   }
-  // };
+  
 
   // // Обновление title при редактировании правила
   // const handleEditTitle = (docId, sectionId, newTitle) => {
@@ -138,18 +122,9 @@ const RulesContainer = ({ loading, setRuleStored, ruleStored, getAllRulesById, r
 
           <PositionsModuleRow item={docSelected} type={typePosModule.DOC} />
 
-          <SectionsListModule
-            docSelected={docSelected}
-            // onSectionSelected={handleSectionSelected}
-          />
+          <SectionsListModule docSelected={docSelected} />
           
-          {/* <RulesModuleRow
-            docSelected={docSelected}
-            sectionSelected={sectionSelected}
-          /> */}
-
-
-          <div className={classes.cancelSubmitBtn}>
+          {/* <div className={classes.cancelSubmitBtn}>
             <CancelSubmitBtn
               onCancel={handleClose}
               onSubmit={handleSubmit}
@@ -163,7 +138,7 @@ const RulesContainer = ({ loading, setRuleStored, ruleStored, getAllRulesById, r
             onOk={handleOkConfirm}
             onCancel={handleCloseConfirm}
             title="Есть не сохранённые данные, выйти без сохранения?"
-          />
+          /> */}
 
         </div>
       </Paper>

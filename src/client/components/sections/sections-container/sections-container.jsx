@@ -1,6 +1,5 @@
 import React, {useState, useRef, useEffect} from 'react';
 import pt from 'prop-types';
-import { createId, getMaxOrder } from '../../../../server/utils/utils';
 // Readux Stuff
 import { connect } from 'react-redux';
 import { updateDocument } from '../../../redux/actions/data-actions';
@@ -16,6 +15,7 @@ import DialogContent from '@material-ui/core/DialogContent';
 import SectionsList from '../sections-list/sections-list';
 import SectionAdd from '../section-add/section-add';
 import DialogTitle from '../../dialogs/dialog-title/dialog-title';
+import { createId, getMaxOrder } from '../../../../server/utils/utils';
 
 
 const useStyles = makeStyles((theme) => ({

@@ -72,8 +72,6 @@ export const getIdxRulesFromDocAndSection = (rules, doc, section) => {
 export const sortingArr = (arr, fieldName) => {
   let result = [];
   result = result.concat(arr);
-  console.log('result: ', result);
-
   return result.sort((a, b) => {
     if (a[fieldName] < b[fieldName]) {
       return -1;

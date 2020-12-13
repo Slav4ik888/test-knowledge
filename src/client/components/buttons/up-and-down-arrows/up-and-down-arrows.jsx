@@ -19,19 +19,20 @@ import { typeUpDown } from '../../../../types';
 
 const useStyles = makeStyles((theme) => ({
   container: {
-    margin: theme.spacing(2, 0, 4, 1),
+    marginLeft: theme.spacing(1),
     display: `flex`,
     flexDirection: `column`,
     alignItems: `center`,
     justifyContent: `center`,
   },
   addIcon: {
-    width: `10px`,
-    height: `10px`, 
-    color: theme.palette.background.default,
+    width: `14px`,
+    height: `14px`, 
+    // color: theme.palette.background.default,
+    color: `#ffffff`,
   },
   hoverIcon: {
-    color: theme.palette.background.iconHover,
+    color: theme.palette.background.default,
   },
 }));
 
@@ -63,7 +64,7 @@ const UpAndDownArrows = ({ type }) => {
     
     case typeUpDown.RULE:
       tooltipUp = `Переместить правило выше`;
-      tooltipDown = `Переместить раздел ниже`;
+      tooltipDown = `Переместить правило ниже`;
       break;
   }
   

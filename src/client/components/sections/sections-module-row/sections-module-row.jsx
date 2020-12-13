@@ -17,12 +17,19 @@ import ExpandLessIcon from '@material-ui/icons/ExpandLess';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 // Components
 import DeleteButton from '../../buttons/delete-button/delete-button';
+import UpAndDownAdd from '../../buttons/up-and-down-add/up-and-down-add';
 import UpAndDownArrows from '../../buttons/up-and-down-arrows/up-and-down-arrows';
 import { typeUpDown } from '../../../../types';
 
 
 const useStyles = makeStyles((theme) => ({
   container: {
+    display: 'flex',
+    flexDirection: `column`,
+    width: `100%`,
+    margin: theme.spacing(2, 0, 4, 0),
+  },
+  box: {
     display: 'flex',
     flexDirection: `row`,
     alignItems: `center`,
@@ -32,7 +39,7 @@ const useStyles = makeStyles((theme) => ({
     width: `100%`,
     display: 'flex',
     alignItems: `center`,
-    margin: theme.spacing(2, 0, 4, 0),
+    // margin: theme.spacing(2, 0, 4, 0),
     padding: theme.spacing(1, 2, 1, 2),
     borderRadius: `10px`,
     border: `1px solid`,
@@ -132,60 +139,60 @@ const SectionsModuleRow = ({ docSelected, section, updateDocument }) => {
   return (
     <>
       <div className={classes.container}>
-        <div className={cl(classes.row, {[classes.hover]: isHover})}>
-          <Avatar className={classes.avatar}>
-            <InsertDriveFileIcon />
-          </Avatar>
+        <UpAndDownAdd type={typeUpDown.SECTION} docSelected={docSelected} section={section} up />
+        
+        <div className={classes.box}>
+          <div className={cl(classes.row, {[classes.hover]: isHover})}>
+            <Avatar className={classes.avatar}>
+              <InsertDriveFileIcon />
+            </Avatar>
 
-          <div className={classes.sprite}>
-            <div style={{ display: `flex`, flexDirection: `row`, width: `100%` }}
-              onMouseEnter={handlePointerEnter}
-              onMouseLeave={handlePointerLeave}
-            >
-              {
-                //   InputProps={{
-                //     classes: {
-                //       input: classes.textFieldTitle,
-                //     },
-                //   }} 
-                <InputBase
-                  className={classes.textFieldTitle}
-                  value={newTitle}
-                  fullWidth
-                  placeholder="Введите заголовок раздела"
-                  onChange={handleEditTitle} 
-                  onKeyDown={handleEditTitle}
+            <div className={classes.sprite}>
+              <div style={{ display: `flex`, flexDirection: `row`, width: `100%` }}
+                onMouseEnter={handlePointerEnter}
+                onMouseLeave={handlePointerLeave}
+              >
+                <Tooltip title="Нажмите, чтобы изменить заголовок раздела" placement="top" arrow enterDelay={1000} enterNextDelay={1000}>
+                  <InputBase
+                    className={classes.textFieldTitle}
+                    value={newTitle}
+                    fullWidth
+                    placeholder="Введите заголовок раздела"
+                    onChange={handleEditTitle} 
+                    onKeyDown={handleEditTitle}
                   />
-              }
-              {
-                isHover &&
-                  <>
-                    <Tooltip title="Редактировать заголовок раздела" placement="bottom" arrow enterDelay={1000} enterNextDelay={1000}>
-                      <IconButton aria-label="Edit"
-                        className={cl(classes.editIcon, { [classes.hoverIcon]: isHoverEditIcon })}
-                        onMouseEnter={handlePointerEditIconOn}
-                        onMouseLeave={handlePointerEditIconOff}
-                      >
-                        <EditIcon />
-                      </IconButton>
-                    </Tooltip>
-                  
-                    <DeleteButton type={`section`} icon placement="right" onDel={handleDeleteSection}
-                      classname={classes.delIcon} classesActiveDel={classes.hoverIcon} />
-                  </>
-              }
-            </div>
+                </Tooltip>
+                {
+                  isHover &&
+                    <>
+                      {/* <Tooltip title="Редактировать заголовок раздела" placement="bottom" arrow enterDelay={1000} enterNextDelay={1000}>
+                        <IconButton aria-label="Edit"
+                          className={cl(classes.editIcon, { [classes.hoverIcon]: isHoverEditIcon })}
+                          onMouseEnter={handlePointerEditIconOn}
+                          onMouseLeave={handlePointerEditIconOff}
+                        >
+                          <EditIcon />
+                        </IconButton>
+                      </Tooltip> */}
+                    
+                      <DeleteButton type={`section`} icon placement="right" onDel={handleDeleteSection}
+                        classname={classes.delIcon} classesActiveDel={classes.hoverIcon} />
+                    </>
+                }
+              </div>
 
-            <Tooltip title={ExpandTitle} placement="bottom" arrow enterDelay={1000} enterNextDelay={1000}>
-              <IconButton onClick={handleToggleShowRules} className={classes.expandIcon}>
-                {ExpandIcon}
-              </IconButton>
-            </Tooltip>
+              <Tooltip title={ExpandTitle} placement="bottom" arrow enterDelay={1000} enterNextDelay={1000}>
+                <IconButton onClick={handleToggleShowRules} className={classes.expandIcon}>
+                  {ExpandIcon}
+                </IconButton>
+              </Tooltip>
+            </div>
           </div>
+
+          <UpAndDownArrows type={typeUpDown.SECTION} />
         </div>
 
-        <UpAndDownArrows type={typeUpDown.SECTION} />
-          
+        <UpAndDownAdd type={typeUpDown.SECTION} docSelected={docSelected} section={section} down/>
       </div>
     </>
   );
