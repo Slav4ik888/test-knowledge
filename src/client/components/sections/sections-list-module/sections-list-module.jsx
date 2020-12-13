@@ -8,7 +8,7 @@ import { connect } from 'react-redux';
 import SectionsModuleRow from '../sections-module-row/sections-module-row';
 import { sortingArr } from '../../../utils/utils';
 
-
+// В открытом document выводит список всех section в виде модулей с вложенными rules
 const SectionsListModule = ({ docSelected }) => {
   if (!docSelected) return null;
 

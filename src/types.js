@@ -55,3 +55,9 @@ exports.typeListSelect = {
   DOC: `Документ`,
   SECTION: `Обязанность`,
 };
+
+// Типы для UpAndDownArrows
+exports.typeUpDown = {
+  SECTION: `Раздел`,
+  RULE: `Правило`,
+};

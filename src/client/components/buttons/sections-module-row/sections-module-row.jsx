@@ -9,16 +9,18 @@ import { makeStyles } from '@material-ui/core/styles';
 import Avatar from '@material-ui/core/Avatar';
 import IconButton from '@material-ui/core/IconButton';
 import Tooltip from '@material-ui/core/Tooltip';
+import TextField from '@material-ui/core/TextField';
+import Typography from '@material-ui/core/Typography';
 import InputBase from '@material-ui/core/InputBase';
 // Icons
 import EditIcon from '@material-ui/icons/Edit';
+import AddIcon from '@material-ui/icons/Add';
 import InsertDriveFileIcon from '@material-ui/icons/InsertDriveFile';
 import ExpandLessIcon from '@material-ui/icons/ExpandLess';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 // Components
-import DeleteButton from '../../buttons/delete-button/delete-button';
-import UpAndDownArrows from '../../buttons/up-and-down-arrows/up-and-down-arrows';
-import { typeUpDown } from '../../../../types';
+import DeleteButton from '../delete-button/delete-button';
+
 
 
 const useStyles = makeStyles((theme) => ({
@@ -67,6 +69,18 @@ const useStyles = makeStyles((theme) => ({
   },
   hoverIcon: {
     color: theme.palette.background.iconHover,
+  },
+  addSectionBlock: {
+    margin: theme.spacing(2, 0, 4, 1),
+    display: `flex`,
+    flexDirection: `column`,
+    alignItems: `center`,
+    justifyContent: `center`,
+  },
+  addIcon: {
+    width: `10px`,
+    height: `10px`, 
+    color: `#ffffff`,
   },
 }));
 
@@ -127,7 +141,18 @@ const SectionsModuleRow = ({ docSelected, section, updateDocument }) => {
     // TODO: deleteSection();
   };
 
+  const [isHoverAdd, setIsHoverAdd] = useState(false);
+  const handlePointerAddSectionOn = () => setIsHoverAdd(true);
+  const handlePointerAddSectionOff = () => setIsHoverAdd(false);
   
+
+  const handleAddSectionUp = () => {
+
+  };
+
+  const handleAddSectionDown = () => {
+
+  };
 
   return (
     <>
@@ -184,8 +209,23 @@ const SectionsModuleRow = ({ docSelected, section, updateDocument }) => {
           </div>
         </div>
 
-        <UpAndDownArrows type={typeUpDown.SECTION} />
+        <div className={classes.addSectionBlock}
+          // onMouseEnter={handlePointerAddSectionOn} onMouseLeave={handlePointerAddSectionOff}
+        >
+          <Tooltip title="Добавить раздел выше" placement="right" arrow enterDelay={1000} enterNextDelay={1000}>
+            <IconButton onClick={handleAddSectionUp} className={cl(classes.addIcon, { [classes.hoverIcon]: isHoverEditIcon })}>
+              <ExpandLessIcon />
+            </IconButton>
+          </Tooltip>
+
+          <AddIcon className={cl(classes.addIcon, { [classes.hoverIcon]: isHoverEditIcon })}/>
           
+          <Tooltip title="Добавить раздел ниже" placement="right" arrow enterDelay={1000} enterNextDelay={1000}>
+            <IconButton onClick={handleAddSectionDown} className={cl(classes.addIcon, { [classes.hoverIcon]: isHoverEditIcon })}>
+              <ExpandMoreIcon />
+            </IconButton>
+          </Tooltip>
+        </div>
       </div>
     </>
   );
