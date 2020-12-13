@@ -27,7 +27,7 @@ const useStyles = makeStyles((theme) => ({
     width: `5px`,
     height: `5px`, 
     // color: theme.palette.background.default,
-    color: `#ffffff`,
+    color: theme.palette.background.dialogBody,
   },
   hoverIcon: {
     color: theme.palette.background.default,

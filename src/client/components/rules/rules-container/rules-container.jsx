@@ -13,8 +13,6 @@ import DialogTitle from '../../dialogs/dialog-title/dialog-title';
 import DocumentsModuleRow from '../../documents/documents-module-row/documents-module-row';
 import PositionsModuleRow from '../../positions/positions-module-row/positions-module-row';
 import SectionsListModule from '../../sections/sections-list-module/sections-list-module';
-import SectionsModuleRow from '../../sections/sections-module-row/sections-module-row';
-import RulesModuleRow from '../../rules/rules-module-row/rules-module-row';
 import CancelSubmitBtn from '../../buttons/cancel-submit-btn/cancel-submit-btn';
 import Confirm from '../../confirm/confirm';
 import { typePosModule, typeConfirm } from '../../../../types';
@@ -36,7 +34,7 @@ const useStyles = makeStyles((theme) => ({
   },
   paper: {
     width: `100%`,
-    // backgroundColor: theme.palette.background.default,
+    backgroundColor: theme.palette.background.dialogBody,
   },
   content: {
     padding: theme.spacing(4),

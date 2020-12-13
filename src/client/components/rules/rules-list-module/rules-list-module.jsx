@@ -22,24 +22,22 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 
-const RulesModuleRow = ({ loading, onEditTitle, onEditRule, rules, activeRules: {docId, sectionId} }) => {
+const RulesListModule = ({ loading, rules, docSelected, section }) => {
   
-  if (!sectionId) return null;
-  // if (loading) return <CircularProgress />;
+  // if (!sectionId) return null;
+  if (loading) return <CircularProgress />;
 
-  console.log('rules: ', rules);
-  console.log('activeRules: ', docId, ` : `, sectionId);
   const classes = useStyles();
 
   let rulesShow = [];
   // Получаем объект с правилами для секции
-  let activeRuleObj = getRulesFromDocAndSection(rules, docId, sectionId); 
+  let activeRuleObj = getRulesFromDocAndSection(rules, docSelected.id, section.id); 
   console.log('activeRuleObj: ', activeRuleObj);
 
 
   if (activeRuleObj) {
     // Получаем rules отсортированные по order
-    rulesShow = sortingArr(rulesShow.concat(activeRuleObj.rules), `order`);
+    rulesShow = sortingArr(activeRuleObj.rules, `order`);
   };
   console.log('rulesShow: ', rulesShow);
   
@@ -52,16 +50,15 @@ const RulesModuleRow = ({ loading, onEditTitle, onEditRule, rules, activeRules: 
             rulesShow.map((rule) => <RuleRow key={rule.id}
               rule={rule}
             />)
-            : null
+            : <RuleRowCreate />
         }
-        <RuleRowCreate />
       </div>
     </>
   );
 };
 
 
-RulesModuleRow.propTypes = {
+RulesListModule.propTypes = {
   loading: pt.bool.isRequired,
   rules: pt.array.isRequired,
   activeRules: pt.object.isRequired,
@@ -74,4 +71,4 @@ const mapStateToProps = (state) => ({
 });
 
 
-export default connect(mapStateToProps)(RulesModuleRow);
+export default connect(mapStateToProps)(RulesListModule);

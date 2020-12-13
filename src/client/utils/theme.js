@@ -19,14 +19,17 @@ export default {
       rule: `#666666`,
     },
     background: {
-      default: `#e4e9ea`, // Для body #ebecf0
+      default: `#e4e9ea`, // Для body #ebecf0  
       main: `#ffffff`,
       light: `#ececec`,
+      paperChip: `#b3b9bf`,
+      chip: `#ade6dc`,
       dialog: `#c1e5e2`,
+      dialogBody: `#d2d8d7`,
       hover: `#e6f4f3`,
       iconHover: `#9e9e9e`,
-      section: `#fafafa`,
-      sectionHover: `#f7f7f7`,
+      section: `#b3b9bf`, //fafafa
+      sectionHover: `#c3c9ce`, //f7f7f7
       moduleAdd: `#e6f4f3`,
       moduleAddInput: `#fafafa`,
     },

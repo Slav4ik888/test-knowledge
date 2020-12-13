@@ -19,7 +19,7 @@ import { getNewOrderForMoveSection } from '../../../../server/utils/utils';
 
 const useStyles = makeStyles((theme) => ({
   container: {
-    marginLeft: theme.spacing(1),
+    // marginLeft: theme.spacing(1),
     display: `flex`,
     flexDirection: `column`,
     alignItems: `center`,
@@ -29,11 +29,10 @@ const useStyles = makeStyles((theme) => ({
   addIcon: {
     width: `24px`,
     height: `24px`, 
-    // color: theme.palette.background.default,
-    color: `#ffffff`,
+    color: theme.palette.background.default,
   },
   hoverIcon: {
-    color: theme.palette.background.default,
+    color: theme.palette.background.iconHover,
   },
 }));
 

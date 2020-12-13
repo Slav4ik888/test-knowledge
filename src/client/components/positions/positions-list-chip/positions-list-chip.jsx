@@ -26,6 +26,7 @@ const useStyles = makeStyles((theme) => ({
   chip: {
     margin: theme.spacing(0.5),
     color: `#013253`,
+    backgroundColor: theme.palette.background.chip,
   },
 }));
 

@@ -32,6 +32,7 @@ const useStyles = makeStyles((theme) => ({
     border: `1px solid`,
     borderColor: theme.border.light,
     borderRadius: `5px`,
+    backgroundColor: theme.palette.background.paperChip,
   },
   block: {
     display: `block`,
