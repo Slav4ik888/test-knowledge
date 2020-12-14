@@ -15,8 +15,8 @@ import { typeConfirm } from '../../../../types';
 
 const useStyles = makeStyles((theme) => ({
   icon: {
-    color: theme.palette.background.default,
-  },
+    color: theme.palette.background.bodyfield,
+  },  
   iconActiveSave: {
     color: theme.palette.primary.main,
   },

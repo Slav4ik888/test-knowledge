@@ -19,43 +19,49 @@ import { typePosModule, typeConfirm } from '../../../../types';
 import { getRulesFromDocAndSection } from '../../../utils/utils';
 
 const useStyles = makeStyles((theme) => ({
-  root: {
-    display: 'flex',
-    flexWrap: 'wrap',
-    justifyContent: `center`,
-    width: `100%`,
-    height: `100%`,
-    margin: theme.spacing(2, 0, 2, 0),
+  // root: {
+  //   display: 'flex',
+  //   flexWrap: 'wrap',
+  //   justifyContent: `center`,
+  //   width: `100%`,
+  //   height: `100%`,
+  //   margin: theme.spacing(2, 0, 2, 0),
     // '& > *': {
     //   margin: theme.spacing(1),
     //   width: theme.spacing(16),
     //   height: theme.spacing(16),
     // },
-  },
+  // },
   paper: {
+    display: 'flex',
+    flexWrap: 'wrap',
+    // justifyContent: `center`,
+    flexDirection: `column`,
     width: `100%`,
-    backgroundColor: theme.palette.background.dialogBody,
+    height: `100%`,
+    margin: theme.spacing(2, 0, 2, 0),
+    backgroundColor: theme.palette.background.bodyfield,
   },
   content: {
     padding: theme.spacing(4),
   },
-  row: {
-    display: 'flex',
-    alignItems: `center`,
-    margin: theme.spacing(2, 0, 4, 0),
-  },
-  avatar: { 
-    marginRight: theme.spacing(3),
-  },
-  editIcon: {
-    marginTop: theme.spacing(1),
-    marginLeft: theme.spacing(3),
-  },
-  cancelSubmitBtn: {
-    margin: theme.spacing(4, 0, 4, 0),
-    position: `relative`,
-    float: `right`,
-  },
+  // row: {
+  //   display: 'flex',
+  //   alignItems: `center`,
+  //   margin: theme.spacing(2, 0, 4, 0),
+  // },
+  // avatar: { 
+  //   marginRight: theme.spacing(3),
+  // },
+  // editIcon: {
+  //   marginTop: theme.spacing(1),
+  //   marginLeft: theme.spacing(3),
+  // },
+  // cancelSubmitBtn: {
+  //   margin: theme.spacing(4, 0, 4, 0),
+  //   position: `relative`,
+  //   float: `right`,
+  // },
 }));
 
 
@@ -111,7 +117,7 @@ const RulesContainer = ({ loading, setRuleStored, ruleStored, setActiveRules }) 
   
   
   return (
-    <div className={classes.root}>
+    // <div className={classes.root}>
       <Paper className={classes.paper}>
         <DialogTitle>Новое правило</DialogTitle>
         <div className={classes.content}>
@@ -140,7 +146,7 @@ const RulesContainer = ({ loading, setRuleStored, ruleStored, setActiveRules }) 
 
         </div>
       </Paper>
-    </div>
+    // </div>
   );
 };
 

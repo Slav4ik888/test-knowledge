@@ -12,21 +12,28 @@ import FolderIcon from '@material-ui/icons/Folder';
 
 
 const useStyles = makeStyles((theme) => ({
+  form: {
+    backgroundColor: theme.palette.background.moduleAddInput,
+  },
   formControl: {
-    margin: theme.spacing(4, 3, 4, 3),
-    padding: theme.spacing(2, 4, 2, 2),
+    margin: theme.spacing(2, 3, 5, 3),
+    padding: theme.spacing(1.5, 4, 1.5, 2),
     minWidth: 300,
     display: `flex`,
     alignItems: `center`,
     backgroundColor: theme.palette.background.moduleAdd,
+
   },
   input: {
     margin: theme.spacing(0, 2, 0, 2),
-    width: `calc(100% - 120px)`,
+    width: `calc(100% - 100px)`,
     flex: 1,
     padding: theme.spacing(1, 3, 1, 3),
     backgroundColor: theme.palette.background.moduleAddInput,
-    borderRadius: `35px`,
+    borderRadius: `10px`,
+  },
+  avatar: {
+    backgroundColor: theme.palette.primary.light,
   },
   customError: {
     color: `red`,
@@ -64,9 +71,9 @@ const DocumentAdd = ({ onAdd, UI: { errors } }) => {
 
   return (
     <>
-      <form onSubmit={handleSubmit}>
+      <form onSubmit={handleSubmit} className={classes.form}>
         <Paper className={classes.formControl}>
-          <Avatar>
+          <Avatar className={classes.avatar}>
             <FolderIcon />
           </Avatar>
           <InputBase
@@ -77,7 +84,7 @@ const DocumentAdd = ({ onAdd, UI: { errors } }) => {
             value={newDoc}
             onChange={handleEdit}
           />
-          <IconButton aria-label="Add" onClick={handleAdd}>
+          <IconButton aria-label="Add" onClick={handleAdd} >
             <AddIcon />
           </IconButton>
         </Paper>

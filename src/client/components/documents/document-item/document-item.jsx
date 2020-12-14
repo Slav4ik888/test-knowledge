@@ -4,16 +4,14 @@ import pt from 'prop-types';
 import { connect } from 'react-redux';
 // MUI Stuff
 import { makeStyles } from '@material-ui/core/styles';
-import TextField from '@material-ui/core/TextField';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemAvatar from '@material-ui/core/ListItemAvatar';
 import ListItemSecondaryAction from '@material-ui/core/ListItemSecondaryAction';
-import ListItemText from '@material-ui/core/ListItemText';
 import Avatar from '@material-ui/core/Avatar';
 import IconButton from '@material-ui/core/IconButton';
 import Tooltip from '@material-ui/core/Tooltip';
+import InputBase from '@material-ui/core/InputBase';
 // Icons
-import EditIcon from '@material-ui/icons/Edit';
 import FolderIcon from '@material-ui/icons/Folder';
 import SupervisedUserCircleIcon from '@material-ui/icons/SupervisedUserCircle';
 // Components
@@ -28,10 +26,20 @@ const useStyles = makeStyles((theme) => ({
     marginRight: 70,
   },
   hover: {
+    transition: `transform 0.2s`,
     backgroundColor: theme.palette.background.hover,
+    borderRadius: `5px`,
   },
   textField: {
 
+  },
+  avatar: {
+    backgroundColor: theme.palette.primary.light,
+  },
+  input: {
+    width: `calc(100% - 100px)`,
+    flex: 1,
+    padding: theme.spacing(1, 3, 1, 3),
   },
 }));
 
@@ -49,13 +57,10 @@ const DocumentItem = ({ doc, onEdit, onDel, positions}) => {
   };
   const hover = showIcons ? classes.hover : ``;
 
-  const [edit, setEdit] = useState(false);
-  const handleSetEdit = () => setEdit(true);
-
   const [newTitle, setNewTitle] = useState(title);
   const handleEdit = (e) => {
     if (e.keyCode === 13 || e.keyCode === 27) {
-      setEdit(false);
+      e.target.blur();
       if (title !== newTitle) {
         onEdit(id, newTitle);
       }
@@ -63,9 +68,7 @@ const DocumentItem = ({ doc, onEdit, onDel, positions}) => {
     setNewTitle(e.target.value);
   };
 
-  const handleFocus = () => {};
   const handleBlur = () => {
-    setEdit(false);
     if (title !== newTitle) {
       onEdit(id, newTitle);
     }
@@ -91,33 +94,27 @@ const DocumentItem = ({ doc, onEdit, onDel, positions}) => {
       className={hover}
     >
       <ListItemAvatar>
-        <Avatar>
+        <Avatar className={classes.avatar}>
           <FolderIcon />
         </Avatar>
       </ListItemAvatar>
-      {
-        edit ?
-          <TextField
-            name={id} type="text" className={classes.textField}
-            value={newTitle} onChange={handleEdit} fullWidth
-            onFocus={handleFocus}
-            onBlur={handleBlur}
-            onKeyDown={handleEdit}
-          />
-          :
-          <ListItemText primary={newTitle} onClick={handleSetEdit}/>
-      }
+
+      <Tooltip title="Нажмите для редактирования" placement="top" arrow enterDelay={1000} enterNextDelay={1000}>
+        <InputBase
+          className={classes.input}
+          inputProps={{ 'aria-label': 'Документ' }}
+          value={newTitle}
+          type="text"
+          placeholder="Введите название документа"
+          onChange={handleEdit}
+          onBlur={handleBlur}
+          onKeyDown={handleEdit}
+        />
+      </Tooltip>
+      
       {
         showIcons &&
         <>
-          <ListItemSecondaryAction onClick={handleSetEdit} className={classes.editIcon}>
-            <Tooltip title="Изменить" placement="bottom" arrow enterDelay={1000} enterNextDelay={1000}>
-              <IconButton aria-label="Edit">
-                <EditIcon />
-              </IconButton>
-            </Tooltip>
-          </ListItemSecondaryAction>
-
           <DeleteDocumentAvatar onDel={handleDelDoc} title={`документ`} />
 
           <ListItemSecondaryAction

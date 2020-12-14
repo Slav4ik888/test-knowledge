@@ -6,18 +6,21 @@ import { connect } from 'react-redux';
 // MUI Stuff
 import { makeStyles } from '@material-ui/core/styles';
 import Dialog from '@material-ui/core/Dialog';
-import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
 // Components
 import PositionsListItem from '../positions-list-item/positions-list-item';
 import PositionAdd from '../position-add/position-add';
 import DialogTitle from '../../dialogs/dialog-title/dialog-title';
-// import CancelSubmitBtn from '../../buttons/cancel-submit-btn/cancel-submit-btn';
 
 
 const useStyles = makeStyles((theme) => ({
   dialog: {
     padding: theme.spacing(4),
+  },
+  container: {
+    display: 'flex',
+    flexWrap: 'wrap',
+    backgroundColor: theme.palette.background.bodyfield,
   },
 }));
 
@@ -63,13 +66,12 @@ const PositionsContainer = ({ open, onClose, UI: { loading, errors, messages }, 
       >
         <DialogTitle onClose={handleClose}>Настройка должностей</DialogTitle>
 
-        <DialogContent dividers ref={listRef} >
+        <DialogContent dividers ref={listRef} className={classes.container} >
           <PositionsListItem positions={positions} />
         </DialogContent>
 
         <PositionAdd onAdd={handleAddPos} />
         
-        {/* <DialogActions className={classes.dialog}></DialogActions> */}
       </Dialog>
     </>
   );

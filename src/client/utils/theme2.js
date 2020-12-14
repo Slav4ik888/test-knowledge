@@ -1,17 +1,16 @@
 export default {
   palette: {
     primary: {
-      ultralight: `#cfd8dc`,
-      light: `#62727b`, 
-      main: `#37474f`,
-      dark: `#102027`,
-      contrastText: `#ffffff`,
+      light: `#c1e5e2`,
+      main: `#b2dfdb`,
+      dark: `#7c9c99`,
+      contrastText: `#1e3331`,
     },
     secondary: {
-      light: `#ffffb0`,
-      main: `#ffe57f`,
-      dark: `#cab350`,
-      contrastText: `#000000`,
+      light: `#f6685e`,
+      main: `#f44336`,
+      dark: `#aa2e25`,
+      contrastText: `#fff`,
     },
     fontColor: {
       document: ``,
@@ -23,17 +22,16 @@ export default {
       default: `#e4e9ea`, // Для body #ebecf0  
       main: `#ffffff`,
       light: `#ececec`,
-      bodyfield: `#e0e0e0`, 
       paperChip: `#b3b9bf`,
-      chip: `#ffe57f`,
+      chip: `#ade6dc`,
       dialog: `#c1e5e2`,
       dialogBody: `#d2d8d7`,
-      hover: `#cfd8dc`,
-      iconHover: `#62727b`, // 9e9e9e
-      section: `#c9cfd2`, //fafafa
-      sectionHover: `#c0c6ca`, //f7f7f7 
-      moduleAdd: `#e0e0e0`,
-      moduleAddInput: `#F5F5F5`,
+      hover: `#e6f4f3`,
+      iconHover: `#9e9e9e`,
+      section: `#b3b9bf`, //fafafa
+      sectionHover: `#c3c9ce`, //f7f7f7
+      moduleAdd: `#e6f4f3`,
+      moduleAddInput: `#fafafa`,
     },
   },
   fontSize: {

@@ -64,7 +64,7 @@ const useStyles = makeStyles((theme) => ({
   },
   editIcon: {
     marginRight: theme.spacing(1),
-    color: theme.palette.background.default,
+    color: theme.palette.background.bodyfield,
   },
   delIcon: {
     marginRight: theme.spacing(1),

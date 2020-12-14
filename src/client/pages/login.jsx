@@ -23,7 +23,8 @@ import {loginUser} from '../redux/actions/user-actions';
 const styles = {
   paper: {
     padding: 20,
-    marginTop: 20
+    marginTop: 20,
+    backgroundColor: `#e0e0e0`,
   },
   form: {
     textAlign: `center`,

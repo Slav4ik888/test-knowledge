@@ -23,6 +23,9 @@ const useStyles = makeStyles((theme) => ({
       display: 'block',
     },
   },
+  button: {
+    color: theme.palette.primary.ultralight,
+  },
 }));
 
 const NavbarNoAuth = () => {
@@ -43,6 +46,7 @@ const NavbarNoAuth = () => {
       </Typography>
       <div className={classes.grow} />
       <Button
+        className={classes.button}
         component={Link}
         to={route.LOGIN}
         endIcon={<AccountCircle />}

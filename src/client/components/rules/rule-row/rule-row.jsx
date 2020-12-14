@@ -40,12 +40,12 @@ const useStyles = makeStyles((theme) => ({
     flexDirection: `column`,
     // margin: theme.spacing(2, 0, 4, 0),
     width: `100%`,
-    // padding: theme.spacing(2),
+    paddingBottom: theme.spacing(1),
     // borderRadius: `5px`,
     // backgroundColor: theme.palette.background.main,
   },
   sprite: {
-    // width: `100%`,
+    width: `100%`,
     display: `flex`,
     flexDirection: `row`,
   },
@@ -73,9 +73,11 @@ const useStyles = makeStyles((theme) => ({
   title: {
     marginTop: theme.spacing(0.5),
   },
-  // inputContainer: {
-  //   width: `100%`,
-  // },
+  input: {
+    width: `calc(100% - 130px)`,
+    flex: 1,
+    padding: theme.spacing(1, 3, 1, 3),
+  },
   textFieldTitle: {
     fontSize: theme.fontSize.ruleTitle,
     fontColor: theme.palette.fontColor.ruleTitle,
@@ -84,13 +86,15 @@ const useStyles = makeStyles((theme) => ({
   },
   rule: {
     width: `100%`,
+    margin: 0,
   },
   body: {
-    marginTop: theme.spacing(2),
-    padding: theme.spacing(2, 2, 4, 2),
+    // marginTop: theme.spacing(2),
+    padding: theme.spacing(2, 2, 2, 2),
     resize: `vertical`,
     borderColor: theme.border.light,
     outline: 0,  
+    width: `100%`,
   },
   bodyStyle: {
     fontSize: theme.fontSize.rule,
@@ -110,32 +114,24 @@ const RuleRow = ({ rule, updateRule, deleteRule }) => {
   const classes = useStyles();
 
   const [expanded, setExpanded] = React.useState(false);
-
-  const handleExpandClick = () => {
-    setExpanded(!expanded);
-  };
+  const handleExpandClick = () => setExpanded(!expanded);
 
   const [newTitle, setNewTitle] = useState(rule.title);
   const handleEditTitle = (e) => {
     if (e.keyCode === 13 || e.keyCode === 27) {
       e.target.blur();
       handleUpdateRule();
-      // handleBlur();
     }
     const value = e.target.value;
-    // if (value !== rule.rule) {
-    //   handleUpdateRule();
-    // }
     setNewTitle(value);
   };
+
+  const handleBlur = () => handleUpdateRule();
 
   const [newRule, setNewRule] = useState(rule.rule);
   const handleEditRule = (e) => {
     const value = e.target.value;
     setNewRule(value);
-    // if (value !== rule.rule) {
-    //   handleUpdateRule();
-    // }
   };
 
   const handleUpdateRule = () => {
@@ -159,37 +155,18 @@ const RuleRow = ({ rule, updateRule, deleteRule }) => {
           <Avatar className={classes.avatar}>
             <DescriptionIcon />
           </Avatar>
-          <div className={classes.sprite}>
-            <div style={{ display: `flex`, flexDirection: `row`, width: `100%` }}>
-              <Tooltip title="Нажмите, чтобы изменить заголовок раздела" placement="top" arrow enterDelay={1000} enterNextDelay={1000}>
-                <InputBase
-                  className={classes.textFieldTitle}
-                  value={newTitle}
-                  fullWidth
-                  placeholder="Введите заголовок правила"
-                  onChange={handleEditTitle} 
-                  onKeyDown={handleEditTitle}
-                  inputprops={{
-                    classes: {
-                      input: classes.textFieldTitle,
-                    },
-                  }} 
-                />
-              </Tooltip>
-            </div>
-          </div>
-          {/* <TextField 
-            name={newTitle.id} type="text" fullWidth
-            value={newTitle}
-            placeholder="Введите заголовок правила"
-            onChange={handleEditTitle} 
-            onKeyDown={handleEditTitle}
-            InputProps={{
-              classes: {
-                input: classes.textFieldTitle,
-              },
-            }} 
-          /> */}
+          <Tooltip title="Нажмите, чтобы изменить заголовок раздела" placement="top" arrow enterDelay={1000} enterNextDelay={1000}>
+            <InputBase
+              className={classes.input}
+              inputProps={{ 'aria-label': 'Заголовок правила' }}
+              value={newTitle}
+              type="text"
+              placeholder="Введите заголовок правила"
+              onChange={handleEditTitle} 
+              onKeyDown={handleEditTitle}
+              onBlur={handleBlur}
+            />
+          </Tooltip>
            
           <IconButton
             className={cl(classes.expand, {
@@ -211,6 +188,7 @@ const RuleRow = ({ rule, updateRule, deleteRule }) => {
               className={classes.body}
               placeholder="Введите текст правила"
               value={newRule}
+              rowsMin={4}
               onChange={handleEditRule} 
             />
           </CardContent>

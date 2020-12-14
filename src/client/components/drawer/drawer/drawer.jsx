@@ -32,6 +32,7 @@ const useStyles = makeStyles((theme) => ({
       easing: theme.transitions.easing.sharp,
       duration: theme.transitions.duration.enteringScreen,
     }),
+    backgroundColor: theme.palette.primary.contrastText,
   },
   drawerClose: {
     transition: theme.transitions.create('width', {
@@ -39,10 +40,11 @@ const useStyles = makeStyles((theme) => ({
       duration: theme.transitions.duration.leavingScreen,
     }),
     overflowX: 'hidden',
-    width: theme.spacing(7) + 1,
+    width: theme.spacing(5) + 1,
     [theme.breakpoints.up('sm')]: {
-      width: theme.spacing(9) + 1,
+      width: theme.spacing(7) + 1,
     },
+    backgroundColor: theme.palette.background .bodyfield,
   },
   toolbar: {
     display: 'flex',
@@ -52,22 +54,22 @@ const useStyles = makeStyles((theme) => ({
     // necessary for content to be below app bar
     ...theme.mixins.toolbar,
   },
-  content: {
-    flexGrow: 1,
-    padding: theme.spacing(3),
-  },
-  button: {
-    marginTop: theme.spacing(1),
-  },
-  subButton: {
-    fontStyle: `italic`,
-    color: `#666666`,
-    paddingLeft: theme.spacing(9),
-    height: 30,
-  },
-  lastSubButton: {
-    marginBottom: theme.spacing(1),
-  },
+  // content: {
+  //   flexGrow: 1,
+  //   padding: theme.spacing(3),
+  // },
+  // button: {
+  //   marginTop: theme.spacing(1),
+  // },
+  // subButton: {
+  //   fontStyle: `italic`,
+  //   color: `#666666`,
+  //   paddingLeft: theme.spacing(9),
+  //   height: 30,
+  // },
+  // lastSubButton: {
+  //   marginBottom: theme.spacing(1),
+  // },
 }));
 
 const MiniDrawer = ({ open, onOpen, onClose}) => {

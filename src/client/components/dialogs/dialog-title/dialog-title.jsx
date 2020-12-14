@@ -15,7 +15,8 @@ const styles = (theme) => ({
     paddingBottom: theme.spacing(2),
     paddingRight: theme.spacing(4),
     paddingLeft: theme.spacing(4),
-    backgroundColor: theme.palette.background.dialog,
+    color: theme.palette.primary.contrastText,
+    backgroundColor: theme.palette.primary.main,
   },
   closeButton: {
     position: 'absolute',

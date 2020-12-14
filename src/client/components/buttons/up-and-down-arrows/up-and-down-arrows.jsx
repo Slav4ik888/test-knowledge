@@ -29,7 +29,8 @@ const useStyles = makeStyles((theme) => ({
   addIcon: {
     width: `24px`,
     height: `24px`, 
-    color: theme.palette.background.default,
+    // color: theme.palette.background.bodyfield,
+    color: theme.palette.background.bodyfield,
   },
   hoverIcon: {
     color: theme.palette.background.iconHover,

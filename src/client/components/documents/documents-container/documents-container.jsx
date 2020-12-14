@@ -28,6 +28,7 @@ const useStyles = makeStyles((theme) => ({
   container: {
     display: 'flex',
     flexWrap: 'wrap',
+    backgroundColor: theme.palette.background.bodyfield,
   },
 }));
 
@@ -100,7 +101,7 @@ const DocumentsContainer = ({ open, onClose, UI, documents, createDocument, upda
         open={open} onClose={handleClose}
       >
         <DialogTitle onClose={handleClose}>Настройка документов</DialogTitle>
-        <DialogContent dividers ref={listRef} >
+        <DialogContent dividers ref={listRef} className={classes.container} >
           <DocumentsList
             open={open}
             documents={documents}
