@@ -29,15 +29,16 @@ const useStyles = makeStyles((theme) => ({
     borderColor: theme.border.light,
     width: `100%`,
     height: `50px`,
+    backgroundColor: theme.palette.background.light,
   },
   hover: {
     color: theme.textSecondary,
-    backgroundColor: theme.palette.background.light,
+    backgroundColor: `#d7d8da`,
   },
 }));
 
 
-const RuleRowCreate = ({ createRule, activeRules: {docId, sectionId} }) => {
+const RuleRowCreate = ({ createRule, docSelected, section }) => {
 
   const classes = useStyles();
   const [isHover, setIsHover] = useState(false);
@@ -46,8 +47,9 @@ const RuleRowCreate = ({ createRule, activeRules: {docId, sectionId} }) => {
 
   const handleCreateRule = () => {
     const newRule = {
-      docId,
-      sectionId,
+      docId: docSelected.id,
+      sectionId: section.id,
+      order: 100,
       title: ``,
       rule: ``,
     }
@@ -57,7 +59,7 @@ const RuleRowCreate = ({ createRule, activeRules: {docId, sectionId} }) => {
 
   return (
     <>
-      <Tooltip title="Добавить правило" placement="bottom" arrow enterDelay={1000} enterNextDelay={1000}>
+      <Tooltip title="Создать правило" placement="bottom" arrow enterDelay={1000} enterNextDelay={1000}>
         <div className={cl(classes.row, {[classes.hover]: isHover})} onClick={handleCreateRule}
           onPointerEnter={handleHoverOn}
           onPointerLeave={handleHoverOff}

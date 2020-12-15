@@ -35,10 +35,10 @@ const Confirm = ({ open, typeOk, onOk, onCancel, title }) => {
         </DialogTitle>
 
         <DialogActions className={classes.dialog}>
-          <Button variant="outlined" onClick={onCancel} className={classes.button}>
+          <Button variant="contained" color="secondary" onClick={onCancel} className={classes.button}>
             Отменить
           </Button>
-          <Button variant="outlined" color="secondary" onClick={onOk}>
+          <Button variant="outlined" onClick={onOk}>
             {typeOk}
           </Button>
         </DialogActions>

@@ -24,7 +24,7 @@ const useStyles = makeStyles((theme) => ({
     display: 'flex',
     alignItems: `center`,
     margin: theme.spacing(2, 0, 4, 0),
-    padding: theme.spacing(2),
+    padding: theme.spacing(2, 0, 2, 2),
   },
   paperChip: {
     width: `100%`,
@@ -39,6 +39,8 @@ const useStyles = makeStyles((theme) => ({
   },
   avatar: {
     marginRight: theme.spacing(3),
+    backgroundColor: theme.palette.primary.light,
+    cursor: `pointer`,
   },
   editIcon: {
     marginTop: theme.spacing(1),
@@ -88,9 +90,11 @@ const PositionsModuleRow = ({ type, item, employees, positions }) => {
   
   return (
     <div className={classes.row}>
-      <Avatar className={classes.avatar}>
-        <SupervisedUserCircleIcon />
-      </Avatar>
+      <Tooltip title="Редактировать должности" placement="bottom" arrow enterDelay={1000} enterNextDelay={1000}>
+        <Avatar onClick={handlePosEditOpen} className={classes.avatar}>
+          <SupervisedUserCircleIcon />
+        </Avatar>
+      </Tooltip>
 
       <Tooltip title={`Изменить закреплённые за ${titleItem} должности`} placement="bottom" arrow enterDelay={1000} enterNextDelay={1000}>
         <Paper elevation={0} onClick={handlePosToggleOpen} className={classes.paperChip}>
@@ -98,11 +102,11 @@ const PositionsModuleRow = ({ type, item, employees, positions }) => {
         </Paper>
       </Tooltip>
 
-      <Tooltip title="Редактировать должности" placement="bottom" arrow enterDelay={1000} enterNextDelay={1000}>
+      {/* <Tooltip title="Редактировать должности" placement="bottom" arrow enterDelay={1000} enterNextDelay={1000}>
         <IconButton aria-label="Edit" onClick={handlePosEditOpen} className={classes.editIcon}>
           <EditIcon />
         </IconButton>
-      </Tooltip>
+      </Tooltip> */}
 
       <PositionsAddInItem
         open={posToggle}

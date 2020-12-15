@@ -50,7 +50,7 @@ const RulesListModule = ({ loading, rules, docSelected, section }) => {
             rulesShow.map((rule) => <RuleRow key={rule.id}
               rule={rule}
             />)
-            : <RuleRowCreate />
+            : <RuleRowCreate docSelected={docSelected} section={section}/>
         }
       </div>
     </>

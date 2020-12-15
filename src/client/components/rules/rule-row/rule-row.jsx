@@ -31,6 +31,8 @@ import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import MoreVertIcon from '@material-ui/icons/MoreVert';
 // Components
 import DeleteButton from '../../buttons/delete-button/delete-button';
+import UpAndDownAdd from '../../buttons/up-and-down-add/up-and-down-add';
+import { typeUpDown } from '../../../../types';
 
 
 const useStyles = makeStyles((theme) => ({
@@ -51,6 +53,7 @@ const useStyles = makeStyles((theme) => ({
   },
   avatar: {
     marginRight: theme.spacing(3),
+    backgroundColor: theme.palette.primary.light,
   },
   expand: {
     transform: 'rotate(0deg)',
@@ -150,12 +153,14 @@ const RuleRow = ({ rule, updateRule, deleteRule }) => {
   
   return (
     <>
+      <UpAndDownAdd type={typeUpDown.RULE} rule={rule} up />
+      
       <Card className={classes.container} onMouseLeave={handleUpdateRule} >
         <CardContent className={classes.header}>
           <Avatar className={classes.avatar}>
             <DescriptionIcon />
           </Avatar>
-          <Tooltip title="Нажмите, чтобы изменить заголовок раздела" placement="top" arrow enterDelay={1000} enterNextDelay={1000}>
+          <Tooltip title="Нажмите, чтобы изменить заголовок правила" placement="top" arrow enterDelay={1000} enterNextDelay={1000}>
             <InputBase
               className={classes.input}
               inputProps={{ 'aria-label': 'Заголовок правила' }}
@@ -199,6 +204,8 @@ const RuleRow = ({ rule, updateRule, deleteRule }) => {
         </div>
 
       </Card>
+
+      <UpAndDownAdd type={typeUpDown.RULE} rule={rule} down />
     </>
   );
 };
@@ -210,13 +217,13 @@ RuleRow.propTypes = {
   deleteRule: pt.func.isRequired,
 };
 
-const mapStateToProps = (state) => ({
-  ruleStored: state.UI.ruleStored,
-});
+// const mapStateToProps = (state) => ({
+//   ruleStored: state.UI.ruleStored,
+// });
 
 const mapActionsToProps = {
   updateRule,
   deleteRule,
 };
 
-export default connect(mapStateToProps, mapActionsToProps)(RuleRow);
+export default connect(undefined, mapActionsToProps)(RuleRow);

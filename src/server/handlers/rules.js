@@ -9,13 +9,13 @@ async function createRule(req, res) {
   if (!valid) return res.status(400).json(errors);
 
   // getAllRulesById сообщаем, что это обновление и нужно вернуть данные сюда, а не пользователю
-  req.update = true;
-  const rules = await getAllRulesById(req, res);
+  // req.update = true;
+  // const rules = await getAllRulesById(req, res);
 
   let newRule = {
     docId: req.params.documentId,
     sectionId: req.params.sectionId,
-    order: getMaxOrder(rules),
+    order: req.body.order || 100, // getMaxOrder(rules),
     createdAt: new Date().toISOString(),
     lastChange: new Date().toISOString(),
     title: req.body.title,
@@ -162,6 +162,7 @@ async function deleteRule(req, res) {
   };
 };
 
+// Удаляем группу правил, например при удалении section так как она может содержать несколько правил
 async function deleteAllRulesById(req, res) {
   // является ли пользователь Админом или Владельцем аккаунта или 
   const validData = await validationAdminAuthority(req.user);

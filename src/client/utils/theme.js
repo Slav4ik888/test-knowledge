@@ -25,7 +25,7 @@ export default {
       light: `#ececec`,
       bodyfield: `#e0e0e0`, 
       paperChip: `#b3b9bf`,
-      chip: `#ffe57f`,
+      chip: `#ffffb0`,
       dialog: `#c1e5e2`,
       dialogBody: `#d2d8d7`,
       hover: `#cfd8dc`,

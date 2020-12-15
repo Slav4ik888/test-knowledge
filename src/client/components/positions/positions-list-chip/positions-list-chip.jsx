@@ -22,6 +22,7 @@ const useStyles = makeStyles((theme) => ({
   },
   column: {
     flexDirection: `column`,
+    backgroundColor: theme.palette.background.bodyfield,
   },
   chip: {
     margin: theme.spacing(0.5),

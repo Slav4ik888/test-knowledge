@@ -3,7 +3,7 @@ import pt from 'prop-types';
 import cl from 'classnames';
 // Readux Stuff
 import { connect } from 'react-redux';
-import { updateDocument } from '../../../redux/actions/data-actions';
+import { updateDocument, createRule } from '../../../redux/actions/data-actions';
 // MUI Stuff
 import { makeStyles } from '@material-ui/core/styles';
 import IconButton from '@material-ui/core/IconButton';
@@ -12,8 +12,8 @@ import Tooltip from '@material-ui/core/Tooltip';
 import AddIcon from '@material-ui/icons/Add';
 // Components
 import { typeUpDown } from '../../../../types';
-import { createId, getNewOrderForSection } from '../../../../server/utils/utils';
-
+import { createId, getNewOrderForItem } from '../../../../server/utils/utils';
+import { getIdxRulesFromDocAndSection } from '../../../utils/utils';
 
 
 const useStyles = makeStyles((theme) => ({
@@ -34,7 +34,7 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 // Выводит стрелки вверх и вниз, а при нажатии перемещает объект выше или ниже
-const UpAndDownAdd = ({ loading, type, docSelected, section, up, down, updateDocument }) => {
+const UpAndDownAdd = ({ loading, type, docSelected, section, rule, up, down, rules, updateDocument, createRule }) => {
   const classes = useStyles();
 
   const [isHover, setIsHover] = useState(false);
@@ -44,25 +44,52 @@ const UpAndDownAdd = ({ loading, type, docSelected, section, up, down, updateDoc
 
   const handleAddItem = () => {
     if (!loading) {
-      if (up) {
-        handleAddSection(`up`);
+      if (type === typeUpDown.SECTION) {
+        if (up) {
+          handleAddSection(`up`);
+        }
+        if (down) {
+          handleAddSection(`down`);
+        }
+      } else if (type === typeUpDown.RULE) {
+        if (up) {
+          handleAddRule(`up`);
+        }
+        if (down) {
+          handleAddRule(`down`);
+        }
       }
-      if (down) {
-        handleAddSection(`down`);
-      }
+
     }
   };
 
-  const handleAddSection = (type) => {
+  // Добавляем пустой раздел сверху или снизу
+  const handleAddSection = (condition) => {
       const newSection = {
         title: ``,
         id: createId(docSelected.sections),
-        order: getNewOrderForSection(type, docSelected, section),
+        order: getNewOrderForItem(condition, `section`, docSelected, section),
         createdAt: new Date().toISOString(),
         lastChange: new Date().toISOString(),
       };
       docSelected.sections.push(newSection);
       updateDocument(docSelected);
+  };
+
+  // Добавляем пустое правило сверху или снизу
+  const handleAddRule = (condition) => {
+    // Находим индекс где храниться нужная секция в rules так как там массив посекционный с rules
+    const idxRule = getIdxRulesFromDocAndSection(rules, rule, rule);
+    const rulesInSection = rules[idxRule].rules;
+    
+    const newRule = {
+      title: ``,
+      rule: ``,
+      order: getNewOrderForItem(condition, `rule`, rulesInSection, rule),
+      docId: rule.docId,
+      sectionId: rule.sectionId,
+    };
+    createRule(newRule);
   };
 
   let tooltip = ``;
@@ -104,13 +131,17 @@ UpAndDownAdd.propTypes = {
   up: pt.bool,
   down: pt.bool,
   updateDocument: pt.func.isRequired,
-  docSelected: pt.object.isRequired,
-  section: pt.object.isRequired,
+  createRule: pt.func.isRequired,
+  docSelected: pt.object,
+  section: pt.object,
+  rule: pt.object,
+  rules: pt.array,
 };
 
 const mapStateToProps = (state) => ({
   loading: state.UI.loading,
+  rules: state.data.rules,
 });
 
 
-export default connect(mapStateToProps, { updateDocument })(UpAndDownAdd);
+export default connect(mapStateToProps, { updateDocument, createRule })(UpAndDownAdd);

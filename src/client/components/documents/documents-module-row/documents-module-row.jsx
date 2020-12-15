@@ -19,12 +19,15 @@ import { typeListSelect } from '../../../../types';
 const useStyles = makeStyles((theme) => ({
   row: {
     display: 'flex',
-    alignItems: `center`,
+    alignItems: `flex-end`,
     margin: theme.spacing(2, 0, 4, 0),
-    padding: theme.spacing(2),
+    padding: theme.spacing(2, 0, 2, 2),
   },
   avatar: {
     marginRight: theme.spacing(3),
+    marginBottom: theme.spacing(0.5),
+    backgroundColor: theme.palette.primary.light,
+    cursor: `pointer`,
   },
 }));
 
@@ -41,9 +44,11 @@ const DocumentsModuleRow = ({ onDocumentSelected, documents, ruleStored }) => {
   return (
     <>
       <div className={classes.row}>
-        <Avatar className={classes.avatar}> 
-          <FolderIcon />
-        </Avatar>
+        <Tooltip title="Редактировать документы" placement="bottom" arrow enterDelay={1000} enterNextDelay={1000}>
+          <Avatar onClick={handleDocumentsOpen}  className={classes.avatar}> 
+            <FolderIcon />
+          </Avatar>
+        </Tooltip>
 
         <ListSelect
           type={typeListSelect.DOC}
@@ -56,11 +61,11 @@ const DocumentsModuleRow = ({ onDocumentSelected, documents, ruleStored }) => {
           onItemAdd={handleDocumentsOpen}
         />
 
-        <Tooltip title="Редактировать документы" placement="bottom" arrow enterDelay={1000} enterNextDelay={1000}>
+        {/* <Tooltip title="Редактировать документы" placement="bottom" arrow enterDelay={1000} enterNextDelay={1000}>
           <IconButton aria-label="Edit" onClick={handleDocumentsOpen} className={classes.editIcon}>
             <EditIcon />
           </IconButton>
-        </Tooltip>
+        </Tooltip> */}
       </div>
 
       <DocumentsContainer open={isDocuments} onClose={handleDocumentsClose} />

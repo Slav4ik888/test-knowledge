@@ -56,6 +56,7 @@ const useStyles = makeStyles((theme) => ({
   },
   avatar: {
     marginRight: theme.spacing(3),
+    backgroundColor: theme.palette.primary.light,
   },
   textFieldTitle: {
     fontSize: theme.fontSize.section,
@@ -85,8 +86,7 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 // item - переданный документ или пользователь
-const SectionsModuleRow = ({ loading, docSelected, section, rules, updateDocument, getAllRulesById }) => {
-  console.log('rules: ', rules);
+const SectionsModuleRow = ({ docSelected, section, rules, updateDocument, getAllRulesById }) => {
   const classes = useStyles();
 
   // Рендер rules
@@ -95,7 +95,7 @@ const SectionsModuleRow = ({ loading, docSelected, section, rules, updateDocumen
     if (!isShowRules) { // Если открыли section
       // Получаем объект с rules для нашей section
       let rulesInSection = getRulesFromDocAndSection(rules, docSelected.id, section.id); 
-      console.log('rulesInSection: ', rulesInSection);
+
       if (!rulesInSection) { // Проверяем есть ли загруженные данные, если нет - загружаем
         console.log(`Нет загруженных - ЗАГРУЖАЕМ`);
         getAllRulesById({ docId: docSelected.id, sectionId: section.id });
@@ -201,7 +201,6 @@ const SectionsModuleRow = ({ loading, docSelected, section, rules, updateDocumen
 
 
 SectionsModuleRow.propTypes = {
-  // loading: pt.bool.isRequired,
   docSelected: pt.object,
   section: pt.object,
   rules: pt.array.isRequired,
@@ -210,7 +209,6 @@ SectionsModuleRow.propTypes = {
 };
 
 const mapStateToProps = (state) => ({
-  // loading: state.UI.loading,
   rules: state.data.rules,
 });
 

@@ -39,41 +39,7 @@ const sortingArr = (arr, fieldName) => {
   }); 
 };
 
-// Возвращает order для новой section предшеструющей текущей section
-const getPrevOrderForSection = (doc, section) => {
-  let sections = sortingArr(doc.sections, `order`);
 
-  const idx = sections.findIndex((sec) => sec.id === section.id);
-  const order = sections[idx].order;
-
-  if (idx === 0) {
-    return order / 2;
-
-  } else {
-    const prevOrder = sections[idx - 1].order;
-    return prevOrder + (order - prevOrder) / 2;
-  }
-};
-  
-// Возвращает order для новой section следующей после текущей section
-const getNextOrderForSection = (doc, section) => {
-  let sections = sortingArr(doc.sections, `order`);
-
-  const idx = sections.findIndex((sec) => sec.id === section.id);
-  const order = sections[idx].order;
-
-  if (idx === sections.length - 1) {
-    return order + 100;
-
-  } else {
-    const nextOrder = sections[idx + 1].order;
-    return order + (nextOrder - order) / 2;
-  }
-};
-exports.getNewOrderForSection = (type, doc, section) => {
-  if (type === `up`) return getPrevOrderForSection(doc, section);
-  if (type === `down`) return getNextOrderForSection(doc, section);
-};
   
 // Возвращает order для section которую перемещают вверх
 const getPrevOrderForMoveSection = (doc, section) => {
@@ -118,8 +84,50 @@ const getNextOrderForMoveSection = (doc, section) => {
     return nextOrder + (nextNextOrder - nextOrder) / 2;
   }
 };
-
+// Возвращает order для section которую перемещают
 exports.getNewOrderForMoveSection = (type, doc, section) => {
   if (type === `up`) return getPrevOrderForMoveSection(doc, section);
   if (type === `down`) return getNextOrderForMoveSection(doc, section);
+};
+  
+
+
+// Возвращает order для новой rule или section предшеструющей текущей rule или section
+const getPrevOrderForItem = (type, values, item) => {
+  const items = type === `section` ? values.sections : values;
+  let sortedItems = sortingArr(items, `order`);
+
+  const idx = sortedItems.findIndex((it) => it.id === item.id);
+  const order = sortedItems[idx].order;
+
+  if (idx === 0) { // Первая
+    return order / 2;
+
+  } else {
+    const prevOrder = sortedItems[idx - 1].order;
+    return prevOrder + (order - prevOrder) / 2;
+  }
+};
+  
+// Возвращает order для новой rule или section следующей после текущей rule или section 
+const getNextOrderForItem = (type, values, item) => {
+  const items = type === `section` ? values.sections : values;
+  let sortedItems = sortingArr(items, `order`);
+
+  const idx = sortedItems.findIndex((it) => it.id === item.id);
+  const order = sortedItems[idx].order;
+
+  if (idx === sortedItems.length - 1) {
+    return order + 100;
+
+  } else {
+    const nextOrder = sortedItems[idx + 1].order;
+    return order + (nextOrder - order) / 2;
+  }
+};
+
+// Возвращает order для новой rule
+exports.getNewOrderForItem = (condition, type, values, item) => {
+  if (condition === `up`) return getPrevOrderForItem(type, values, item);
+  if (condition === `down`) return getNextOrderForItem(type, values, item);
 };

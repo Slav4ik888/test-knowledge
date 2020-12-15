@@ -125,7 +125,7 @@ export const getAllPositions = () => (dispatch) => {
 
 // Обновляем position
 export const updatePosition = (position) => (dispatch) => {
-  dispatch({ type: uiActionType.LOADING_UI });
+  // dispatch({ type: uiActionType.LOADING_UI });
 
   return axios.post(`/updatePosition/${position.id}`, position)
     .then((res) => {
@@ -210,7 +210,7 @@ export const createDocument = (newDocument) => (dispatch) => {
 
 // Обновляем document
 export const updateDocument = (updateDocument) => (dispatch) => {
-  dispatch({ type: uiActionType.LOADING_UI });
+  // dispatch({ type: uiActionType.LOADING_UI });
 
   return axios.post(`/updateDocument/${updateDocument.id}`, updateDocument)
     .then((res) => {
@@ -307,7 +307,7 @@ export const setActiveRules = ({ docId, sectionId }) => (dispatch) => {
 
 // Обновляем rule
 export const updateRule = (rule) => (dispatch) => {
-  dispatch({ type: uiActionType.LOADING_UI });
+  // dispatch({ type: uiActionType.LOADING_UI });
   
   return axios.post(`/updateRule/${rule.id}`, rule)
     .then((res) => {
@@ -349,7 +349,7 @@ export const deleteRule = (rule) => (dispatch) => {
 
 // Удаляем rules которые были привязаны к разделу
 export const deleteAllRulesById = ({ docId, sectionId }) => (dispatch) => {
-  console.log('docId, sectionId: ', docId, ' : ', sectionId);
+  // console.log('docId, sectionId: ', docId, ' : ', sectionId);
   dispatch({ type: uiActionType.LOADING_UI });
   
   return axios.get(`/deleteAllRulesById/${docId}/${sectionId}`)
