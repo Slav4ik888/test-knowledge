@@ -11,7 +11,8 @@ const initialState = {
   //   sectionId: `sdfsdfd`,
   //   rules: [],
   // }
-  activeRules: {}, // { docId, sectionId } - чтобы по ним взять rules из активной section 
+  activeRules: null, // { docId, sectionId } - чтобы по ним взять rules из активной section 
+  activeDocument: null,
   questions: [],
   loading: false,
 };
@@ -129,9 +130,14 @@ export default function (state = initialState, action) {
         loading: false,
       });
     
+    case dataActionType.SET_ACTIVE_DOCUMENT:
+      return extend(state, {
+        activeDocument: action.payload,
+      });
+    
     case dataActionType.UPDATE_DOCUMENT:
       return extend(state, {
-        documents: getArrWithoutItemByField(state.documents, `id`, action.payload),
+        documents: updateArrWithItemByField(state.documents, `id`, action.payload),
         loading: false,
       });
 

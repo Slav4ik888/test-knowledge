@@ -68,7 +68,8 @@ async function updateDocument(req, res) {
     const updateRes = await db.doc(`documents/${req.user.companyId}/documents/${req.params.documentId}`)
       .update(document);
     
-    return res.json({ document, message: `Документ успешно обновлён` });
+    console.log(`Документ успешно обновлён`);
+    return res.json({ message: `Документ успешно обновлён` });
     
   } catch(err) {
       console.error(err);
@@ -153,6 +154,7 @@ async function deleteDocument(req, res) {
     const updateRes = await db.doc(`documents/${req.user.companyId}/documents/${req.params.documentId}`)
       .delete();
     
+    console.log(`Документ успешно удалён`);
     return res.json({ message: `Документ успешно удалён` });
     
   } catch(err) {

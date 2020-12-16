@@ -87,6 +87,8 @@ const useStyles = makeStyles((theme) => ({
 
 // item - переданный документ или пользователь
 const SectionsModuleRow = ({ docSelected, section, rules, updateDocument, getAllRulesById }) => {
+  
+  // if (loading) return null;
   const classes = useStyles();
 
   // Рендер rules
@@ -201,6 +203,7 @@ const SectionsModuleRow = ({ docSelected, section, rules, updateDocument, getAll
 
 
 SectionsModuleRow.propTypes = {
+  // loading: pt.bool.isRequired,
   docSelected: pt.object,
   section: pt.object,
   rules: pt.array.isRequired,
@@ -210,6 +213,7 @@ SectionsModuleRow.propTypes = {
 
 const mapStateToProps = (state) => ({
   rules: state.data.rules,
+  // loading: state.UI.loading,
 });
 
 

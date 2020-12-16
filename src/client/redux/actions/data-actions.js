@@ -216,7 +216,11 @@ export const updateDocument = (updateDocument) => (dispatch) => {
     .then((res) => {
       dispatch({
         type: dataActionType.UPDATE_DOCUMENT,
-        payload: res.data.document,
+        payload: updateDocument,
+      });
+      dispatch({
+        type: dataActionType.SET_ACTIVE_DOCUMENT,
+        payload: updateDocument,
       });
       dispatch({ type: uiActionType.CLEAR_ERRORS });
     })
@@ -252,7 +256,7 @@ export const deleteDocument = (deleteDocument) => (dispatch) => {
 
 // Создаём rule
 export const createRule = (newRule) => (dispatch) => {
-  dispatch({ type: uiActionType.LOADING_UI });
+  // dispatch({ type: uiActionType.LOADING_UI });
   
   return axios.post(`/createRule/${newRule.docId}/${newRule.sectionId}`, newRule)
     .then((res) => {
@@ -305,6 +309,14 @@ export const setActiveRules = ({ docId, sectionId }) => (dispatch) => {
   });
 };
 
+// Сохраняем selectedDocument 
+export const setActiveDocument = (doc) => (dispatch) => {
+  dispatch({
+    type: dataActionType.SET_ACTIVE_DOCUMENT,
+    payload: doc,
+  });
+};
+
 // Обновляем rule
 export const updateRule = (rule) => (dispatch) => {
   // dispatch({ type: uiActionType.LOADING_UI });
@@ -328,7 +340,7 @@ export const updateRule = (rule) => (dispatch) => {
 
 // Удаляем rule
 export const deleteRule = (rule) => (dispatch) => {
-  dispatch({ type: uiActionType.LOADING_UI });
+  // dispatch({ type: uiActionType.LOADING_UI });
   
   return axios.get(`/deleteRule/${rule.id}`)
     .then((res) => {

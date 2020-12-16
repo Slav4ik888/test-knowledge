@@ -3,7 +3,7 @@ import pt from 'prop-types';
 // Readux Stuff
 import { connect } from 'react-redux';
 import { setRuleStored } from '../../../redux/actions/ui-actions';
-import { getAllRulesById, setActiveRules } from '../../../redux/actions/data-actions';
+import { getAllRulesById, setActiveRules, setActiveDocument } from '../../../redux/actions/data-actions';
 // MUI Stuff
 import { makeStyles } from '@material-ui/core/styles';
 import Paper from '@material-ui/core/Paper';
@@ -66,7 +66,7 @@ const useStyles = makeStyles((theme) => ({
 
 
 
-const RulesContainer = ({ loading, setRuleStored, ruleStored, setActiveRules }) => {
+const RulesContainer = ({ loading, activeDocument, setRuleStored, ruleStored, setActiveRules, setActiveDocument }) => {
 
   const classes = useStyles();
   const [isChange, setIsChange] = useState(false);
@@ -84,6 +84,7 @@ const RulesContainer = ({ loading, setRuleStored, ruleStored, setActiveRules }) 
   const [docSelected, setDocSelected] = useState(ruleStored.docSelected);
   const handleDocSelected = (doc) => {
     setDocSelected(doc);
+    setActiveDocument(doc);
     setRuleStored({ docSelected: doc, sectionSelected: null }); // Запоминаем выбранное
     setActiveRules({ docId: ``, sectionId: `` }); // Обнуляем activeRules
   };
@@ -153,6 +154,7 @@ const RulesContainer = ({ loading, setRuleStored, ruleStored, setActiveRules }) 
 
 RulesContainer.propTypes = {
   loading: pt.bool.isRequired,
+  // activeDocument: pt.object.isRequired,
   ruleStored: pt.object.isRequired,
   setRuleStored: pt.func.isRequired,
   getAllRulesById: pt.func.isRequired,
@@ -164,12 +166,14 @@ const mapStateToProps = (state) => ({
   loading: state.UI.loading,
   ruleStored: state.UI.ruleStored,
   rules: state.data.rules,
+  // activeDocument: state.data.activeDocument,
 });
 
 const mapActionsToProps = {
   setRuleStored,
   getAllRulesById,
   setActiveRules,
+  setActiveDocument,
 };
 
 export default connect(mapStateToProps, mapActionsToProps)(RulesContainer);

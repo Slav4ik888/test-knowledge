@@ -25,7 +25,7 @@ const useStyles = makeStyles((theme) => ({
 const RulesListModule = ({ loading, rules, docSelected, section }) => {
   
   // if (!sectionId) return null;
-  if (loading) return <CircularProgress />;
+  // if (loading) return <CircularProgress />;
 
   const classes = useStyles();
 
@@ -61,13 +61,13 @@ const RulesListModule = ({ loading, rules, docSelected, section }) => {
 RulesListModule.propTypes = {
   loading: pt.bool.isRequired,
   rules: pt.array.isRequired,
-  activeRules: pt.object.isRequired,
+  // activeRules: pt.object.isRequired,
 };
 
 const mapStateToProps = (state) => ({
   loading: state.UI.loading,
   rules: state.data.rules,
-  activeRules: state.data.activeRules,
+  // activeRules: state.data.activeRules,
 });
 
 
