@@ -32,6 +32,8 @@ export default {
       iconHover: `#62727b`, // 9e9e9e
       section: `#c9cfd2`, //fafafa
       sectionHover: `#c0c6ca`, //f7f7f7 
+      sectionIcon: `#b3b9bf`,
+      sectionIconHover: `#62727b`,
       moduleAdd: `#e0e0e0`,
       moduleAddInput: `#F5F5F5`,
     },

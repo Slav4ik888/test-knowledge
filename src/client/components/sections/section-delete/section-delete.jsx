@@ -26,9 +26,10 @@ const useStyles = makeStyles((theme) => ({
   },
   delIcon: {
     marginRight: theme.spacing(1),
+    color: theme.palette.background.sectionIcon,
   },
   hoverIcon: {
-    color: theme.palette.background.iconHover,
+    color: theme.palette.background.sectionIconHover,
   },
 }));
 

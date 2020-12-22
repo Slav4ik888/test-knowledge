@@ -3,7 +3,7 @@ import pt from 'prop-types';
 import cl from 'classnames';
 // Readux Stuff
 import { connect } from 'react-redux';
-import { updateDocument, getAllRulesById } from '../../../redux/actions/data-actions';
+import { updateDocument } from '../../../redux/actions/data-actions';
 // MUI Stuff
 import { makeStyles } from '@material-ui/core/styles';
 import Avatar from '@material-ui/core/Avatar';
@@ -21,7 +21,6 @@ import UpAndDownAdd from '../../buttons/up-and-down-add/up-and-down-add';
 import UpAndDownArrows from '../../buttons/up-and-down-arrows/up-and-down-arrows';
 import { typeUpDown } from '../../../../types';
 import RulesListModule from '../../rules/rules-list-module/rules-list-module';
-import { getRulesFromDocAndSection } from '../../../utils/utils';
 
 
 const useStyles = makeStyles((theme) => ({
@@ -63,16 +62,16 @@ const useStyles = makeStyles((theme) => ({
     fontColor: theme.palette.fontColor.section,
     fontWeight: theme.fontWeight.section,
   },
-  editIcon: {
-    marginRight: theme.spacing(1),
-    color: theme.palette.background.bodyfield,
-  },
-  delIcon: {
-    marginRight: theme.spacing(1),
-  },
-  hoverIcon: {
-    color: theme.palette.background.iconHover,
-  },
+  // editIcon: {
+  //   marginRight: theme.spacing(1),
+  //   color: theme.palette.background.bodyfield,
+  // },
+  // delIcon: {
+  //   marginRight: theme.spacing(1),
+  // },
+  // hoverIcon: {
+  //   color: theme.palette.background.iconHover,
+  // },
   expand: {
     transform: 'rotate(0deg)',
     marginLeft: 'auto',
@@ -85,30 +84,15 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-// item - переданный документ или пользователь
-const SectionsModuleRow = ({ docSelected, section, rules, updateDocument, getAllRulesById }) => {
+
+const SectionsModuleRow = ({ docSelected, section, updateDocument }) => {
   
   // if (loading) return null;
   const classes = useStyles();
 
   // Рендер rules
   const [isShowRules, setIsShowRules] = useState(false);
-  const handleToggleShowRules = () => {
-    if (!isShowRules) { // Если открыли section
-      // Получаем объект с rules для нашей section
-      let rulesInSection = getRulesFromDocAndSection(rules, docSelected.id, section.id); 
-
-      if (!rulesInSection) { // Проверяем есть ли загруженные данные, если нет - загружаем
-        console.log(`Нет загруженных - ЗАГРУЖАЕМ`);
-        getAllRulesById({ docId: docSelected.id, sectionId: section.id });
-      } else {
-        console.log(`Есть загруженные`);
-      }
-      setIsShowRules(true);
-    } else {
-      setIsShowRules(false);
-    }
-  };
+  const handleToggleShowRules = () => setIsShowRules(!isShowRules);
   
   const [isHover, setIsHover] = useState(false);
   const handlePointerEnter = () => setIsHover(true);
@@ -206,15 +190,15 @@ SectionsModuleRow.propTypes = {
   // loading: pt.bool.isRequired,
   docSelected: pt.object,
   section: pt.object,
-  rules: pt.array.isRequired,
+  // rules: pt.array.isRequired,
   updateDocument: pt.func.isRequired,
-  getAllRulesById: pt.func.isRequired,
+  // getAllRulesById: pt.func.isRequired,
 };
 
 const mapStateToProps = (state) => ({
-  rules: state.data.rules,
+  // rules: state.data.rules,
   // loading: state.UI.loading,
 });
 
 
-export default connect(mapStateToProps, { updateDocument, getAllRulesById })(SectionsModuleRow);
+export default connect(mapStateToProps, { updateDocument })(SectionsModuleRow);

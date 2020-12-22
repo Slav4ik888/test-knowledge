@@ -47,6 +47,7 @@ export default function (state = initialState, action) {
     case uiActionType.SET_RULES_STORED:
       return extend(state, {
         ruleStored: action.payload,
+        loading: false,
       });
     
     default: return state;

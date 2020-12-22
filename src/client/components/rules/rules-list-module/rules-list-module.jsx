@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import pt from 'prop-types';
 // Readux Stuff
 import { connect } from 'react-redux';
+import { getAllRulesById } from '../../../redux/actions/data-actions';
 // MUI Stuff
 import { makeStyles } from '@material-ui/core/styles';
 // Icons
@@ -22,29 +23,37 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 
-const RulesListModule = ({ loading, rules, docSelected, section }) => {
+const RulesListModule = ({ loading, rules, docSelected, section, getAllRulesById }) => {
   
-  // if (!sectionId) return null;
-  // if (loading) return <CircularProgress />;
-
   const classes = useStyles();
 
+  const docId = docSelected.id;
+  const sectionId = section.id;
+
   let rulesShow = [];
-  // Получаем объект с правилами для секции
-  let activeRuleObj = getRulesFromDocAndSection(rules, docSelected.id, section.id); 
+  // Получаем объект с rules для этой секции
+  let activeRuleObj = getRulesFromDocAndSection(rules, docId, sectionId); 
   console.log('activeRuleObj: ', activeRuleObj);
 
+  if (!activeRuleObj) { // Проверяем есть ли загруженные данные, если нет - загружаем
+    console.log(`Нет загр-х - ЗАГРУЖАЕМ`);
+    getAllRulesById({ docId, sectionId });
 
-  if (activeRuleObj) {
+  } else {
+    console.log(`Есть загр-е - НЕ загружаем`);
     // Получаем rules отсортированные по order
     rulesShow = sortingArr(activeRuleObj.rules, `order`);
-  };
+  }
+  
   console.log('rulesShow: ', rulesShow);
   
 
   return (
     <>
       <div className={classes.rows}>
+        {
+          loading && <CircularProgress />
+        }
         {
           rulesShow.length ?
             rulesShow.map((rule) => <RuleRow key={rule.id}
@@ -61,6 +70,7 @@ const RulesListModule = ({ loading, rules, docSelected, section }) => {
 RulesListModule.propTypes = {
   loading: pt.bool.isRequired,
   rules: pt.array.isRequired,
+  getAllRulesById: pt.func.isRequired,
   // activeRules: pt.object.isRequired,
 };
 
@@ -71,4 +81,4 @@ const mapStateToProps = (state) => ({
 });
 
 
-export default connect(mapStateToProps)(RulesListModule);
+export default connect(mapStateToProps, { getAllRulesById })(RulesListModule);

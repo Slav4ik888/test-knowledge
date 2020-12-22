@@ -24,9 +24,9 @@ const useStyles = makeStyles((theme) => ({
     justifyContent: `center`,
     margin: theme.spacing(2, 0, 4, 0),
     borderRadius: `5px`,
-    borderStyle: `solid`,
-    border: `1px`,
-    borderColor: theme.border.light,
+    // borderStyle: `solid`,
+    // border: `1px`,
+    // borderColor: theme.border.light,
     width: `100%`,
     height: `50px`,
     backgroundColor: theme.palette.background.light,
@@ -34,6 +34,8 @@ const useStyles = makeStyles((theme) => ({
   hover: {
     color: theme.textSecondary,
     backgroundColor: `#d7d8da`,
+    boxShadow: `1px 1px 3px rgba(0, 0, 0, 0.15)`,
+    // transition: `transform 2s`,
   },
 }));
 

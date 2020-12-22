@@ -174,33 +174,31 @@ export default function (state = initialState, action) {
     case dataActionType.SET_RULES:
       let setRules = action.payload;
 
-      if (setRules.length) {
-        let loadRules = state.rules; 
-        const docId = setRules[0].docId;
-        const sectionId = setRules[0].sectionId;
+      let loadRules = state.rules; 
+      const docId = state.activeRules.docId;
+      const sectionId = state.activeRules.sectionId;
 
-        // const idxLoadRuleSection = loadRules.findIndex((item) => item.docId === docId && item.sectionId === sectionId);
-        // Находим индекс где храниться нужная секция
-        const idxLoadRuleSection = getIdxRulesFromDocAndSection(loadRules, setRules[0], setRules[0]);
-        console.log('idxLoadRuleSection: ', idxLoadRuleSection);
+      // Находим индекс где храниться нужная секция
+      const idxLoadRuleSection = getIdxRulesFromDocAndSection(loadRules, state.activeRules, state.activeRules);
+      console.log('idxLoadRuleSection: ', idxLoadRuleSection);
+      
+      if (idxLoadRuleSection !== -1) { // Если в section уже есть rules, записываем поверх
+        console.log(`Найдена секция`);
+        loadRules[idxLoadRuleSection].rules = setRules;
 
-        if (idxLoadRuleSection !== -1) { // Если в section уже есть rules, записываем поверх
-          console.log(`Найдена секция`);
-          loadRules[idxLoadRuleSection].rules = setRules;
-        } else { // Если это первые загруженные правила, создаём
-          loadRules.push({
-            docId,
-            sectionId,
-            rules: setRules,
-          });
-        }
-
-        return extend(state, {
-          rules: loadRules,
-          loading: false,
+      } else { // Если это первые загруженные правила, создаём
+        console.log('Первый раз загружаем правила для секции');
+        loadRules.push({
+          docId,
+          sectionId,
+          rules: setRules,
         });
       }
-      return state;
+
+      return extend(state, {
+        rules: loadRules,
+        loading: false,
+      });
       
     case dataActionType.SET_ACTIVE_RULES:
       return extend(state, {

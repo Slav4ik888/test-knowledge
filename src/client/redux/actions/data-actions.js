@@ -79,6 +79,8 @@ export const deleteEmployee = (employee) => (dispatch) => {
     });
 };
 
+
+
 // Создаём position
 export const createPosition = (position) => (dispatch) => {
   console.log('position: ', position);
@@ -165,27 +167,7 @@ export const deletePosition = (position) => (dispatch) => {
     });
 };
 
-// Получаем documents
-export const getAllDocuments = () => (dispatch) => {
-  dispatch({ type: uiActionType.LOADING_UI });
-  return axios.get(`/getAllDocuments`)
-    .then((res) => {
-      console.log(`Полученные documents: `, res.data.documents);
-      dispatch({
-        type: dataActionType.SET_DOCUMENTS,
-        payload: res.data.documents,
-      })
-      dispatch({ type: uiActionType.CLEAR_ERRORS });
-    })
-    .catch((err) => {
-      console.log(err.response.data);
-      dispatch({
-        type: uiActionType.SET_ERRORS,
-        payload: err.response.data,
-      })
-      dispatch(logoutUser());
-    });
-};
+
 
 // Создаём document
 export const createDocument = (newDocument) => (dispatch) => {
@@ -205,6 +187,36 @@ export const createDocument = (newDocument) => (dispatch) => {
         type: uiActionType.SET_ERRORS,
         payload: err.response.data,
       })
+    });
+};
+
+// Сохраняем selectedDocument 
+export const setActiveDocument = (doc) => (dispatch) => {
+  dispatch({
+    type: dataActionType.SET_ACTIVE_DOCUMENT,
+    payload: doc,
+  });
+};
+
+// Получаем documents
+export const getAllDocuments = () => (dispatch) => {
+  dispatch({ type: uiActionType.LOADING_UI });
+  return axios.get(`/getAllDocuments`)
+    .then((res) => {
+      console.log(`Полученные documents: `, res.data.documents);
+      dispatch({
+        type: dataActionType.SET_DOCUMENTS,
+        payload: res.data.documents,
+      })
+      dispatch({ type: uiActionType.CLEAR_ERRORS });
+    })
+    .catch((err) => {
+      console.log(err.response.data);
+      dispatch({
+        type: uiActionType.SET_ERRORS,
+        payload: err.response.data,
+      })
+      dispatch(logoutUser());
     });
 };
 
@@ -254,41 +266,21 @@ export const deleteDocument = (deleteDocument) => (dispatch) => {
     });
 };
 
+
+
 // Создаём rule
 export const createRule = (newRule) => (dispatch) => {
-  // dispatch({ type: uiActionType.LOADING_UI });
+  dispatch({ type: uiActionType.LOADING_UI });
   
   return axios.post(`/createRule/${newRule.docId}/${newRule.sectionId}`, newRule)
     .then((res) => {
+      dispatch({ // Сохраняем rules из активной section
+        type: dataActionType.SET_ACTIVE_RULES,
+        payload: { docId: newRule.docId, sectionId: newRule.sectionId },
+      });
       dispatch({
         type: dataActionType.CREATE_RULE,
         payload: res.data.newRule,
-      });
-      dispatch({ type: uiActionType.CLEAR_ERRORS });
-    })
-    .catch((err) => {
-      console.log(err.response.data);
-      dispatch({
-        type: uiActionType.SET_ERRORS,
-        payload: err.response.data,
-      })
-    });
-};
-
-// Загружаем rules
-export const getAllRulesById = ({ docId, sectionId }) => (dispatch) => {
-  console.log('docId, sectionId: ', docId, sectionId);
-  dispatch({ type: uiActionType.LOADING_UI });
-  
-  return axios.get(`/getAllRulesById/${docId}/${sectionId}`)
-    .then((res) => {
-      dispatch({
-        type: dataActionType.SET_RULES,
-        payload: res.data.rules,
-      });
-      dispatch({ // Сохраняем rules из активной section
-        type: dataActionType.SET_ACTIVE_RULES,
-        payload: { docId, sectionId },
       });
       dispatch({ type: uiActionType.CLEAR_ERRORS });
     })
@@ -309,13 +301,33 @@ export const setActiveRules = ({ docId, sectionId }) => (dispatch) => {
   });
 };
 
-// Сохраняем selectedDocument 
-export const setActiveDocument = (doc) => (dispatch) => {
-  dispatch({
-    type: dataActionType.SET_ACTIVE_DOCUMENT,
-    payload: doc,
-  });
+// Загружаем rules
+export const getAllRulesById = ({ docId, sectionId }) => (dispatch) => {
+  console.log('docId, sectionId: ', docId, sectionId);
+
+  dispatch({ type: uiActionType.LOADING_UI });
+  
+  return axios.get(`/getAllRulesById/${docId}/${sectionId}`)
+    .then((res) => {
+      dispatch({ // Сохраняем rules из активной section
+        type: dataActionType.SET_ACTIVE_RULES,
+        payload: { docId, sectionId },
+      });
+      dispatch({
+        type: dataActionType.SET_RULES,
+        payload: res.data.rules,
+      });
+      dispatch({ type: uiActionType.CLEAR_ERRORS });
+    })
+    .catch((err) => {
+      console.log(err.response.data);
+      dispatch({
+        type: uiActionType.SET_ERRORS,
+        payload: err.response.data,
+      })
+    });
 };
+
 
 // Обновляем rule
 export const updateRule = (rule) => (dispatch) => {
@@ -340,7 +352,7 @@ export const updateRule = (rule) => (dispatch) => {
 
 // Удаляем rule
 export const deleteRule = (rule) => (dispatch) => {
-  // dispatch({ type: uiActionType.LOADING_UI });
+  dispatch({ type: uiActionType.LOADING_UI });
   
   return axios.get(`/deleteRule/${rule.id}`)
     .then((res) => {

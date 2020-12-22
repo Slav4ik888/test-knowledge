@@ -3,7 +3,7 @@ import pt from 'prop-types';
 // Readux Stuff
 import { connect } from 'react-redux';
 import { setRuleStored } from '../../../redux/actions/ui-actions';
-import { getAllRulesById, setActiveRules, setActiveDocument } from '../../../redux/actions/data-actions';
+import { setActiveRules, setActiveDocument } from '../../../redux/actions/data-actions';
 // MUI Stuff
 import { makeStyles } from '@material-ui/core/styles';
 import Paper from '@material-ui/core/Paper';
@@ -157,7 +157,6 @@ RulesContainer.propTypes = {
   // activeDocument: pt.object.isRequired,
   ruleStored: pt.object.isRequired,
   setRuleStored: pt.func.isRequired,
-  getAllRulesById: pt.func.isRequired,
   setActiveRules: pt.func.isRequired, 
   // rules: pt.array.isRequired,
 };
@@ -171,7 +170,6 @@ const mapStateToProps = (state) => ({
 
 const mapActionsToProps = {
   setRuleStored,
-  getAllRulesById,
   setActiveRules,
   setActiveDocument,
 };

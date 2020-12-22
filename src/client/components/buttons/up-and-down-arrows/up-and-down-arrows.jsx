@@ -29,11 +29,10 @@ const useStyles = makeStyles((theme) => ({
   addIcon: {
     width: `24px`,
     height: `24px`, 
-    // color: theme.palette.background.bodyfield,
-    color: theme.palette.background.bodyfield,
+    color: theme.palette.background.sectionIcon,
   },
   hoverIcon: {
-    color: theme.palette.background.iconHover,
+    color: theme.palette.background.sectionIconHover,
   },
 }));
 
