@@ -6,6 +6,7 @@ import Paper from '@material-ui/core/Paper';
 import InputBase from '@material-ui/core/InputBase';
 import IconButton from '@material-ui/core/IconButton';
 import Avatar from '@material-ui/core/Avatar';
+// import Typography from '@material-ui/core/Typography';
 // Icons
 import AddIcon from '@material-ui/icons/Add';
 import FolderIcon from '@material-ui/icons/Folder';
@@ -16,7 +17,7 @@ const useStyles = makeStyles((theme) => ({
     backgroundColor: theme.palette.background.moduleAddInput,
   },
   formControl: {
-    margin: theme.spacing(2, 3, 5, 3),
+    margin: theme.spacing(3, 3, 4, 3),
     padding: theme.spacing(1.5, 4, 1.5, 2),
     minWidth: 300,
     display: `flex`,
@@ -90,13 +91,13 @@ const DocumentAdd = ({ onAdd, UI: { errors } }) => {
         </Paper>
       </form>
 
-      {
+      {/* {
         errors.general && (
           <Typography variant="body2" className={classes.customError}>
             {errors.general}
           </Typography>
         )
-      }
+      } */}
 
     </>
   );

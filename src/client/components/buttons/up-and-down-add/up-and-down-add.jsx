@@ -12,8 +12,8 @@ import Tooltip from '@material-ui/core/Tooltip';
 import AddIcon from '@material-ui/icons/Add';
 // Components
 import { typeUpDown } from '../../../../types';
-import { createId, getNewOrderForItem } from '../../../../server/utils/utils';
-import { getIdxRulesFromDocAndSection } from '../../../utils/utils';
+import { addSectionInDocument } from '../../sections/utils';
+import { addRuleInSection } from '../../rules/util';
 
 
 const useStyles = makeStyles((theme) => ({
@@ -34,62 +34,24 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 // Выводит стрелки вверх и вниз, а при нажатии перемещает объект выше или ниже
-const UpAndDownAdd = ({ loading, type, docSelected, section, rule, up, down, rules, updateDocument, createRule }) => {
+const UpAndDownAdd = ({ loading, type, docSelected, section, rule, upDown, rules, updateDocument, createRule }) => {
   const classes = useStyles();
 
   const [isHover, setIsHover] = useState(false);
   const handleIsHoverOn = () => setIsHover(true);
   const handleIsHoverOff = () => setIsHover(false);
   
-
   const handleAddItem = () => {
     if (!loading) {
       if (type === typeUpDown.SECTION) {
-        if (up) {
-          handleAddSection(`up`);
-        }
-        if (down) {
-          handleAddSection(`down`);
-        }
+        // Добавляем пустой раздел сверху или снизу
+        addSectionInDocument(upDown, docSelected, section, updateDocument);
+
       } else if (type === typeUpDown.RULE) {
-        if (up) {
-          handleAddRule(`up`);
-        }
-        if (down) {
-          handleAddRule(`down`);
-        }
+        // Добавляем пустое правило сверху или снизу 
+        addRuleInSection(upDown, rules, rule, createRule);
       }
-
     }
-  };
-
-  // Добавляем пустой раздел сверху или снизу
-  const handleAddSection = (condition) => {
-      const newSection = {
-        title: ``,
-        id: createId(docSelected.sections),
-        order: getNewOrderForItem(condition, `section`, docSelected, section),
-        createdAt: new Date().toISOString(),
-        lastChange: new Date().toISOString(),
-      };
-      docSelected.sections.push(newSection);
-      updateDocument(docSelected);
-  };
-
-  // Добавляем пустое правило сверху или снизу
-  const handleAddRule = (condition) => {
-    // Находим индекс где храниться нужная секция в rules так как там массив посекционный с rules
-    const idxRule = getIdxRulesFromDocAndSection(rules, rule, rule);
-    const rulesInSection = rules[idxRule].rules;
-    
-    const newRule = {
-      title: ``,
-      rule: ``,
-      order: getNewOrderForItem(condition, `rule`, rulesInSection, rule),
-      docId: rule.docId,
-      sectionId: rule.sectionId,
-    };
-    createRule(newRule);
   };
 
   let tooltip = ``;
@@ -97,13 +59,13 @@ const UpAndDownAdd = ({ loading, type, docSelected, section, rule, up, down, rul
 
   switch (type) {
     case typeUpDown.SECTION:
-      tooltip = up ? `Добавить раздел выше` : `Добавить раздел ниже`;
-      placement = up ? `top` : `bottom`;
+      tooltip = upDown === `up` ? `Добавить раздел выше` : `Добавить раздел ниже`;
+      placement = upDown === `up` ? `top` : `bottom`;
       break;
     
     case typeUpDown.RULE:
-      tooltip = down ? `Добавить правило выше` : `Добавить правило ниже`;
-      placement = down ? `top` : `bottom`;
+      tooltip = upDown === `up` ? `Добавить правило выше` : `Добавить правило ниже`;
+      placement = upDown === `up` ? `top` : `bottom`;
       break;
   }
   
@@ -128,8 +90,7 @@ const UpAndDownAdd = ({ loading, type, docSelected, section, rule, up, down, rul
 UpAndDownAdd.propTypes = {
   loading: pt.bool.isRequired,
   type: pt.string.isRequired,
-  up: pt.bool,
-  down: pt.bool,
+  upDown: pt.string.isRequired,
   updateDocument: pt.func.isRequired,
   createRule: pt.func.isRequired,
   docSelected: pt.object,

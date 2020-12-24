@@ -3,7 +3,7 @@ import pt from 'prop-types';
 import cl from 'classnames';
 // Readux Stuff
 import { connect } from 'react-redux';
-import { updateDocument } from '../../../redux/actions/data-actions';
+import { updateDocument, updateRule } from '../../../redux/actions/data-actions';
 // MUI Stuff
 import { makeStyles } from '@material-ui/core/styles';
 import IconButton from '@material-ui/core/IconButton';
@@ -14,7 +14,8 @@ import ExpandLessIcon from '@material-ui/icons/ExpandLess';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 // Components
 import { typeUpDown } from '../../../../types';
-import { getNewOrderForMoveSection } from '../../../../server/utils/utils';
+import { getNewOrderForMoveItem } from '../../../../server/utils/utils';
+import { getIdxRulesFromDocAndSection } from '../../../utils/utils';
 
 
 const useStyles = makeStyles((theme) => ({
@@ -37,7 +38,7 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 // Выводит стрелки вверх и вниз, а при нажатии перемещает объект выше или ниже
-const UpAndDownArrows = ({ loading, type, docSelected, section, updateDocument }) => {
+const UpAndDownArrows = ({ loading, type, docSelected, section, rules, rule, updateDocument, updateRule }) => {
   const classes = useStyles();
 
   const [isHover, setIsHover] = useState(false);
@@ -47,26 +48,51 @@ const UpAndDownArrows = ({ loading, type, docSelected, section, updateDocument }
 
   const handleMoveItemUp = () => {
     if (!loading) {
-      handleMoveSection(`up`);
+      if (type === typeUpDown.SECTION) {
+        handleMoveSection(`up`);
+      } else if (type === typeUpDown.RULE) {
+        handleMoveRule(`up`);
+      } 
     }
   };
 
   const handleMoveItemDown = () => {
     if (!loading) {
-      handleMoveSection(`down`);
+      if (type === typeUpDown.SECTION) {
+        handleMoveSection(`down`);
+      } else if (type === typeUpDown.RULE) {
+        handleMoveRule(`down`);
+      } 
     }
   };
 
-  const handleMoveSection = (type) => {
+  // Перемещаем раздел
+  const handleMoveSection = (condition) => {
     const idx = docSelected.sections.findIndex((sec) => sec.id === section.id);
     const order = section.order;
-    const newOrder = getNewOrderForMoveSection(type, docSelected, section);
+    const newOrder = getNewOrderForMoveItem(condition, `section`, docSelected, section);
 
     if (newOrder !== order) { // Сохраняем если есть изменения
       docSelected.sections[idx].order = newOrder;
       updateDocument(docSelected);
     }
   };
+
+  // Перемещаем правило
+  const handleMoveRule = (condition) => {
+    // Если в разделе уже есть хотя бы одно правило
+    // Находим индекс где храниться нужная секция в rules так как там массив посекционный с rules
+    const idxRule = getIdxRulesFromDocAndSection(rules, rule, rule);
+    const rulesInSection = rules[idxRule].rules;
+    const newOrder = getNewOrderForMoveItem(condition, `rule`, rulesInSection, rule);
+
+    if (newOrder !== rule.order) {
+      // console.log(`Перемещаем правило`);
+      rule.order = newOrder;
+      updateRule(rule);
+    }
+  };
+
 
   let tooltipUp = ``;
   let tooltipDown = ``;
@@ -112,14 +138,18 @@ const UpAndDownArrows = ({ loading, type, docSelected, section, updateDocument }
 UpAndDownArrows.propTypes = {
   loading: pt.bool.isRequired,
   type: pt.string.isRequired,
-  docSelected: pt.object.isRequired,
-  section: pt.object.isRequired,
+  docSelected: pt.object,
+  section: pt.object,
+  rules: pt.array,
+  rule: pt.object,
   updateDocument: pt.func.isRequired,
+  updateRule: pt.func.isRequired,
 };
 
 const mapStateToProps = (state) => ({
   loading: state.UI.loading,
+  rules: state.data.rules,
 });
 
 
-export default connect(mapStateToProps, { updateDocument })(UpAndDownArrows);
+export default connect(mapStateToProps, { updateDocument, updateRule })(UpAndDownArrows);

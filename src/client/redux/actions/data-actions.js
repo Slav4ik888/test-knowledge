@@ -303,7 +303,7 @@ export const setActiveRules = ({ docId, sectionId }) => (dispatch) => {
 
 // Загружаем rules
 export const getAllRulesById = ({ docId, sectionId }) => (dispatch) => {
-  console.log('docId, sectionId: ', docId, sectionId);
+  // console.log('docId, sectionId: ', docId, sectionId);
 
   dispatch({ type: uiActionType.LOADING_UI });
   
@@ -327,7 +327,6 @@ export const getAllRulesById = ({ docId, sectionId }) => (dispatch) => {
       })
     });
 };
-
 
 // Обновляем rule
 export const updateRule = (rule) => (dispatch) => {

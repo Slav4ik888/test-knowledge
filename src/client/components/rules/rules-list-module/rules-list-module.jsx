@@ -9,8 +9,9 @@ import { makeStyles } from '@material-ui/core/styles';
 import CircularProgress from '@material-ui/core/CircularProgress';
 // Components
 import RuleRow from '../rule-row/rule-row';
-import RuleRowCreate from '../rule-row-create/rule-row-create';
+import NewRowCreate from '../../buttons/new-row-create/new-row-create';
 import { getRulesFromDocAndSection, sortingArr } from '../../../utils/utils';
+import { typeUpDown } from '../../../../types';
 
 
 const useStyles = makeStyles((theme) => ({
@@ -59,7 +60,7 @@ const RulesListModule = ({ loading, rules, docSelected, section, getAllRulesById
             rulesShow.map((rule) => <RuleRow key={rule.id}
               rule={rule}
             />)
-            : <RuleRowCreate docSelected={docSelected} section={section}/>
+            : <NewRowCreate type={typeUpDown.RULE} docSelected={docSelected} section={section}/>
         }
       </div>
     </>

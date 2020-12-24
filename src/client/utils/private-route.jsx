@@ -6,7 +6,7 @@ import route from './routes';
 import {connect} from 'react-redux';
 
 
-const PrivateRoute = ({exact, path, render, authenticated}) => {
+const PrivateRoute = ({ exact, path, render, authenticated }) => {
   return (
     <Route
       exact={exact}

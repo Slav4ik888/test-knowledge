@@ -130,7 +130,7 @@ const SectionsModuleRow = ({ docSelected, section, updateDocument }) => {
   return (
     <>
       <div className={classes.container}>
-        <UpAndDownAdd type={typeUpDown.SECTION} docSelected={docSelected} section={section} up />
+        <UpAndDownAdd type={typeUpDown.SECTION} docSelected={docSelected} section={section} upDown={`up`} />
         
         <Card className={classes.box} >
         
@@ -175,7 +175,7 @@ const SectionsModuleRow = ({ docSelected, section, updateDocument }) => {
           </div>
         </Card>
 
-        <UpAndDownAdd type={typeUpDown.SECTION} docSelected={docSelected} section={section} down/>
+        <UpAndDownAdd type={typeUpDown.SECTION} docSelected={docSelected} section={section} upDown={`down`} />
       </div>
 
       <Collapse in={isShowRules} timeout="auto" unmountOnExit>

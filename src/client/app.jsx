@@ -9,9 +9,9 @@ import { logoutUser, getUserAndCompanyData } from './redux/actions/user-actions'
 import { getAllEmployeesData, getAllPositions, getAllDocuments } from './redux/actions/data-actions';
 import { userActionType } from './redux/types';
 // MUI Stuff
-import { ThemeProvider } from '@material-ui/core/styles';
-import createMuiTheme from '@material-ui/core/styles/createMuiTheme';
-import themeFile from './utils/theme';
+// import { ThemeProvider } from '@material-ui/core/styles';
+// import createMuiTheme from '@material-ui/core/styles/createMuiTheme';
+// import themeFile from './utils/theme';
 // Pages
 import Home from './pages/home';
 import SignupCompany from './pages/signup-company';
@@ -40,40 +40,38 @@ if (token && !token.includes(`Bearer undefined`)) {
   }
 };
 
-const theme = createMuiTheme(themeFile);
+// const theme = createMuiTheme(themeFile);
 
 
 const App = () => {
   return (
-    <ThemeProvider theme={theme}>
-      <Router>
-        <div className="container">
-          <Navbar />
-          <Switch>
-            <Route exact path={route.HOME} component={Home} />
-            
-            <PrivateRoute exact path={route.CREATE_RULE} render={() => <CreateRule />} />
+    <Router>
+      <div className="container">
+        <Navbar />
+        <Switch>
+          <Route exact path={route.HOME} component={Home} />
+          
+          <PrivateRoute exact path={route.CREATE_RULE} render={() => <CreateRule />} />
 
-            <AuthRoute exact path={route.SIGNUP_COMPANY} component={SignupCompany} />
-            <AuthRoute exact path={route.LOGIN} component={Login} />
-            <Route exact path={route.ROOT} />
+          <AuthRoute exact path={route.SIGNUP_COMPANY} component={SignupCompany} />
+          <AuthRoute exact path={route.LOGIN} component={Login} />
+          <Route exact path={route.ROOT} />
 
-            <Route
-              render={() => (
-                <>
-                  <h1>
-                    404.
-                    <br />
-                    <small>Page not found</small>
-                  </h1>
-                  <Redirect to={route.ROOT} />
-                </>
-              )}
-            />
-          </Switch>
-        </div>
-      </Router>
-    </ThemeProvider>
+          <Route
+            render={() => (
+              <>
+                <h1>
+                  404.
+                  <br />
+                  <small>Page not found</small>
+                </h1>
+                <Redirect to={route.ROOT} />
+              </>
+            )}
+          />
+        </Switch>
+      </div>
+    </Router>
   );
 };
 

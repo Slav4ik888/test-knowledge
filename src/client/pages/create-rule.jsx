@@ -1,12 +1,14 @@
 import React from 'react';
 import pt from 'prop-types';
+import {Redirect} from 'react-router-dom';
 // Redux stuff
-// import {connect} from 'react-redux';
+import {connect} from 'react-redux';
 // MUI Stuff
 import { makeStyles } from '@material-ui/core/styles';  
 import Grid from '@material-ui/core/Grid';
 // Component
 import RulesContainer from '../components/rules/rules-container/rules-container';
+import route from '../utils/routes';
 
 
 const useStyles = makeStyles((theme) => ({
@@ -15,15 +17,12 @@ const useStyles = makeStyles((theme) => ({
     display: `flex`,
     justifyContent: `center`,
   },
-  // paper: {
-  //   padding: theme.spacing(2),
-  //   textAlign: 'center',
-  //   color: theme.palette.text.secondary,
-  // },
 }));
 
 
-const CreateRule = () => {
+const CreateRule = ({ userProfile }) => {
+  if (!userProfile.email) return <Redirect to={route.ROOT} />;
+
   const classes = useStyles();
 
   return (
@@ -36,12 +35,11 @@ const CreateRule = () => {
 };
 
 CreateRule.propTypes = {
-  // getScreams: pt.func.isRequired,
-  // data: pt.object.isRequired,
+  userProfile: pt.object.isRequired,
 }
-// const mapStateToProps = (state) => ({
-//   data: state.data,
-// })
+const mapStateToProps = (state) => ({
+  userProfile: state.user.userProfile,
+})
 
-// export default connect(mapStateToProps, {getScreams})(Home);
-export default CreateRule;
+export default connect(mapStateToProps)(CreateRule);
+// export default CreateRule;

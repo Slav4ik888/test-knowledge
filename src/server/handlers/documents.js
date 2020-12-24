@@ -151,6 +151,19 @@ async function deleteDocument(req, res) {
   if (!valid) return res.status(400).json(errors);
 
   try {
+    // Проверяем есть  в нём находятся "Правила".
+    const rulesRes = await db.collection(`rules`)
+      .doc(req.user.companyId)
+      .collection(`rules`)
+      .where(`docId`, `==`, req.params.documentId)
+      .limit(1)
+      .get();
+    
+    if (!rulesRes.empty) {
+      console.log(`Нельзя удалить документ, если в нём находятся "Правила"`);
+      return res.status(405).json({ general: `Нельзя удалить документ, если в нём находятся "Правила". Вначале удалите или перенесите "Правила" в другой документ.` });
+    }
+
     const updateRes = await db.doc(`documents/${req.user.companyId}/documents/${req.params.documentId}`)
       .delete();
     
@@ -162,6 +175,5 @@ async function deleteDocument(req, res) {
       return res.status(500).json({ general: err.code });
   };
 };
-// TODO: Нельзя удалить документ, если в нём находятся "Правила". Вначале удалите или перенесите "Правила" в другой документ.
 
 module.exports = { createDocument, updateDocument, getDocument, getAllDocuments, deleteDocument };

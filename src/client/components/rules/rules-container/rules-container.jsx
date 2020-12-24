@@ -66,19 +66,10 @@ const useStyles = makeStyles((theme) => ({
 
 
 
-const RulesContainer = ({ loading, activeDocument, setRuleStored, ruleStored, setActiveRules, setActiveDocument }) => {
+const RulesContainer = ({ setRuleStored, ruleStored, setActiveDocument }) => {
 
   const classes = useStyles();
-  const [isChange, setIsChange] = useState(false);
-
-  // Подтверждение выхода без сохранения
-  const [isOpen, setIsOpen] = useState(false);
-  const handleCloseConfirm = () => setIsOpen(false);
-  const handleOkConfirm = () => {
-    setIsOpen(false);
-    // TODO: Выход без сохранения
-  };
-  const handleOpenConfirm = () => setIsOpen(true);
+  
 
   // Выбранный документ
   const [docSelected, setDocSelected] = useState(ruleStored.docSelected);
@@ -86,85 +77,37 @@ const RulesContainer = ({ loading, activeDocument, setRuleStored, ruleStored, se
     setDocSelected(doc);
     setActiveDocument(doc);
     setRuleStored({ docSelected: doc, sectionSelected: null }); // Запоминаем выбранное
-    setActiveRules({ docId: ``, sectionId: `` }); // Обнуляем activeRules
+    // setActiveRules({ docId: ``, sectionId: `` }); // Обнуляем activeRules
   };
 
-  
-
-  // // Обновление title при редактировании правила
-  // const handleEditTitle = (docId, sectionId, newTitle) => {
-  //   console.log('docId, sectionId, newTitle: ', docId, ` : `, sectionId, ` : `, newTitle);
-  //   // Поиск нужного правила и запись в него
-
-  // };
-
-  // // Обновление тела rule при редактировании правила
-  // const handleEditRule = (docId, sectionId, newRule) => {
-  //   console.log('docId, sectionId, newRule: ', docId, ` : `, sectionId, ` : `, newRule);
-  //   // Поиск нужного правила и запись в него
-  // };
-
-  const handleClose = () => {
-    if (isChange) {
-      // Спросить, есть изменения, выйти без сохранения?
-      handleOpenConfirm();
-    }
-  };
-
-  const handleSubmit = () => {
-    // TODO: Сохранить изменения и выйти
-  }; 
-
-  
-  
   return (
-    // <div className={classes.root}>
-      <Paper className={classes.paper}>
-        <DialogTitle>Новое правило</DialogTitle>
-        <div className={classes.content}>
+    <Paper className={classes.paper}>
+      <DialogTitle>Редактирование документа</DialogTitle>
+      <div className={classes.content}>
 
-          <DocumentsModuleRow onDocumentSelected={handleDocSelected} />
+        <DocumentsModuleRow onDocumentSelected={handleDocSelected} />
 
-          <PositionsModuleRow item={docSelected} type={typePosModule.DOC} />
+        <PositionsModuleRow item={docSelected} type={typePosModule.DOC} />
 
-          <SectionsListModule docSelected={docSelected} />
-          
-          {/* <div className={classes.cancelSubmitBtn}>
-            <CancelSubmitBtn
-              onCancel={handleClose}
-              onSubmit={handleSubmit}
-              disabled={loading || !isChange} loading={loading}
-            />
-          </div>
-
-          <Confirm
-            open={isOpen}
-            typeOk={typeConfirm.DEL}
-            onOk={handleOkConfirm}
-            onCancel={handleCloseConfirm}
-            title="Есть не сохранённые данные, выйти без сохранения?"
-          /> */}
-
-        </div>
-      </Paper>
-    // </div>
+        <SectionsListModule />
+        
+      </div>
+    </Paper>
   );
 };
 
 
 RulesContainer.propTypes = {
   loading: pt.bool.isRequired,
-  // activeDocument: pt.object.isRequired,
   ruleStored: pt.object.isRequired,
   setRuleStored: pt.func.isRequired,
-  setActiveRules: pt.func.isRequired, 
-  // rules: pt.array.isRequired,
+  // setActiveRules: pt.func.isRequired, 
 };
 
 const mapStateToProps = (state) => ({
   loading: state.UI.loading,
   ruleStored: state.UI.ruleStored,
-  rules: state.data.rules,
+  // rules: state.data.rules,
   // activeDocument: state.data.activeDocument,
 });
 

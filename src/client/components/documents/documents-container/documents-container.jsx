@@ -8,12 +8,17 @@ import { makeStyles } from '@material-ui/core/styles';
 import Dialog from '@material-ui/core/Dialog';
 import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
+import Snackbar from '@material-ui/core/Snackbar';
+import MuiAlert from '@material-ui/lab/Alert';
 // Component
 import DocumentsList from '../documents-list/documents-list';
 import DocumentAdd from '../document-add/document-add';
 import DialogTitle from '../../dialogs/dialog-title/dialog-title';
 // import CancelSubmitBtn from '../../buttons/cancel-submit-btn/cancel-submit-btn';
 
+function Alert(props) {
+  return <MuiAlert elevation={6} variant="filled" {...props} />;
+}
 
 const useStyles = makeStyles((theme) => ({
   dialog: {
@@ -30,6 +35,11 @@ const useStyles = makeStyles((theme) => ({
     flexWrap: 'wrap',
     backgroundColor: theme.palette.background.bodyfield,
   },
+  snack: {
+    padding: theme.spacing(2),
+    backgroundColor: theme.palette.secondary.light,
+    color: theme.palette.primary.main,
+  },
 }));
 
 const DocumentsContainer = ({ open, onClose, UI, documents, createDocument, updateDocument, deleteDocument }) => {
@@ -38,7 +48,7 @@ const DocumentsContainer = ({ open, onClose, UI, documents, createDocument, upda
     return null;
   }
   const classes = useStyles();
-  const { loading } = UI;
+  const { loading, errors } = UI;
   
   // const [isChange, setIsChange] = useState(false);
 
@@ -93,6 +103,14 @@ const DocumentsContainer = ({ open, onClose, UI, documents, createDocument, upda
     }
   }, [open]);
 
+  const [isSnack, setIsSnack] = useState(false);
+  useEffect(() => {
+    if (errors.general) {
+      setIsSnack(true); 
+    }
+  }, [errors.general]);
+  const handleCloseSnackBar = () => setIsSnack(false); 
+
   return (
     <>
       <Dialog
@@ -111,6 +129,12 @@ const DocumentsContainer = ({ open, onClose, UI, documents, createDocument, upda
         </DialogContent>
 
         <DocumentAdd onAdd={handleAddDoc} UI={UI} />
+
+        <Snackbar open={isSnack} autoHideDuration={6000} onClose={handleCloseSnackBar} >
+          <Alert onClose={handleCloseSnackBar} severity="warning" className={classes.snack}>
+            {errors.general}
+          </Alert>
+        </Snackbar>
 
       </Dialog>
     </>

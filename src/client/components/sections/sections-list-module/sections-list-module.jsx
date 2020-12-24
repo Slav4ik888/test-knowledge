@@ -6,17 +6,20 @@ import { connect } from 'react-redux';
 
 // Component
 import SectionsModuleRow from '../sections-module-row/sections-module-row';
+import NewRowCreate from '../../buttons/new-row-create/new-row-create';
+import { typeUpDown } from '../../../../types';
 import { sortingArr } from '../../../utils/utils';
 
+
 // В открытом document выводит список всех section в виде модулей с вложенными rules
-const SectionsListModule = ({ docSelected, documents }) => {
+const SectionsListModule = ({ activeDocument, documents }) => {
   
-  if (!docSelected) return null;
+  if (!activeDocument) return null;
   
-  const document = documents.find((doc) => doc.id === docSelected.id);
+  const document = documents.find((doc) => doc.id === activeDocument.id);
   // Получаем sections отсортированные по order
-  // const sectionsShow = sortingArr(docSelected.sections, `order`);
-  let sectionsShow;
+  let sectionsShow = [];
+
   if (document) {
     sectionsShow = sortingArr(document.sections, `order`);
   }
@@ -24,11 +27,11 @@ const SectionsListModule = ({ docSelected, documents }) => {
   return (
     <>
       {
-        sectionsShow && sectionsShow.length &&
+        sectionsShow.length ?
           sectionsShow.map((section) => <SectionsModuleRow key={section.id}
               section={section}
-              docSelected={docSelected}
-            />)
+              docSelected={activeDocument}
+            />) : <NewRowCreate type={typeUpDown.SECTION} docSelected={activeDocument} />
       }
 
     </>
@@ -36,13 +39,14 @@ const SectionsListModule = ({ docSelected, documents }) => {
 }
 
 SectionsListModule.propTypes = {
-  docSelected: pt.object,
+  activeDocument: pt.object,
   documents: pt.array.isRequired,
 };
 
 const mapStateToProps = (state) => ({
   loading: state.UI.loading,
   documents: state.data.documents,
+  activeDocument: state.data.activeDocument,
 });
 
 

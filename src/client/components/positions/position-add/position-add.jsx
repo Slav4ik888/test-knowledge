@@ -21,7 +21,7 @@ const useStyles = makeStyles((theme) => ({
     backgroundColor: theme.palette.background.moduleAddInput,
   },
   formControl: {
-    margin: theme.spacing(2, 3, 5, 3),
+    margin: theme.spacing(3, 3, 4, 3),
     padding: theme.spacing(1.5, 4, 1.5, 2),
     minWidth: 300,
     display: `flex`,

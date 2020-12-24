@@ -9,29 +9,18 @@ import { makeStyles } from '@material-ui/core/styles';
 import Avatar from '@material-ui/core/Avatar';
 import TextareaAutosize from '@material-ui/core/TextareaAutosize';
 import Tooltip from '@material-ui/core/Tooltip';
-import TextField from '@material-ui/core/TextField';
 import Card from '@material-ui/core/Card';
-import CardHeader from '@material-ui/core/CardHeader';
-import CardMedia from '@material-ui/core/CardMedia';
 import CardContent from '@material-ui/core/CardContent';
-import CardActions from '@material-ui/core/CardActions';
 import Collapse from '@material-ui/core/Collapse';
 import IconButton from '@material-ui/core/IconButton';
 import InputBase from '@material-ui/core/InputBase';
-// import Button from '@material-ui/core/Button';
-// import IconButton from '@material-ui/core/IconButton';
-// import Tooltip from '@material-ui/core/Tooltip';
 // Icons
-// import SaveIcon from '@material-ui/icons/Save';
 import DescriptionIcon from '@material-ui/icons/Description';
-import Delete from '@material-ui/icons/Delete';
-import FavoriteIcon from '@material-ui/icons/Favorite';
-import ShareIcon from '@material-ui/icons/Share';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
-import MoreVertIcon from '@material-ui/icons/MoreVert';
 // Components
 import DeleteButton from '../../buttons/delete-button/delete-button';
 import UpAndDownAdd from '../../buttons/up-and-down-add/up-and-down-add';
+import UpAndDownArrows from '../../buttons/up-and-down-arrows/up-and-down-arrows';
 import { typeUpDown } from '../../../../types';
 
 
@@ -47,7 +36,7 @@ const useStyles = makeStyles((theme) => ({
     // backgroundColor: theme.palette.background.main,
   },
   sprite: {
-    width: `100%`,
+    width: `calc(100% - 120px)`,
     display: `flex`,
     flexDirection: `row`,
   },
@@ -116,6 +105,10 @@ const RuleRow = ({ rule, updateRule, deleteRule }) => {
 
   const classes = useStyles();
 
+  const [isHover, setIsHover] = useState(false);
+  const handleIsHoverOn = () => setIsHover(true);
+  const handleIsHoverOff = () => setIsHover(false);
+
   const [expanded, setExpanded] = React.useState(false);
   const handleExpandClick = () => setExpanded(!expanded);
 
@@ -153,26 +146,34 @@ const RuleRow = ({ rule, updateRule, deleteRule }) => {
   
   return (
     <>
-      <UpAndDownAdd type={typeUpDown.RULE} rule={rule} up />
+      <UpAndDownAdd type={typeUpDown.RULE} rule={rule} upDown={`up`} />
       
       <Card className={classes.container} onMouseLeave={handleUpdateRule} >
-        <CardContent className={classes.header}>
+        <CardContent className={classes.header} >
           <Avatar className={classes.avatar}>
             <DescriptionIcon />
           </Avatar>
-          <Tooltip title="Нажмите, чтобы изменить заголовок правила" placement="top" arrow enterDelay={1000} enterNextDelay={1000}>
-            <InputBase
-              className={classes.input}
-              inputProps={{ 'aria-label': 'Заголовок правила' }}
-              value={newTitle}
-              type="text"
-              placeholder="Введите заголовок правила"
-              onChange={handleEditTitle} 
-              onKeyDown={handleEditTitle}
-              onBlur={handleBlur}
-            />
-          </Tooltip>
-           
+
+          <div className={classes.sprite} onMouseEnter={handleIsHoverOn} onMouseLeave={handleIsHoverOff}>
+            <Tooltip title="Нажмите, чтобы изменить заголовок правила" placement="top" arrow enterDelay={1000} enterNextDelay={1000}>
+              <InputBase
+                className={classes.input}
+                inputProps={{ 'aria-label': 'Заголовок правила' }}
+                value={newTitle}
+                type="text"
+                placeholder="Введите заголовок правила"
+                onChange={handleEditTitle} 
+                onKeyDown={handleEditTitle}
+                onBlur={handleBlur}
+              />
+            </Tooltip>
+
+            {
+              isHover && <>
+                <UpAndDownArrows type={typeUpDown.RULE} rule={rule} />
+              </>
+            }
+          </div>
           <IconButton
             className={cl(classes.expand, {
               [classes.expandOpen]: expanded,
@@ -205,7 +206,7 @@ const RuleRow = ({ rule, updateRule, deleteRule }) => {
 
       </Card>
 
-      <UpAndDownAdd type={typeUpDown.RULE} rule={rule} down />
+      <UpAndDownAdd type={typeUpDown.RULE} rule={rule} upDown={`down`} />
     </>
   );
 };

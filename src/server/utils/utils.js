@@ -38,63 +38,66 @@ const sortingArr = (arr, fieldName) => {
     return 0;
   }); 
 };
-
-
   
-// Возвращает order для section которую перемещают вверх
-const getPrevOrderForMoveSection = (doc, section) => {
-  let sections = sortingArr(doc.sections, `order`);
-  // Взять две предыдущие секции и сделать order между ними
+
+// Возвращает order для rule || section которую перемещают вверх
+const getPrevOrderForMoveItem = (type, values, item) => {
+  const items = type === `section` ? values.sections : values;
+  let sortedItems = sortingArr(items, `order`);
+
   // Текущее положение
-  const idx = sections.findIndex((sec) => sec.id === section.id);
-  const order = sections[idx].order;
+  const idx = sortedItems.findIndex((it) => it.id === item.id);
+  const order = sortedItems[idx].order;
 
   if (idx === 0) { // Поднимать некуда
     return order;
 
   } else if (idx === 1) { // Вверху только 1 секция
-    const prevOrder = sections[idx - 1].order
+    const prevOrder = sortedItems[idx - 1].order
     return prevOrder / 2;
 
-  } else { // Вверху более 1 секции
-    const prevOrder = sections[idx - 1].order;
-    const prevPrevOrder = sections[idx - 2].order;
+  } else { // Вверху более 1 секции, взять две предыдущие items и сделать order между ними
+    const prevOrder = sortedItems[idx - 1].order;
+    const prevPrevOrder = sortedItems[idx - 2].order;
     return prevPrevOrder + (prevOrder - prevPrevOrder) / 2;
   }
 };
 
-// Возвращает order для section которую перемещают вниз
-const getNextOrderForMoveSection = (doc, section) => {
-  let sections = sortingArr(doc.sections, `order`);
-  // Взять две предыдущие секции и сделать order между ними
-  // Текущее положение
-  const idx = sections.findIndex((sec) => sec.id === section.id);
-  const order = sections[idx].order;
+// Возвращает order для rule || section которую перемещают вниз
+const getNextOrderForMoveItem = (type, values, item) => {
+  const items = type === `section` ? values.sections : values;
+  let sortedItems = sortingArr(items, `order`);
 
-  if (idx === sections.length - 1) { // Опускать ниже некуда
+  // Текущее положение
+  const idx = sortedItems.findIndex((it) => it.id === item.id);
+  const order = sortedItems[idx].order;
+
+  if (idx === sortedItems.length - 1) { // Опускать ниже некуда
     return order;
 
-  } else if (idx === sections.length - 2) { // Внизу только 1 секция
-    const nextOrder = sections[idx + 1].order;
+  } else if (idx === sortedItems.length - 2) { // Внизу только 1 секция
+    const nextOrder = sortedItems[idx + 1].order;
     return nextOrder + 100;
 
-  } else { // Внизу более 1 секции
-    const nextOrder = sections[idx + 1].order;
-    const nextNextOrder = sections[idx + 2].order;
+  } else { // Внизу более 1 секции, взять две последующие секции и сделать order между ними
+    const nextOrder = sortedItems[idx + 1].order;
+    const nextNextOrder = sortedItems[idx + 2].order;
     return nextOrder + (nextNextOrder - nextOrder) / 2;
   }
 };
-// Возвращает order для section которую перемещают
-exports.getNewOrderForMoveSection = (type, doc, section) => {
-  if (type === `up`) return getPrevOrderForMoveSection(doc, section);
-  if (type === `down`) return getNextOrderForMoveSection(doc, section);
+// Возвращает order для rule || section которую перемещают
+exports.getNewOrderForMoveItem = (condition, type, values, item) => {
+  if (condition === `up`) return getPrevOrderForMoveItem(type, values, item);
+  if (condition === `down`) return getNextOrderForMoveItem(type, values, item);
 };
-  
 
 
-// Возвращает order для новой rule или section предшеструющей текущей rule или section
+
+// Возвращает order для новой rule || section предшеструющей текущей rule || section
 const getPrevOrderForItem = (type, values, item) => {
   const items = type === `section` ? values.sections : values;
+  if (items.length === 0) return 100;
+
   let sortedItems = sortingArr(items, `order`);
 
   const idx = sortedItems.findIndex((it) => it.id === item.id);
@@ -109,7 +112,7 @@ const getPrevOrderForItem = (type, values, item) => {
   }
 };
   
-// Возвращает order для новой rule или section следующей после текущей rule или section 
+// Возвращает order для новой rule || section следующей после текущей rule || section 
 const getNextOrderForItem = (type, values, item) => {
   const items = type === `section` ? values.sections : values;
   let sortedItems = sortingArr(items, `order`);
@@ -126,7 +129,7 @@ const getNextOrderForItem = (type, values, item) => {
   }
 };
 
-// Возвращает order для новой rule
+// Возвращает order для новой rule || section
 exports.getNewOrderForItem = (condition, type, values, item) => {
   if (condition === `up`) return getPrevOrderForItem(type, values, item);
   if (condition === `down`) return getNextOrderForItem(type, values, item);
