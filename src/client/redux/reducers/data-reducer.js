@@ -200,6 +200,7 @@ export default function (state = initialState, action) {
         loading: false,
       });
       
+    // Сохраняем docId & sectionId
     case dataActionType.SET_ACTIVE_RULES:
       return extend(state, {
         activeRules: action.payload,
@@ -207,16 +208,14 @@ export default function (state = initialState, action) {
       
     case dataActionType.UPDATE_RULE:
       const updRule = action.payload;
-
       let updRules = state.rules;
-      // const updIdxObj = updRules.findIndex((rule) => rule.docId === updRule.docId && rule.sectionId === updRule.sectionId);
       // Находим индекс где храниться нужная секция
       const updIdxObj = getIdxRulesFromDocAndSection(updRules, updRule, updRule);
 
       if (updIdxObj !== -1) { // Если совпали docId и sectionId
         const updIdxRule = updRules[updIdxObj].rules.findIndex((rule) => rule.id === updRule.id);
         if (updIdxRule !== -1) {
-          console.log(`Есть обновляемый rule`);
+          // console.log(`Есть обновляемый rule`);
           updRules[updIdxObj].rules[updIdxRule] = updRule;
 
           return extend(state, {
@@ -237,11 +236,9 @@ export default function (state = initialState, action) {
 
       // Находим индекс где храниться нужная секция
       const delIdxObj = getIdxRulesFromDocAndSection(delRules, delRule, delRule);
-      console.log('delIdxObj: ', delIdxObj);
 
       if (delIdxObj !== -1) { // Если совпали docId и sectionId
         const delIdxRule = delRules[delIdxObj].rules.findIndex((rule) => rule.id === delRule.id);
-        console.log('delIdxRule: ', delIdxRule);
         if (delIdxRule !== -1) {
           console.log(`Удаляем rule`);
           delRules[delIdxObj].rules = [
@@ -255,6 +252,8 @@ export default function (state = initialState, action) {
           });
         }
       }
+
+      console.log(`Не найден удаляемый rule. Ошибка`);
       return extend(state, {
         loading: false,
       });

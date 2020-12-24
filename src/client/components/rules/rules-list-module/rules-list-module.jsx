@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import pt from 'prop-types';
 // Readux Stuff
 import { connect } from 'react-redux';
@@ -6,7 +6,7 @@ import { getAllRulesById } from '../../../redux/actions/data-actions';
 // MUI Stuff
 import { makeStyles } from '@material-ui/core/styles';
 // Icons
-import CircularProgress from '@material-ui/core/CircularProgress';
+// import CircularProgress from '@material-ui/core/CircularProgress';
 // Components
 import RuleRow from '../rule-row/rule-row';
 import NewRowCreate from '../../buttons/new-row-create/new-row-create';
@@ -24,8 +24,7 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 
-const RulesListModule = ({ loading, rules, docSelected, section, getAllRulesById }) => {
-  
+const RulesListModule = ({ rules, docSelected, section, getAllRulesById }) => {
   const classes = useStyles();
 
   const docId = docSelected.id;
@@ -34,7 +33,6 @@ const RulesListModule = ({ loading, rules, docSelected, section, getAllRulesById
   let rulesShow = [];
   // Получаем объект с rules для этой секции
   let activeRuleObj = getRulesFromDocAndSection(rules, docId, sectionId); 
-  console.log('activeRuleObj: ', activeRuleObj);
 
   if (!activeRuleObj) { // Проверяем есть ли загруженные данные, если нет - загружаем
     console.log(`Нет загр-х - ЗАГРУЖАЕМ`);
@@ -46,15 +44,9 @@ const RulesListModule = ({ loading, rules, docSelected, section, getAllRulesById
     rulesShow = sortingArr(activeRuleObj.rules, `order`);
   }
   
-  console.log('rulesShow: ', rulesShow);
-  
-
   return (
     <>
       <div className={classes.rows}>
-        {
-          loading && <CircularProgress />
-        }
         {
           rulesShow.length ?
             rulesShow.map((rule) => <RuleRow key={rule.id}
@@ -69,14 +61,14 @@ const RulesListModule = ({ loading, rules, docSelected, section, getAllRulesById
 
 
 RulesListModule.propTypes = {
-  loading: pt.bool.isRequired,
+  // loading: pt.bool.isRequired,
   rules: pt.array.isRequired,
   getAllRulesById: pt.func.isRequired,
   // activeRules: pt.object.isRequired,
 };
 
 const mapStateToProps = (state) => ({
-  loading: state.UI.loading,
+  // loading: state.UI.loading,
   rules: state.data.rules,
   // activeRules: state.data.activeRules,
 });

@@ -330,7 +330,7 @@ export const getAllRulesById = ({ docId, sectionId }) => (dispatch) => {
 
 // Обновляем rule
 export const updateRule = (rule) => (dispatch) => {
-  // dispatch({ type: uiActionType.LOADING_UI });
+  dispatch({ type: uiActionType.LOADING_UI });
   
   return axios.post(`/updateRule/${rule.id}`, rule)
     .then((res) => {
