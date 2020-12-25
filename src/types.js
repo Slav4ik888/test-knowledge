@@ -40,6 +40,7 @@ exports.typeQuestions = {
 // Типы PositionsModuleRow
 exports.typePosModule = {
   DOC: `DOC`,
+  RULE: `RULE`,
   EMPLOYEE: `EMPLOYEE`,
 };
 

@@ -3,7 +3,7 @@ import pt from 'prop-types';
 import cl from 'classnames';
 // Readux Stuff
 import { connect } from 'react-redux';
-import { updateRule, deleteRule } from '../../../redux/actions/data-actions';
+import { updateRule } from '../../../redux/actions/data-actions';
 // MUI Stuff
 import { makeStyles } from '@material-ui/core/styles';
 import Avatar from '@material-ui/core/Avatar';
@@ -18,9 +18,10 @@ import InputBase from '@material-ui/core/InputBase';
 import DescriptionIcon from '@material-ui/icons/Description';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 // Components
-import DeleteButton from '../../buttons/delete-button/delete-button';
+import RuleDelete from '../rule-delete/rule-delete';
 import UpAndDownAdd from '../../buttons/up-and-down-add/up-and-down-add';
 import UpAndDownArrows from '../../buttons/up-and-down-arrows/up-and-down-arrows';
+import RuleTestBox from '../rule-test-box/rule-test-box';
 import { typeUpDown } from '../../../../types';
 
 
@@ -31,7 +32,7 @@ const useStyles = makeStyles((theme) => ({
     flexDirection: `column`,
     // margin: theme.spacing(2, 0, 4, 0),
     width: `100%`,
-    paddingBottom: theme.spacing(1),
+    // paddingBottom: theme.spacing(1),
     // borderRadius: `5px`,
     // backgroundColor: theme.palette.background.main,
   },
@@ -62,20 +63,17 @@ const useStyles = makeStyles((theme) => ({
     minWidth: 220,
     color: theme.textSecondary,
   },
-  title: {
-    marginTop: theme.spacing(0.5),
-  },
   input: {
     width: `calc(100% - 130px)`,
     flex: 1,
     padding: theme.spacing(1, 3, 1, 3),
   },
-  textFieldTitle: {
-    fontSize: theme.fontSize.ruleTitle,
-    fontColor: theme.palette.fontColor.ruleTitle,
-    fontWeight: theme.fontWeight.ruleTitle,
-    width: `100%`,
-  },
+  // textFieldTitle: {
+  //   fontSize: theme.fontSize.ruleTitle,
+  //   fontColor: theme.palette.fontColor.ruleTitle,
+  //   fontWeight: theme.fontWeight.ruleTitle,
+  //   width: `100%`,
+  // },
   rule: {
     width: `100%`,
     margin: 0,
@@ -93,14 +91,10 @@ const useStyles = makeStyles((theme) => ({
     fontColor: theme.palette.fontColor.rule,
     fontWeight: theme.fontWeight.rule,
   },
-  helpBox: {
-    marginLeft: theme.spacing(2),
-    width: `50px`,
-  },
 }));
 
 
-const RuleRow = ({ rule, updateRule, deleteRule }) => {
+const RuleRow = ({ rule, updateRule }) => {
   if (!rule) return null;
 
   const classes = useStyles();
@@ -138,11 +132,6 @@ const RuleRow = ({ rule, updateRule, deleteRule }) => {
       updateRule(rule);
     }
   };
-
-  const handleDeleteRule = () => {
-    console.log(`Нажали удалить правило`);
-    deleteRule(rule);
-  };
   
   return (
     <>
@@ -170,6 +159,7 @@ const RuleRow = ({ rule, updateRule, deleteRule }) => {
 
             {
               isHover && <>
+                <RuleDelete rule={rule} />
                 <UpAndDownArrows type={typeUpDown.RULE} rule={rule} />
               </>
             }
@@ -197,12 +187,11 @@ const RuleRow = ({ rule, updateRule, deleteRule }) => {
               rowsMin={4}
               onChange={handleEditRule} 
             />
+            
+            <RuleTestBox rule={rule} />
           </CardContent>
         </Collapse>
 
-        <div className={classes.helpBox}>
-          <DeleteButton type={`rule`} icon placement="right" onDel={handleDeleteRule} />
-        </div>
 
       </Card>
 
@@ -215,7 +204,6 @@ const RuleRow = ({ rule, updateRule, deleteRule }) => {
 RuleRow.propTypes = {
   rule: pt.object.isRequired,
   updateRule: pt.func.isRequired,
-  deleteRule: pt.func.isRequired,
 };
 
 // const mapStateToProps = (state) => ({
@@ -224,7 +212,6 @@ RuleRow.propTypes = {
 
 const mapActionsToProps = {
   updateRule,
-  deleteRule,
 };
 
 export default connect(undefined, mapActionsToProps)(RuleRow);

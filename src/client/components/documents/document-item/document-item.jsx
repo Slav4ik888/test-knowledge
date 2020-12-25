@@ -80,9 +80,7 @@ const DocumentItem = ({ doc, onEdit, onDel, positions}) => {
 
   const [anchorPos, setAnchorPos] = useState(null);
   const handleShowPosOpen = (e) => setAnchorPos(e.currentTarget);
-  const handleShowPosClose = () => {
-    setAnchorPos(null);
-  };
+  const handleShowPosClose = () => setAnchorPos(null);
   const openPos = Boolean(anchorPos);
 
   const handleDelDoc = () => onDel(id);

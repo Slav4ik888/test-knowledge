@@ -62,4 +62,4 @@ app.use(express.static('dist'));
 
 app.listen(process.env.PORT || 8080, () => console.log(`Listening on port ${process.env.PORT || 8080}!`));
 
-//  git add . && git commit -m "fix update & render move rule up&down" && git push origin master
+//  git add . && git commit -m "start RuleTestBox" && git push origin master

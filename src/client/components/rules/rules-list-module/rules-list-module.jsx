@@ -19,12 +19,12 @@ const useStyles = makeStyles((theme) => ({
     display: 'flex',
     flexDirection: `column`,
     alignItems: `center`,
-    marginTop: theme.spacing(2),
+    // marginTop: theme.spacing(2),
   },
 }));
 
 
-const RulesListModule = ({ rules, docSelected, section, getAllRulesById }) => {
+const RulesListModule = ({ loading, rules, docSelected, section, getAllRulesById }) => {
   const classes = useStyles();
 
   const docId = docSelected.id;
@@ -61,14 +61,14 @@ const RulesListModule = ({ rules, docSelected, section, getAllRulesById }) => {
 
 
 RulesListModule.propTypes = {
-  // loading: pt.bool.isRequired,
+  loading: pt.bool.isRequired,
   rules: pt.array.isRequired,
   getAllRulesById: pt.func.isRequired,
   // activeRules: pt.object.isRequired,
 };
 
 const mapStateToProps = (state) => ({
-  // loading: state.UI.loading,
+  loading: state.UI.loading,
   rules: state.data.rules,
   // activeRules: state.data.activeRules,
 });

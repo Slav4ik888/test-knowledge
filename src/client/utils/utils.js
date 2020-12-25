@@ -35,6 +35,14 @@ export const getPositionsFromDocPosId = (docPositions, allPositions) => {
 export const getPositionsByDocId = (documentId, positions) => positions.filter((pos) => pos.documents.find((docId) => docId === documentId));
 
 /**
+ * Возвращает массив positions закреплённых за rule
+ * @param {array} ruleId 
+ * @param {array} positions 
+ */
+export const getPositionsByRuleId = (ruleId, positions) => positions.filter((pos) => pos.rules.find((id) => id === ruleId));
+
+
+/**
  * Возвращает массив positions закреплённых за user
  * @param {array} userPositions 
  * @param {array} positions 

@@ -27,9 +27,11 @@ const useStyles = makeStyles((theme) => ({
     width: `5px`,
     height: `5px`, 
     color: theme.palette.background.bodyfield,
+    // color: theme.palette.primary.light,
   },
   hoverIcon: {
-    color: theme.palette.background.section,
+    // color: theme.palette.background.section,
+    color: theme.palette.primary.light,
   },
 }));
 
