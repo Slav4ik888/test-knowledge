@@ -13,7 +13,6 @@ import { sortingArr } from '../../../utils/utils';
 
 // В открытом document выводит список всех section в виде модулей с вложенными rules
 const SectionsListModule = ({ activeDocument, documents }) => {
-  
   if (!activeDocument) return null;
   
   const document = documents.find((doc) => doc.id === activeDocument.id);

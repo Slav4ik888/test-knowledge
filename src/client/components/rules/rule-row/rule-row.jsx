@@ -28,11 +28,11 @@ import { typeUpDown } from '../../../../types';
 const useStyles = makeStyles((theme) => ({
   container: {
     display: 'flex',
-    alignItems: `flex-start`,
+    // alignItems: `flex-start`,
+    alignItems: `center`,
     flexDirection: `column`,
     // margin: theme.spacing(2, 0, 4, 0),
     width: `100%`,
-    // paddingBottom: theme.spacing(1),
     // borderRadius: `5px`,
     // backgroundColor: theme.palette.background.main,
   },
@@ -51,6 +51,7 @@ const useStyles = makeStyles((theme) => ({
     transition: theme.transitions.create('transform', {
       duration: theme.transitions.duration.shortest,
     }),
+    height: `min-content`,
   },
   expandOpen: {
     transform: 'rotate(180deg)',
@@ -59,14 +60,17 @@ const useStyles = makeStyles((theme) => ({
     display: 'flex',
     flexWrap: 'wrap',
     flexDirection: `row`,
+    alignItems: `center`,
     width: `100%`,
     minWidth: 220,
-    color: theme.textSecondary,
+    color: theme.palette.primary.main,
+    padding: theme.spacing(0, 2, 0, 2),
   },
   input: {
     width: `calc(100% - 130px)`,
     flex: 1,
     padding: theme.spacing(1, 3, 1, 3),
+    fontSize: `25px`,
   },
   // textFieldTitle: {
   //   fontSize: theme.fontSize.ruleTitle,
@@ -93,7 +97,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-
+// Строка (модуль) с rule
 const RuleRow = ({ rule, updateRule }) => {
   if (!rule) return null;
 
