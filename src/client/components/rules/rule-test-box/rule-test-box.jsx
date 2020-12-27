@@ -17,7 +17,8 @@ import InputBase from '@material-ui/core/InputBase';
 import DescriptionIcon from '@material-ui/icons/Description';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 // Components
-import RulePositions from '../rule-positions/rule-positions';
+import PositionsIconShow from '../../positions/positions-icon-show/positions-icon-show';
+import { typePosModule } from '../../../../types';
 
 
 const useStyles = makeStyles((theme) => ({
@@ -65,7 +66,7 @@ const RuleTestBox = ({ rule }) => {
       <div className={classes.container}>
         <div className={cl(classes.button)}>Тесты</div>
         
-        <RulePositions rule={rule} />
+        <PositionsIconShow type={typePosModule.RULE} item={rule} />
       </div>
     </>
   );

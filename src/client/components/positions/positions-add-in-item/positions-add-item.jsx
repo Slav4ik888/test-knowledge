@@ -14,7 +14,32 @@ import DialogTitle from '../../dialogs/dialog-title/dialog-title';
 import ToggleItems from '../../toggle-items/toggle-items';
 import CancelSubmitBtn from '../../buttons/cancel-submit-btn/cancel-submit-btn';
 import { typePosModule } from '../../../../types';
-import { getPositionsByDocId, getPositionsByUser } from '../../../utils/utils';
+import { getPositionsByDocId, getPositionsByRuleId, getPositionsByUser } from '../../../utils/utils';
+
+
+// Проверяет какие изменения произошли (открепили или прикрепили) и запускает ф-ю обновления
+const updateChangesInPositions = (positionsInItem, selected, field, item, updateFunc) => {
+  // Проверяем открепили ли должность от документа || правила
+  positionsInItem.forEach((pos) => {
+    const result = selected.find((selPos) => pos.id === selPos.id);
+    if (!result) { // Открепили
+      const idx = pos[field].findIndex((docId) => docId === item.id);
+      if (idx !== -1) {
+        pos[field] = [...pos[field].slice(0, idx), ...pos[field].slice(idx + 1)];
+        updateFunc(pos);
+      }
+    }
+  });
+
+  // Проверяем закрепили ли должность за документом || правилом
+  selected.forEach((pos) => {
+    const result = positionsInItem.find((selPos) => pos.id === selPos.id);
+    if (!result) { // Добавили
+      pos[field].push(item.id);
+      updateFunc(pos);
+    }
+  });
+};
 
 
 const useStyles = makeStyles((theme) => ({
@@ -36,6 +61,11 @@ const PositionsAddInItem = ({ open, type, onClose, UI: { loading }, item, positi
     case typePosModule.DOC:
       title = `Выберите те должности, которым нужно полностью знать этот документ`;
       positionsInItem = getPositionsByDocId(item.id, positions);
+      break;
+    
+    case typePosModule.RULE:
+      title = `Выберите те должности, которым нужно знать это правило`;
+      positionsInItem = getPositionsByRuleId(item.id, positions);
       break;
     
     case typePosModule.EMPLOYEE:
@@ -63,30 +93,13 @@ const PositionsAddInItem = ({ open, type, onClose, UI: { loading }, item, positi
   // Сохраняем обновлённые данные
   const handleSetPosToItem = () => {
      
-
     switch (type) {
       case typePosModule.DOC:
-        // Проверяем открепили ли должность от документа
-        positionsInItem.forEach((pos) => {
-          const resOut = selected.find((selPos) => pos.id === selPos.id);
-          if (!resOut) { // Открепили
-            const resOutDoc = pos.documents.findIndex((docId) => docId === item.id);
-            if (resOutDoc !== -1) {
-              let updateDocList = [...pos.documents.slice(0, resOutDoc), ...pos.documents.slice(resOutDoc + 1)];
-              pos.documents = updateDocList;
-              updatePosition(pos);
-            }
-          }
-        });
-
-        // Проверяем закрепили ли должность за документом
-        selected.forEach((pos) => {
-          const resIn = positionsInItem.find((selPos) => pos.id === selPos.id);
-          if (!resIn) { // Добавили
-            pos.documents.push(item.id);
-            updatePosition(pos);
-          }
-        });
+        updateChangesInPositions(positionsInItem, selected, `documents`, item, updatePosition);
+        break;
+      
+      case typePosModule.RULE:
+        updateChangesInPositions(positionsInItem, selected, `rules`, item, updatePosition);
         break;
       
       case typePosModule.EMPLOYEE:
@@ -131,7 +144,11 @@ const PositionsAddInItem = ({ open, type, onClose, UI: { loading }, item, positi
 };
 
 PositionsAddInItem.propTypes = {
-  doc: pt.object,
+  open: pt.bool.isRequired,
+  type: pt.oneOf([typePosModule.DOC, typePosModule.RULE, typePosModule.RULE]).isRequired,
+  onClose: pt.func.isRequired,
+  UI: pt.object.isRequired,
+  item: pt.object.isRequired,
   positions: pt.array.isRequired,
   updatePosition: pt.func.isRequired, 
   updateEmployee: pt.func.isRequired, 

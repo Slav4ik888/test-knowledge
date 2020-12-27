@@ -164,6 +164,7 @@ async function deleteDocument(req, res) {
       return res.status(405).json({ general: `Нельзя удалить документ, если в нём находятся "Правила". Вначале удалите или перенесите "Правила" в другой документ.` });
     }
 
+    // TODO: Если документ был закреплён за должностью, то открепить этот документ из должности 
     const updateRes = await db.doc(`documents/${req.user.companyId}/documents/${req.params.documentId}`)
       .delete();
     

@@ -3,28 +3,19 @@ import pt from 'prop-types';
 // Readux Stuff
 import { connect } from 'react-redux';
 // MUI Stuff
-import { makeStyles } from '@material-ui/core/styles';
 import Tooltip from '@material-ui/core/Tooltip';
-import Avatar from '@material-ui/core/Avatar';
 import IconButton from '@material-ui/core/IconButton';
 // Icons
 import SupervisedUserCircleIcon from '@material-ui/icons/SupervisedUserCircle';
 // Components
-import PositionsPopoverShow from '../../positions/positions-popover-show/positions-popover-show';
-import PositionsAddInItem from '../../positions/positions-add-in-item/positions-add-item';
-import { getPositionsByRuleId } from '../../../utils/utils';
+import PositionsPopoverShow from '../positions-popover-show/positions-popover-show';
+import PositionsAddInItem from '../positions-add-in-item/positions-add-item';
+import { getPositionsByRuleId, getPositionsByDocId, getPositionsByUser } from '../../../utils/utils';
 import { typePosModule } from '../../../../types';
 
 
-const useStyles = makeStyles((theme) => ({
-  
-}));
-
 // Дополнительные должности, которые должны знать данное правило
-const RulePositions = ({ rule, positions }) => {
-  console.log('positions: ', positions);
-
-  const classes = useStyles();
+const PositionsIconShow = ({ type, item, positions }) => {
 
   const [anchorPos, setAnchorPos] = useState(null);
   const handleShowPosOpen = (e) => setAnchorPos(e.currentTarget);
@@ -35,6 +26,26 @@ const RulePositions = ({ rule, positions }) => {
   const handlePosEditOpen = () => setPosEdit(true);
   const handlePosEditClose = () => setPosEdit(false);
 
+  let title = ``;
+  let positionsInItem = []; // Должности закреплённые за item
+  
+  switch (type) {
+    case typePosModule.DOC:
+      positionsInItem = getPositionsByDocId(item.id, positions);
+      break;
+    
+    case typePosModule.RULE:
+      positionsInItem = getPositionsByRuleId(item.id, positions);
+      break;
+    
+    case typePosModule.EMPLOYEE:
+      positionsInItem = getPositionsByUser(item.positions, positions);
+      console.log('USER positionsInItem: ', positionsInItem);
+      break;
+    
+    default: break;
+  };
+  
 
   return (
     <>
@@ -53,12 +64,12 @@ const RulePositions = ({ rule, positions }) => {
         open={openPos}
         anchorEl={anchorPos}
         onClose={handleShowPosClose}
-        positions={getPositionsByRuleId(rule.id, positions)}
+        positions={positionsInItem}
       />
       <PositionsAddInItem
         open={posEdit}
-        type={typePosModule.RULE}
-        item={rule}
+        type={type}
+        item={item}
         onClose={handlePosEditClose}
       />
     </>
@@ -66,9 +77,9 @@ const RulePositions = ({ rule, positions }) => {
 };
 
 
-RulePositions.propTypes = {
-  rule: pt.object.isRequired,
-  // updateRule: pt.func.isRequired,  
+PositionsIconShow.propTypes = {
+  type: pt.oneOf([typePosModule.DOC, typePosModule.RULE, typePosModule.RULE]).isRequired,
+  item: pt.object.isRequired,
   positions: pt.array.isRequired,
 };
 
@@ -76,8 +87,4 @@ const mapStateToProps = (state) => ({
   positions: state.data.positions,
 });
 
-const mapActionsToProps = {
-  // updateRule,
-};
-
-export default connect(mapStateToProps, mapActionsToProps)(RulePositions);
+export default connect(mapStateToProps)(PositionsIconShow);

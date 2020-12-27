@@ -1,5 +1,7 @@
 import {dataActionType} from '../types';
-import {extend, getIdxRulesFromDocAndSection} from '../../utils/utils';
+import { extend, getIdxRulesFromDocAndSection } from '../../utils/utils';
+import { getArrWithoutItemByField, updateArrWithItemByField } from '../../utils/arrays';
+
 
 const initialState = {
   employees: [],
@@ -17,35 +19,6 @@ const initialState = {
   loading: false,
 };
 
-// Возвращает массив без указанного элемента
-// const getArrWithoutItem = (items, itemField, delItem) => {
-//   const idx = items.findIndex((item) => item[itemField] === delItem);
-//   let newItems = items;
-//   if (idx !== -1) {
-//     newItems = [...newItems.slice(0, idx), ...newItems.slice(idx + 1)];
-//   }
-//   return newItems;
-// };
-
-// Возвращает массив без указанного элемента по itemField
-const getArrWithoutItemByField = (items, itemField, delItem) => {
-  const idx = items.findIndex((item) => item[itemField] === delItem[itemField]);
-  let newItems = items;
-  if (idx !== -1) {
-    newItems = [...newItems.slice(0, idx), ...newItems.slice(idx + 1)];
-  }
-  return newItems;
-};
-
-// Возвращает массив с обновлённым item
-const updateArrWithItemByField = (items, updateField, updateItem) => {
-  const idx = items.findIndex((item) => item[updateField] === updateItem[updateField]);
-  let newItems = items;
-  if (idx !== -1) {
-    newItems = [...newItems.slice(0, idx), updateItem, ...newItems.slice(idx + 1)];
-  }
-  return newItems;
-};
 
 
 export default function (state = initialState, action) {
@@ -150,7 +123,6 @@ export default function (state = initialState, action) {
     case dataActionType.CREATE_RULE:
       let newRule = action.payload;
       let upRules = state.rules; 
-      // const idxRuleSection = upRules.findIndex((item) => item.docId === newRule.docId && item.sectionId === newRule.sectionId);
       // Находим индекс где храниться нужная секция
       const idxRuleSection = getIdxRulesFromDocAndSection(upRules, newRule, newRule);
 
