@@ -15,7 +15,7 @@ import PositionsModuleRow from '../../positions/positions-module-row/positions-m
 import SectionsListModule from '../../sections/sections-list-module/sections-list-module';
 import CancelSubmitBtn from '../../buttons/cancel-submit-btn/cancel-submit-btn';
 import Confirm from '../../confirm/confirm';
-import { typePosModule, typeConfirm } from '../../../../types';
+import { typeElem } from '../../../../types';
 import { getRulesFromDocAndSection } from '../../../utils/utils';
 
 const useStyles = makeStyles((theme) => ({
@@ -87,7 +87,7 @@ const RulesContainer = ({ setRuleStored, ruleStored, setActiveDocument }) => {
 
         <DocumentsModuleRow onDocumentSelected={handleDocSelected} />
 
-        <PositionsModuleRow item={docSelected} type={typePosModule.DOC} />
+        <PositionsModuleRow item={docSelected} type={typeElem.DOC} />
 
         <SectionsListModule />
         

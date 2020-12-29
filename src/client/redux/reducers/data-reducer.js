@@ -4,19 +4,36 @@ import { getArrWithoutItemByField, updateArrWithItemByField } from '../../utils/
 
 
 const initialState = {
+  loading: false,
   employees: [],
   positions: [],
   documents: [],
-  rules: [], // хранить посекционно, то есть для каждой секции свой объект
+  activeDocument: null,
+
+  rules: [], // Храняться посекционно, то есть для каждой секции свой объект
   // {
   //   docId: `dslkjwejf`,
   //   sectionId: `sdfsdfd`,
   //   rules: [],
   // }
   activeRules: null, // { docId, sectionId } - чтобы по ним взять rules из активной section 
-  activeDocument: null,
-  questions: [],
-  loading: false,
+
+  questions: [], // Храняться объекты загруженных questions
+  // questions = {
+  //   id: `1`, // id массива вопросов
+  //   ruleId: `1`, // id правила - для которого вопросы
+  //   createdAt: `2020-11-04T18:16:54.385Z`,
+  //   lastChange: `2020-11-04T18:16:54.385Z`,
+  //   questions: [
+  //     {
+  //       // question1
+  //     }, {
+  //       // question2
+  //     }, {
+  //       // question3
+  //     },
+  //   ],
+  // };
 };
 
 
@@ -38,7 +55,7 @@ export default function (state = initialState, action) {
       });
     
     case dataActionType.CREATE_EMPLOYEE:
-      console.log('action.payload: ', action.payload);
+      console.log('CREATE_EMPLOYEE: ', action.payload);
       const createEmployees = state.employees;
       createEmployees.push(action.payload);
 
@@ -48,7 +65,7 @@ export default function (state = initialState, action) {
       });
     
     case dataActionType.UPDATE_EMPLOYEE:
-      console.log('action.payload: ', action.payload);
+      console.log('UPDATE_EMPLOYEE: ', action.payload);
 
       return extend(state, {
         employees: updateArrWithItemByField(state.employees, `userId`, action.payload),
@@ -229,6 +246,8 @@ export default function (state = initialState, action) {
       return extend(state, {
         loading: false,
       });
+    
+    
     
     default: return state;
   }

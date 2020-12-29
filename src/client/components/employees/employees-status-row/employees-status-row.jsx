@@ -27,6 +27,8 @@ const useStyles = makeStyles((theme) => ({
   },
   avatar: {
     marginRight: theme.spacing(3),
+    backgroundColor: theme.palette.primary.light,
+    cursor: `pointer`,
   },
   formControl: {
     display: 'flex',

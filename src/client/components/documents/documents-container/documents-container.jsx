@@ -11,9 +11,10 @@ import DialogContent from '@material-ui/core/DialogContent';
 import Snackbar from '@material-ui/core/Snackbar';
 import MuiAlert from '@material-ui/lab/Alert';
 // Component
-import DocumentsList from '../documents-list/documents-list';
-import DocumentAdd from '../document-add/document-add';
 import DialogTitle from '../../dialogs/dialog-title/dialog-title';
+import DocumentsList from '../documents-list/documents-list';
+import ElementAdd from '../../buttons/element-add/element-add';
+import { typeElem } from '../../../../types';
 // import CancelSubmitBtn from '../../buttons/cancel-submit-btn/cancel-submit-btn';
 
 function Alert(props) {
@@ -65,7 +66,7 @@ const DocumentsContainer = ({ open, onClose, UI, documents, createDocument, upda
     deleteDocument(newDocument);
   };
 
-  const handleAddDoc = (title) => {
+  const handleAddDoc = ({ title }) => {
     if (title.trim()) {
       const newDocument = {
         title,
@@ -128,7 +129,7 @@ const DocumentsContainer = ({ open, onClose, UI, documents, createDocument, upda
           />
         </DialogContent>
 
-        <DocumentAdd onAdd={handleAddDoc} UI={UI} />
+        <ElementAdd type={typeElem.DOC} onAdd={handleAddDoc} />
 
         <Snackbar open={isSnack} autoHideDuration={6000} onClose={handleCloseSnackBar} >
           <Alert onClose={handleCloseSnackBar} severity="warning" className={classes.snack}>

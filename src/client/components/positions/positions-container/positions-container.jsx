@@ -1,16 +1,17 @@
 import React, {useRef, useEffect} from 'react';
 import pt from 'prop-types';
-import { createId, getMaxOrder } from '../../../../server/utils/utils';
 // Readux Stuff
 import { connect } from 'react-redux';
+import { createPosition } from '../../../redux/actions/data-actions';
 // MUI Stuff
 import { makeStyles } from '@material-ui/core/styles';
 import Dialog from '@material-ui/core/Dialog';
 import DialogContent from '@material-ui/core/DialogContent';
 // Components
 import PositionsListItem from '../positions-list-item/positions-list-item';
-import PositionAdd from '../position-add/position-add';
+import ElementAdd from '../../buttons/element-add/element-add';
 import DialogTitle from '../../dialogs/dialog-title/dialog-title';
+import { typeElem } from '../../../../types';
 
 
 const useStyles = makeStyles((theme) => ({
@@ -25,25 +26,12 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 
-const PositionsContainer = ({ open, onClose, UI: { loading, errors, messages }, positions }) => {
-  if (!open) {
-    return null;
-  }
+const PositionsContainer = ({ open, onClose, positions, createPosition }) => {
+  if (!open) return null;
 
   const classes = useStyles();
 
-  const handleAddPos = (title) => {
-    if (title.trim()) {
-      const newPos = {
-        title,
-        id: createId(positions),
-        order: getMaxOrder(positions),
-      }
-      let newPositions = [newPos, ...positions];
-      setIsChange(true);
-      updatePositions(newPositions);
-    }
-  };
+  const handleAdd = (titleObj) => createPosition(titleObj);
 
   const handleClose = () => onClose();
 
@@ -70,7 +58,7 @@ const PositionsContainer = ({ open, onClose, UI: { loading, errors, messages }, 
           <PositionsListItem positions={positions} />
         </DialogContent>
 
-        <PositionAdd onAdd={handleAddPos} />
+        <ElementAdd type={typeElem.POS} onAdd={handleAdd} />
         
       </Dialog>
     </>
@@ -80,13 +68,16 @@ const PositionsContainer = ({ open, onClose, UI: { loading, errors, messages }, 
 PositionsContainer.propTypes = {
   open: pt.bool.isRequired,
   onClose: pt.func.isRequired,
-  UI: pt.object.isRequired,
   positions: pt.array.isRequired,
+  createPosition: pt.func.isRequired,
 };
 
 const mapStateToProps = (state) => ({
-  UI: state.UI,
   positions: state.data.positions,
 });
 
-export default connect(mapStateToProps)(PositionsContainer);
+const mapActionsToProps = {
+  createPosition,
+};
+
+export default connect(mapStateToProps, mapActionsToProps)(PositionsContainer);

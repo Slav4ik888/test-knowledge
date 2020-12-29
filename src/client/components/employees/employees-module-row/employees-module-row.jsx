@@ -13,6 +13,7 @@ import AccountCircle from '@material-ui/icons/AccountCircle';
 // Components
 import EmployeeAdd from '../employee-add/employee-add';
 import ListSelect from '../../list-select/list-select';
+import { typeListSelect } from '../../../../types';
 
 
 const useStyles = makeStyles((theme) => ({
@@ -23,6 +24,9 @@ const useStyles = makeStyles((theme) => ({
   },
   avatar: {
     marginRight: theme.spacing(3),
+    marginBottom: theme.spacing(0.5),
+    backgroundColor: theme.palette.primary.light,
+    // cursor: `pointer`,
   },
 }));
 
@@ -44,7 +48,7 @@ const EmployeesModuleRow = ({ onEmployeeSelected, employees, disabled }) => {
         </Avatar>
 
         <ListSelect
-          type={`addUser`}
+          type={typeListSelect.EMPLOYEE}
           // title={`Выберите сотрудника`}
           disabled={disabled}
           items={employees}

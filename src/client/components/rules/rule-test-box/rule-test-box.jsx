@@ -5,7 +5,7 @@ import { makeStyles } from '@material-ui/core/styles';
 // Components
 import QuestionsBtnContainer from '../../questions/questions-btn-container/questions-btn-container';
 import PositionsIconShow from '../../positions/positions-icon-show/positions-icon-show';
-import { typePosModule } from '../../../../types';
+import { typeElem } from '../../../../types';
 
 
 const useStyles = makeStyles((theme) => ({
@@ -29,7 +29,7 @@ const RuleTestBox = ({ rule }) => {
     <>
       <div className={classes.container}>
         <QuestionsBtnContainer rule={rule} />
-        <PositionsIconShow type={typePosModule.RULE} item={rule} />
+        <PositionsIconShow type={typeElem.RULE} item={rule} />
       </div>
     </>
   );

@@ -13,7 +13,7 @@ import DialogContent from '@material-ui/core/DialogContent';
 import DialogTitle from '../../dialogs/dialog-title/dialog-title';
 import ToggleItems from '../../toggle-items/toggle-items';
 import CancelSubmitBtn from '../../buttons/cancel-submit-btn/cancel-submit-btn';
-import { typePosModule } from '../../../../types';
+import { typeElem } from '../../../../types';
 import { getPositionsByDocId, getPositionsByRuleId, getPositionsByUser } from '../../../utils/utils';
 
 
@@ -58,17 +58,17 @@ const PositionsAddInItem = ({ open, type, onClose, UI: { loading }, item, positi
   let positionsInItem = []; // Должности закреплённые за item
   
   switch (type) {
-    case typePosModule.DOC:
+    case typeElem.DOC:
       title = `Выберите те должности, которым нужно полностью знать этот документ`;
       positionsInItem = getPositionsByDocId(item.id, positions);
       break;
     
-    case typePosModule.RULE:
+    case typeElem.RULE:
       title = `Выберите те должности, которым нужно знать это правило`;
       positionsInItem = getPositionsByRuleId(item.id, positions);
       break;
     
-    case typePosModule.EMPLOYEE:
+    case typeElem.EMPLOYEE:
       title = `Выберите должности, которые занимает данный сотрудник`;
       positionsInItem = getPositionsByUser(item.positions, positions);
       console.log('USER positionsInItem: ', positionsInItem);
@@ -94,15 +94,15 @@ const PositionsAddInItem = ({ open, type, onClose, UI: { loading }, item, positi
   const handleSetPosToItem = () => {
      
     switch (type) {
-      case typePosModule.DOC:
+      case typeElem.DOC:
         updateChangesInPositions(positionsInItem, selected, `documents`, item, updatePosition);
         break;
       
-      case typePosModule.RULE:
+      case typeElem.RULE:
         updateChangesInPositions(positionsInItem, selected, `rules`, item, updatePosition);
         break;
       
-      case typePosModule.EMPLOYEE:
+      case typeElem.EMPLOYEE:
         let newUserDetails = Object.assign({}, item);
         newUserDetails.positions = selected.map((sel) => sel.id);
         updateEmployee(newUserDetails);
@@ -145,7 +145,7 @@ const PositionsAddInItem = ({ open, type, onClose, UI: { loading }, item, positi
 
 PositionsAddInItem.propTypes = {
   open: pt.bool.isRequired,
-  type: pt.oneOf([typePosModule.DOC, typePosModule.RULE, typePosModule.RULE]).isRequired,
+  type: pt.oneOf([typeElem.DOC, typeElem.RULE, typeElem.RULE, typeElem.EMPLOYEE]).isRequired,
   onClose: pt.func.isRequired,
   UI: pt.object.isRequired,
   item: pt.object.isRequired,

@@ -37,10 +37,13 @@ exports.typeQuestions = {
   }
 };
 
-// Типы PositionsModuleRow
-exports.typePosModule = {
+// Типы для PositionsModuleRow, ElementAdd
+exports.typeElem = {
   DOC: `DOC`,
+  POS: `POS`,
+  SECTION: `SECTION`,
   RULE: `RULE`,
+  QUESTION: `QUESTION`,
   EMPLOYEE: `EMPLOYEE`,
 };
 
@@ -55,6 +58,7 @@ exports.typeConfirm = {
 exports.typeListSelect = {
   DOC: `Документ`,
   SECTION: `Обязанность`,
+  EMPLOYEE: `Сотрудника`,
 };
 
 // Типы для UpAndDownArrows

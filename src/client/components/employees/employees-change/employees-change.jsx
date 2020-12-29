@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import pt from 'prop-types';
 import { makeStyles } from '@material-ui/core/styles';
 // Readux Stuff
@@ -16,7 +16,7 @@ import EmployeesModuleRow from '../employees-module-row/employees-module-row';
 import PositionsModuleRow from '../../positions/positions-module-row/positions-module-row';
 import EmployeesStatusRow from '../employees-status-row/employees-status-row';
 import DeleteUserButton from '../../buttons/delete-user-button/delete-user-button';
-import { typePosModule } from '../../../../types';
+import { typeElem } from '../../../../types';
 
 
 const useStyles = makeStyles((theme) => ({
@@ -32,15 +32,21 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const EmployeesChange = ({ open, onClose, UI: { loading, errors, messages }, deleteEmployee}) => {
+const EmployeesChange = ({ open, onClose, UI: { errors }, employees, deleteEmployee}) => {
+  if (!open) return null;
 
-  if (!open) {
-    return null;
-  }
   const classes = useStyles();
 
   const [employeeSeleted, setEmployeeSelected] = useState(null);
-
+  useEffect(() => {
+    if (employeeSeleted && employees && employees.length) {
+      const updated = employees.find((emp) => emp.email === employeeSeleted.email);
+      if (updated) {
+        setEmployeeSelected(updated);
+      }
+    }
+  }, [employees]); 
+  
   const handleEmployeeSelected = (user) => {
     if (user) {
       setEmployeeSelected(user);
@@ -73,7 +79,7 @@ const EmployeesChange = ({ open, onClose, UI: { loading, errors, messages }, del
             employeeSeleted &&
               <>
                 <Typography variant="h5" color="primary" >Занимаемые должности</Typography>
-                <PositionsModuleRow item={employeeSeleted} type={typePosModule.EMPLOYEE} />
+                <PositionsModuleRow item={employeeSeleted} type={typeElem.EMPLOYEE} />
               
                 <Typography variant="h5" color="primary">Статус в приложении</Typography>
                 <EmployeesStatusRow employee={employeeSeleted} />
@@ -100,9 +106,11 @@ EmployeesChange.propTypes = {
   open: pt.bool.isRequired,
   onClose: pt.func.isRequired,
   UI: pt.object.isRequired,
+  employees: pt.array.isRequired,
 };
 
 const mapStateToProps = (state) => ({
+  employees: state.data.employees,
   UI: state.UI,
 });
 

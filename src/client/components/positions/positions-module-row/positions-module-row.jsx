@@ -6,16 +6,14 @@ import { connect } from 'react-redux';
 import { makeStyles } from '@material-ui/core/styles';
 import Paper from '@material-ui/core/Paper';
 import Avatar from '@material-ui/core/Avatar';
-import IconButton from '@material-ui/core/IconButton';
 import Tooltip from '@material-ui/core/Tooltip';
 // Icons
-import EditIcon from '@material-ui/icons/Edit';
 import SupervisedUserCircleIcon from '@material-ui/icons/SupervisedUserCircle';
 // Components
 import PositionsContainer from '../positions-container/positions-container';
 import PositionsListChip from '../positions-list-chip/positions-list-chip';
 import PositionsAddInItem from '../positions-add-in-item/positions-add-item';
-import { typePosModule } from '../../../../types';
+import { typeElem } from '../../../../types';
 import { getPositionsByDocId } from '../../../utils/utils';
 
 
@@ -26,6 +24,12 @@ const useStyles = makeStyles((theme) => ({
     margin: theme.spacing(2, 0, 4, 0),
     padding: theme.spacing(2, 0, 2, 2),
   },
+  rowForEmployee: {
+    display: 'flex',
+    alignItems: `center`,
+    margin: theme.spacing(2, 0, 4, 0),
+    padding: theme.spacing(2, 0, 2, 0),
+  },
   paperChip: {
     width: `100%`,
     padding: theme.spacing(1),
@@ -33,6 +37,7 @@ const useStyles = makeStyles((theme) => ({
     borderColor: theme.border.light,
     borderRadius: `5px`,
     backgroundColor: theme.palette.background.paperChip,
+    cursor: `pointer`,
   },
   block: {
     display: `block`,
@@ -56,16 +61,18 @@ const PositionsModuleRow = ({ type, item, employees, positions }) => {
   let updatedItem = Object.assign({}, item);
   let titleItem = ``;
   let positionsInItem = []; // Контейнер для positions которые есть в item
+  let classRow = classes.row;
 
   switch (type) {
-    case typePosModule.DOC:
+    case typeElem.DOC:
       titleItem = `документом`;
       // Выбираем должности закреплённые за данным item
       positionsInItem = getPositionsByDocId(item.id, positions)
       break;
     
-    case typePosModule.EMPLOYEE:
+    case typeElem.EMPLOYEE:
       titleItem = `сотрудником`;
+      classRow = classes.rowForEmployee;
       const upIdx = employees.findIndex((it) => it.userId === item.userId);
       updatedItem = employees[upIdx];
       // Выбираем должности закреплённые за данным item
@@ -89,7 +96,7 @@ const PositionsModuleRow = ({ type, item, employees, positions }) => {
 
   
   return (
-    <div className={classes.row}>
+    <div className={classRow}>
       <Tooltip title="Редактировать должности" placement="bottom" arrow enterDelay={1000} enterNextDelay={1000}>
         <Avatar onClick={handlePosEditOpen} className={classes.avatar}>
           <SupervisedUserCircleIcon />
@@ -101,12 +108,6 @@ const PositionsModuleRow = ({ type, item, employees, positions }) => {
           <PositionsListChip positions={positionsInItem} />
         </Paper>
       </Tooltip>
-
-      {/* <Tooltip title="Редактировать должности" placement="bottom" arrow enterDelay={1000} enterNextDelay={1000}>
-        <IconButton aria-label="Edit" onClick={handlePosEditOpen} className={classes.editIcon}>
-          <EditIcon />
-        </IconButton>
-      </Tooltip> */}
 
       <PositionsAddInItem
         open={posToggle}

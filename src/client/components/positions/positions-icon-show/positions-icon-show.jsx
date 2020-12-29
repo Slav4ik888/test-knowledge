@@ -11,7 +11,7 @@ import SupervisedUserCircleIcon from '@material-ui/icons/SupervisedUserCircle';
 import PositionsPopoverShow from '../positions-popover-show/positions-popover-show';
 import PositionsAddInItem from '../positions-add-in-item/positions-add-item';
 import { getPositionsByRuleId, getPositionsByDocId, getPositionsByUser } from '../../../utils/utils';
-import { typePosModule } from '../../../../types';
+import { typeElem } from '../../../../types';
 
 
 // Дополнительные должности, которые должны знать данное правило
@@ -30,15 +30,15 @@ const PositionsIconShow = ({ type, item, positions }) => {
   let positionsInItem = []; // Должности закреплённые за item
   
   switch (type) {
-    case typePosModule.DOC:
+    case typeElem.DOC:
       positionsInItem = getPositionsByDocId(item.id, positions);
       break;
     
-    case typePosModule.RULE:
+    case typeElem.RULE:
       positionsInItem = getPositionsByRuleId(item.id, positions);
       break;
     
-    case typePosModule.EMPLOYEE:
+    case typeElem.EMPLOYEE:
       positionsInItem = getPositionsByUser(item.positions, positions);
       console.log('USER positionsInItem: ', positionsInItem);
       break;
@@ -78,7 +78,7 @@ const PositionsIconShow = ({ type, item, positions }) => {
 
 
 PositionsIconShow.propTypes = {
-  type: pt.oneOf([typePosModule.DOC, typePosModule.RULE, typePosModule.RULE]).isRequired,
+  type: pt.oneOf([typeElem.DOC, typeElem.RULE, typeElem.RULE]).isRequired,
   item: pt.object.isRequired,
   positions: pt.array.isRequired,
 };

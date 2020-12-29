@@ -28,7 +28,7 @@ export const getAllEmployeesData = () => (dispatch) => {
 // Обновляем аккаунт работника
 export const updateEmployee = (employee) => (dispatch) => {
   console.log('employee: ', employee);
-  dispatch({ type: dataActionType.LOADING_DATA });
+  dispatch({ type: uiActionType.LOADING_UI });
   
   return axios.post(`/updateUserData`, employee)
     .then(() => {
@@ -36,6 +36,7 @@ export const updateEmployee = (employee) => (dispatch) => {
         type: dataActionType.UPDATE_EMPLOYEE,
         payload: employee,
       });
+      dispatch({ type: uiActionType.CLEAR_ERRORS });
     })
     .catch((err) => {
       console.log(err);

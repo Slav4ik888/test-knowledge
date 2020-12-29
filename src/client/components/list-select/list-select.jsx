@@ -43,9 +43,10 @@ const useStyles = makeStyles((theme) => ({
 
 
 const ListSelect = ({ type, items, valueField, title, placeholder, label, onSelected, onItemAdd, itemTextAdd, disabled }) => {
+  console.log('placeholder: ', placeholder);
   const classes = useStyles();
 
-  const icon = type === `addUser` ? <PersonAddIcon className={classes.addIcon} /> : <AddIcon className={classes.addIcon} />;
+  const icon = type === typeListSelect.EMPLOYEE ? <PersonAddIcon className={classes.addIcon} /> : <AddIcon className={classes.addIcon} />;
   const classSelected = type === typeListSelect.DOC ? classes.docSelected : classes.sectionSelected;
 
   const [valueSelected, setValueSelected] = useState(placeholder);

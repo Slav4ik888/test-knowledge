@@ -12,7 +12,7 @@ import FolderIcon from '@material-ui/icons/Folder';
 // Components
 import PositionsIconShow from '../../positions/positions-icon-show/positions-icon-show';
 import DeleteDocumentAvatar from '../../buttons/delete-document-avatar/delete-document-avatar';
-import { typePosModule } from '../../../../types';
+import { typeElem } from '../../../../types';
 
 
 const useStyles = makeStyles((theme) => ({
@@ -93,7 +93,7 @@ const DocumentItem = ({ doc, onEdit, onDel }) => {
         showIcons &&
         <>
           <DeleteDocumentAvatar onDel={handleDelDoc} title={`документ`} />
-          <PositionsIconShow type={typePosModule.DOC} item={doc} />
+          <PositionsIconShow type={typeElem.DOC} item={doc} />
         </>
       }
 
