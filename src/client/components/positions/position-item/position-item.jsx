@@ -13,7 +13,9 @@ import InputBase from '@material-ui/core/InputBase';
 // Icons
 import SupervisedUserCircleIcon from '@material-ui/icons/SupervisedUserCircle';
 // Component
-import DeletePositionAvatar from '../../buttons/delete-position-avatar/delete-position-avatar';
+import DeleteIconAvatar from '../../buttons/delete-icon-avatar/delete-icon-avatar';
+import { typeElem } from '../../../../types';
+
 
 const useStyles = makeStyles((theme) => ({
   editIcon: {
@@ -96,7 +98,7 @@ const PositionItem = ({ position, updatePosition, deletePosition}) => {
       </Tooltip>
 
       {
-        showIcons && <DeletePositionAvatar onDel={handleDelPos} />
+        showIcons && <DeleteIconAvatar type={typeElem.POS} onDel={handleDelPos} />
       }
 
     </ListItem>

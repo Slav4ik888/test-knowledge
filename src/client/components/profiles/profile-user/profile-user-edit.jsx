@@ -15,7 +15,7 @@ import DialogContent from '@material-ui/core/DialogContent';
 // Icons
 import EditIcon from '@material-ui/icons/Edit';
 // Component
-import MyButton from '../../buttons/button-icon/button-icon';
+import MyButton from '../../buttons/button-with-icon/button-with-icon';
 import CancelSubmitBtn from '../../buttons/cancel-submit-btn/cancel-submit-btn';
 import DialogTitle from '../../dialogs/dialog-title/dialog-title';
 import DeleteButton from '../../buttons/delete-button/delete-button';

@@ -15,7 +15,7 @@ import DialogTitle from '../../dialogs/dialog-title/dialog-title';
 import EmployeesModuleRow from '../employees-module-row/employees-module-row';
 import PositionsModuleRow from '../../positions/positions-module-row/positions-module-row';
 import EmployeesStatusRow from '../employees-status-row/employees-status-row';
-import DeleteUserButton from '../../buttons/delete-user-button/delete-user-button';
+import DeleteIconAvatar from '../../buttons/delete-icon-avatar/delete-icon-avatar';
 import { typeElem } from '../../../../types';
 
 
@@ -84,7 +84,7 @@ const EmployeesChange = ({ open, onClose, UI: { errors }, employees, deleteEmplo
                 <Typography variant="h5" color="primary">Статус в приложении</Typography>
                 <EmployeesStatusRow employee={employeeSeleted} />
               
-                <DeleteUserButton onDel={handleDeleteEmployee} />
+                <DeleteIconAvatar type={typeElem.EMPLOYEE} onDel={handleDeleteEmployee} />
               </>
           }
 

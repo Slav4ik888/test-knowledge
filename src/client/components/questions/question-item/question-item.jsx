@@ -4,13 +4,13 @@ import pt from 'prop-types';
 import { makeStyles } from '@material-ui/core/styles';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemAvatar from '@material-ui/core/ListItemAvatar';
+import ListItemText from '@material-ui/core/ListItemText';
 import Avatar from '@material-ui/core/Avatar';
 import Tooltip from '@material-ui/core/Tooltip';
-import InputBase from '@material-ui/core/InputBase';
 // Icons
 import FolderIcon from '@material-ui/icons/Folder';
 // Components
-import PositionsIconShow from '../../positions/positions-icon-show/positions-icon-show';
+import EditIconAvatar from '../../buttons/edit-icon-avatar/edit-icon-avatar';
 import DeleteIconAvatar from '../../buttons/delete-icon-avatar/delete-icon-avatar';
 import { typeElem } from '../../../../types';
 
@@ -20,49 +20,32 @@ const useStyles = makeStyles((theme) => ({
     transition: `transform 0.2s`,
     backgroundColor: theme.palette.background.hover,
     borderRadius: `5px`,
+    // height: theme.spacing(1),
   },
   avatar: {
     backgroundColor: theme.palette.primary.light,
   },
-  input: {
+  title: {
     width: `calc(100% - 100px)`,
     flex: 1,
     padding: theme.spacing(1, 3, 1, 3),
+    cursor: `pointer`,
   },
 }));
 
-const DocumentItem = ({ doc, onEdit, onDel }) => {
+const QuestionItem = ({ question, onEdit, onDel }) => {
   const classes = useStyles();
 
-  const { title, id } = doc;
+  const { title, id } = question;
+
   const [showIcons, setShowIcons] = useState(false);
   const handlePointerEnter = () => setShowIcons(true);
-  const handlePointerLeave = () => {
-    setShowIcons(false);
-    if (title !== newTitle) {
-      handleBlur();
-    }
-  };
+  const handlePointerLeave = () => setShowIcons(false);
+
   const hover = showIcons ? classes.hover : ``;
 
-  const [newTitle, setNewTitle] = useState(title);
-  const handleEdit = (e) => {
-    if (e.keyCode === 13 || e.keyCode === 27) {
-      e.target.blur();
-      if (title !== newTitle) {
-        onEdit(id, newTitle);
-      }
-    }
-    setNewTitle(e.target.value);
-  };
-
-  const handleBlur = () => {
-    if (title !== newTitle) {
-      onEdit(id, newTitle);
-    }
-  };
-
-  const handleDelDoc = () => onDel(id);
+  const handleEdit = () => onEdit(id);
+  const handleDel = () => onDel(id);
 
   return (
     <ListItem
@@ -77,23 +60,16 @@ const DocumentItem = ({ doc, onEdit, onDel }) => {
       </ListItemAvatar>
 
       <Tooltip title="Нажмите для редактирования" placement="top" arrow enterDelay={1000} enterNextDelay={1000}>
-        <InputBase
-          className={classes.input}
-          inputProps={{ 'aria-label': 'Документ' }}
-          value={newTitle}
-          type="text"
-          placeholder="Введите название документа"
-          onChange={handleEdit}
-          onBlur={handleBlur}
-          onKeyDown={handleEdit}
-        />
+        <ListItemText onClick={handleEdit} className={classes.title}>
+          {title}
+        </ListItemText>
       </Tooltip>
-      
+
       {
         showIcons &&
         <>
-          <DeleteIconAvatar type={typeElem.DOC} onDel={handleDelDoc} />
-          <PositionsIconShow type={typeElem.DOC} item={doc} />
+          <EditIconAvatar type={typeElem.QUESTION} onEdit={handleEdit} />
+          <DeleteIconAvatar type={typeElem.QUESTION} onDel={handleDel} />
         </>
       }
 
@@ -101,10 +77,10 @@ const DocumentItem = ({ doc, onEdit, onDel }) => {
   );
 }
 
-DocumentItem.propTypes = {
-  doc: pt.object.isRequired,
+QuestionItem.propTypes = {
+  question: pt.object.isRequired,
   onEdit: pt.func.isRequired,
   onDel: pt.func.isRequired,
 };
 
-export default DocumentItem;
+export default QuestionItem;

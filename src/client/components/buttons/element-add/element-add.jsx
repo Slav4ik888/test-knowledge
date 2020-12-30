@@ -71,6 +71,12 @@ const ElementAdd = ({ type, onAdd, setErrors }) => {
       general = `Введите название должности`;
       break;
     
+    case typeElem.QUESTION:
+      placeholder = `Добавить вопрос`;
+      label = `Новый вопрос`;
+      general = `Введите название вопроса`;
+      break;
+    
     default: break;
   }
 
@@ -122,7 +128,7 @@ const ElementAdd = ({ type, onAdd, setErrors }) => {
 }
 
 ElementAdd.propTypes = {
-  type: pt.oneOf([typeElem.POS, typeElem.DOC]).isRequired,
+  type: pt.oneOf([typeElem.POS, typeElem.DOC, typeElem.QUESTION]).isRequired,
   onAdd: pt.func.isRequired,
   setErrors: pt.func.isRequired,
 };

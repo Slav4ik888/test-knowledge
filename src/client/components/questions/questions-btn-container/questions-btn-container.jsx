@@ -17,7 +17,7 @@ import Button from '@material-ui/core/Button';
 import DescriptionIcon from '@material-ui/icons/Description';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 // Components
-import PositionsIconShow from '../../positions/positions-icon-show/positions-icon-show';
+import QuestionsContainer from '../questions-container/questions-container';
 import { typePosModule } from '../../../../types';
 
 
@@ -54,6 +54,13 @@ const QuestionsBtnContainer = ({ rule }) => {
       >
         Вопросы
       </Button>
+      {
+        expanded && <QuestionsContainer
+          open={expanded}
+          onClose={handleExpandClick}
+          rule={rule}
+        />
+      }
     </>
   );
 };
