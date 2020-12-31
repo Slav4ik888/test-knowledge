@@ -32,7 +32,7 @@ async function createRule(req, res) {
     
     // const document = newRule;
     newRule.id = createRes.id;
-
+    
     // Сохраняем newRule с добавленным id
     const updateRes = await db.collection(`rules`)
       .doc(req.user.companyId)

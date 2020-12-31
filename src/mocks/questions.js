@@ -21,6 +21,7 @@ export const question1 = {
   ruleId: `1`, // id правила - для которого вопрос
   createdAt: `2020-11-04T18:16:54.385Z`,
   lastChange: `2020-11-04T18:16:54.385Z`,
+  order: 100,
   typeQuestion: typeQuestions.ONE_ANSWER, // Тип вопроса: 1 или несколько ответов и прочие варианты
   question: `Что должен сделать Кладовщик, если товар пришёл с повреждениями?`,
   answers: [
