@@ -33,10 +33,8 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const QuestionItem = ({ question, onEdit, onDel }) => {
+const QuestionItem = ({ question: { question, id }, onEdit, onDel }) => {
   const classes = useStyles();
-
-  const { title, id } = question;
 
   const [showIcons, setShowIcons] = useState(false);
   const handlePointerEnter = () => setShowIcons(true);
@@ -61,7 +59,7 @@ const QuestionItem = ({ question, onEdit, onDel }) => {
 
       <Tooltip title="Нажмите для редактирования" placement="top" arrow enterDelay={1000} enterNextDelay={1000}>
         <ListItemText onClick={handleEdit} className={classes.title}>
-          {title}
+          {question}
         </ListItemText>
       </Tooltip>
 

@@ -69,6 +69,19 @@ export const getIdxRulesFromDocAndSection = (rules, doc, section) => {
   return rules.findIndex((item) => item.docId === doc.docId && item.sectionId === section.sectionId)
 };
 
+
+/**
+ * Возвращает все questions для ruleId
+ * @param {string} ruleId 
+ * @param {array} allQuestions
+ * 
+ * @return {object}
+ */ 
+export const getQuestionsFromRuleId = (allQuestions, ruleId) => {
+  return allQuestions.find((quest) => quest.ruleId === ruleId);
+};
+  
+
 /**
  * Сортируем по arr по полю fieldName
  * @param {array} arr 

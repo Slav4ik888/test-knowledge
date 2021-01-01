@@ -70,7 +70,6 @@ const RulesContainer = ({ setRuleStored, ruleStored, setActiveDocument }) => {
 
   const classes = useStyles();
   
-
   // Выбранный документ
   const [docSelected, setDocSelected] = useState(ruleStored.docSelected);
   const handleDocSelected = (doc) => {

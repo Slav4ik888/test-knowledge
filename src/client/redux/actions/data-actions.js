@@ -392,3 +392,72 @@ export const deleteAllRulesById = ({ docId, sectionId }) => (dispatch) => {
       })
     });
 };
+
+
+
+// Создаём question
+export const createQuestion = (newQuestion) => (dispatch) => {
+  dispatch({ type: uiActionType.LOADING_UI });
+
+  return axios.post(`/createQuestion/${newQuestion.ruleId}`, newQuestion)
+    .then((res) => {
+      dispatch({
+        type: dataActionType.CREATE_QUESTION,
+        payload: res.data.newQuestion,
+      });
+      dispatch({ type: uiActionType.CLEAR_ERRORS });
+    })
+    .catch((err) => {
+      console.log(err.response.data);
+      dispatch({
+        type: uiActionType.SET_ERRORS,
+        payload: err.response.data,
+      });
+    });
+};
+
+// Загружаем questions по ruleId
+export const getAllQuestionsByRuleId = ({ ruleId }) => (dispatch) => {
+  console.log('ruleId: ', ruleId);
+  dispatch({ type: uiActionType.LOADING_UI });
+
+  return axios.get(`getAllQuestionsByRuleId/${ruleId}`)
+    .then((res) => {
+      dispatch({
+        type: dataActionType.SET_QUESTIONS_BY_RULEID,
+        payload: {
+          ruleId,
+          questions: res.data.questions,
+        },
+      });
+      dispatch({ type: uiActionType.CLEAR_ERRORS });
+    })
+    .catch((err) => {
+      console.log(err.response.data);
+      dispatch({
+        type: uiActionType.SET_ERRORS,
+        payload: err.response.data,
+      })
+    })
+
+};
+
+export const updateQuestion = (question) => (dispatch) => {
+  dispatch({ type: uiActionType.LOADING_UI });
+
+  return axios.post(`/updateQuestion`, question)
+    .then((res) => {
+      dispatch({
+        type: dataActionType.UPDATE_QUESTION,
+        payload: res.data.question,
+      });
+      dispatch({ type: uiActionType.CLEAR_ERRORS });
+    })
+    .catch((err) => {
+      console.error(err.response.data);
+      dispatch({
+        type: uiActionType.SET_ERRORS,
+        payload: err.response.data,
+      });
+    });
+};

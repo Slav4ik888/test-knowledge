@@ -6,6 +6,7 @@ import List from '@material-ui/core/List';
 // Component
 import QuestionItem from '../question-item/question-item';
 
+
 const useStyles = makeStyles((theme) => ({
   list: {
     width: `100%`,
@@ -16,14 +17,14 @@ const useStyles = makeStyles((theme) => ({
 const QuestionsList = ({ questions, onEdit, onDel }) => {
   
   if (!questions) return null;
-
+  
   const classes = useStyles();
 
   return (
     <>
       <List height={200} className={classes.list}>
         {
-          questions.map((question) => <QuestionItem key={question.id}
+          questions.length && questions.map((question) => <QuestionItem key={question.id}
             question={question}
             onEdit={onEdit}
             onDel={onDel}

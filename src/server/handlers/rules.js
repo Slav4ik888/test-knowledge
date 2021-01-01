@@ -79,17 +79,15 @@ async function getAllRulesById(req, res) {
       .where(`sectionId`, `==`, req.params.sectionId)
       .get();
     
+    let rules = [];
+
     if (rulesRes.empty) {
       if (req.update) {
-        const rules = [];
         return rules;
       } else {
-        const rules = [];
         return res.json({ rules, message: `Нет ни одного правила` });
       }
     } else {
-      let rules = [];
-
       rulesRes.forEach(rule => {
         const obj = rule.data();
         rules.push(obj);
@@ -128,7 +126,7 @@ async function updateRule(req, res) {
     req.update = true; // getRule сообщаем, что это обновление и нужно вернуть данные сюда, а не пользователю
     const rule = await getRule(req, res);
 
-    console.log(`updateRule`);
+    console.log(`Правило ${req.params.ruleId} успешно обновлено`);
     return res.json({ rule, message: `Правило успешно обновлено` });
     
   } catch (err) {

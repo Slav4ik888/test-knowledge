@@ -12,7 +12,7 @@ const { createPosition, getPosition, getAllPositions, updatePosition, deletePosi
 const { getAllEmployeesData } = require('./handlers/data');
 const { createDocument, getDocument, getAllDocuments, updateDocument, deleteDocument } = require('./handlers/documents');
 const { createRule, getRule, getAllRulesById, updateRule, deleteRule, deleteAllRulesById } = require('./handlers/rules');
-const { createQuestion } = require('./handlers/questions');
+const { createQuestion, getAllQuestionsByRuleId, updateQuestion } = require('./handlers/questions');
 
 app.use(bodyParser.json());
 
@@ -59,6 +59,8 @@ app.get(`/api/deleteAllRulesById/:documentId/:sectionId`, FBAuth, deleteAllRules
 
 // questions
 app.post(`/api/createQuestion/:ruleId`, FBAuth, createQuestion);
+app.get(`/api/getAllQuestionsByRuleId/:ruleId`, FBAuth, getAllQuestionsByRuleId);
+app.post(`/api/updateQuestion`, FBAuth, updateQuestion);
 
 
 app.use(express.static('dist'));
@@ -66,4 +68,4 @@ app.use(express.static('dist'));
 
 app.listen(process.env.PORT || 8080, () => console.log(`Listening on port ${process.env.PORT || 8080}!`));
 
-//  git add . && git commit -m "create createQuestion" && git push origin master
+//  git add . && git commit -m "create getAllQuestionsByRuleId, updateQuestion" && git push origin master

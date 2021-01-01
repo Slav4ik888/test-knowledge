@@ -58,7 +58,7 @@ const QuestionsBtnContainer = ({ rule }) => {
         expanded && <QuestionsContainer
           open={expanded}
           onClose={handleExpandClick}
-          rule={rule}
+          ruleId={rule.id}
         />
       }
     </>

@@ -35,7 +35,7 @@ const RulesListModule = ({ loading, rules, docSelected, section, getAllRulesById
   let activeRuleObj = getRulesFromDocAndSection(rules, docId, sectionId); 
 
   if (!activeRuleObj) { // Проверяем есть ли загруженные данные, если нет - загружаем
-    console.log(`Нет загр-х - ЗАГРУЖАЕМ`);
+    console.log(`Нет загр-х rules - ЗАГРУЖАЕМ`);
     getAllRulesById({ docId, sectionId });
 
   } else {

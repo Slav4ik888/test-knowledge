@@ -144,7 +144,6 @@ export default function (state = initialState, action) {
       const idxRuleSection = getIdxRulesFromDocAndSection(upRules, newRule, newRule);
 
       if (idxRuleSection !== -1) { // Если в section уже есть rules - добавляем
-        console.log(`Найдена секция`);
         upRules[idxRuleSection].rules.push(newRule);
       } else { // Если это первое правило
         upRules.push({
@@ -172,7 +171,7 @@ export default function (state = initialState, action) {
       console.log('idxLoadRuleSection: ', idxLoadRuleSection);
       
       if (idxLoadRuleSection !== -1) { // Если в section уже есть rules, записываем поверх
-        console.log(`Найдена секция`);
+        console.log(`Для выбранной секции, rules уже загружали`);
         loadRules[idxLoadRuleSection].rules = setRules;
 
       } else { // Если это первые загруженные правила, создаём
@@ -247,6 +246,73 @@ export default function (state = initialState, action) {
         loading: false,
       });
     
+    
+    case dataActionType.CREATE_QUESTION:
+      let createQuestions = state.questions;
+      const createRuleId = action.payload.ruleId;
+
+      // Находим индекс где хранятся нужные questions
+      const createIdxQuest = createQuestions.findIndex((obj) => obj.ruleId === createRuleId);
+      if (createIdxQuest !== -1) { // Если в ruleId уже есть вопросы
+        createQuestions[createIdxQuest].questions.push(action.payload);
+      } else { // Если это первый вопрос
+        console.log(`Это первый вопрос`);
+        createQuestions.push({
+          ruleId: createRuleId,
+          questions: [action.payload]
+        });
+      }
+
+      return extend(state, {
+        questions: createQuestions,
+        loading: false,
+      });
+      
+    // Сохраняем полученные questions в объект по ruleId
+    case dataActionType.SET_QUESTIONS_BY_RULEID:
+      let setQuestions = state.questions;
+      const setRuleId = action.payload.ruleId;
+
+      const setIdxQuest = setQuestions.findIndex((obj) => obj.ruleId === setRuleId);
+      if (setIdxQuest !== -1) { // Если в questions уже есть questions по ruleId, записываем поверх
+        console.log(`Для выбранной ruleId вопросы уже загружали`);
+        setQuestions[setIdxQuest].questions = action.payload.questions;
+      } else { // Если это первые загруженные questions, создаём
+        console.log('Первый раз загружаем questions для rule');
+        setQuestions.push({
+          ruleId: setRuleId,
+          questions: action.payload.questions,
+        });
+      }
+
+      return extend(state, {
+        questions: setQuestions,
+        loading: false,
+      });
+    
+    
+    case dataActionType.UPDATE_QUESTION:
+      let updQuestions = state.questions;
+      // Находим индекс где хранятся нужные questions
+      const updIdxQuest = updQuestions.findIndex((obj) => obj.ruleId === action.payload.ruleId);
+      if (updIdxQuest !== -1) {
+        const idxUpdQue = updQuestions[updIdxQuest].questions.findIndex((quest) => quest.id === action.payload.id);
+        if (idxUpdQue !== -1) {
+          updQuestions[updIdxQuest].questions[idxUpdQue] = action.payload;
+          console.log('UPDATE_QUESTION: ', action.payload);
+
+          return extend(state, {
+            questions: updQuestions,
+            loading: false,
+          });
+        }
+      }
+
+      console.log(`Не найден обновляемый question. Ошибка`);
+
+      return extend(state, {
+        loading: false,
+      });
     
     
     default: return state;
