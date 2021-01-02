@@ -21,6 +21,7 @@ import CreateRule from './pages/create-rule';
 import Navbar from './components/navbar/navbar';
 import AuthRoute from './utils/auth-route';
 import PrivateRoute from './utils/private-route';
+import Snackbar from './components/dialogs/snackbar/snackbar';
 
 
 const token = localStorage.TKidToken;
@@ -71,6 +72,7 @@ const App = () => {
           />
         </Switch>
       </div>
+      <Snackbar />
     </Router>
   );
 };

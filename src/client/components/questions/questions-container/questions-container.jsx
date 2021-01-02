@@ -2,7 +2,7 @@ import React, { useState, useRef, useEffect } from 'react';
 import pt from 'prop-types';
 // Readux Stuff
 import { connect } from 'react-redux';
-import { createQuestion, getAllQuestionsByRuleId } from '../../../redux/actions/data-actions';
+import { createQuestion, getAllQuestionsByRuleId, deleteQuestion } from '../../../redux/actions/data-actions';
 // MUI Stuff
 import { makeStyles } from '@material-ui/core/styles';
 import Dialog from '@material-ui/core/Dialog';
@@ -12,10 +12,10 @@ import DialogTitle from '../../dialogs/dialog-title/dialog-title';
 import QuestionsList from '../questions-list/questions-list';
 import ElementAdd from '../../buttons/element-add/element-add';
 import QuestionContainerEdit from '../question-container-edit/question-container-edit';
-import Snackbar from '../../dialogs/snackbar/snackbar';
 import { typeElem, typeQuestions } from '../../../../types';
 import { getMaxOrder } from '../../../../server/utils/utils';
 import { getQuestionsFromRuleId, sortingArr } from '../../../utils/utils';
+import { getItemFromArrById } from '../../../utils/arrays';
 
 
 const useStyles = makeStyles((theme) => ({
@@ -37,16 +37,12 @@ const useStyles = makeStyles((theme) => ({
 
 
 // Контейнер с вопросами, которые можно создавать и редактировать
-const QuestionsContainer = ({ open, onClose, ruleId, errors, allQuestions, getAllQuestionsByRuleId, createQuestion }) => {
-  
+const QuestionsContainer = ({ open, onClose, ruleId, errors, allQuestions, getAllQuestionsByRuleId, createQuestion, deleteQuestion }) => {
   
   if (!open) return null;
-  console.log('allQuestions: ', allQuestions);
 
   let questions = [];
-
   const activeQuestionsObj = getQuestionsFromRuleId(allQuestions, ruleId);
-  console.log('activeQuestionsObj: ', activeQuestionsObj);
 
   // Проверяем загружали ли уже и если нет то загружаем первый раз
   if (!activeQuestionsObj) {
@@ -87,15 +83,21 @@ const QuestionsContainer = ({ open, onClose, ruleId, errors, allQuestions, getAl
   };
 
   // Открываем контейнер для редактирования выбранного question
+  const [quest, setQuest] = useState({}); // Вопрос передаваемый в QuestionContainerEdit
   const [editId, setEditId] = useState(null);
   const handleEditOpen = (id) => {
-    console.log(`Нажали редактировать вопрос: `, id);
+    setQuest(getItemFromArrById(questions, id));
     setEditId(id);
   };
-  const handleEditClose = () => setEditId(null);
+  const handleEditClose = () => {
+    setQuest({});
+    setEditId(null);
+  };
 
+  // Удаляем вопрос
   const handleDelQuestion = (id) => {
-    console.log(`Нажали удалить вопрос: `, id);
+    const question = getItemFromArrById(questions, id);
+    deleteQuestion(question);
   };
 
   
@@ -120,10 +122,8 @@ const QuestionsContainer = ({ open, onClose, ruleId, errors, allQuestions, getAl
         <QuestionContainerEdit
           open={Boolean(editId)}
           onClose={handleEditClose}
-          question={questions.find((quest) => quest.id === editId)}
+          question={quest}
         />
-
-        <Snackbar errors={errors} />
 
       </Dialog>
     </>
@@ -138,6 +138,7 @@ QuestionsContainer.propTypes = {
   createQuestion: pt.func.isRequired,
   allQuestions: pt.array.isRequired,
   getAllQuestionsByRuleId: pt.func.isRequired,
+  deleteQuestion: pt.func.isRequired,
 };
 
 const mapStateToProps = (state) => ({
@@ -148,6 +149,7 @@ const mapStateToProps = (state) => ({
 const mapActionsToProps = {
   createQuestion,
   getAllQuestionsByRuleId,
+  deleteQuestion,
 };
 
 export default connect(mapStateToProps, mapActionsToProps)(QuestionsContainer);

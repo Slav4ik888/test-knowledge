@@ -136,8 +136,24 @@ async function updateQuestion(req, res) {
 
 };
 
+async function deleteQuestion(req, res) {
+  // является ли пользователь Админом или Владельцем аккаунта
+  const validData = await validationAdminAuthority(req.user);
+  const { valid, errors } = validData;
+  if (!valid) return res.status(400).json(errors);
 
+  try {
+    const delRes = await db.doc(`questions/${req.user.companyId}/questions/${req.params.questionId}`).delete();
+    console.log(`deleteQuestion ${req.params.questionId}`);
+
+    return res.json({ message: `Вопрос успешно удалён` });
+
+  } catch (err) {
+    console.error(err);
+    return res.status(500).json({ general: err.code });
+  }
+};
 
 // TODO: удалять все questions по ruleId 
 // TODO: когда удаляют rule удалять все questions
-module.exports = { createQuestion, getAllQuestionsByRuleId, updateQuestion };
+module.exports = { createQuestion, getAllQuestionsByRuleId, updateQuestion, deleteQuestion };

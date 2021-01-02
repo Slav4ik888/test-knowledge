@@ -442,6 +442,7 @@ export const getAllQuestionsByRuleId = ({ ruleId }) => (dispatch) => {
 
 };
 
+// Обновляем question
 export const updateQuestion = (question) => (dispatch) => {
   dispatch({ type: uiActionType.LOADING_UI });
 
@@ -450,6 +451,26 @@ export const updateQuestion = (question) => (dispatch) => {
       dispatch({
         type: dataActionType.UPDATE_QUESTION,
         payload: res.data.question,
+      });
+      dispatch({ type: uiActionType.CLEAR_ERRORS });
+    })
+    .catch((err) => {
+      console.error(err.response.data);
+      dispatch({
+        type: uiActionType.SET_ERRORS,
+        payload: err.response.data,
+      });
+    });
+};
+
+export const deleteQuestion = (question) => (dispatch) => {
+  dispatch({ type: uiActionType.LOADING_UI });
+
+  return axios.get(`/deleteQuestion/${question.id}`)
+    .then(() => {
+      dispatch({
+        type: dataActionType.DELETE_QUESTION,
+        payload: question,
       });
       dispatch({ type: uiActionType.CLEAR_ERRORS });
     })

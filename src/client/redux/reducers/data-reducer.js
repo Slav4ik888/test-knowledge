@@ -314,6 +314,28 @@ export default function (state = initialState, action) {
         loading: false,
       });
     
+    case dataActionType.DELETE_QUESTION:
+      let delQuestions = state.questions;
+      // Находим индекс где хранятся нужные questions
+      const delIdxQuest = delQuestions.findIndex((obj) => obj.ruleId === action.payload.ruleId);
+      if (delIdxQuest !== -1) {
+        const idxDelQue = delQuestions[delIdxQuest].questions.findIndex((quest) => quest.id === action.payload.id);
+        if (idxDelQue !== -1) {
+          delQuestions[delIdxQuest].questions = getArrWithoutItemByField(delQuestions[delIdxQuest].questions, `id`, action.payload);
+          console.log('DELETE_QUESTION: ', action.payload);
+
+          return extend(state, {
+            questions: delQuestions,
+            loading: false,
+          });
+        }
+      }
+
+      console.log(`Не найден удаляемый question. Ошибка`);
+
+      return extend(state, {
+        loading: false,
+      });
     
     default: return state;
   }

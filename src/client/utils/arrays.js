@@ -39,3 +39,9 @@ export const updateArrWithItemByField = (items, updateField, updateItem) => {
   return newItems;
 };
 
+/**
+ * Возвращает item соответвующий id
+ * @param {array} arr 
+ * @param {string} id 
+ */
+export const getItemFromArrById = (arr, id) => arr.find((item) => item.id === id);

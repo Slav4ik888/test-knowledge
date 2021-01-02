@@ -44,6 +44,7 @@ exports.typeElem = {
   SECTION: `SECTION`,
   RULE: `RULE`,
   QUESTION: `QUESTION`,
+  ANSWER: `ANSWER`,
   EMPLOYEE: `EMPLOYEE`,
 };
 

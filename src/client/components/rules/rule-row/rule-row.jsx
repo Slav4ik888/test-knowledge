@@ -66,6 +66,9 @@ const useStyles = makeStyles((theme) => ({
     color: theme.palette.primary.main,
     padding: theme.spacing(0, 2, 0, 2),
   },
+  outPadding: {
+    paddingBottom: `0px !important`,
+  },
   input: {
     width: `calc(100% - 130px)`,
     flex: 1,
@@ -137,7 +140,7 @@ const RuleRow = ({ rule, updateRule }) => {
       <UpAndDownAdd type={typeUpDown.RULE} rule={rule} upDown={`up`} />
       
       <Card className={classes.container} onMouseLeave={handleUpdateRule} >
-        <CardContent className={classes.header} >
+        <div className={classes.header} >
           <Avatar className={classes.avatar}>
             <DescriptionIcon />
           </Avatar>
@@ -173,7 +176,7 @@ const RuleRow = ({ rule, updateRule }) => {
           >
             <ExpandMoreIcon />
           </IconButton>
-        </CardContent>
+        </div>
         
         {/* Положение - {rule.order}  */}
 

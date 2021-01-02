@@ -12,7 +12,7 @@ const { createPosition, getPosition, getAllPositions, updatePosition, deletePosi
 const { getAllEmployeesData } = require('./handlers/data');
 const { createDocument, getDocument, getAllDocuments, updateDocument, deleteDocument } = require('./handlers/documents');
 const { createRule, getRule, getAllRulesById, updateRule, deleteRule, deleteAllRulesById } = require('./handlers/rules');
-const { createQuestion, getAllQuestionsByRuleId, updateQuestion } = require('./handlers/questions');
+const { createQuestion, getAllQuestionsByRuleId, updateQuestion, deleteQuestion } = require('./handlers/questions');
 
 app.use(bodyParser.json());
 
@@ -61,6 +61,7 @@ app.get(`/api/deleteAllRulesById/:documentId/:sectionId`, FBAuth, deleteAllRules
 app.post(`/api/createQuestion/:ruleId`, FBAuth, createQuestion);
 app.get(`/api/getAllQuestionsByRuleId/:ruleId`, FBAuth, getAllQuestionsByRuleId);
 app.post(`/api/updateQuestion`, FBAuth, updateQuestion);
+app.get(`/api/deleteQuestion/:questionId`, FBAuth, deleteQuestion);
 
 
 app.use(express.static('dist'));
@@ -68,4 +69,4 @@ app.use(express.static('dist'));
 
 app.listen(process.env.PORT || 8080, () => console.log(`Listening on port ${process.env.PORT || 8080}!`));
 
-//  git add . && git commit -m "create QuestionContainerEdit" && git push origin master
+//  git add . && git commit -m "deleteQuestion" && git push origin master

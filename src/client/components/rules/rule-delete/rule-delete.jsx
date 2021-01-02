@@ -12,7 +12,8 @@ import DeleteButton from '../../buttons/delete-button/delete-button';
 
 const useStyles = makeStyles((theme) => ({
   container: {
-    // display: 'flex',
+    display: 'flex',
+    alignItems: `center`,
     // flexDirection: `column`,
     // width: `100%`,
     // margin: theme.spacing(2, 0, 4, 0),

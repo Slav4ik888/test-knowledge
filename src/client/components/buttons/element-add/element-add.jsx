@@ -12,6 +12,9 @@ import Avatar from '@material-ui/core/Avatar';
 // Icons
 import AddIcon from '@material-ui/icons/Add';
 import SupervisedUserCircleIcon from '@material-ui/icons/SupervisedUserCircle';
+import FolderIcon from '@material-ui/icons/Folder';
+import HelpOutlineIcon from '@material-ui/icons/HelpOutline';
+// Components
 import { typeElem } from '../../../../types';
 
 
@@ -42,6 +45,9 @@ const useStyles = makeStyles((theme) => ({
   avatarIcon: {
     height: `34px`,
     width: `34px`,
+    // display: `flex`,
+    // alignItems: `center`,
+    // justifyContent: `center`,
   },
   customError: {
     color: `red`,
@@ -57,24 +63,35 @@ const ElementAdd = ({ type, onAdd, setErrors }) => {
   let placeholder = ``;
   let label = ``;
   let general = ``;
+  let icon = null;
 
   switch (type) {
     case typeElem.DOC:
       placeholder = `Добавить документ`;
       label = `Новый документ`;
       general = `Введите название документа`;
+      icon = <FolderIcon />;
       break;
     
     case typeElem.POS:
       placeholder = `Добавить должность`;
       label = `Новая должность`;
       general = `Введите название должности`;
+      icon = <SupervisedUserCircleIcon className={classes.avatarIcon}/>;
       break;
     
     case typeElem.QUESTION:
       placeholder = `Добавить вопрос`;
       label = `Новый вопрос`;
-      general = `Введите название вопроса`;
+      general = `Введите вопрос`;
+      icon = <HelpOutlineIcon className={classes.avatarIcon}/>;
+      break;
+    
+    case typeElem.ANSWER:
+      placeholder = `Добавить ответ`;
+      label = `Новый ответ`;
+      general = `Введите ответ`;
+      icon = <HelpOutlineIcon className={classes.avatarIcon}/>;
       break;
     
     default: break;
@@ -109,7 +126,7 @@ const ElementAdd = ({ type, onAdd, setErrors }) => {
     <form onSubmit={handleSubmit} className={classes.form}>
       <Paper className={classes.formControl}>
         <Avatar>
-          <SupervisedUserCircleIcon className={classes.avatarIcon}/>
+          {icon}
         </Avatar>
         <InputBase
           className={classes.input}
@@ -128,7 +145,7 @@ const ElementAdd = ({ type, onAdd, setErrors }) => {
 }
 
 ElementAdd.propTypes = {
-  type: pt.oneOf([typeElem.POS, typeElem.DOC, typeElem.QUESTION]).isRequired,
+  type: pt.oneOf([typeElem.POS, typeElem.DOC, typeElem.QUESTION, typeElem.ANSWER]).isRequired,
   onAdd: pt.func.isRequired,
   setErrors: pt.func.isRequired,
 };

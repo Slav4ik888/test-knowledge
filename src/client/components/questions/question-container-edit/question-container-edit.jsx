@@ -17,7 +17,6 @@ import HelpOutlineIcon from '@material-ui/icons/HelpOutline';
 import DialogTitle from '../../dialogs/dialog-title/dialog-title';
 import AnswersList from '../answers-list/answers-list';
 import ElementAdd from '../../buttons/element-add/element-add';
-import Snackbar from '../../dialogs/snackbar/snackbar';
 import { typeElem, typeQuestions } from '../../../../types';
 import { getMaxOrder } from '../../../../server/utils/utils';
 import { getQuestionsFromRuleId, sortingArr } from '../../../utils/utils';
@@ -32,7 +31,8 @@ const useStyles = makeStyles((theme) => ({
     display: 'flex',
     alignItems: `center`,
     padding: theme.spacing(1, 2, 1, 2),
-    backgroundColor: theme.palette.background.section,
+    backgroundColor: theme.palette.background.bodyfield,
+
   },
   avatar: {
     marginRight: theme.spacing(3),
@@ -41,6 +41,7 @@ const useStyles = makeStyles((theme) => ({
   questionBox: {
     display: `flex`,
     flexDirection: `column`,
+    width: `100%`,
   },
   questionBody: {
     padding: theme.spacing(2, 2, 2, 2),
@@ -52,15 +53,10 @@ const useStyles = makeStyles((theme) => ({
   // hover: {
   //   backgroundColor: theme.palette.background.sectionHover, // `#e9f6fc`,
   // },
-  textField: {
-    margin: `10px auto 10px auto`,
-  },
-  iconButton: {
-    padding: 10,
-  },
-  container: {
+  answerListBody: {
     display: 'flex',
     flexWrap: 'wrap',
+    minHeight: `200px`,
     backgroundColor: theme.palette.background.bodyfield,
   },
 }));
@@ -90,6 +86,9 @@ const QuestionContainerEdit = ({ open, onClose, question, errors }) => {
     setNewQuestion(value);
   };
 
+  const handleAddAnswer = () => {
+    console.log(`Нажали добавить ответ`);
+  };
   const handleEditAnswer = () => {
     console.log(`Нажали редактировать ответ`);
   };
@@ -122,7 +121,7 @@ const QuestionContainerEdit = ({ open, onClose, question, errors }) => {
           </div>
         </div>
 
-        <DialogContent dividers ref={listRef} className={classes.container} >
+        <DialogContent dividers ref={listRef} className={classes.answerListBody} >
           <AnswersList
             answers={question.answers}
             onEdit={handleEditAnswer}
@@ -130,9 +129,7 @@ const QuestionContainerEdit = ({ open, onClose, question, errors }) => {
           />
         </DialogContent>
 
-        {/* <ElementAdd type={typeElem.QUESTION} onAdd={handleAddQuestion} /> */}
-
-        {/* <Snackbar errors={errors} /> */}
+        <ElementAdd type={typeElem.ANSWER} onAdd={handleAddAnswer}/>
 
       </Dialog>
     </>

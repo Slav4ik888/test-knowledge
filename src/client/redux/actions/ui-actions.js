@@ -16,3 +16,6 @@ export const setErrors = (general) => (dispatch) => {
     payload: general,
   })
 };
+
+// Очищаем ошибки
+export const clearErrors = () => (dispatch) => dispatch({ type: uiActionType.CLEAR_ERRORS });
