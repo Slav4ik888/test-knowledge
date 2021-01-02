@@ -3,20 +3,23 @@ import pt from 'prop-types';
 import cl from 'classnames';
 // Readux Stuff
 import { connect } from 'react-redux';
-// import {  } from '../../../redux/actions/data-actions';
+import { updateQuestion } from '../../../redux/actions/data-actions';
 // MUI Stuff
 import { makeStyles } from '@material-ui/core/styles';
 import Dialog from '@material-ui/core/Dialog';
 import Typography from '@material-ui/core/Typography';
 import DialogContent from '@material-ui/core/DialogContent';
+import DialogActions from '@material-ui/core/DialogActions';
 import Avatar from '@material-ui/core/Avatar';
 import TextareaAutosize from '@material-ui/core/TextareaAutosize';
-// icons
+// Icons
 import HelpOutlineIcon from '@material-ui/icons/HelpOutline';
-// Component
+// Components
 import DialogTitle from '../../dialogs/dialog-title/dialog-title';
 import AnswersList from '../answers-list/answers-list';
 import ElementAdd from '../../buttons/element-add/element-add';
+import CancelSubmitBtn from '../../buttons/cancel-submit-btn/cancel-submit-btn';
+// Functions
 import { typeElem, typeQuestions } from '../../../../types';
 import { getMaxOrder } from '../../../../server/utils/utils';
 import { getQuestionsFromRuleId, sortingArr } from '../../../utils/utils';
@@ -32,7 +35,6 @@ const useStyles = makeStyles((theme) => ({
     alignItems: `center`,
     padding: theme.spacing(1, 2, 1, 2),
     backgroundColor: theme.palette.background.bodyfield,
-
   },
   avatar: {
     marginRight: theme.spacing(3),
@@ -59,14 +61,19 @@ const useStyles = makeStyles((theme) => ({
     minHeight: `200px`,
     backgroundColor: theme.palette.background.bodyfield,
   },
+  action: {
+    padding: theme.spacing(0, 4, 4, 4),
+    backgroundColor: theme.palette.background.moduleAddInput,
+  },
 }));
 
 
-// Контейнер с вопросами, которые можно создавать и редактировать
-const QuestionContainerEdit = ({ open, onClose, question, errors }) => {
+// Контейнер с вопросом и ответами на него, которые можно создавать и редактировать
+const QuestionContainerEdit = ({ open, loading, onClose, question, updateQuestion }) => {
   if (!open) return null;
 
   const classes = useStyles();
+  const [isChange, setIsChange] = useState(false);
 
   const handleClose = () => onClose();
 
@@ -74,6 +81,7 @@ const QuestionContainerEdit = ({ open, onClose, question, errors }) => {
   useEffect(() => {
     if (open) {
       const { current: listElement } = listRef;
+      console.log('listElement: ', listElement);
       if (listElement !== null) {
         listElement.focus();
       }
@@ -83,17 +91,28 @@ const QuestionContainerEdit = ({ open, onClose, question, errors }) => {
   const [newQuestion, setNewQuestion] = useState(question.question);
   const handleEditQuestion = (e) => {
     const value = e.target.value;
-    setNewQuestion(value);
+    if (value !== question.question) {
+      setIsChange(true);
+      setNewQuestion(value);
+    }
   };
 
   const handleAddAnswer = () => {
     console.log(`Нажали добавить ответ`);
+    setIsChange(true);
   };
   const handleEditAnswer = () => {
     console.log(`Нажали редактировать ответ`);
+    setIsChange(true);
   };
   const handleDelAnswer = () => {
     console.log(`Нажали удалить ответ`);
+    setIsChange(true);
+  };
+
+  const handleSubmit = () => {
+    console.log(`Нажали сохранить`);
+    // updateQuestion();
   };
 
   return (
@@ -131,6 +150,14 @@ const QuestionContainerEdit = ({ open, onClose, question, errors }) => {
 
         <ElementAdd type={typeElem.ANSWER} onAdd={handleAddAnswer}/>
 
+        <DialogActions className={classes.action}>
+          <CancelSubmitBtn
+            onCancel={onClose}
+            onSubmit={handleSubmit}
+            disabled={loading || !isChange}
+            loading={loading}
+          />
+        </DialogActions>
       </Dialog>
     </>
   );
@@ -138,18 +165,18 @@ const QuestionContainerEdit = ({ open, onClose, question, errors }) => {
 
 QuestionContainerEdit.propTypes = {
   open: pt.bool.isRequired,
+  loading: pt.bool.isRequired,
   onClose: pt.func.isRequired,
   question: pt.object,
-  errors: pt.object.isRequired,
-
+  updateQuestion: pt.func.isRequired,
 };
 
 const mapStateToProps = (state) => ({
-  errors: state.UI.errors,
+  loading: state.UI.loading,
 });
 
 const mapActionsToProps = {
-
+  updateQuestion,
 };
 
 export default connect(mapStateToProps, mapActionsToProps)(QuestionContainerEdit);

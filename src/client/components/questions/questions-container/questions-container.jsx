@@ -108,7 +108,7 @@ const QuestionsContainer = ({ open, onClose, ruleId, errors, allQuestions, getAl
         className={classes.dialog} maxWidth="sm" scroll={`paper`}
         open={open} onClose={handleClose}
       >
-        <DialogTitle onClose={handleClose}>Настройка вопросов</DialogTitle>
+        <DialogTitle onClose={handleClose}>Настройка вопросов для тестирования</DialogTitle>
         <DialogContent dividers ref={listRef} className={classes.container}>
           <QuestionsList
             questions={questions}

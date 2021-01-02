@@ -48,7 +48,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const PositionsAddInItem = ({ open, type, onClose, UI: { loading }, item, positions, updatePosition, updateEmployee }) => {
+const PositionsAddInItem = ({ open, type, onClose, loading, item, positions, updatePosition, updateEmployee }) => {
   if (!open) return null;
 
   const classes = useStyles();
@@ -147,7 +147,7 @@ PositionsAddInItem.propTypes = {
   open: pt.bool.isRequired,
   type: pt.oneOf([typeElem.DOC, typeElem.RULE, typeElem.RULE, typeElem.EMPLOYEE]).isRequired,
   onClose: pt.func.isRequired,
-  UI: pt.object.isRequired,
+  loading: pt.bool.isRequired,
   item: pt.object.isRequired,
   positions: pt.array.isRequired,
   updatePosition: pt.func.isRequired, 
@@ -155,7 +155,7 @@ PositionsAddInItem.propTypes = {
 };
 
 const mapStateToProps = (state) => ({
-  UI: state.UI,
+  loading: state.UI.loading,
   positions: state.data.positions,
 });
 
