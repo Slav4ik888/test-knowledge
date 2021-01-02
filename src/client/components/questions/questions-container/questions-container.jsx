@@ -1,4 +1,4 @@
-import React, { useRef, useEffect } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import pt from 'prop-types';
 // Readux Stuff
 import { connect } from 'react-redux';
@@ -6,13 +6,12 @@ import { createQuestion, getAllQuestionsByRuleId } from '../../../redux/actions/
 // MUI Stuff
 import { makeStyles } from '@material-ui/core/styles';
 import Dialog from '@material-ui/core/Dialog';
-import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
-import MuiAlert from '@material-ui/lab/Alert';
 // Component
 import DialogTitle from '../../dialogs/dialog-title/dialog-title';
 import QuestionsList from '../questions-list/questions-list';
 import ElementAdd from '../../buttons/element-add/element-add';
+import QuestionContainerEdit from '../question-container-edit/question-container-edit';
 import Snackbar from '../../dialogs/snackbar/snackbar';
 import { typeElem, typeQuestions } from '../../../../types';
 import { getMaxOrder } from '../../../../server/utils/utils';
@@ -87,9 +86,13 @@ const QuestionsContainer = ({ open, onClose, ruleId, errors, allQuestions, getAl
     createQuestion(newQuestion);
   };
 
-  const handleEditQuestion = (id) => {
+  // Открываем контейнер для редактирования выбранного question
+  const [editId, setEditId] = useState(null);
+  const handleEditOpen = (id) => {
     console.log(`Нажали редактировать вопрос: `, id);
+    setEditId(id);
   };
+  const handleEditClose = () => setEditId(null);
 
   const handleDelQuestion = (id) => {
     console.log(`Нажали удалить вопрос: `, id);
@@ -104,15 +107,21 @@ const QuestionsContainer = ({ open, onClose, ruleId, errors, allQuestions, getAl
         open={open} onClose={handleClose}
       >
         <DialogTitle onClose={handleClose}>Настройка вопросов</DialogTitle>
-        <DialogContent dividers ref={listRef} className={classes.container} >
+        <DialogContent dividers ref={listRef} className={classes.container}>
           <QuestionsList
             questions={questions}
-            onEdit={handleEditQuestion}
+            onEditOpen={handleEditOpen}
             onDel={handleDelQuestion}
           />
         </DialogContent>
 
-        <ElementAdd type={typeElem.QUESTION} onAdd={handleAddQuestion} />
+        <ElementAdd type={typeElem.QUESTION} onAdd={handleAddQuestion}/>
+
+        <QuestionContainerEdit
+          open={Boolean(editId)}
+          onClose={handleEditClose}
+          question={questions.find((quest) => quest.id === editId)}
+        />
 
         <Snackbar errors={errors} />
 

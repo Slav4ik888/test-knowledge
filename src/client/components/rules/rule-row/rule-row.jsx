@@ -90,11 +90,6 @@ const useStyles = makeStyles((theme) => ({
     outline: 0,  
     width: `100%`,
   },
-  bodyStyle: {
-    fontSize: theme.fontSize.rule,
-    fontColor: theme.palette.fontColor.rule,
-    fontWeight: theme.fontWeight.rule,
-  },
 }));
 
 // Строка (модуль) с rule

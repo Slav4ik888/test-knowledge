@@ -84,6 +84,15 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
+const goTop = () => {
+  if (window.pageYOffset !== 0) {
+    window.scrollBy(0, -80);
+    setTimeout(goTop, 0);
+  } else {
+    // upDownBtn.classList.remove('up_down_btn-disabled');
+  }
+};
+
 
 const SectionsModuleRow = ({ docSelected, section, updateDocument }) => {
   
@@ -92,7 +101,9 @@ const SectionsModuleRow = ({ docSelected, section, updateDocument }) => {
 
   // Рендер rules
   const [isShowRules, setIsShowRules] = useState(false);
-  const handleToggleShowRules = () => setIsShowRules(!isShowRules);
+  const handleToggleShowRules = () => {
+    setIsShowRules(!isShowRules);
+  };
   
   const [isHover, setIsHover] = useState(false);
   const handlePointerEnter = () => setIsHover(true);
@@ -129,7 +140,7 @@ const SectionsModuleRow = ({ docSelected, section, updateDocument }) => {
 
   return (
     <>
-      <div className={classes.container}>
+      <div className={classes.container} id={section.id}>
         <UpAndDownAdd type={typeUpDown.SECTION} docSelected={docSelected} section={section} upDown={`up`} />
         
         <Card className={classes.box} >

@@ -33,7 +33,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const QuestionItem = ({ question: { question, id }, onEdit, onDel }) => {
+const QuestionItem = ({ question: { question, id }, onEditOpen, onDel }) => {
   const classes = useStyles();
 
   const [showIcons, setShowIcons] = useState(false);
@@ -42,7 +42,7 @@ const QuestionItem = ({ question: { question, id }, onEdit, onDel }) => {
 
   const hover = showIcons ? classes.hover : ``;
 
-  const handleEdit = () => onEdit(id);
+  const handleEdit = () => onEditOpen(id);
   const handleDel = () => onDel(id);
 
   return (
@@ -77,7 +77,7 @@ const QuestionItem = ({ question: { question, id }, onEdit, onDel }) => {
 
 QuestionItem.propTypes = {
   question: pt.object.isRequired,
-  onEdit: pt.func.isRequired,
+  onEditOpen: pt.func.isRequired,
   onDel: pt.func.isRequired,
 };
 

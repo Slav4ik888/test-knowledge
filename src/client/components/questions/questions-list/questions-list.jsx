@@ -14,7 +14,7 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 
-const QuestionsList = ({ questions, onEdit, onDel }) => {
+const QuestionsList = ({ questions, onEditOpen, onDel }) => {
   
   if (!questions) return null;
   
@@ -24,11 +24,11 @@ const QuestionsList = ({ questions, onEdit, onDel }) => {
     <>
       <List height={200} className={classes.list}>
         {
-          questions.length && questions.map((question) => <QuestionItem key={question.id}
+          questions.length ? questions.map((question) => <QuestionItem key={question.id}
             question={question}
-            onEdit={onEdit}
+            onEditOpen={onEditOpen}
             onDel={onDel}
-          />)
+          />) : null
         }
       </List> 
     </>
@@ -36,7 +36,7 @@ const QuestionsList = ({ questions, onEdit, onDel }) => {
 }
 
 QuestionsList.propTypes = {
-  onEdit: pt.func.isRequired,
+  onEditOpen: pt.func.isRequired,
   onDel: pt.func.isRequired,
   questions: pt.array.isRequired,
 };
