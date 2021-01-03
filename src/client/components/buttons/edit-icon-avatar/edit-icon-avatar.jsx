@@ -40,6 +40,10 @@ const EditIconAvatar = ({ type, onEdit }) => {
     case (typeElem.QUESTION):
       titleTooltip = `Редактировать этот вопрос`;
       break;
+    
+    case (typeElem.ANSWER):
+      titleTooltip = `Редактировать этот ответ`;
+      break;
   }
 
   const [isOpen, setIsOpen] = useState(false);
@@ -64,7 +68,7 @@ const EditIconAvatar = ({ type, onEdit }) => {
 };
 
 EditIconAvatar.propTypes = {
-  type: pt.oneOf([typeElem.DOC, typeElem.POS, typeElem.EMPLOYEE, typeElem.QUESTION]).isRequired,
+  type: pt.oneOf([typeElem.DOC, typeElem.POS, typeElem.EMPLOYEE, typeElem.QUESTION, typeElem.ANSWER]).isRequired,
   onEdit: pt.func.isRequired,
 };
 

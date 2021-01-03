@@ -32,7 +32,6 @@ const RuleDelete = ({ rule, deleteRule }) => {
   const classes = useStyles();
 
   const handleDeleteRule = () => {
-    console.log(`Нажали удалить правило`);
     deleteRule(rule);
   };
   

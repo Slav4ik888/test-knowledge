@@ -45,6 +45,11 @@ const DeleteIconAvatar = ({ type, onDel }) => {
       titleConfirm = `Вы действительно хотите удалить этот вопрос без возможности восстановления?`;
       titleTooltip = `Удалить этот вопрос`;
       break;
+      
+    case (typeElem.ANSWER):
+      titleConfirm = `Вы действительно хотите удалить этот ответ без возможности восстановления?`;
+      titleTooltip = `Удалить этот ответ`;
+      break;
   }
 
   const [isOpen, setIsOpen] = useState(false);
@@ -80,7 +85,7 @@ const DeleteIconAvatar = ({ type, onDel }) => {
 };
 
 DeleteIconAvatar.propTypes = {
-  type: pt.oneOf([typeElem.DOC, typeElem.POS, typeElem.EMPLOYEE, typeElem.QUESTION]).isRequired,
+  type: pt.oneOf([typeElem.DOC, typeElem.POS, typeElem.EMPLOYEE, typeElem.QUESTION, typeElem.ANSWER]).isRequired,
   onDel: pt.func.isRequired,
 };
 

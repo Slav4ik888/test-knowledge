@@ -128,7 +128,7 @@ const RuleRow = ({ rule, updateRule }) => {
 
   const handleUpdateRule = () => {
     if (newTitle !== rule.title || newRule !== rule.rule) {
-      console.log(`Есть изменения, обновляем правило`);
+      // console.log(`Есть изменения, обновляем правило`);
       rule.title = newTitle;
       rule.rule = newRule;
       updateRule(rule);

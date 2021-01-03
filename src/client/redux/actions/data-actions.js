@@ -107,9 +107,9 @@ export const createPosition = (position) => (dispatch) => {
 // Получаем positions
 export const getAllPositions = () => (dispatch) => {
   dispatch({ type: uiActionType.LOADING_UI });
+
   return axios.get(`/getAllPositions`)
     .then((res) => {
-      console.log(`Полученные positions: `, res.data.positions);
       dispatch({
         type: dataActionType.SET_POSITIONS,
         payload: res.data.positions,
@@ -202,9 +202,9 @@ export const setActiveDocument = (doc) => (dispatch) => {
 // Получаем documents
 export const getAllDocuments = () => (dispatch) => {
   dispatch({ type: uiActionType.LOADING_UI });
+
   return axios.get(`/getAllDocuments`)
     .then((res) => {
-      console.log(`Полученные documents: `, res.data.documents);
       dispatch({
         type: dataActionType.SET_DOCUMENTS,
         payload: res.data.documents,
@@ -418,7 +418,6 @@ export const createQuestion = (newQuestion) => (dispatch) => {
 
 // Загружаем questions по ruleId
 export const getAllQuestionsByRuleId = ({ ruleId }) => (dispatch) => {
-  console.log('ruleId: ', ruleId);
   dispatch({ type: uiActionType.LOADING_UI });
 
   return axios.get(`getAllQuestionsByRuleId/${ruleId}`)

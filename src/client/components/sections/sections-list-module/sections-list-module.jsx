@@ -16,13 +16,11 @@ const SectionsListModule = ({ activeDocument, documents }) => {
   if (!activeDocument) return null;
   
   const document = documents.find((doc) => doc.id === activeDocument.id);
-  console.log('document: ', document);
   // Получаем sections отсортированные по order
   let sectionsShow = [];
 
   if (document) {
     sectionsShow = sortingArr(document.sections, `order`);
-    console.log('sectionsShow: ', sectionsShow);
   }
 
   return (

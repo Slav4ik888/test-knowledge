@@ -168,10 +168,9 @@ export default function (state = initialState, action) {
 
       // Находим индекс где храниться нужная секция
       const idxLoadRuleSection = getIdxRulesFromDocAndSection(loadRules, state.activeRules, state.activeRules);
-      console.log('idxLoadRuleSection: ', idxLoadRuleSection);
       
       if (idxLoadRuleSection !== -1) { // Если в section уже есть rules, записываем поверх
-        console.log(`Для выбранной секции, rules уже загружали`);
+        // console.log(`Для выбранной секции, rules уже загружали`);
         loadRules[idxLoadRuleSection].rules = setRules;
 
       } else { // Если это первые загруженные правила, создаём
@@ -275,7 +274,7 @@ export default function (state = initialState, action) {
 
       const setIdxQuest = setQuestions.findIndex((obj) => obj.ruleId === setRuleId);
       if (setIdxQuest !== -1) { // Если в questions уже есть questions по ruleId, записываем поверх
-        console.log(`Для выбранной ruleId вопросы уже загружали`);
+        // console.log(`Для выбранной ruleId вопросы уже загружали`);
         setQuestions[setIdxQuest].questions = action.payload.questions;
       } else { // Если это первые загруженные questions, создаём
         console.log('Первый раз загружаем questions для rule');
@@ -289,7 +288,6 @@ export default function (state = initialState, action) {
         questions: setQuestions,
         loading: false,
       });
-    
     
     case dataActionType.UPDATE_QUESTION:
       let updQuestions = state.questions;

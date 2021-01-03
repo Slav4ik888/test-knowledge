@@ -84,6 +84,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
+// Скроллинг вверх
 const goTop = () => {
   if (window.pageYOffset !== 0) {
     window.scrollBy(0, -80);
@@ -96,7 +97,6 @@ const goTop = () => {
 
 const SectionsModuleRow = ({ docSelected, section, updateDocument }) => {
   
-  // if (loading) return null;
   const classes = useStyles();
 
   // Рендер rules
@@ -198,18 +198,13 @@ const SectionsModuleRow = ({ docSelected, section, updateDocument }) => {
 
 
 SectionsModuleRow.propTypes = {
-  // loading: pt.bool.isRequired,
   docSelected: pt.object,
   section: pt.object,
-  // rules: pt.array.isRequired,
   updateDocument: pt.func.isRequired,
-  // getAllRulesById: pt.func.isRequired,
 };
 
-const mapStateToProps = (state) => ({
-  // rules: state.data.rules,
-  // loading: state.UI.loading,
-});
+// const mapStateToProps = (state) => ({
+// });
 
 
-export default connect(mapStateToProps, { updateDocument })(SectionsModuleRow);
+export default connect(undefined, { updateDocument })(SectionsModuleRow);

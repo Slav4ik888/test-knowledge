@@ -21,7 +21,7 @@ import ElementAdd from '../../buttons/element-add/element-add';
 import CancelSubmitBtn from '../../buttons/cancel-submit-btn/cancel-submit-btn';
 // Functions
 import { typeElem, typeQuestions } from '../../../../types';
-import { getMaxOrder } from '../../../../server/utils/utils';
+import { getMaxOrder, createId } from '../../../../server/utils/utils';
 import { getQuestionsFromRuleId, sortingArr } from '../../../utils/utils';
 
 
@@ -88,7 +88,7 @@ const QuestionContainerEdit = ({ open, loading, onClose, question, updateQuestio
     }
   }, [open]);
 
-  const [newQuestion, setNewQuestion] = useState(question.question);
+  const [newQuestion, setNewQuestion] = useState(question);
   const handleEditQuestion = (e) => {
     const value = e.target.value;
     if (value !== question.question) {
@@ -97,22 +97,27 @@ const QuestionContainerEdit = ({ open, loading, onClose, question, updateQuestio
     }
   };
 
-  const handleAddAnswer = () => {
-    console.log(`Нажали добавить ответ`);
+  const handleAddAnswer = ({ title }) => {
+    const updQuestion = Object.assign({}, newQuestion);
+    const answers = {
+      answer: title,
+      id: createId(updQuestion.answers),
+    };
+    updQuestion.answers.push(answers);
+    setNewQuestion(updQuestion);
     setIsChange(true);
   };
-  const handleEditAnswer = () => {
+  const handleEditAnswer = (id) => {
     console.log(`Нажали редактировать ответ`);
     setIsChange(true);
   };
-  const handleDelAnswer = () => {
+  const handleDelAnswer = (id) => {
     console.log(`Нажали удалить ответ`);
     setIsChange(true);
   };
 
   const handleSubmit = () => {
-    console.log(`Нажали сохранить`);
-    // updateQuestion();
+    updateQuestion(newQuestion);
   };
 
   return (
@@ -133,22 +138,25 @@ const QuestionContainerEdit = ({ open, loading, onClose, question, updateQuestio
             <TextareaAutosize
               className={classes.questionBody}
               placeholder="Введите текст вопроса"
-              value={newQuestion}
+              value={newQuestion.question}
               rowsMin={2}
               onChange={handleEditQuestion} 
             />
           </div>
         </div>
 
-        <DialogContent dividers ref={listRef} className={classes.answerListBody} >
+        {/* dividers */}
+        <Typography variant="overline">Варианты ответов</Typography>
+
+        <DialogContent ref={listRef} className={classes.answerListBody} >
           <AnswersList
-            answers={question.answers}
+            answers={newQuestion.answers}
             onEdit={handleEditAnswer}
             onDel={handleDelAnswer}
           />
         </DialogContent>
-
-        <ElementAdd type={typeElem.ANSWER} onAdd={handleAddAnswer}/>
+        
+        <ElementAdd type={typeElem.ANSWER} onAdd={handleAddAnswer} />
 
         <DialogActions className={classes.action}>
           <CancelSubmitBtn

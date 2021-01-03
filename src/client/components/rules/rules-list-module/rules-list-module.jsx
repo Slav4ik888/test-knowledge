@@ -31,6 +31,7 @@ const RulesListModule = ({ loading, rules, docSelected, section, getAllRulesById
   const sectionId = section.id;
 
   let rulesShow = [];
+  
   // Получаем объект с rules для этой секции
   let activeRuleObj = getRulesFromDocAndSection(rules, docId, sectionId); 
 
@@ -38,10 +39,8 @@ const RulesListModule = ({ loading, rules, docSelected, section, getAllRulesById
     console.log(`Нет загр-х rules - ЗАГРУЖАЕМ`);
     getAllRulesById({ docId, sectionId });
 
-  } else {
-    console.log(`Есть загр-е - НЕ загружаем`);
-    // Получаем rules отсортированные по order
-    rulesShow = sortingArr(activeRuleObj.rules, `order`);
+  } else { // Есть загр-е - НЕ загружаем
+    rulesShow = sortingArr(activeRuleObj.rules, `order`); // Получаем rules отсортированные по order
   }
   
   return (

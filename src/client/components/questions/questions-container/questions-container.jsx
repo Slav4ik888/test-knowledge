@@ -49,10 +49,8 @@ const QuestionsContainer = ({ open, onClose, ruleId, errors, allQuestions, getAl
     console.log(`Нет загр-х questions - ЗАГРУЖАЕМ`);
     getAllQuestionsByRuleId({ ruleId });
 
-  } else {
-    console.log(`Есть загр-е - НЕ загружаем`);
-    // Получаем questions отсортированные по order
-    questions = sortingArr(activeQuestionsObj.questions, `order`);
+  } else { // Есть загр-е - НЕ загружаем
+    questions = sortingArr(activeQuestionsObj.questions, `order`); // Получаем questions отсортированные по order
   }
 
 
