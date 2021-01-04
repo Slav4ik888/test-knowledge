@@ -23,6 +23,7 @@ import CancelSubmitBtn from '../../buttons/cancel-submit-btn/cancel-submit-btn';
 import { typeElem, typeQuestions } from '../../../../types';
 import { getMaxOrder, createId } from '../../../../server/utils/utils';
 import { getQuestionsFromRuleId, sortingArr } from '../../../utils/utils';
+import { updateArrWithItemByField, getArrWithoutItemByField } from '../../../utils/arrays';
 
 
 const useStyles = makeStyles((theme) => ({
@@ -32,12 +33,12 @@ const useStyles = makeStyles((theme) => ({
   question: {
     width: `100%`,
     display: 'flex',
-    alignItems: `center`,
-    padding: theme.spacing(1, 2, 1, 2),
+    // alignItems: `center`,
+    padding: theme.spacing(1, 4, 1, 5),
     backgroundColor: theme.palette.background.bodyfield,
   },
   avatar: {
-    marginRight: theme.spacing(3),
+    margin: theme.spacing(4, 3, 0, 0),
     backgroundColor: theme.palette.primary.light,
   },
   questionBox: {
@@ -47,10 +48,12 @@ const useStyles = makeStyles((theme) => ({
   },
   questionBody: {
     padding: theme.spacing(2, 2, 2, 2),
+    marginBottom: `16px`,
     resize: `vertical`,
     borderColor: theme.border.light,
     outline: 0,  
     width: `100%`,
+    fontSize: `20px`,
   },
   // hover: {
   //   backgroundColor: theme.palette.background.sectionHover, // `#e9f6fc`,
@@ -58,7 +61,7 @@ const useStyles = makeStyles((theme) => ({
   answerListBody: {
     display: 'flex',
     flexWrap: 'wrap',
-    minHeight: `200px`,
+    minHeight: `180px`,
     backgroundColor: theme.palette.background.bodyfield,
   },
   action: {
@@ -99,20 +102,26 @@ const QuestionContainerEdit = ({ open, loading, onClose, question, updateQuestio
 
   const handleAddAnswer = ({ title }) => {
     const updQuestion = Object.assign({}, newQuestion);
-    const answers = {
+    const addAnswer = {
       answer: title,
       id: createId(updQuestion.answers),
     };
-    updQuestion.answers.push(answers);
+    updQuestion.answers.push(addAnswer);
     setNewQuestion(updQuestion);
     setIsChange(true);
   };
-  const handleEditAnswer = (id) => {
-    console.log(`Нажали редактировать ответ`);
+
+  const handleEditAnswer = (answer) => {
+    const updQuestion = Object.assign({}, newQuestion);
+    updQuestion.answers = updateArrWithItemByField(updQuestion.answers, `id`, answer);
+    setNewQuestion(updQuestion);
     setIsChange(true);
   };
-  const handleDelAnswer = (id) => {
-    console.log(`Нажали удалить ответ`);
+
+  const handleDelAnswer = (answer) => {
+    const updQuestion = Object.assign({}, newQuestion);
+    updQuestion.answers = getArrWithoutItemByField(updQuestion.answers, `id`, answer);
+    setNewQuestion(updQuestion);
     setIsChange(true);
   };
 
@@ -142,20 +151,18 @@ const QuestionContainerEdit = ({ open, loading, onClose, question, updateQuestio
               rowsMin={2}
               onChange={handleEditQuestion} 
             />
+            <Typography variant="overline">Варианты ответов</Typography>
           </div>
         </div>
 
-        {/* dividers */}
-        <Typography variant="overline">Варианты ответов</Typography>
-
-        <DialogContent ref={listRef} className={classes.answerListBody} >
+        <DialogContent dividers ref={listRef} className={classes.answerListBody} >
           <AnswersList
             answers={newQuestion.answers}
             onEdit={handleEditAnswer}
             onDel={handleDelAnswer}
           />
         </DialogContent>
-        
+
         <ElementAdd type={typeElem.ANSWER} onAdd={handleAddAnswer} />
 
         <DialogActions className={classes.action}>

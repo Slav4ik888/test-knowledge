@@ -69,4 +69,4 @@ app.use(express.static('dist'));
 
 app.listen(process.env.PORT || 8080, () => console.log(`Listening on port ${process.env.PORT || 8080}!`));
 
-//  git add . && git commit -m "handleAddAnswer" && git push origin master
+//  git add . && git commit -m "handleEditAnswer, handleDelAnswer" && git push origin master

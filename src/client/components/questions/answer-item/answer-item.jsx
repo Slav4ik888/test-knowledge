@@ -17,6 +17,11 @@ import { typeElem } from '../../../../types';
 
 
 const useStyles = makeStyles((theme) => ({
+  sprite: {
+    width: `calc(100% - 80px)`,
+    display: `flex`,
+    flexDirection: `row`,
+  },
   hover: {
     transition: `transform 0.2s`,
     backgroundColor: theme.palette.background.hover,
@@ -30,11 +35,11 @@ const useStyles = makeStyles((theme) => ({
     width: `calc(100% - 130px)`,
     flex: 1,
     padding: theme.spacing(1, 3, 1, 3),
-    fontSize: `25px`,
+    fontSize: `18px`,
   },
 }));
 
-const AnswerItem = ({ answer: { answer, id }, onEdit, onDel }) => {
+const AnswerItem = ({ answer, onEdit, onDel }) => {
   const classes = useStyles();
 
   const [showIcons, setShowIcons] = useState(false);
@@ -43,27 +48,27 @@ const AnswerItem = ({ answer: { answer, id }, onEdit, onDel }) => {
 
   const hover = showIcons ? classes.hover : ``;
 
-  const [newTitle, setNewTitle] = useState(answer);
+  const [newAnswer, setNewAnswer] = useState(answer);
   const handleEdit = (e) => {
     if (e.keyCode === 13 || e.keyCode === 27) {
       e.target.blur();
       handleUpdateAnswer();
     }
     const value = e.target.value;
-    setNewTitle(value);
+    const updAnswer = Object.assign({}, newAnswer);
+    updAnswer.answer = value;
+    setNewAnswer(updAnswer);
   };
 
   const handleBlur = () => handleUpdateAnswer();
 
   const handleUpdateAnswer = () => {
-    if (newTitle !== answer) {
-      console.log(`Есть изменения, обновляем ответ`);
-      // updateRule(rule);
+    if (newAnswer.answer !== answer.answer) {
+      onEdit(newAnswer);
     }
   };
 
-  // const handleEdit = () => onEdit(id);
-  const handleDel = () => onDel(id);
+  const handleDel = () => onDel(answer);
 
   return (
     <ListItem className={hover}>
@@ -78,7 +83,7 @@ const AnswerItem = ({ answer: { answer, id }, onEdit, onDel }) => {
           <InputBase
             className={classes.input}
             inputProps={{ 'aria-label': 'Заголовок ответа' }}
-            value={newTitle}
+            value={newAnswer.answer}
             type="text"
             placeholder="Введите заголовок ответа"
             onChange={handleEdit} 
@@ -89,7 +94,6 @@ const AnswerItem = ({ answer: { answer, id }, onEdit, onDel }) => {
         {
           showIcons &&
           <>
-            <EditIconAvatar type={typeElem.ANSWER} onEdit={handleEdit} />
             <DeleteIconAvatar type={typeElem.ANSWER} onDel={handleDel} />
           </>
         }

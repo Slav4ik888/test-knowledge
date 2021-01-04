@@ -89,7 +89,6 @@ export const getQuestionsFromRuleId = (allQuestions, ruleId) => {
  * 
  * @return {array} - result
  */
-
 export const sortingArr = (arr, fieldName) => {
   let result = [];
   result = result.concat(arr);
