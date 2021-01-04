@@ -12,6 +12,7 @@ import AddIcon from '@material-ui/icons/Add';
 // Components
 import { addSectionInDocument } from '../../sections/utils';
 import { addRuleInSection } from '../../rules/util';
+import { addAnswerInAnswers } from '../../questions/util';
 import { typeUpDown } from '../../../../types';
 
 
@@ -34,7 +35,7 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 
-const NewRowCreate = ({ loading, type, updateDocument, createRule, docSelected, section }) => {
+const NewRowCreate = ({ loading, type, updateDocument, createRule, docSelected, section, onAddAnswer }) => {
 
   const classes = useStyles();
   const [isHover, setIsHover] = useState(false);
@@ -45,8 +46,12 @@ const NewRowCreate = ({ loading, type, updateDocument, createRule, docSelected, 
     if (!loading) {
       if (type === typeUpDown.SECTION) {
         addSectionInDocument(`up`, docSelected, section, updateDocument);
+
       } else if (type === typeUpDown.RULE) {
         addRuleInSection(`up`, null, { docId: docSelected.id, sectionId: section.id }, createRule);
+
+      } else if (type === typeUpDown.ANSWER) {
+        addAnswerInAnswers(`up`, null, null, onAddAnswer);
       }
     }
   };
@@ -59,6 +64,10 @@ const NewRowCreate = ({ loading, type, updateDocument, createRule, docSelected, 
     
     case typeUpDown.RULE:
       tooltip = `Добавить правило`;
+      break;
+    
+    case typeUpDown.ANSWER:
+      tooltip = `Добавить ответ`;
       break;
   }
 
@@ -80,6 +89,7 @@ const NewRowCreate = ({ loading, type, updateDocument, createRule, docSelected, 
 NewRowCreate.propTypes = {
   updateDocument: pt.func.isRequired,
   createRule: pt.func.isRequired,
+  onAddAnswer: pt.func,
   loading: pt.bool.isRequired,
 };
 

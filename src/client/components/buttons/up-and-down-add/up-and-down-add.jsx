@@ -14,6 +14,7 @@ import AddIcon from '@material-ui/icons/Add';
 import { typeUpDown } from '../../../../types';
 import { addSectionInDocument } from '../../sections/utils';
 import { addRuleInSection } from '../../rules/util';
+import { addAnswerInAnswers } from '../../questions/util';
 
 
 const useStyles = makeStyles((theme) => ({
@@ -36,7 +37,7 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 // Выводит стрелки вверх и вниз, а при нажатии перемещает объект выше или ниже
-const UpAndDownAdd = ({ loading, type, docSelected, section, rule, upDown, rules, updateDocument, createRule }) => {
+const UpAndDownAdd = ({ loading, type, items, item, docSelected, section, rule, upDown, rules, updateDocument, createRule, onAddAnswer }) => {
   const classes = useStyles();
 
   const [isHover, setIsHover] = useState(false);
@@ -52,7 +53,12 @@ const UpAndDownAdd = ({ loading, type, docSelected, section, rule, upDown, rules
       } else if (type === typeUpDown.RULE) {
         // Добавляем пустое правило сверху или снизу 
         addRuleInSection(upDown, rules, rule, createRule);
+
+      } else if (type === typeUpDown.ANSWER) {
+        // Добавляем пустой ответ сверху или снизу 
+        addAnswerInAnswers(upDown, items, item, onAddAnswer);
       }
+
     }
   };
 
@@ -67,6 +73,11 @@ const UpAndDownAdd = ({ loading, type, docSelected, section, rule, upDown, rules
     
     case typeUpDown.RULE:
       tooltip = upDown === `up` ? `Добавить правило выше` : `Добавить правило ниже`;
+      placement = upDown === `up` ? `top` : `bottom`;
+      break;
+    
+    case typeUpDown.ANSWER:
+      tooltip = upDown === `up` ? `Добавить ответ выше` : `Добавить ответ ниже`;
       placement = upDown === `up` ? `top` : `bottom`;
       break;
   }
@@ -93,8 +104,11 @@ UpAndDownAdd.propTypes = {
   loading: pt.bool.isRequired,
   type: pt.string.isRequired,
   upDown: pt.string.isRequired,
+  items: pt.array,
+  item: pt.object,
   updateDocument: pt.func.isRequired,
   createRule: pt.func.isRequired,
+  onAddAnswer: pt.func,
   docSelected: pt.object,
   section: pt.object,
   rule: pt.object,
@@ -106,5 +120,8 @@ const mapStateToProps = (state) => ({
   rules: state.data.rules,
 });
 
+const mapActionsToProps = {
+  updateDocument, createRule
+};
 
-export default connect(mapStateToProps, { updateDocument, createRule })(UpAndDownAdd);
+export default connect(mapStateToProps, mapActionsToProps)(UpAndDownAdd);

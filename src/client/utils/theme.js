@@ -52,6 +52,7 @@ export default {
   },
   border: {
     light: `#ececec`,
+    answer: `#b3b9bf`,
   },
   typography: {
     useNextVariants: true

@@ -1,6 +1,6 @@
 exports.createId = (arr) => {
   let maxId = 1;
-  if (arr.length) {
+  if (arr && arr.length) {
     arr.forEach((item) => {
       if (item.id >= maxId) {
         maxId = +item.id + 1;
@@ -129,7 +129,7 @@ const getNextOrderForItem = (type, values, item) => {
   }
 };
 
-// Возвращает order для новой rule || section
+// Возвращает order для новой rule || section || answer
 exports.getNewOrderForItem = (condition, type, values, item) => {
   if (condition === `up`) return getPrevOrderForItem(type, values, item);
   if (condition === `down`) return getNextOrderForItem(type, values, item);

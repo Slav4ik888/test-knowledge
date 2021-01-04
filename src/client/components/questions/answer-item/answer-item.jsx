@@ -1,5 +1,6 @@
 import React, {useState} from 'react';
 import pt from 'prop-types';
+import cl from 'classnames';
 // MUI Stuff
 import { makeStyles } from '@material-ui/core/styles';
 import ListItem from '@material-ui/core/ListItem';
@@ -11,22 +12,30 @@ import InputBase from '@material-ui/core/InputBase';
 // Icons
 import FolderIcon from '@material-ui/icons/Folder';
 // Components
-import EditIconAvatar from '../../buttons/edit-icon-avatar/edit-icon-avatar';
+import UpAndDownAdd from '../../buttons/up-and-down-add/up-and-down-add';
+import UpAndDownArrows from '../../buttons/up-and-down-arrows/up-and-down-arrows';
 import DeleteIconAvatar from '../../buttons/delete-icon-avatar/delete-icon-avatar';
-import { typeElem } from '../../../../types';
+import { typeElem, typeUpDown } from '../../../../types';
 
 
 const useStyles = makeStyles((theme) => ({
-  sprite: {
-    width: `calc(100% - 80px)`,
+  container: {
     display: `flex`,
     flexDirection: `row`,
+    borderRadius: `5px`,
+    border: `1px solid`,
+    borderColor: theme.border.answer,
   },
   hover: {
     transition: `transform 0.2s`,
     backgroundColor: theme.palette.background.hover,
-    borderRadius: `5px`,
+    // borderRadius: `5px`,
     // height: theme.spacing(1),
+  },
+  sprite: {
+    width: `calc(100% - 80px)`,
+    display: `flex`,
+    flexDirection: `row`,
   },
   avatar: {
     backgroundColor: theme.palette.primary.light,
@@ -39,7 +48,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const AnswerItem = ({ answer, onEdit, onDel }) => {
+const AnswerItem = ({ answers, answer, onAdd, onEdit, onDel }) => {
   const classes = useStyles();
 
   const [showIcons, setShowIcons] = useState(false);
@@ -71,39 +80,48 @@ const AnswerItem = ({ answer, onEdit, onDel }) => {
   const handleDel = () => onDel(answer);
 
   return (
-    <ListItem className={hover}>
-      <ListItemAvatar>
-        <Avatar className={classes.avatar}>
-          <FolderIcon />
-        </Avatar>
-      </ListItemAvatar>
+    <>
+      <UpAndDownAdd type={typeUpDown.ANSWER} onAddAnswer={onAdd} items={answers} item={answer} upDown={`up`} />
 
-      <div className={classes.sprite} onMouseEnter={handleIsHoverOn} onMouseLeave={handleIsHoverOff}>
-        <Tooltip title="Нажмите, чтобы изменить заголовок ответа" placement="top" arrow enterDelay={1000} enterNextDelay={1000}>
-          <InputBase
-            className={classes.input}
-            inputProps={{ 'aria-label': 'Заголовок ответа' }}
-            value={newAnswer.answer}
-            type="text"
-            placeholder="Введите заголовок ответа"
-            onChange={handleEdit} 
-            onKeyDown={handleEdit}
-            onBlur={handleBlur}
-          />
-        </Tooltip>
-        {
-          showIcons &&
-          <>
-            <DeleteIconAvatar type={typeElem.ANSWER} onDel={handleDel} />
-          </>
-        }
-      </div>
-    </ListItem>
+      <ListItem className={cl(classes.container, hover)}>
+        <ListItemAvatar>
+          <Avatar className={classes.avatar}>
+            <FolderIcon />
+          </Avatar>
+        </ListItemAvatar>
+
+        <div className={classes.sprite} onMouseEnter={handleIsHoverOn} onMouseLeave={handleIsHoverOff}>
+          <Tooltip title="Нажмите, чтобы изменить заголовок ответа" placement="top" arrow enterDelay={1000} enterNextDelay={1000}>
+            <InputBase
+              className={classes.input}
+              inputProps={{ 'aria-label': 'Заголовок ответа' }}
+              value={newAnswer.answer}
+              type="text"
+              placeholder="Введите вариант ответа"
+              onChange={handleEdit} 
+              onKeyDown={handleEdit}
+              onBlur={handleBlur}
+            />
+          </Tooltip>
+          {
+            showIcons &&
+            <>
+              <DeleteIconAvatar type={typeElem.ANSWER} onDel={handleDel} />
+              <UpAndDownArrows type={typeUpDown.ANSWER} items={answers} item={answer} update={onEdit} />
+            </>
+          }
+        </div>
+      </ListItem>
+
+      <UpAndDownAdd type={typeUpDown.ANSWER} onAddAnswer={onAdd} items={answers} item={answer} upDown={`down`} />
+    </>
   );
 }
 
 AnswerItem.propTypes = {
+  answers: pt.array.isRequired,
   answer: pt.object.isRequired,
+  onAdd: pt.func.isRequired,
   onEdit: pt.func.isRequired,
   onDel: pt.func.isRequired,
 };

@@ -66,4 +66,5 @@ exports.typeListSelect = {
 exports.typeUpDown = {
   SECTION: `Раздел`,
   RULE: `Правило`,
+  ANSWER: `Ответ`,
 };

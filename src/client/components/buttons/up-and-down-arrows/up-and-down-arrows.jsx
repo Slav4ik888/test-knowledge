@@ -38,7 +38,7 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 // Выводит стрелки вверх и вниз, а при нажатии перемещает объект выше или ниже
-const UpAndDownArrows = ({ loading, type, docSelected, section, rules, rule, updateDocument, updateRule }) => {
+const UpAndDownArrows = ({ loading, type, docSelected, section, rules, rule, items, item, updateDocument, updateRule, update }) => {
   const classes = useStyles();
 
   const [isHover, setIsHover] = useState(false);
@@ -52,7 +52,9 @@ const UpAndDownArrows = ({ loading, type, docSelected, section, rules, rule, upd
         handleMoveSection(`up`);
       } else if (type === typeUpDown.RULE) {
         handleMoveRule(`up`);
-      } 
+      } else if (type === typeUpDown.ANSWER) {
+        handleMoveAnswer(`up`);
+      }
     }
   };
 
@@ -62,19 +64,23 @@ const UpAndDownArrows = ({ loading, type, docSelected, section, rules, rule, upd
         handleMoveSection(`down`);
       } else if (type === typeUpDown.RULE) {
         handleMoveRule(`down`);
-      } 
+      } else if (type === typeUpDown.ANSWER) {
+        handleMoveAnswer(`down`);
+      }
     }
   };
 
   // Перемещаем раздел
   const handleMoveSection = (condition) => {
     const idx = docSelected.sections.findIndex((sec) => sec.id === section.id);
-    const order = section.order;
-    const newOrder = getNewOrderForMoveItem(condition, `section`, docSelected, section);
+    if (idx !== -1) {
+      const order = section.order;
+      const newOrder = getNewOrderForMoveItem(condition, `section`, docSelected, section);
 
-    if (newOrder !== order) { // Сохраняем если есть изменения
-      docSelected.sections[idx].order = newOrder;
-      updateDocument(docSelected);
+      if (newOrder !== order) { // Сохраняем если есть изменения
+        docSelected.sections[idx].order = newOrder;
+        updateDocument(docSelected);
+      }
     }
   };
 
@@ -83,16 +89,23 @@ const UpAndDownArrows = ({ loading, type, docSelected, section, rules, rule, upd
     // Если в разделе уже есть хотя бы одно правило
     // Находим индекс где храниться нужная секция в rules так как там массив посекционный с rules
     const idxRule = getIdxRulesFromDocAndSection(rules, rule, rule);
-    const rulesInSection = rules[idxRule].rules;
-    const newOrder = getNewOrderForMoveItem(condition, `rule`, rulesInSection, rule);
+    if (idxRule !== -1) {
+      const rulesInSection = rules[idxRule].rules;
+      const newOrder = getNewOrderForMoveItem(condition, `rule`, rulesInSection, rule);
 
-    if (newOrder !== rule.order) {
-      // console.log(`Перемещаем правило`);
-      rule.order = newOrder;
-      updateRule(rule);
+      if (newOrder !== rule.order) {
+        // console.log(`Перемещаем правило`);
+        rule.order = newOrder;
+        updateRule(rule);
+      }
     }
   };
 
+  // Перемещаем ответ
+  const handleMoveAnswer = (condition) => {
+    item.order = getNewOrderForMoveItem(condition, `answer`, items, item);
+    update(item);
+  }
 
   let tooltipUp = ``;
   let tooltipDown = ``;
@@ -106,6 +119,11 @@ const UpAndDownArrows = ({ loading, type, docSelected, section, rules, rule, upd
     case typeUpDown.RULE:
       tooltipUp = `Переместить правило выше`;
       tooltipDown = `Переместить правило ниже`;
+      break;
+    
+    case typeUpDown.ANSWER:
+      tooltipUp = `Переместить ответ выше`;
+      tooltipDown = `Переместить ответ ниже`;
       break;
   }
   
@@ -138,12 +156,15 @@ const UpAndDownArrows = ({ loading, type, docSelected, section, rules, rule, upd
 UpAndDownArrows.propTypes = {
   loading: pt.bool.isRequired,
   type: pt.string.isRequired,
+  items: pt.array,
+  item: pt.object,
   docSelected: pt.object,
   section: pt.object,
   rules: pt.array,
   rule: pt.object,
   updateDocument: pt.func.isRequired,
   updateRule: pt.func.isRequired,
+  update: pt.func,
 };
 
 const mapStateToProps = (state) => ({

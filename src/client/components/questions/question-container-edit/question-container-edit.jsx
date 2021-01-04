@@ -65,7 +65,7 @@ const useStyles = makeStyles((theme) => ({
     backgroundColor: theme.palette.background.bodyfield,
   },
   action: {
-    padding: theme.spacing(0, 4, 4, 4),
+    padding: theme.spacing(4),
     backgroundColor: theme.palette.background.moduleAddInput,
   },
 }));
@@ -84,7 +84,6 @@ const QuestionContainerEdit = ({ open, loading, onClose, question, updateQuestio
   useEffect(() => {
     if (open) {
       const { current: listElement } = listRef;
-      console.log('listElement: ', listElement);
       if (listElement !== null) {
         listElement.focus();
       }
@@ -100,11 +99,12 @@ const QuestionContainerEdit = ({ open, loading, onClose, question, updateQuestio
     }
   };
 
-  const handleAddAnswer = ({ title }) => {
+  const handleAddAnswer = (answer) => {
     const updQuestion = Object.assign({}, newQuestion);
     const addAnswer = {
-      answer: title,
-      id: createId(updQuestion.answers),
+      answer: answer.answer,
+      id: answer.id,
+      order: answer.order,
     };
     updQuestion.answers.push(addAnswer);
     setNewQuestion(updQuestion);
@@ -127,6 +127,7 @@ const QuestionContainerEdit = ({ open, loading, onClose, question, updateQuestio
 
   const handleSubmit = () => {
     updateQuestion(newQuestion);
+    setIsChange(false);
   };
 
   return (
@@ -158,12 +159,13 @@ const QuestionContainerEdit = ({ open, loading, onClose, question, updateQuestio
         <DialogContent dividers ref={listRef} className={classes.answerListBody} >
           <AnswersList
             answers={newQuestion.answers}
+            onAdd={handleAddAnswer}
             onEdit={handleEditAnswer}
             onDel={handleDelAnswer}
           />
         </DialogContent>
 
-        <ElementAdd type={typeElem.ANSWER} onAdd={handleAddAnswer} />
+        {/* <ElementAdd type={typeElem.ANSWER} onAdd={handleAddAnswer} /> */}
 
         <DialogActions className={classes.action}>
           <CancelSubmitBtn
