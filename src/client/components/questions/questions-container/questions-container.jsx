@@ -22,9 +22,6 @@ const useStyles = makeStyles((theme) => ({
   dialog: {
     padding: theme.spacing(4),
   },
-  textField: {
-    margin: `10px auto 10px auto`,
-  },
   iconButton: {
     padding: 10,
   },

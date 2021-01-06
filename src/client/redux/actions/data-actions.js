@@ -305,8 +305,7 @@ export const setActiveRules = ({ docId, sectionId }) => (dispatch) => {
 // Загружаем rules
 export const getAllRulesById = ({ docId, sectionId }) => (dispatch) => {
   // console.log('docId, sectionId: ', docId, sectionId);
-
-  dispatch({ type: uiActionType.LOADING_UI });
+  // dispatch({ type: uiActionType.LOADING_UI });
   
   return axios.get(`/getAllRulesById/${docId}/${sectionId}`)
     .then((res) => {
@@ -418,7 +417,7 @@ export const createQuestion = (newQuestion) => (dispatch) => {
 
 // Загружаем questions по ruleId
 export const getAllQuestionsByRuleId = ({ ruleId }) => (dispatch) => {
-  dispatch({ type: uiActionType.LOADING_UI });
+  // dispatch({ type: uiActionType.LOADING_UI });
 
   return axios.get(`getAllQuestionsByRuleId/${ruleId}`)
     .then((res) => {

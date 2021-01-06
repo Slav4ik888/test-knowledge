@@ -11,7 +11,7 @@ import { makeStyles } from '@material-ui/core/styles';
 import RuleRow from '../rule-row/rule-row';
 import NewRowCreate from '../../buttons/new-row-create/new-row-create';
 import { getRulesFromDocAndSection, sortingArr } from '../../../utils/utils';
-import { typeUpDown } from '../../../../types';
+import { typeElem } from '../../../../types';
 
 
 const useStyles = makeStyles((theme) => ({
@@ -24,7 +24,7 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 
-const RulesListModule = ({ loading, rules, docSelected, section, getAllRulesById }) => {
+const RulesListModule = ({ errors, rules, docSelected, section, getAllRulesById }) => {
   const classes = useStyles();
 
   const docId = docSelected.id;
@@ -51,7 +51,7 @@ const RulesListModule = ({ loading, rules, docSelected, section, getAllRulesById
             rulesShow.map((rule) => <RuleRow key={rule.id}
               rule={rule}
             />)
-            : <NewRowCreate type={typeUpDown.RULE} docSelected={docSelected} section={section}/>
+            : <NewRowCreate type={typeElem.RULE} docSelected={docSelected} section={section}/>
         }
       </div>
     </>
@@ -60,14 +60,14 @@ const RulesListModule = ({ loading, rules, docSelected, section, getAllRulesById
 
 
 RulesListModule.propTypes = {
-  loading: pt.bool.isRequired,
+  errors: pt.object.isRequired,
   rules: pt.array.isRequired,
   getAllRulesById: pt.func.isRequired,
   // activeRules: pt.object.isRequired,
 };
 
 const mapStateToProps = (state) => ({
-  loading: state.UI.loading,
+  errors: state.UI.errors,
   rules: state.data.rules,
   // activeRules: state.data.activeRules,
 });

@@ -7,7 +7,7 @@ import { connect } from 'react-redux';
 // Component
 import SectionsModuleRow from '../sections-module-row/sections-module-row';
 import NewRowCreate from '../../buttons/new-row-create/new-row-create';
-import { typeUpDown } from '../../../../types';
+import { typeElem } from '../../../../types';
 import { sortingArr } from '../../../utils/utils';
 
 
@@ -30,7 +30,7 @@ const SectionsListModule = ({ activeDocument, documents }) => {
           sectionsShow.map((section) => <SectionsModuleRow key={section.id}
               section={section}
               docSelected={activeDocument}
-            />) : <NewRowCreate type={typeUpDown.SECTION} docSelected={activeDocument} />
+            />) : <NewRowCreate type={typeElem.SECTION} docSelected={activeDocument} />
       }
 
     </>

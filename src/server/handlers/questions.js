@@ -17,7 +17,7 @@ async function createQuestion(req, res) {
     typeQuestion: req.body.typeQuestion,
     question: req.body.question,
     answers: [],
-    answerTrue: [],
+    // answerTrue: [],
   };
 
   try {
@@ -118,7 +118,7 @@ async function updateQuestion(req, res) {
       typeQuestion: req.body.typeQuestion,
       question: req.body.question,
       answers: req.body.answers,
-      answerTrue: req.body.answerTrue,
+      // answerTrue: req.body.answerTrue,
     };
 
     const updateRes = await db.doc(`questions/${req.user.companyId}/questions/${req.body.id}`).update(updateQuestion);

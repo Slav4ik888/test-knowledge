@@ -13,9 +13,12 @@ import { typeConfirm, typeElem } from '../../../../types';
 
 
 const useStyles = makeStyles((theme) => ({
-  // delIcon: {
-  //   marginRight: 30,
-  // },
+  editIcon: {
+    position: `absolute`,
+    top: 9,
+    right: 60,
+    // marginRight: 30,
+  },
 }));
 
 
@@ -60,7 +63,7 @@ const EditIconAvatar = ({ type, onEdit }) => {
 
   return (
     <Tooltip title={titleTooltip} placement="bottom" arrow enterDelay={1000} enterNextDelay={1000}>
-      <IconButton aria-label="Edit" onClick={handleOk} className={classes.delIcon}>
+      <IconButton aria-label="Edit" onClick={handleOk} className={classes.editIcon}>
         <Edit />
       </IconButton>
     </Tooltip>

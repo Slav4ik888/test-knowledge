@@ -11,7 +11,7 @@ import Tooltip from '@material-ui/core/Tooltip';
 // Icons
 import AddIcon from '@material-ui/icons/Add';
 // Components
-import { typeUpDown } from '../../../../types';
+import { typeElem } from '../../../../types';
 import { addSectionInDocument, addRuleInSection, addAnswerInAnswers } from '../../../utils/moveItemInArray';
 
 
@@ -35,24 +35,26 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 // Выводит новый элемент выше или ниже
-const UpAndDownAdd = ({ loading, type, items, item, docSelected, section, rule, upDown, rules, updateDocument, createRule, onAddAnswer }) => {
+const AddIconRow = ({ loading, type, up, items, item, docSelected, section, rule, rules, updateDocument, createRule, onAddAnswer }) => {
   const classes = useStyles();
 
   const [isHover, setIsHover] = useState(false);
   const handleIsHoverOn = () => setIsHover(true);
   const handleIsHoverOff = () => setIsHover(false);
   
+  const upDown = up ? `up` : `down`; // Куда выводим новый элемент
+
   const handleAddItem = () => {
     if (!loading) {
-      if (type === typeUpDown.SECTION) {
+      if (type === typeElem.SECTION) {
         // Добавляем пустой раздел сверху или снизу
         addSectionInDocument(upDown, docSelected, section, updateDocument);
 
-      } else if (type === typeUpDown.RULE) {
+      } else if (type === typeElem.RULE) {
         // Добавляем пустое правило сверху или снизу 
         addRuleInSection(upDown, rules, rule, createRule);
 
-      } else if (type === typeUpDown.ANSWER) {
+      } else if (type === typeElem.ANSWER) {
         // Добавляем пустой ответ сверху или снизу 
         addAnswerInAnswers(upDown, items, item, onAddAnswer);
       }
@@ -64,17 +66,17 @@ const UpAndDownAdd = ({ loading, type, items, item, docSelected, section, rule, 
   let placement = ``;
 
   switch (type) {
-    case typeUpDown.SECTION:
+    case typeElem.SECTION:
       tooltip = upDown === `up` ? `Добавить раздел выше` : `Добавить раздел ниже`;
       placement = upDown === `up` ? `top` : `bottom`;
       break;
     
-    case typeUpDown.RULE:
+    case typeElem.RULE:
       tooltip = upDown === `up` ? `Добавить правило выше` : `Добавить правило ниже`;
       placement = upDown === `up` ? `top` : `bottom`;
       break;
     
-    case typeUpDown.ANSWER:
+    case typeElem.ANSWER:
       tooltip = upDown === `up` ? `Добавить ответ выше` : `Добавить ответ ниже`;
       placement = upDown === `up` ? `top` : `bottom`;
       break;
@@ -98,10 +100,10 @@ const UpAndDownAdd = ({ loading, type, items, item, docSelected, section, rule, 
 };
 
 
-UpAndDownAdd.propTypes = {
+AddIconRow.propTypes = {
   loading: pt.bool.isRequired,
-  type: pt.string.isRequired,
-  upDown: pt.string.isRequired,
+  type: pt.oneOf([typeElem.SECTION, typeElem.RULE, typeElem.ANSWER]).isRequired,
+  up: pt.bool,
   items: pt.array,
   item: pt.object,
   updateDocument: pt.func.isRequired,
@@ -122,4 +124,4 @@ const mapActionsToProps = {
   updateDocument, createRule
 };
 
-export default connect(mapStateToProps, mapActionsToProps)(UpAndDownAdd);
+export default connect(mapStateToProps, mapActionsToProps)(AddIconRow);

@@ -1,5 +1,6 @@
 import React, {useState} from 'react';
 import pt from 'prop-types';
+import cl from 'classnames';
 // MUI Stuff
 import { makeStyles } from '@material-ui/core/styles';
 import Tooltip from '@material-ui/core/Tooltip';
@@ -13,9 +14,23 @@ import { typeConfirm, typeElem } from '../../../../types';
 
 
 const useStyles = makeStyles((theme) => ({
-  // delIcon: {
-  //   marginRight: 30,
-  // },
+  containerDoc: {
+    position: `absolute`,
+    top: 8,
+    right: 55,
+  },
+  containerQuestion: {
+    position: `absolute`,
+    top: 9,
+    right: 5,
+  },
+  containerAnswer: {
+    position: `absolute`,
+    bottom: -25,
+    right: 5,
+    width: `20px`,
+    height: `20px`, 
+  },
 }));
 
 
@@ -67,7 +82,11 @@ const DeleteIconAvatar = ({ type, onDel }) => {
   return (
     <>
       <Tooltip title={titleTooltip} placement="bottom" arrow enterDelay={1000} enterNextDelay={1000}>
-        <IconButton aria-label="Delete" onClick={handleOpenConfirm} className={classes.delIcon}>
+        <IconButton aria-label="Delete" onClick={handleOpenConfirm} className={cl(
+          { [classes.containerDoc]: type === typeElem.DOC },
+          { [classes.containerQuestion]: type === typeElem.QUESTION },
+          { [classes.containerAnswer]: type === typeElem.ANSWER },
+        )}>
           <Delete />
         </IconButton>
       </Tooltip>

@@ -41,10 +41,10 @@ exports.typeQuestions = {
 exports.typeElem = {
   DOC: `DOC`,
   POS: `POS`,
-  SECTION: `SECTION`,
-  RULE: `RULE`,
+  SECTION: `Раздел`,
+  RULE: `Правило`,
   QUESTION: `QUESTION`,
-  ANSWER: `ANSWER`,
+  ANSWER: `Ответ`,
   EMPLOYEE: `EMPLOYEE`,
 };
 

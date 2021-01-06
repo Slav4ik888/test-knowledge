@@ -10,10 +10,8 @@ import Tooltip from '@material-ui/core/Tooltip';
 // Icons
 import AddIcon from '@material-ui/icons/Add';
 // Components
-import { addSectionInDocument } from '../../sections/utils';
-import { addRuleInSection } from '../../rules/util';
-import { addAnswerInAnswers } from '../../questions/util';
-import { typeUpDown } from '../../../../types';
+import { addSectionInDocument, addRuleInSection, addAnswerInAnswers } from '../../../utils/moveItemInArray';
+import { typeElem } from '../../../../types';
 
 
 const useStyles = makeStyles((theme) => ({
@@ -44,13 +42,13 @@ const NewRowCreate = ({ loading, type, updateDocument, createRule, docSelected, 
 
   const handleCreate = () => {
     if (!loading) {
-      if (type === typeUpDown.SECTION) {
+      if (type === typeElem.SECTION) {
         addSectionInDocument(`up`, docSelected, section, updateDocument);
 
-      } else if (type === typeUpDown.RULE) {
+      } else if (type === typeElem.RULE) {
         addRuleInSection(`up`, null, { docId: docSelected.id, sectionId: section.id }, createRule);
 
-      } else if (type === typeUpDown.ANSWER) {
+      } else if (type === typeElem.ANSWER) {
         addAnswerInAnswers(`up`, null, null, onAddAnswer);
       }
     }
@@ -58,15 +56,15 @@ const NewRowCreate = ({ loading, type, updateDocument, createRule, docSelected, 
 
   let tooltip = ``;
   switch (type) {
-    case typeUpDown.SECTION:
+    case typeElem.SECTION:
       tooltip = `Добавить раздел `;
       break;
     
-    case typeUpDown.RULE:
+    case typeElem.RULE:
       tooltip = `Добавить правило`;
       break;
     
-    case typeUpDown.ANSWER:
+    case typeElem.ANSWER:
       tooltip = `Добавить ответ`;
       break;
   }
@@ -87,6 +85,7 @@ const NewRowCreate = ({ loading, type, updateDocument, createRule, docSelected, 
 
 
 NewRowCreate.propTypes = {
+  type: pt.oneOf([typeElem.SECTION, typeElem.RULE, typeElem.ANSWER]).isRequired,
   updateDocument: pt.func.isRequired,
   createRule: pt.func.isRequired,
   onAddAnswer: pt.func,

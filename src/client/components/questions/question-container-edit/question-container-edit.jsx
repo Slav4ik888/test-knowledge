@@ -4,6 +4,7 @@ import cl from 'classnames';
 // Readux Stuff
 import { connect } from 'react-redux';
 import { updateQuestion } from '../../../redux/actions/data-actions';
+import { clearErrors } from '../../../redux/actions/ui-actions';
 // MUI Stuff
 import { makeStyles } from '@material-ui/core/styles';
 import Dialog from '@material-ui/core/Dialog';
@@ -13,7 +14,7 @@ import DialogActions from '@material-ui/core/DialogActions';
 import Avatar from '@material-ui/core/Avatar';
 import TextareaAutosize from '@material-ui/core/TextareaAutosize';
 // Icons
-import HelpOutlineIcon from '@material-ui/icons/HelpOutline';
+import HelpIcon from '@material-ui/icons/Help';
 // Components
 import DialogTitle from '../../dialogs/dialog-title/dialog-title';
 import AnswersList from '../answers-list/answers-list';
@@ -72,9 +73,10 @@ const useStyles = makeStyles((theme) => ({
 
 
 // Контейнер с вопросом и ответами на него, которые можно создавать и редактировать
-const QuestionContainerEdit = ({ open, loading, onClose, question, updateQuestion }) => {
+const QuestionContainerEdit = ({ open, loading, onClose, question, updateQuestion, clearErrors }) => {
+  
   if (!open) return null;
-
+  
   const classes = useStyles();
   const [isChange, setIsChange] = useState(false);
 
@@ -91,37 +93,42 @@ const QuestionContainerEdit = ({ open, loading, onClose, question, updateQuestio
   }, [open]);
 
   const [newQuestion, setNewQuestion] = useState(question);
+  
   const handleEditQuestion = (e) => {
     const value = e.target.value;
+
     if (value !== question.question) {
+      const updQuestion = Object.assign({}, newQuestion);
+      updQuestion.question = value;
       setIsChange(true);
-      setNewQuestion(value);
+      setNewQuestion(updQuestion);
     }
   };
 
   const handleAddAnswer = (answer) => {
-    const updQuestion = Object.assign({}, newQuestion);
+    console.log('handleAddAnswer');
+
     const addAnswer = {
       answer: answer.answer,
+      trueAnswer: answer.trueAnswer,
       id: answer.id,
       order: answer.order,
     };
-    updQuestion.answers.push(addAnswer);
-    setNewQuestion(updQuestion);
+    newQuestion.answers.push(addAnswer);
+    setNewQuestion(newQuestion);
     setIsChange(true);
+    clearErrors();
   };
 
   const handleEditAnswer = (answer) => {
-    const updQuestion = Object.assign({}, newQuestion);
-    updQuestion.answers = updateArrWithItemByField(updQuestion.answers, `id`, answer);
-    setNewQuestion(updQuestion);
+    newQuestion.answers = updateArrWithItemByField(newQuestion.answers, `id`, answer);
+    setNewQuestion(newQuestion);
     setIsChange(true);
   };
 
   const handleDelAnswer = (answer) => {
-    const updQuestion = Object.assign({}, newQuestion);
-    updQuestion.answers = getArrWithoutItemByField(updQuestion.answers, `id`, answer);
-    setNewQuestion(updQuestion);
+    newQuestion.answers = getArrWithoutItemByField(newQuestion.answers, `id`, answer);
+    setNewQuestion(newQuestion);
     setIsChange(true);
   };
 
@@ -141,7 +148,7 @@ const QuestionContainerEdit = ({ open, loading, onClose, question, updateQuestio
 
         <div className={classes.question}>
           <Avatar className={classes.avatar}>
-            <HelpOutlineIcon />
+            <HelpIcon />
           </Avatar>
           <div className={classes.questionBox}>
             <Typography variant="overline">Вопрос</Typography>
@@ -186,6 +193,7 @@ QuestionContainerEdit.propTypes = {
   onClose: pt.func.isRequired,
   question: pt.object,
   updateQuestion: pt.func.isRequired,
+  clearErrors: pt.func.isRequired,
 };
 
 const mapStateToProps = (state) => ({
@@ -193,7 +201,7 @@ const mapStateToProps = (state) => ({
 });
 
 const mapActionsToProps = {
-  updateQuestion,
+  updateQuestion, clearErrors,
 };
 
 export default connect(mapStateToProps, mapActionsToProps)(QuestionContainerEdit);
