@@ -4,10 +4,8 @@ const { getMaxOrder } = require('../utils/utils');
 
 async function createQuestion(req, res) {
   // является ли пользователь Админом или Владельцем аккаунта
-  const validData = await validationAdminAuthority(req.user);
-  const { valid, errors } = validData;
-  if (!valid) return res.status(400).json(errors)
-
+  const { valid, errors } = await validationAdminAuthority(req.user);
+  if (!valid) return res.status(400).json(errors);
   
   let newQuestion = {
     ruleId: req.params.ruleId,
@@ -17,7 +15,6 @@ async function createQuestion(req, res) {
     typeQuestion: req.body.typeQuestion,
     question: req.body.question,
     answers: [],
-    // answerTrue: [],
   };
 
   try {
@@ -30,7 +27,7 @@ async function createQuestion(req, res) {
     newQuestion.id = createRes.id;
 
     // Сохраняем newRule с добавленным id
-    const updateRes = await db.collection(`questions`)
+    await db.collection(`questions`)
       .doc(req.user.companyId)
       .collection(`questions`)
       .doc(createRes.id)
@@ -45,12 +42,13 @@ async function createQuestion(req, res) {
 };
 
 // Загружаем questions по ruleId
+// ruleId  берём либо из params либо из переданного req.ruleId
 async function getAllQuestionsByRuleId(req, res) {
   try {
     const questionRes = await db.collection(`questions`)
       .doc(req.user.companyId)
       .collection(`questions`)
-      .where(`ruleId`, `==`, req.params.ruleId)
+      .where(`ruleId`, `==`, req.ruleId ? req.ruleId : req.params.ruleId)
       .get();
     
     let questions = [];
@@ -136,6 +134,7 @@ async function updateQuestion(req, res) {
 
 };
 
+// Удаляем вопрос
 async function deleteQuestion(req, res) {
   // является ли пользователь Админом или Владельцем аккаунта
   const validData = await validationAdminAuthority(req.user);
@@ -144,16 +143,35 @@ async function deleteQuestion(req, res) {
 
   try {
     const delRes = await db.doc(`questions/${req.user.companyId}/questions/${req.params.questionId}`).delete();
-    console.log(`deleteQuestion ${req.params.questionId}`);
+    console.log(`deleteQuestion i - ${req.params.questionId}`);
 
-    return res.json({ message: `Вопрос успешно удалён` });
-
+    if (req.update) {
+      return null;
+    } else {
+      return res.json({ message: `Вопрос успешно удалён` });
+    }
   } catch (err) {
     console.error(err);
     return res.status(500).json({ general: err.code });
   }
 };
 
-// TODO: удалять все questions по ruleId 
-// TODO: когда удаляют rule удалять все questions
-module.exports = { createQuestion, getAllQuestionsByRuleId, updateQuestion, deleteQuestion };
+// Удаляем все Questions которые есть в Rule
+// Вызывается при удалении Rule, чтобы в params был ruleId
+async function deleteAllQuestionsByRuleId(req, res, ruleId) {
+
+  try {
+    req.update = true;
+    req.ruleId = ruleId;
+    const allQuestions = await getAllQuestionsByRuleId(req, res);
+    
+    allQuestions.forEach((quest) => db.doc(`questions/${req.user.companyId}/questions/${quest.id}`).delete());
+
+  } catch (err) {
+    console.error(err);
+    return res.status(500).json({ general: err.code });
+  }
+
+};
+
+module.exports = { createQuestion, getAllQuestionsByRuleId, updateQuestion, deleteQuestion, deleteAllQuestionsByRuleId };

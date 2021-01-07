@@ -14,22 +14,22 @@ import { typeConfirm, typeElem } from '../../../../types';
 
 
 const useStyles = makeStyles((theme) => ({
-  containerDoc: {
+  doc: {
     position: `absolute`,
     top: 8,
     right: 55,
   },
-  containerQuestion: {
+  question: {
     position: `absolute`,
     top: 9,
     right: 5,
   },
-  containerAnswer: {
+  answer: {
     position: `absolute`,
-    bottom: -25,
-    right: 5,
-    width: `20px`,
-    height: `20px`, 
+    top: 9,
+    right: 65,
+    // width: `20px`,
+    // height: `20px`, 
   },
 }));
 
@@ -83,9 +83,9 @@ const DeleteIconAvatar = ({ type, onDel }) => {
     <>
       <Tooltip title={titleTooltip} placement="bottom" arrow enterDelay={1000} enterNextDelay={1000}>
         <IconButton aria-label="Delete" onClick={handleOpenConfirm} className={cl(
-          { [classes.containerDoc]: type === typeElem.DOC },
-          { [classes.containerQuestion]: type === typeElem.QUESTION },
-          { [classes.containerAnswer]: type === typeElem.ANSWER },
+          { [classes.doc]: type === typeElem.DOC },
+          { [classes.question]: type === typeElem.QUESTION },
+          { [classes.answer]: type === typeElem.ANSWER },
         )}>
           <Delete />
         </IconButton>

@@ -39,7 +39,7 @@ export const addRuleInSection = (type, rules, rule, func) => {
     idxRule = getIdxRulesFromDocAndSection(rules, rule, rule);
     rulesInSection = rules[idxRule].rules;
   }
-  
+
   const newRule = {
     title: ``,
     rule: ``,

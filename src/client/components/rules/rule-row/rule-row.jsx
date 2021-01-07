@@ -3,7 +3,7 @@ import pt from 'prop-types';
 import cl from 'classnames';
 // Readux Stuff
 import { connect } from 'react-redux';
-import { updateRule } from '../../../redux/actions/data-actions';
+import { createRule, updateRule } from '../../../redux/actions/data-actions';
 // MUI Stuff
 import { makeStyles } from '@material-ui/core/styles';
 import Avatar from '@material-ui/core/Avatar';
@@ -19,10 +19,10 @@ import DescriptionIcon from '@material-ui/icons/Description';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 // Components
 import RuleDelete from '../rule-delete/rule-delete';
-import UpAndDownAdd from '../../buttons/up-and-down-add/up-and-down-add';
+import AddIconRow from '../../buttons/add-icon-row/add-icon-row';
 import UpAndDownArrows from '../../buttons/up-and-down-arrows/up-and-down-arrows';
 import RuleTestBox from '../rule-test-box/rule-test-box';
-import { typeUpDown } from '../../../../types';
+import { typeElem } from '../../../../types';
 
 
 const useStyles = makeStyles((theme) => ({
@@ -96,7 +96,7 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 // Строка (модуль) с rule
-const RuleRow = ({ rule, updateRule }) => {
+const RuleRow = ({ rules, rule, createRule, updateRule }) => {
   if (!rule) return null;
 
   const classes = useStyles();
@@ -137,8 +137,6 @@ const RuleRow = ({ rule, updateRule }) => {
   
   return (
     <>
-      <UpAndDownAdd type={typeUpDown.RULE} rule={rule} upDown={`up`} />
-      
       <Card className={classes.container} onMouseLeave={handleUpdateRule} >
         <div className={classes.header} >
           <Avatar className={classes.avatar}>
@@ -162,7 +160,7 @@ const RuleRow = ({ rule, updateRule }) => {
             {
               isHover && <>
                 <RuleDelete rule={rule} />
-                <UpAndDownArrows type={typeUpDown.RULE} rule={rule} />
+                <UpAndDownArrows type={typeElem.RULE} rule={rule} />
               </>
             }
           </div>
@@ -197,23 +195,26 @@ const RuleRow = ({ rule, updateRule }) => {
 
       </Card>
 
-      <UpAndDownAdd type={typeUpDown.RULE} rule={rule} upDown={`down`} />
+      <AddIconRow type={typeElem.RULE} items={rules} item={rule} onAdd={createRule} />
     </>
   );
 };
 
 
 RuleRow.propTypes = {
+  rules: pt.array.isRequired,
   rule: pt.object.isRequired,
+  createRule: pt.func.isRequired,
   updateRule: pt.func.isRequired,
 };
 
-// const mapStateToProps = (state) => ({
-//   ruleStored: state.UI.ruleStored,
-// });
+const mapStateToProps = (state) => ({
+  rules: state.data.rules,
+});
 
 const mapActionsToProps = {
+  createRule,
   updateRule,
 };
 
-export default connect(undefined, mapActionsToProps)(RuleRow);
+export default connect(mapStateToProps, mapActionsToProps)(RuleRow);

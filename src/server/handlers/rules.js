@@ -1,5 +1,6 @@
 const { db } = require('../firebase/admin');
 const { validationAdminAuthority } = require('../utils/validators');
+const { deleteAllQuestionsByRuleId } = require('./questions');
 const { getMaxOrder } = require('../utils/utils');
 
 async function createRule(req, res) {
@@ -138,6 +139,7 @@ async function updateRule(req, res) {
   };
 };
 
+
 async function deleteRule(req, res) {
   // является ли пользователь Админом или Владельцем аккаунта или 
   const validData = await validationAdminAuthority(req.user); 
@@ -148,7 +150,10 @@ async function deleteRule(req, res) {
     const updateRes = await db.doc(`rules/${req.user.companyId}/rules/${req.params.ruleId}`)
       .delete();
     console.log(`deleteRule`);
-    
+
+    // Удалять все questions
+    const delQuestions = await deleteAllQuestionsByRuleId(req, res);
+
     return res.json({ message: `Правило успешно удалено` });
     
   } catch (err) {
@@ -174,10 +179,14 @@ async function deleteAllRulesById(req, res) {
     allRules.forEach((rule) => {
       db.doc(`rules/${req.user.companyId}/rules/${rule.id}`).delete();
       console.log(`deleteRule - ${rule.id}`);
+      // Удалять все questions
+      deleteAllQuestionsByRuleId(req, res, rule.id);
     });
+
     if (allRules.length) {
       console.log(`Правила успешно удалены`);
       return res.json({ message: `Правила успешно удалены` });
+
     } else {
       console.log(`Правила в разделе отсутствовали`);
       return res.json({ message: `Правила в разделе отсутствовали` });

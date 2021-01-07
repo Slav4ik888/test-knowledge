@@ -157,7 +157,7 @@ const AnswerItem = ({ answers, answer, onAdd, onEdit, onDel }) => {
         </ListItem>
       </form>
 
-      <AddIconRow type={typeElem.ANSWER} onAddAnswer={onAdd} items={answers} item={answer} />
+      <AddIconRow type={typeElem.ANSWER} onAdd={onAdd} items={answers} item={answer} />
     </>
   );
 }

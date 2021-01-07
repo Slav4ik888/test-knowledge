@@ -16,7 +16,7 @@ const useStyles = makeStyles((theme) => ({
     flexDirection: `row`,
     width: `100%`,
     // marginTop: theme.spacing(2),
-    padding: theme.spacing(1, 0, 1, 0),
+    padding: theme.spacing(1, 1, 0, 0),
     // backgroundColor: theme.palette.background.bodyfield,
   },
 }));

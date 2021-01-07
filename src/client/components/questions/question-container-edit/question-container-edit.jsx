@@ -124,12 +124,14 @@ const QuestionContainerEdit = ({ open, loading, onClose, question, updateQuestio
     newQuestion.answers = updateArrWithItemByField(newQuestion.answers, `id`, answer);
     setNewQuestion(newQuestion);
     setIsChange(true);
+    clearErrors();
   };
 
   const handleDelAnswer = (answer) => {
     newQuestion.answers = getArrWithoutItemByField(newQuestion.answers, `id`, answer);
     setNewQuestion(newQuestion);
     setIsChange(true);
+    clearErrors();
   };
 
   const handleSubmit = () => {

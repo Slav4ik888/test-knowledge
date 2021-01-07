@@ -2,13 +2,13 @@ import React from 'react';
 import pt from 'prop-types';
 // Readux Stuff
 import { connect } from 'react-redux';
-import { getAllRulesById } from '../../../redux/actions/data-actions';
+import { getAllRulesById, createRule } from '../../../redux/actions/data-actions';
 // MUI Stuff
 import { makeStyles } from '@material-ui/core/styles';
 // Icons
-// import CircularProgress from '@material-ui/core/CircularProgress';
 // Components
 import RuleRow from '../rule-row/rule-row';
+import AddIconRow from '../../buttons/add-icon-row/add-icon-row';
 import NewRowCreate from '../../buttons/new-row-create/new-row-create';
 import { getRulesFromDocAndSection, sortingArr } from '../../../utils/utils';
 import { typeElem } from '../../../../types';
@@ -24,7 +24,7 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 
-const RulesListModule = ({ errors, rules, docSelected, section, getAllRulesById }) => {
+const RulesListModule = ({ errors, rules, docSelected, section, getAllRulesById, createRule }) => {
   const classes = useStyles();
 
   const docId = docSelected.id;
@@ -41,17 +41,21 @@ const RulesListModule = ({ errors, rules, docSelected, section, getAllRulesById 
 
   } else { // Есть загр-е - НЕ загружаем
     rulesShow = sortingArr(activeRuleObj.rules, `order`); // Получаем rules отсортированные по order
+    console.log(rulesShow);
   }
   
   return (
     <>
       <div className={classes.rows}>
         {
-          rulesShow.length ?
-            rulesShow.map((rule) => <RuleRow key={rule.id}
-              rule={rule}
-            />)
-            : <NewRowCreate type={typeElem.RULE} docSelected={docSelected} section={section}/>
+          rulesShow.length ? <>
+            <AddIconRow up type={typeElem.RULE} items={rules} item={rulesShow[0]} onAdd={createRule} />
+            {
+              rulesShow.map((rule) => <RuleRow key={rule.id}
+                rule={rule}
+              />)
+            }
+            </> : <NewRowCreate type={typeElem.RULE} docSelected={docSelected} section={section}/>
         }
       </div>
     </>
@@ -63,6 +67,7 @@ RulesListModule.propTypes = {
   errors: pt.object.isRequired,
   rules: pt.array.isRequired,
   getAllRulesById: pt.func.isRequired,
+  createRule: pt.func.isRequired,
   // activeRules: pt.object.isRequired,
 };
 
@@ -72,5 +77,9 @@ const mapStateToProps = (state) => ({
   // activeRules: state.data.activeRules,
 });
 
+const mapActionsToProps = {
+  getAllRulesById,
+  createRule,
+};
 
-export default connect(mapStateToProps, { getAllRulesById })(RulesListModule);
+export default connect(mapStateToProps, mapActionsToProps)(RulesListModule);

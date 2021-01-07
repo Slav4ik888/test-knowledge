@@ -32,7 +32,7 @@ const AnswersList = ({ answers, onAdd, onEdit, onDel }) => {
       <List height={200} className={classes.list}>
         {
           answersShow.length ? <>
-            <AddIconRow up type={typeElem.ANSWER} onAddAnswer={onAdd} items={answersShow} item={answersShow[0]} />
+            <AddIconRow up type={typeElem.ANSWER} onAdd={onAdd} items={answersShow} item={answersShow[0]} />
             
             {
               answersShow.map((answer, i) => <AnswerItem key={`${answer.id} + ${i}`}

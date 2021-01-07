@@ -32,6 +32,16 @@ const useStyles = makeStyles((theme) => ({
     height: `24px`, 
     color: theme.palette.background.sectionIcon,
   },
+  answerUp: {
+    position: `absolute`,
+    top: 13,
+    right: 110,
+  },
+  answerDown: {
+    position: `absolute`,
+    top: 33,
+    right: 110,
+  },
   hoverIcon: {
     color: theme.palette.background.sectionIconHover,
   },
@@ -135,7 +145,10 @@ const UpAndDownArrows = ({ loading, type, docSelected, section, rules, rule, ite
         onMouseLeave={handleIsHoverOff}
       >
         <Tooltip title={tooltipUp} placement="right" arrow enterDelay={1000} enterNextDelay={1000}>
-          <IconButton onClick={handleMoveItemUp} className={cl(classes.addIcon, { [classes.hoverIcon]: isHover })}>
+          <IconButton onClick={handleMoveItemUp} className={cl(classes.addIcon,
+            { [classes.answerUp]: type === typeUpDown.ANSWER },
+            { [classes.hoverIcon]: isHover }
+          )}>
             <ExpandLessIcon />
           </IconButton>
         </Tooltip>
@@ -143,7 +156,10 @@ const UpAndDownArrows = ({ loading, type, docSelected, section, rules, rule, ite
         {/* <AddIcon className={cl(classes.addIcon, { [classes.hoverIcon]: isHover })}/> */}
         
         <Tooltip title={tooltipDown} placement="right" arrow enterDelay={1000} enterNextDelay={1000}>
-          <IconButton onClick={handleMoveItemDown} className={cl(classes.addIcon, { [classes.hoverIcon]: isHover })}>
+          <IconButton onClick={handleMoveItemDown} className={cl(classes.addIcon,
+            { [classes.answerDown]: type === typeUpDown.ANSWER },
+            { [classes.hoverIcon]: isHover })
+          }>
             <ExpandMoreIcon />
           </IconButton>
         </Tooltip>
