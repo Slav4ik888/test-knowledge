@@ -60,7 +60,7 @@ const useStyles = makeStyles((theme) => ({
   
 }));
 
-const AnswerItem = ({ answers, answer, onAdd, onEdit, onDel }) => {
+const AnswerItem = ({ answers, answer, onAdd, onEdit, onMove, onDel }) => {
   const classes = useStyles();
 
   const [showIcons, setShowIcons] = useState(false);
@@ -117,32 +117,22 @@ const AnswerItem = ({ answers, answer, onAdd, onEdit, onDel }) => {
 
           <div className={classes.sprite} onMouseEnter={handleIsHoverOn} onMouseLeave={handleIsHoverOff}>
             <Tooltip title="Нажмите, чтобы изменить заголовок ответа" placement="top" arrow enterDelay={1000} enterNextDelay={1000}>
-              {/* <InputBase
-                className={classes.input}
-                inputProps={{ 'aria-label': 'Заголовок ответа' }}
-                value={newAnswer.answer}
-                type="text"
-                name="answer"
+              <TextareaAutosize
+                className={classes.answer}
                 placeholder="Введите вариант ответа"
+                value={newAnswer.answer}
+                name="answer"
                 onChange={handleEdit} 
                 onKeyDown={handleEdit}
                 onBlur={handleBlur}
-              /> */}
-            <TextareaAutosize
-              className={classes.answer}
-              placeholder="Введите вариант ответа"
-              value={newAnswer.answer}
-              name="answer"
-              onChange={handleEdit} 
-              onKeyDown={handleEdit}
-              onBlur={handleBlur}
-            />
+              />
             </Tooltip>
+
             {
               showIcons &&
               <>
                 <DeleteIconAvatar type={typeElem.ANSWER} onDel={handleDel} />
-                <UpAndDownArrows type={typeUpDown.ANSWER} items={answers} item={answer} update={onEdit} />
+                <UpAndDownArrows type={typeUpDown.ANSWER} items={answers} item={answer} update={onMove} />
               </>
             }
           </div>
@@ -167,6 +157,7 @@ AnswerItem.propTypes = {
   answer: pt.object.isRequired,
   onAdd: pt.func.isRequired,
   onEdit: pt.func.isRequired,
+  onMove: pt.func.isRequired,
   onDel: pt.func.isRequired,
 };
 

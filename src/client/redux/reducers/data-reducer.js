@@ -48,6 +48,8 @@ export default function (state = initialState, action) {
     case dataActionType.SET_INITIAL:
       return initialState;
     
+    
+    
     case dataActionType.SET_EMPLOYEES:
       return extend(state, {
         employees: action.payload,
@@ -78,6 +80,8 @@ export default function (state = initialState, action) {
         loading: false,
       });
     
+    
+    
     case dataActionType.CREATE_POSITION:
       const createPos = state.positions;
       createPos.push(action.payload);
@@ -105,6 +109,8 @@ export default function (state = initialState, action) {
         loading: false,
       });
       
+    
+    
     case dataActionType.SET_DOCUMENTS:
       return extend(state, {
         documents: action.payload,
@@ -123,6 +129,7 @@ export default function (state = initialState, action) {
     case dataActionType.SET_ACTIVE_DOCUMENT:
       return extend(state, {
         activeDocument: action.payload,
+        activeRules: null,
       });
     
     case dataActionType.UPDATE_DOCUMENT:
@@ -134,9 +141,13 @@ export default function (state = initialState, action) {
     case dataActionType.DELETE_DOCUMENT:
       return extend(state, {
         documents: getArrWithoutItemByField(state.documents, `id`, action.payload),
+        activeDocument: null,
+        activeRules: null,
         loading: false,
       });
 
+    
+    
     case dataActionType.CREATE_RULE:
       let newRule = action.payload;
       let upRules = state.rules; 
@@ -225,25 +236,44 @@ export default function (state = initialState, action) {
       const delIdxObj = getIdxRulesFromDocAndSection(delRules, delRule, delRule);
 
       if (delIdxObj !== -1) { // Если совпали docId и sectionId
-        const delIdxRule = delRules[delIdxObj].rules.findIndex((rule) => rule.id === delRule.id);
-        if (delIdxRule !== -1) {
-          console.log(`Удаляем rule`);
-          delRules[delIdxObj].rules = [
-            ...delRules[delIdxObj].rules.slice(0, delIdxRule),
-            ...delRules[delIdxObj].rules.slice(delIdxRule + 1)
-          ];
+        // const delIdxRule = delRules[delIdxObj].rules.findIndex((rule) => rule.id === delRule.id);
+        // if (delIdxRule !== -1) {
+        //   console.log(`Удаляем rule`);
+        //   delRules[delIdxObj].rules = [
+        //     ...delRules[delIdxObj].rules.slice(0, delIdxRule),
+        //     ...delRules[delIdxObj].rules.slice(delIdxRule + 1)
+        //   ];
 
-          return extend(state, {
-            rules: delRules,
-            loading: false,
-          });
-        }
+        return extend(state, {
+          rules: getArrWithoutItemByField(delRules[delIdxObj].rules, `id`, delRule),
+          loading: false,
+        });
+        // }
       }
 
       console.log(`Не найден удаляемый rule. Ошибка`);
       return extend(state, {
         loading: false,
       });
+    
+    
+    case dataActionType.DELETE_RULES_FROM_SECTION:
+      let deRules = state.rules;
+      const deDocSec = action.payload;
+
+      // Находим индекс где храниться нужная секция
+      const deIdxObj = getIdxRulesFromDocAndSection(deRules, deDocSec, deDocSec);
+      console.log('deIdxObj: ', deIdxObj);
+
+      if (deIdxObj !== -1) { // Если совпали docId и sectionId
+        deRules = [...deRules.slice(0, deIdxObj), ...deRules.slice(deIdxObj + 1)];
+      }
+
+      return extend(state, {
+        rules: deRules,
+        loading: false,
+      });
+    
     
     
     case dataActionType.CREATE_QUESTION:
@@ -334,6 +364,7 @@ export default function (state = initialState, action) {
       return extend(state, {
         loading: false,
       });
+    
     
     default: return state;
   }

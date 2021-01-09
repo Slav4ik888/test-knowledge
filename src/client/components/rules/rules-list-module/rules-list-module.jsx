@@ -23,7 +23,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-
+// Выводит список Rules
 const RulesListModule = ({ errors, rules, docSelected, section, getAllRulesById, createRule }) => {
   const classes = useStyles();
 

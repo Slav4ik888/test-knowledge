@@ -126,6 +126,8 @@ const PositionsModuleRow = ({ type, item, employees, positions }) => {
 
 
 PositionsModuleRow.propTypes = {
+  type: pt.oneOf([typeElem.DOC, typeElem.EMPLOYEE]).isRequired,
+  item: pt.object,
   positions: pt.array.isRequired,
   employees: pt.array.isRequired,
 };

@@ -33,7 +33,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-// item - переданный документ или пользователь
+// Удаляем Section 
 const SectionDelete = ({ docSelected, section, updateDocument, deleteAllRulesById }) => {
   const classes = useStyles();
 

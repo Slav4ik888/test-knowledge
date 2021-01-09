@@ -18,12 +18,8 @@ import HelpIcon from '@material-ui/icons/Help';
 // Components
 import DialogTitle from '../../dialogs/dialog-title/dialog-title';
 import AnswersList from '../answers-list/answers-list';
-import ElementAdd from '../../buttons/element-add/element-add';
 import CancelSubmitBtn from '../../buttons/cancel-submit-btn/cancel-submit-btn';
 // Functions
-import { typeElem, typeQuestions } from '../../../../types';
-import { getMaxOrder, createId } from '../../../../server/utils/utils';
-import { getQuestionsFromRuleId, sortingArr } from '../../../utils/utils';
 import { updateArrWithItemByField, getArrWithoutItemByField } from '../../../utils/arrays';
 
 
@@ -105,8 +101,8 @@ const QuestionContainerEdit = ({ open, loading, onClose, question, updateQuestio
     }
   };
 
+  // Добавили новый ответ
   const handleAddAnswer = (answer) => {
-    console.log('handleAddAnswer');
 
     const addAnswer = {
       answer: answer.answer,
@@ -120,13 +116,18 @@ const QuestionContainerEdit = ({ open, loading, onClose, question, updateQuestio
     clearErrors();
   };
 
-  const handleEditAnswer = (answer) => {
+  // Редактировали ответ
+  const handleEditAnswer = (answer, move) => {
     newQuestion.answers = updateArrWithItemByField(newQuestion.answers, `id`, answer);
     setNewQuestion(newQuestion);
     setIsChange(true);
-    clearErrors();
+    if (move) clearErrors();
   };
 
+  // Переместили ответ
+  const handleMoveAnswer = (answer) => handleDelAnswer(answer, true);
+
+  // Удалили ответ
   const handleDelAnswer = (answer) => {
     newQuestion.answers = getArrWithoutItemByField(newQuestion.answers, `id`, answer);
     setNewQuestion(newQuestion);
@@ -134,6 +135,7 @@ const QuestionContainerEdit = ({ open, loading, onClose, question, updateQuestio
     clearErrors();
   };
 
+  // Нажали сохранить
   const handleSubmit = () => {
     updateQuestion(newQuestion);
     setIsChange(false);
@@ -170,11 +172,10 @@ const QuestionContainerEdit = ({ open, loading, onClose, question, updateQuestio
             answers={newQuestion.answers}
             onAdd={handleAddAnswer}
             onEdit={handleEditAnswer}
+            onMove={handleMoveAnswer}
             onDel={handleDelAnswer}
           />
         </DialogContent>
-
-        {/* <ElementAdd type={typeElem.ANSWER} onAdd={handleAddAnswer} /> */}
 
         <DialogActions className={classes.action}>
           <CancelSubmitBtn

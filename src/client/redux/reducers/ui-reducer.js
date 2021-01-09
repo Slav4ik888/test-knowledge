@@ -4,10 +4,10 @@ import {extend} from '../../utils/utils';
 
 const initialState = {
   loading: false,
-  ruleStored: {
-    sectionSelected: null,
-    docSelected: null,
-  },
+  // ruleStored: {
+  //   sectionSelected: null,
+  //   docSelected: null,
+  // },
   messages: {},
   errors: {},
 };
@@ -44,11 +44,11 @@ export default function (state = initialState, action) {
         messages: {},
       });
     
-    case uiActionType.SET_RULES_STORED:
-      return extend(state, {
-        ruleStored: action.payload,
-        loading: false,
-      });
+    // case uiActionType.SET_RULES_STORED:
+    //   return extend(state, {
+    //     ruleStored: action.payload,
+    //     loading: false,
+    //   });
     
     default: return state;
   }

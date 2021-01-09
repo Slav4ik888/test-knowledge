@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import pt from 'prop-types';
 // Readux Stuff
 import { connect } from 'react-redux';
@@ -12,22 +12,19 @@ import { sortingArr } from '../../../utils/utils';
 
 
 // В открытом document выводит список всех section в виде модулей с вложенными rules
-const SectionsListModule = ({ activeDocument, documents }) => {
+const SectionsListModule = ({ activeDocument }) => {
   if (!activeDocument) return null;
-  
-  const document = documents.find((doc) => doc.id === activeDocument.id);
-  // Получаем sections отсортированные по order
+
   let sectionsShow = [];
 
-  if (document) {
-    sectionsShow = sortingArr(document.sections, `order`);
-  }
+  // Получаем sections отсортированные по order
+  sectionsShow = sortingArr(activeDocument.sections, `order`);
 
   return (
     <>
       {
         sectionsShow.length ?
-          sectionsShow.map((section) => <SectionsModuleRow key={section.id}
+          sectionsShow.map((section) => <SectionsModuleRow key={`${activeDocument.id} ${section.id}`}
               section={section}
               docSelected={activeDocument}
             />) : <NewRowCreate type={typeElem.SECTION} docSelected={activeDocument} />
@@ -39,12 +36,12 @@ const SectionsListModule = ({ activeDocument, documents }) => {
 
 SectionsListModule.propTypes = {
   activeDocument: pt.object,
-  documents: pt.array.isRequired,
+  // documents: pt.array.isRequired,
 };
 
 const mapStateToProps = (state) => ({
-  loading: state.UI.loading,
-  documents: state.data.documents,
+  // loading: state.UI.loading,
+  // documents: state.data.documents,
   activeDocument: state.data.activeDocument,
 });
 

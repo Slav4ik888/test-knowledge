@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import pt from 'prop-types';
 // Readux Stuff
 import { connect } from 'react-redux';
-import { setRuleStored } from '../../../redux/actions/ui-actions';
+// import { setRuleStored } from '../../../redux/actions/ui-actions';
 import { setActiveRules, setActiveDocument } from '../../../redux/actions/data-actions';
 // MUI Stuff
 import { makeStyles } from '@material-ui/core/styles';
@@ -13,10 +13,7 @@ import DialogTitle from '../../dialogs/dialog-title/dialog-title';
 import DocumentsModuleRow from '../../documents/documents-module-row/documents-module-row';
 import PositionsModuleRow from '../../positions/positions-module-row/positions-module-row';
 import SectionsListModule from '../../sections/sections-list-module/sections-list-module';
-import CancelSubmitBtn from '../../buttons/cancel-submit-btn/cancel-submit-btn';
-import Confirm from '../../confirm/confirm';
 import { typeElem } from '../../../../types';
-import { getRulesFromDocAndSection } from '../../../utils/utils';
 
 const useStyles = makeStyles((theme) => ({
   // root: {
@@ -66,16 +63,17 @@ const useStyles = makeStyles((theme) => ({
 
 
 
-const RulesContainer = ({ setRuleStored, ruleStored, setActiveDocument }) => {
+const RulesContainer = ({ activeDocument, setActiveDocument }) => {
 
   const classes = useStyles();
   
   // Выбранный документ
-  const [docSelected, setDocSelected] = useState(ruleStored.docSelected);
+  const [docSelected, setDocSelected] = useState(activeDocument);
   const handleDocSelected = (doc) => {
+    console.log('doc: ', doc);
     setDocSelected(doc);
-    setActiveDocument(doc);
-    setRuleStored({ docSelected: doc, sectionSelected: null }); // Запоминаем выбранное
+    setActiveDocument(doc); // Запоминаем выбранное
+    // setRuleStored({ docSelected: doc, sectionSelected: null }); // Запоминаем выбранное
     // setActiveRules({ docId: ``, sectionId: `` }); // Обнуляем activeRules
   };
 
@@ -98,20 +96,20 @@ const RulesContainer = ({ setRuleStored, ruleStored, setActiveDocument }) => {
 
 RulesContainer.propTypes = {
   loading: pt.bool.isRequired,
-  ruleStored: pt.object.isRequired,
-  setRuleStored: pt.func.isRequired,
+  activeDocument: pt.object,
+  setActiveDocument: pt.func.isRequired,
   // setActiveRules: pt.func.isRequired, 
 };
 
 const mapStateToProps = (state) => ({
   loading: state.UI.loading,
-  ruleStored: state.UI.ruleStored,
+  // ruleStored: state.UI.ruleStored,
   // rules: state.data.rules,
-  // activeDocument: state.data.activeDocument,
+  activeDocument: state.data.activeDocument,
 });
 
 const mapActionsToProps = {
-  setRuleStored,
+  // setRuleStored,
   setActiveRules,
   setActiveDocument,
 };

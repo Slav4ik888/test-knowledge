@@ -18,7 +18,7 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 
-const AnswersList = ({ answers, onAdd, onEdit, onDel }) => {
+const AnswersList = ({ answers, onAdd, onEdit, onMove, onDel }) => {
   
   if (!answers) return null;
   console.log(`AnswersList`);
@@ -40,6 +40,7 @@ const AnswersList = ({ answers, onAdd, onEdit, onDel }) => {
                 answer={answer}
                 onAdd={onAdd}
                 onEdit={onEdit}
+                onMove={onMove}
                 onDel={onDel}
               />)
             }
@@ -53,6 +54,7 @@ const AnswersList = ({ answers, onAdd, onEdit, onDel }) => {
 AnswersList.propTypes = {
   onAdd: pt.func.isRequired,
   onEdit: pt.func.isRequired,
+  onMove: pt.func.isRequired,
   onDel: pt.func.isRequired,
   answers: pt.array.isRequired,
 };

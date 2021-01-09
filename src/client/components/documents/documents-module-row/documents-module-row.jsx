@@ -31,11 +31,11 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-// item - переданный документ или пользователь
-const DocumentsModuleRow = ({ onDocumentSelected, documents, ruleStored }) => {
+// 
+const DocumentsModuleRow = ({ onDocumentSelected, documents, activeDocument }) => {
   const classes = useStyles();
 
-  const placeholder = ruleStored.docSelected ? ruleStored.docSelected.title : `Не указан`;
+  const placeholder = activeDocument ? activeDocument.title : `Не указан`;
 
   const [isDocuments, setIsDocuments] = useState(false);
   const handleDocumentsOpen = () => setIsDocuments(true);
@@ -61,11 +61,6 @@ const DocumentsModuleRow = ({ onDocumentSelected, documents, ruleStored }) => {
           onItemAdd={handleDocumentsOpen}
         />
 
-        {/* <Tooltip title="Редактировать документы" placement="bottom" arrow enterDelay={1000} enterNextDelay={1000}>
-          <IconButton aria-label="Edit" onClick={handleDocumentsOpen} className={classes.editIcon}>
-            <EditIcon />
-          </IconButton>
-        </Tooltip> */}
       </div>
 
       <DocumentsContainer open={isDocuments} onClose={handleDocumentsClose} />
@@ -77,12 +72,12 @@ const DocumentsModuleRow = ({ onDocumentSelected, documents, ruleStored }) => {
 DocumentsModuleRow.propTypes = {
   documents: pt.array.isRequired,
   onDocumentSelected: pt.func.isRequired,
-  ruleStored: pt.object,
+  activeDocument: pt.object,
 };
 
 const mapStateToProps = (state) => ({
   documents: state.data.documents,
-  ruleStored: state.UI.ruleStored,
+  activeDocument: state.data.activeDocument,
 });
 
 

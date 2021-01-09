@@ -376,11 +376,11 @@ export const deleteAllRulesById = ({ docId, sectionId }) => (dispatch) => {
   dispatch({ type: uiActionType.LOADING_UI });
   
   return axios.get(`/deleteAllRulesById/${docId}/${sectionId}`)
-    .then(() => { // Пока ничего не делаем, при обновлении страницы, правила из store исчезнут
-      // dispatch({  
-      //   type: dataActionType.DELETE_RULE,
-      //   payload: rule,
-      // });
+    .then(() => { // Удаляем правила из rules
+      dispatch({  
+        type: dataActionType.DELETE_RULES_FROM_SECTION,
+        payload: { docId, sectionId },
+      });
       dispatch({ type: uiActionType.CLEAR_ERRORS });
     })
     .catch((err) => {
