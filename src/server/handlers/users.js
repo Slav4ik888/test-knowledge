@@ -48,7 +48,7 @@ exports.addUser = (req, res) => {
     .catch(err => {
       console.error(err);
       if (err.code === `auth/email-already-in-use`) {
-        return res.status(400).json({ email: `Этот email уже зарегистрирован, отправьте приглашениеru на другой email` });
+        return res.status(400).json({ email: `Этот email уже зарегистрирован, отправьте приглашение на другой email` });
       } else {
         return res.status(500).json({ general: `Что-то пошло не так, попробуйте ещё раз...` });
       }

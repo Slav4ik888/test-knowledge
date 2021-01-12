@@ -13,7 +13,7 @@ export const addSectionInDocument = (type, docSelected, section, func) => {
   const newSection = {
     title: ``,
     id: createId(docSelected.sections),
-    order: section ? getNewOrderForItem(type, `section`, docSelected, section) : 100,
+    order: section ? getNewOrderForItem(type, docSelected.sections, section) : 100,
     createdAt: new Date().toISOString(),
     lastChange: new Date().toISOString(),
   };
@@ -43,7 +43,7 @@ export const addRuleInSection = (type, rules, rule, func) => {
   const newRule = {
     title: ``,
     rule: ``,
-    order: rulesInSection ? getNewOrderForItem(type, `rule`, rulesInSection, rule) : 100,
+    order: rulesInSection ? getNewOrderForItem(type, rulesInSection, rule) : 100,
     docId: rule.docId,
     sectionId: rule.sectionId,
   };
@@ -63,7 +63,7 @@ export const addAnswerInAnswers = (type, answers, answer, func) => {
     id: createId(answers),
     answer: ``,
     trueAnswer: false,
-    order: answer ? getNewOrderForItem(type, `answer`, answers, answer) : 100,
+    order: answer ? getNewOrderForItem(type, answers, answer) : 100,
   };
   func(newAnswer);
 };

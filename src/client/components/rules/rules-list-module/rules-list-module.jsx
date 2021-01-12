@@ -41,7 +41,7 @@ const RulesListModule = ({ errors, rules, docSelected, section, getAllRulesById,
 
   } else { // Есть загр-е - НЕ загружаем
     rulesShow = sortingArr(activeRuleObj.rules, `order`); // Получаем rules отсортированные по order
-    console.log(rulesShow);
+    // console.log(rulesShow);
   }
   
   return (

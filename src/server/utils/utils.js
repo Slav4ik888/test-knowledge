@@ -41,8 +41,7 @@ const sortingArr = (arr, fieldName) => {
   
 
 // Возвращает order для rule || section которую перемещают вверх
-const getPrevOrderForMoveItem = (type, values, item) => {
-  const items = type === `section` ? values.sections : values;
+const getPrevOrderForMoveItem = (items, item) => {
   let sortedItems = sortingArr(items, `order`);
 
   // Текущее положение
@@ -64,8 +63,7 @@ const getPrevOrderForMoveItem = (type, values, item) => {
 };
 
 // Возвращает order для rule || section которую перемещают вниз
-const getNextOrderForMoveItem = (type, values, item) => {
-  const items = type === `section` ? values.sections : values;
+const getNextOrderForMoveItem = (items, item) => {
   let sortedItems = sortingArr(items, `order`);
 
   // Текущее положение
@@ -86,16 +84,15 @@ const getNextOrderForMoveItem = (type, values, item) => {
   }
 };
 // Возвращает order для rule || section которую перемещают
-exports.getNewOrderForMoveItem = (condition, type, values, item) => {
-  if (condition === `up`) return getPrevOrderForMoveItem(type, values, item);
-  if (condition === `down`) return getNextOrderForMoveItem(type, values, item);
+exports.getNewOrderForMoveItem = (condition, items, item) => {
+  if (condition === `up`) return getPrevOrderForMoveItem(items, item);
+  if (condition === `down`) return getNextOrderForMoveItem(items, item);
 };
 
 
 
 // Возвращает order для новой rule || section предшеструющей текущей rule || section
-const getPrevOrderForItem = (type, values, item) => {
-  const items = type === `section` ? values.sections : values;
+const getPrevOrderForItem = (items, item) => {
   if (items.length === 0) return 100;
 
   let sortedItems = sortingArr(items, `order`);
@@ -113,8 +110,7 @@ const getPrevOrderForItem = (type, values, item) => {
 };
   
 // Возвращает order для новой rule || section следующей после текущей rule || section 
-const getNextOrderForItem = (type, values, item) => {
-  const items = type === `section` ? values.sections : values;
+const getNextOrderForItem = (items, item) => {
   let sortedItems = sortingArr(items, `order`);
 
   const idx = sortedItems.findIndex((it) => it.id === item.id);
@@ -130,7 +126,7 @@ const getNextOrderForItem = (type, values, item) => {
 };
 
 // Возвращает order для новой rule || section || answer
-exports.getNewOrderForItem = (condition, type, values, item) => {
-  if (condition === `up`) return getPrevOrderForItem(type, values, item);
-  if (condition === `down`) return getNextOrderForItem(type, values, item);
+exports.getNewOrderForItem = (condition, items, item) => {
+  if (condition === `up`) return getPrevOrderForItem(items, item);
+  if (condition === `down`) return getNextOrderForItem(items, item);
 };

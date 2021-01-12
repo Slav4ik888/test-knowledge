@@ -1,9 +1,6 @@
 import React, { useState } from 'react';
 import pt from 'prop-types';
 import cl from 'classnames';
-// Readux Stuff
-import { connect } from 'react-redux';
-import { updateDocument } from '../../../redux/actions/data-actions';
 // MUI Stuff
 import { makeStyles } from '@material-ui/core/styles';
 import IconButton from '@material-ui/core/IconButton';
@@ -35,7 +32,7 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 // Выводит новый элемент выше или ниже
-const AddIconRow = ({ loading, type, up, items, item, docSelected, section, updateDocument, onAdd }) => {
+const AddIconRow = ({ loading, type, up, items, item, onAdd }) => {
   const classes = useStyles();
 
   const [isHover, setIsHover] = useState(false);
@@ -48,7 +45,7 @@ const AddIconRow = ({ loading, type, up, items, item, docSelected, section, upda
     if (!loading) {
       if (type === typeElem.SECTION) {
         // Добавляем пустой раздел сверху или снизу
-        addSectionInDocument(upDown, docSelected, section, updateDocument);
+        addSectionInDocument(upDown, items, item, onAdd);
 
       } else if (type === typeElem.RULE) {
         // Добавляем пустое правило сверху или снизу 
@@ -101,23 +98,12 @@ const AddIconRow = ({ loading, type, up, items, item, docSelected, section, upda
 
 
 AddIconRow.propTypes = {
-  loading: pt.bool.isRequired,
   type: pt.oneOf([typeElem.SECTION, typeElem.RULE, typeElem.ANSWER]).isRequired,
   up: pt.bool,
-  items: pt.array,
+  items: pt.oneOf([array, object]).isRequired,
   item: pt.object,
-  updateDocument: pt.func.isRequired,
   onAdd: pt.func,
-  docSelected: pt.object,
-  section: pt.object,
 };
 
-const mapStateToProps = (state) => ({
-  loading: state.UI.loading,
-});
 
-const mapActionsToProps = {
-  updateDocument
-};
-
-export default connect(mapStateToProps, mapActionsToProps)(AddIconRow);
+export default AddIconRow;

@@ -85,7 +85,7 @@ const UpAndDownArrows = ({ loading, type, docSelected, section, rules, rule, ite
     const idx = docSelected.sections.findIndex((sec) => sec.id === section.id);
     if (idx !== -1) {
       const order = section.order;
-      const newOrder = getNewOrderForMoveItem(condition, `section`, docSelected, section);
+      const newOrder = getNewOrderForMoveItem(condition, docSelected.sections, section);
 
       if (newOrder !== order) { // Сохраняем если есть изменения
         docSelected.sections[idx].order = newOrder;
@@ -101,7 +101,7 @@ const UpAndDownArrows = ({ loading, type, docSelected, section, rules, rule, ite
     const idxRule = getIdxRulesFromDocAndSection(rules, rule, rule);
     if (idxRule !== -1) {
       const rulesInSection = rules[idxRule].rules;
-      const newOrder = getNewOrderForMoveItem(condition, `rule`, rulesInSection, rule);
+      const newOrder = getNewOrderForMoveItem(condition, rulesInSection, rule);
 
       if (newOrder !== rule.order) {
         // console.log(`Перемещаем правило`);
@@ -113,7 +113,7 @@ const UpAndDownArrows = ({ loading, type, docSelected, section, rules, rule, ite
 
   // Перемещаем ответ
   const handleMoveAnswer = (condition) => {
-    item.order = getNewOrderForMoveItem(condition, `answer`, items, item);
+    item.order = getNewOrderForMoveItem(condition, items, item);
     update(item);
   }
 

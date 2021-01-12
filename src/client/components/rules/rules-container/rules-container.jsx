@@ -70,7 +70,6 @@ const RulesContainer = ({ activeDocument, setActiveDocument }) => {
   // Выбранный документ
   const [docSelected, setDocSelected] = useState(activeDocument);
   const handleDocSelected = (doc) => {
-    console.log('doc: ', doc);
     setDocSelected(doc);
     setActiveDocument(doc); // Запоминаем выбранное
     // setRuleStored({ docSelected: doc, sectionSelected: null }); // Запоминаем выбранное

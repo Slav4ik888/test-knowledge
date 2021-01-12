@@ -17,9 +17,9 @@ import InsertDriveFileIcon from '@material-ui/icons/InsertDriveFile';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 // Components
 import SectionDelete from '../section-delete/section-delete';
-import UpAndDownAdd from '../../buttons/up-and-down-add/up-and-down-add';
+import AddIconRow from '../../buttons/add-icon-row/add-icon-row';
 import UpAndDownArrows from '../../buttons/up-and-down-arrows/up-and-down-arrows';
-import { typeUpDown } from '../../../../types';
+import { typeUpDown, typeElem } from '../../../../types';
 import RulesListModule from '../../rules/rules-list-module/rules-list-module';
 
 
@@ -141,7 +141,6 @@ const SectionsModuleRow = ({ docSelected, section, updateDocument }) => {
   return (
     <>
       <div className={classes.container} id={section.id}>
-        <UpAndDownAdd type={typeUpDown.SECTION} docSelected={docSelected} section={section} upDown={`up`} />
         
         <Card className={classes.box} >
         
@@ -186,7 +185,7 @@ const SectionsModuleRow = ({ docSelected, section, updateDocument }) => {
           </div>
         </Card>
 
-        <UpAndDownAdd type={typeUpDown.SECTION} docSelected={docSelected} section={section} upDown={`down`} />
+        <AddIconRow type={typeElem.SECTION} items={docSelected} item={section} onAdd={updateDocument}/>
       </div>
 
       <Collapse in={isShowRules} timeout="auto" unmountOnExit>

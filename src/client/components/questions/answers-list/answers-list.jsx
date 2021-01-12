@@ -21,7 +21,6 @@ const useStyles = makeStyles((theme) => ({
 const AnswersList = ({ answers, onAdd, onEdit, onMove, onDel }) => {
   
   if (!answers) return null;
-  console.log(`AnswersList`);
   const classes = useStyles();
   
   // Получаем answers отсортированные по order
