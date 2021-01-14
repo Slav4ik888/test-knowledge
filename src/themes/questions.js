@@ -51,13 +51,21 @@ export const question2 = {
   answers: [
     {
       answer: `Чтобы была возможность написать претензию Поставщику`,
+      trueAnswer: false,
+      id: `1`,
+      order: 100,
     }, {
       answer: `Менеджер должен держать ситуацию под контролем`,
+      trueAnswer: true,
+      id: `2`,
+      order: 200,
     }, {
       answer: `Чтобы была возможность предупредить клиента, который заказал данный товар`,
+      trueAnswer: false,
+      id: `3`,
+      order: 300,
     },
   ],
-  answerTrue: [0, 2],
 };
 
 export const question3 = {
@@ -77,5 +85,4 @@ export const question3 = {
       answer: `Менеджеру эта информация не нужна, по ущербам занимается Юрист`,
     },
   ],
-  answerTrue: [0],
 };

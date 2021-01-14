@@ -125,7 +125,7 @@ const QuestionContainerEdit = ({ open, loading, onClose, question, updateQuestio
   };
 
   // Переместили ответ
-  const handleMoveAnswer = (answer) => handleDelAnswer(answer, true);
+  const handleMoveAnswer = (answer) => handleEditAnswer(answer, true);
 
   // Удалили ответ
   const handleDelAnswer = (answer) => {

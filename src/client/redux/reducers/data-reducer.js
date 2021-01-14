@@ -243,9 +243,10 @@ export default function (state = initialState, action) {
         //     ...delRules[delIdxObj].rules.slice(0, delIdxRule),
         //     ...delRules[delIdxObj].rules.slice(delIdxRule + 1)
         //   ];
+        delRules[delIdxObj].rules = getArrWithoutItemByField(delRules[delIdxObj].rules, `id`, delRule);
 
         return extend(state, {
-          rules: getArrWithoutItemByField(delRules[delIdxObj].rules, `id`, delRule),
+          rules: delRules,
           loading: false,
         });
         // }

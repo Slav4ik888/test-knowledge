@@ -11,8 +11,8 @@ import AddIconRow from '../../buttons/add-icon-row/add-icon-row';
 import NewRowCreate from '../../buttons/new-row-create/new-row-create';
 import { typeElem } from '../../../../types';
 import { sortingArr } from '../../../utils/utils';
-src
-src/client
+
+
 // В открытом document выводит список всех section в виде модулей с вложенными rules
 const SectionsListModule = ({ errors, activeDocument, updateDocument }) => {
   if (!activeDocument) return null;

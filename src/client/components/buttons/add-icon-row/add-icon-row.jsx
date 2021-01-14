@@ -100,7 +100,6 @@ const AddIconRow = ({ loading, type, up, items, item, onAdd }) => {
 AddIconRow.propTypes = {
   type: pt.oneOf([typeElem.SECTION, typeElem.RULE, typeElem.ANSWER]).isRequired,
   up: pt.bool,
-  items: pt.oneOf([array, object]).isRequired,
   item: pt.object,
   onAdd: pt.func,
 };

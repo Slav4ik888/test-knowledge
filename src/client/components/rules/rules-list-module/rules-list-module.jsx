@@ -34,6 +34,7 @@ const RulesListModule = ({ errors, rules, docSelected, section, getAllRulesById,
   
   // Получаем объект с rules для этой секции
   let activeRuleObj = getRulesFromDocAndSection(rules, docId, sectionId); 
+  console.log('activeRuleObj: ', activeRuleObj);
 
   if (!activeRuleObj) { // Проверяем есть ли загруженные данные, если нет - загружаем
     console.log(`Нет загр-х rules - ЗАГРУЖАЕМ`);
@@ -41,7 +42,7 @@ const RulesListModule = ({ errors, rules, docSelected, section, getAllRulesById,
 
   } else { // Есть загр-е - НЕ загружаем
     rulesShow = sortingArr(activeRuleObj.rules, `order`); // Получаем rules отсортированные по order
-    // console.log(rulesShow);
+    console.log(rulesShow);
   }
   
   return (

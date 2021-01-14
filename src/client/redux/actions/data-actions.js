@@ -352,6 +352,7 @@ export const updateRule = (rule) => (dispatch) => {
 // Удаляем rule
 export const deleteRule = (rule) => (dispatch) => {
   dispatch({ type: uiActionType.LOADING_UI });
+  console.log(`Del rule - ${rule.id}`);
   
   return axios.get(`/deleteRule/${rule.id}`)
     .then((res) => {

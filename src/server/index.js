@@ -69,4 +69,4 @@ app.use(express.static('dist'));
 
 app.listen(process.env.PORT || 8080, () => console.log(`Listening on port ${process.env.PORT || 8080}!`));
 
-//  git add . && git commit -m "start test - arrays.test.js & data-reduser.test.js" && git push origin master
+//  git add . && git commit -m "fix onMove for upDownArrow & fix deleteRule in reducer" && git push origin master

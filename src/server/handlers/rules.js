@@ -149,7 +149,7 @@ async function deleteRule(req, res) {
   try {
     const updateRes = await db.doc(`rules/${req.user.companyId}/rules/${req.params.ruleId}`)
       .delete();
-    console.log(`deleteRule`);
+    console.log(`deleteRule ${req.params.ruleId}`);
 
     // Удалять все questions
     const delQuestions = await deleteAllQuestionsByRuleId(req, res);

@@ -164,9 +164,11 @@ async function deleteAllQuestionsByRuleId(req, res, ruleId) {
     req.update = true;
     req.ruleId = ruleId;
     const allQuestions = await getAllQuestionsByRuleId(req, res);
-    
-    allQuestions.forEach((quest) => db.doc(`questions/${req.user.companyId}/questions/${quest.id}`).delete());
 
+    if (allQuestions.length) {
+      allQuestions.forEach((quest) => db.doc(`questions/${req.user.companyId}/questions/${quest.id}`).delete());
+    }
+    
   } catch (err) {
     console.error(err);
     return res.status(500).json({ general: err.code });
