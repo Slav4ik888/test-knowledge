@@ -30,7 +30,7 @@ export const getArrWithoutItemByField = (items, itemField, delItem) => {
  * @param {string} updateField - `id` || `email` || any
  * @param {object} updateItem 
  */
-export const updateArrWithItemByField = (items, updateField, updateItem) => {
+export const updateArrWithItemByField = (items, updateField, updateItem) => { // test +
   const idx = items.findIndex((item) => item[updateField] === updateItem[updateField]);
   let newItems = items;
   if (idx !== -1) {

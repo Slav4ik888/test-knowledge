@@ -40,23 +40,23 @@ const initialState = {
 
 export default function (state = initialState, action) {
   switch (action.type) {
-    case dataActionType.LOADING_DATA:
+    case dataActionType.LOADING_DATA: // test +
       return extend(state, {
         loading: true,
       });
     
-    case dataActionType.SET_INITIAL:
+    case dataActionType.SET_INITIAL: // test +
       return initialState;
     
     
     
-    case dataActionType.SET_EMPLOYEES:
+    case dataActionType.SET_EMPLOYEES: // test +
       return extend(state, {
         employees: action.payload,
         loading: false,
       });
     
-    case dataActionType.CREATE_EMPLOYEE:
+    case dataActionType.CREATE_EMPLOYEE: // test +
       console.log('CREATE_EMPLOYEE: ', action.payload);
       const createEmployees = state.employees;
       createEmployees.push(action.payload);
@@ -66,8 +66,8 @@ export default function (state = initialState, action) {
         loading: false,
       });
     
-    case dataActionType.UPDATE_EMPLOYEE:
-      console.log('UPDATE_EMPLOYEE: ', action.payload);
+    case dataActionType.UPDATE_EMPLOYEE: // test +
+      // console.log('UPDATE_EMPLOYEE: ', action.payload);
 
       return extend(state, {
         employees: updateArrWithItemByField(state.employees, `userId`, action.payload),
