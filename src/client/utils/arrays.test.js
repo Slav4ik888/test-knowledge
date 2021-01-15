@@ -1,4 +1,4 @@
-import { updateArrWithItemByField, getArrWithoutItemByField } from './arrays';
+import { updateArrWithItemByField, getArrWithoutItemByField, getItemFromArrByField } from './arrays';
 import {
   mockArray, mockFieldUpdate, mockArrayUpdated,
   mockArrayWithout1Item, mockArrayWithout2Item, mockArrayWithout3Item
@@ -34,6 +34,20 @@ describe(`ARRAY.JS - getArrWithoutItemByField`, () => {
 
   it(`Ничего не меняет - поле id отсутствует`, () => {
     expect(getArrWithoutItemByField([...mockArray], `id`, { anyField: `111` })).toEqual(mockArray);
+  });
+});
+
+describe(`ARRAYS.JS - getItemFromArrByField`, () => {
+  it(`Возвращает {} item с id === '222'`, () => {
+    expect(getItemFromArrByField([...mockArrayUpdated], `id`, `222`)).toEqual(mockFieldUpdate);
+  });
+
+  it(`Возвращает undefined с id === 222`, () => {
+    expect(getItemFromArrByField([...mockArrayUpdated], `id`, 222)).toEqual(undefined);
+  });
+
+  it(`Возвращает {} item с field2 === 'field2Updated'`, () => {
+    expect(getItemFromArrByField([...mockArrayUpdated], `field2`, `field2Updated`)).toEqual(mockFieldUpdate);
   });
 });
 

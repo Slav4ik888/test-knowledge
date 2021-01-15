@@ -10,7 +10,7 @@ import ListItemText from '@material-ui/core/ListItemText';
 // Icons
 import QueryBuilderIcon from '@material-ui/icons/QueryBuilder';
 // Components
-// import TestsContainer from '../tests-container/tests-container';
+import TestsContainerExecute from '../tests-container-execute/tests-container-execute';
 
 
 const useStyles = makeStyles((theme) => ({
@@ -29,11 +29,14 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 
-const TestsNavBtn = ({ open, onDrawerOpen }) => {
+const TestsNavBtn = ({ open, onDrawerOpen, onDrawerClose }) => {
   const classes = useStyles();
 
   const [isTests, setIsTests] = useState(false);
-  const handleTestsOpen = () => setIsTests(true);
+  const handleTestsOpen = () => {
+    setIsTests(true);
+    onDrawerClose();
+  };
   const handleTestsClose = () => setIsTests(false);
 
   return (
@@ -50,17 +53,17 @@ const TestsNavBtn = ({ open, onDrawerOpen }) => {
           <ListItem button className={classes.subButton}>
             <ListItemText primary="Редактировать" />
           </ListItem>
-          <ListItem button className={cl(classes.subButton, classes.lastSubButton)}>
+          <ListItem button onClick={handleTestsOpen} className={cl(classes.subButton, classes.lastSubButton)}>
             <ListItemText primary="Запустить" />
           </ListItem>
           <Divider />
         </>
       }
 
-      {/* <TestsContainer
+      <TestsContainerExecute
         open={isTests}
         onClose={handleTestsClose}
-      /> */}
+      />
     </>
   )
 };

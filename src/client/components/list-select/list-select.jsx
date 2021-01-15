@@ -67,7 +67,9 @@ const ListSelect = ({ type, items, valueField, title, placeholder, label, onSele
       className={classes.formControl}
       disabled={disabled}
     >
-      {title && <InputLabel id={`${label}-label`}>{title}</InputLabel>}
+      {
+        title && <InputLabel id={`${label}-label`}>{title}</InputLabel>
+      }
 
       <Select
         labelId={`${label}-label`}

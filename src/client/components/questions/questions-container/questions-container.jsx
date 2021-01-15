@@ -15,7 +15,7 @@ import QuestionContainerEdit from '../question-container-edit/question-container
 import { typeElem, typeQuestions } from '../../../../types';
 import { getMaxOrder } from '../../../../server/utils/utils';
 import { getQuestionsFromRuleId, sortingArr } from '../../../utils/utils';
-import { getItemFromArrById } from '../../../utils/arrays';
+import { getItemFromArrByField } from '../../../utils/arrays';
 
 
 const useStyles = makeStyles((theme) => ({
@@ -81,7 +81,7 @@ const QuestionsContainer = ({ open, onClose, ruleId, errors, allQuestions, getAl
   const [quest, setQuest] = useState({}); // Вопрос передаваемый в QuestionContainerEdit
   const [editId, setEditId] = useState(null);
   const handleEditOpen = (id) => {
-    setQuest(getItemFromArrById(questions, id));
+    setQuest(getItemFromArrByField(questions, `id`, id));
     setEditId(id);
   };
   const handleEditClose = () => {
@@ -91,7 +91,7 @@ const QuestionsContainer = ({ open, onClose, ruleId, errors, allQuestions, getAl
 
   // Удаляем вопрос
   const handleDelQuestion = (id) => {
-    const question = getItemFromArrById(questions, id);
+    const question = getItemFromArrByField(questions, `id`, id);
     deleteQuestion(question);
   };
 

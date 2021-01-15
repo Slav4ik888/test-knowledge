@@ -80,8 +80,7 @@ const PositionsAddInItem = ({ open, type, onClose, loading, item, positions, upd
   
   // Не использованные positions
   const remainingPositions = positions 
-    .filter((pos) => Boolean(positionsInItem
-      .find((posInItem) => posInItem.id === pos.id)) === false);
+    .filter((pos) => Boolean(positionsInItem.find((posInItem) => posInItem.id === pos.id)) === false);
 
   const [selected, setSelected] = useState(positionsInItem);
   const handleSelected = (newSelected) => {

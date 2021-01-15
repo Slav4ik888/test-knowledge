@@ -1,4 +1,4 @@
-import React, {useState, useRef, useEffect} from 'react';
+import React, {useRef, useEffect} from 'react';
 import pt from 'prop-types';
 // Readux Stuff
 import { connect } from 'react-redux';
@@ -6,14 +6,13 @@ import { createDocument, updateDocument, deleteDocument } from '../../../redux/a
 // MUI Stuff
 import { makeStyles } from '@material-ui/core/styles';
 import Dialog from '@material-ui/core/Dialog';
-import DialogActions from '@material-ui/core/DialogActions';
+// import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
-import MuiAlert from '@material-ui/lab/Alert';
 // Component
 import DialogTitle from '../../dialogs/dialog-title/dialog-title';
 import DocumentsList from '../documents-list/documents-list';
 import ElementAdd from '../../buttons/element-add/element-add';
-import Snackbar from '../../dialogs/snackbar/snackbar';
+// import Snackbar from '../../dialogs/snackbar/snackbar';
 import { typeElem } from '../../../../types';
 
 
@@ -34,11 +33,12 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
+// Настройка документов: создать, изменить название, удалить 
+// TODO: изменить порядок - переместить выше/ниже, создать каталоги
 const DocumentsContainer = ({ open, onClose, errors, documents, createDocument, updateDocument, deleteDocument }) => {
   if (!open) return null;
 
   const classes = useStyles();
-  // const [isChange, setIsChange] = useState(false);
 
   const handleEditDoc = (id, newTitle) => {
     const idx = documents.findIndex((doc) => doc.id === id);
@@ -103,7 +103,7 @@ const DocumentsContainer = ({ open, onClose, errors, documents, createDocument, 
 
         <ElementAdd type={typeElem.DOC} onAdd={handleAddDoc} />
 
-        <Snackbar errors={errors} />
+        {/* <Snackbar errors={errors} /> */}
 
       </Dialog>
     </>

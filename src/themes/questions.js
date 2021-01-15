@@ -37,7 +37,6 @@ export const question1 = {
       answer: `Не принимать товар и сообщить Директору`,
     },
   ],
-  answerTrue: [1],
 }
   
 export const question2 = {
@@ -47,7 +46,7 @@ export const question2 = {
   lastChange: `2020-11-04T18:16:54.385Z`,
   typeQuestion: typeQuestions.MANY_ANSWERS, // Тип вопроса: 1 или несколько ответов и прочие варианты
   question: `Если товар пришёл с повреждениями, для чего Кладовщик должен сообщить Менеджеру об этом?`,
-  forPositions: [positions.director, positions.storekeeper, positions.manager], // Для каких должностей
+  order: 100,
   answers: [
     {
       answer: `Чтобы была возможность написать претензию Поставщику`,
@@ -74,7 +73,7 @@ export const question3 = {
   createdAt: `2020-11-04T18:16:54.385Z`,
   lastChange: `2020-11-04T18:16:54.385Z`,
   question: `Если товар пришёл с повреждениями, что Кладовщик должен сообщить Менеджеру?`,
-  forPositions: [positions.director, positions.storekeeper, positions.manager], // Для каких должностей
+  order: 100,
   typeQuestion: typeQuestions.ONE_ANSWER, // Тип вопроса: 1 или несколько ответов и прочие варианты
   answers: [
     {

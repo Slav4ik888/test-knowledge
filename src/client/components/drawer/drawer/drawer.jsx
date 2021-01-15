@@ -13,7 +13,7 @@ import ChevronRightIcon from '@material-ui/icons/ChevronRight';
 // Components
 import {drawerWidth} from '../../../utils/consts';
 import TestsNavBtn from '../../tests/tests-nav-btn/tests-nav-btn';
-import RulesNavBtn from '../../rules/rules-nav-btn/rules-nav-btn';
+// import RulesNavBtn from '../../rules/rules-nav-btn/rules-nav-btn';
 import DocumentsNavBtn from '../../documents/documents-nav-btn/documents-nav-btn';
 import PositionsNavBtn from '../../positions/positions-nav-btn/positions-nav-btn';
 import EmployeesNavBtn from '../../employees/employees-nav-btn/employees-nav-btn';
@@ -99,8 +99,8 @@ const MiniDrawer = ({ open, onOpen, onClose}) => {
 
       <List>
         <TestsNavBtn open={open} onDrawerOpen={onOpen} onDrawerClose={onClose} />
-        <RulesNavBtn open={open} onDrawerOpen={onOpen} onDrawerClose={onClose} />
-        <DocumentsNavBtn />
+        {/* <RulesNavBtn open={open} onDrawerOpen={onOpen} onDrawerClose={onClose} /> */}
+        <DocumentsNavBtn open={open} onDrawerOpen={onOpen} onDrawerClose={onClose} />
         <PositionsNavBtn />
         <EmployeesNavBtn />
       </List>

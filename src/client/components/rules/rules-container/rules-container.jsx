@@ -42,23 +42,6 @@ const useStyles = makeStyles((theme) => ({
   content: {
     padding: theme.spacing(4),
   },
-  // row: {
-  //   display: 'flex',
-  //   alignItems: `center`,
-  //   margin: theme.spacing(2, 0, 4, 0),
-  // },
-  // avatar: { 
-  //   marginRight: theme.spacing(3),
-  // },
-  // editIcon: {
-  //   marginTop: theme.spacing(1),
-  //   marginLeft: theme.spacing(3),
-  // },
-  // cancelSubmitBtn: {
-  //   margin: theme.spacing(4, 0, 4, 0),
-  //   position: `relative`,
-  //   float: `right`,
-  // },
 }));
 
 

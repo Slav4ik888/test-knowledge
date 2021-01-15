@@ -13,6 +13,7 @@
  * @param {array} items 
  * @param {string} itemField - `id` || `email` || any
  * @param {obj} delItem 
+ * test +
  */
 export const getArrWithoutItemByField = (items, itemField, delItem) => {
   const idx = items.findIndex((item) => item[itemField] === delItem[itemField]);
@@ -29,8 +30,9 @@ export const getArrWithoutItemByField = (items, itemField, delItem) => {
  * @param {array} items 
  * @param {string} updateField - `id` || `email` || any
  * @param {object} updateItem 
+ * test +
  */
-export const updateArrWithItemByField = (items, updateField, updateItem) => { // test +
+export const updateArrWithItemByField = (items, updateField, updateItem) => {
   const idx = items.findIndex((item) => item[updateField] === updateItem[updateField]);
   let newItems = items;
   if (idx !== -1) {
@@ -42,6 +44,7 @@ export const updateArrWithItemByField = (items, updateField, updateItem) => { //
 /**
  * Возвращает item соответвующий id
  * @param {array} arr 
- * @param {string} id 
+ * @param {string} field - `id` || `email` || any
+ * @param {string || number} value 
  */
-export const getItemFromArrById = (arr, id) => arr.find((item) => item.id === id);
+export const getItemFromArrByField = (arr, field, value) => arr.find((item) => item[field] === value);

@@ -60,6 +60,7 @@ exports.typeListSelect = {
   DOC: `Документ`,
   SECTION: `Обязанность`,
   EMPLOYEE: `Сотрудника`,
+  POSITION: `Должность`,
 };
 
 // Типы для UpAndDownArrows
