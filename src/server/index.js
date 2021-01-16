@@ -11,7 +11,8 @@ const { signupCompany, getCompanyData, getUserAndCompanyData, updateCompanyData,
 const { createPosition, getPosition, getAllPositions, updatePosition, deletePosition } = require('./handlers/positions');
 const { getAllEmployeesData } = require('./handlers/data');
 const { createDocument, getDocument, getAllDocuments, updateDocument, deleteDocument } = require('./handlers/documents');
-const { createRule, getRule, getAllRulesById, updateRule, deleteRule, deleteAllRulesById } = require('./handlers/rules');
+const { createRule, getRule, getRulesByDocAndSectionId, getRulesByDocId, getRulesByArrayOfDocsId,
+  updateRule, deleteRule, deleteAllRulesById } = require('./handlers/rules');
 const { createQuestion, getAllQuestionsByRuleId, updateQuestion, deleteQuestion } = require('./handlers/questions');
 
 app.use(bodyParser.json());
@@ -52,7 +53,9 @@ app.get(`/api/deleteDocument/:documentId`, FBAuth, deleteDocument);
 // rules
 app.post(`/api/createRule/:documentId/:sectionId`, FBAuth, createRule);
 app.get(`/api/getRule/:ruleId`, FBAuth, getRule);
-app.get(`/api/getAllRulesById/:documentId/:sectionId`, FBAuth, getAllRulesById);
+app.get(`/api/getRulesByDocAndSectionId/:documentId/:sectionId`, FBAuth, getRulesByDocAndSectionId);
+app.get(`/api/getRulesByDocId/:documentId`, FBAuth, getRulesByDocId);
+app.post(`/api/getRulesByArrayOfDocsId`, FBAuth, getRulesByArrayOfDocsId);
 app.post(`/api/updateRule/:ruleId`, FBAuth, updateRule);
 app.get(`/api/deleteRule/:ruleId`, FBAuth, deleteRule);
 app.get(`/api/deleteAllRulesById/:documentId/:sectionId`, FBAuth, deleteAllRulesById);
@@ -67,7 +70,7 @@ app.get(`/api/deleteQuestion/:questionId`, FBAuth, deleteQuestion);
 
 // Получить правила по всем закреплённым документам за должностью
 // Сформировать [{documentId, sectionId}, {}, ...] по documentId из position
-// allDocumentsId.forEach((documentId) => getAllRulesById/:documentId/:sectionId );
+// allDocumentsId.forEach((documentId) => getRulesByDocAndSectionId/:documentId/:sectionId );
 // Сохранить в test-reducer.js
 
 // Получить индивидуальные правила закреплённые за должностью
@@ -80,4 +83,4 @@ app.use(express.static('dist'));
 
 app.listen(process.env.PORT || 8080, () => console.log(`Listening on port ${process.env.PORT || 8080}!`));
 
-//  git add . && git commit -m "TestsContainerExecute" && git push origin master
+//  git add . && git commit -m "getRulesByArrayOfDocsId" && git push origin master

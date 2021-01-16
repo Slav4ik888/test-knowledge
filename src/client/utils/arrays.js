@@ -1,13 +1,3 @@
-// Возвращает массив без указанного элемента
-// const getArrWithoutItem = (items, itemField, delItem) => {
-//   const idx = items.findIndex((item) => item[itemField] === delItem);
-//   let newItems = items;
-//   if (idx !== -1) {
-//     newItems = [...newItems.slice(0, idx), ...newItems.slice(idx + 1)];
-//   }
-//   return newItems;
-// };
-
 /**
  * Возвращает массив без указанного элемента по itemField
  * @param {array} items 
@@ -48,3 +38,11 @@ export const updateArrWithItemByField = (items, updateField, updateItem) => {
  * @param {string || number} value 
  */
 export const getItemFromArrByField = (arr, field, value) => arr.find((item) => item[field] === value);
+
+/**
+ * Возвращает массив 
+ * @param {array} arrDocId 
+ */
+export const getRulesFromDocuments = (arrDocId) => {
+  
+};

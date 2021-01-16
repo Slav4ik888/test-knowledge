@@ -74,7 +74,7 @@ export default function (state = initialState, action) {
         loading: false,
       });
     
-    case dataActionType.DEL_EMPLOYEE:
+    case dataActionType.DEL_EMPLOYEE: // test +
       return extend(state, {
         employees: getArrWithoutItemByField(state.employees, `userId`, action.payload),
         loading: false,

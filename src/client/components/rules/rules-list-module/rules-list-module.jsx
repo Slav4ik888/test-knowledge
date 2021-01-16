@@ -2,7 +2,7 @@ import React from 'react';
 import pt from 'prop-types';
 // Readux Stuff
 import { connect } from 'react-redux';
-import { getAllRulesById, createRule } from '../../../redux/actions/data-actions';
+import { getRulesByDocAndSectionId, createRule } from '../../../redux/actions/data-actions';
 // MUI Stuff
 import { makeStyles } from '@material-ui/core/styles';
 // Icons
@@ -24,7 +24,7 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 // Выводит список Rules
-const RulesListModule = ({ errors, rules, docSelected, section, getAllRulesById, createRule }) => {
+const RulesListModule = ({ errors, rules, docSelected, section, getRulesByDocAndSectionId, createRule }) => {
   const classes = useStyles();
 
   const docId = docSelected.id;
@@ -38,7 +38,7 @@ const RulesListModule = ({ errors, rules, docSelected, section, getAllRulesById,
 
   if (!activeRuleObj) { // Проверяем есть ли загруженные данные, если нет - загружаем
     console.log(`Нет загр-х rules - ЗАГРУЖАЕМ`);
-    getAllRulesById({ docId, sectionId });
+    getRulesByDocAndSectionId({ docId, sectionId });
 
   } else { // Есть загр-е - НЕ загружаем
     rulesShow = sortingArr(activeRuleObj.rules, `order`); // Получаем rules отсортированные по order
@@ -67,7 +67,7 @@ const RulesListModule = ({ errors, rules, docSelected, section, getAllRulesById,
 RulesListModule.propTypes = {
   errors: pt.object.isRequired,
   rules: pt.array.isRequired,
-  getAllRulesById: pt.func.isRequired,
+  getRulesByDocAndSectionId: pt.func.isRequired,
   createRule: pt.func.isRequired,
   // activeRules: pt.object.isRequired,
 };
@@ -79,7 +79,7 @@ const mapStateToProps = (state) => ({
 });
 
 const mapActionsToProps = {
-  getAllRulesById,
+  getRulesByDocAndSectionId,
   createRule,
 };
 

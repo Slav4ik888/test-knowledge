@@ -49,6 +49,7 @@ async function createRule(req, res) {
   };
 };
 
+// Получает rule по переданному в params ruleId
 async function getRule(req, res) {
   try {
     const ruleRes = await db.doc(`rules/${req.user.companyId}/rules/${req.params.ruleId}`).get();
@@ -71,7 +72,8 @@ async function getRule(req, res) {
   };
 };
 
-async function getAllRulesById(req, res) {
+// Получает все rules из sectionId в указанном documentId
+async function getRulesByDocAndSectionId(req, res) {
   try {
     const rulesRes = await db.collection(`rules`)
       .doc(req.user.companyId)
@@ -97,14 +99,81 @@ async function getAllRulesById(req, res) {
       if (req.update) {
         return rules;
       } else {
-        console.log(`Get rules`);
+        console.log(`Get rules by documentId & sectionId`);
         return res.json({ rules });
       }
     }
   } catch(err) {
-      console.error(err);
-      return res.status(500).json({ general: err.code });
+    console.error(err);
+    return res.status(500).json({ general: err.code });
   };
+};
+
+
+// Получает все rules из указанного documentId
+async function getRulesByDocId(req, res) {
+  try {
+    const rulesRes = await db.collection(`rules`)
+      .doc(req.user.companyId)
+      .collection(`rules`)
+      .where(`docId`, `==`, req.params.documentId)
+      .get();
+    
+    let rules = [];
+
+    if (rulesRes.empty) {
+      if (req.update) {
+        return rules;
+      } else {
+        return res.json({ rules, message: `Нет ни одного правила` });
+      }
+    } else {
+      rulesRes.forEach(rule => {
+        const obj = rule.data();
+        rules.push(obj);
+      });
+
+      if (req.update) {
+        return rules;
+      } else {
+        console.log(`Get rules by documentId`);
+        return res.json({ rules });
+      }
+    }
+  } catch(err) {
+    console.error(err);
+    return res.status(500).json({ general: err.code });
+  };
+};
+
+
+// Получает все rules из массива документов
+// Необходимо, перед тестированием, создать массив со всеми правилами относящиеся к выбранной должности
+async function getRulesByArrayOfDocsId(req, res) {
+  try {
+    req.update = true;
+    const docsId = req.body.docsId;
+
+    let rules = [];
+
+    if (docsId && docsId.length) {
+      for await (let docId of docsId) {
+        req.params.documentId = docId;
+
+        const rulesByDocId = await getRulesByDocId(req, res);
+        console.log('Загрузили правила для docId: ', docId);
+
+        rules = [...rules, ...rulesByDocId];
+        console.log('rules.length: ', rules.length);
+      }
+    }
+
+    return res.json({ rules });
+
+  } catch (err) {
+    console.error(err);
+    return res.status(500).json({ general: err.code });
+  }
 };
 
 async function updateRule(req, res) {
@@ -173,8 +242,8 @@ async function deleteAllRulesById(req, res) {
   if (!valid) return res.status(400).json(errors);
 
   try {
-    req.update = true; // getAllRulesById сообщаем, что это обновление и нужно вернуть данные сюда, а не пользователю
-    const allRules = await getAllRulesById(req, res);
+    req.update = true; // getRulesByDocAndSectionId сообщаем, что это обновление и нужно вернуть данные сюда, а не пользователю
+    const allRules = await getRulesByDocAndSectionId(req, res);
 
     allRules.forEach((rule) => {
       db.doc(`rules/${req.user.companyId}/rules/${rule.id}`).delete();
@@ -201,4 +270,7 @@ async function deleteAllRulesById(req, res) {
   };
 };
 
-module.exports = { createRule, getRule, getAllRulesById, updateRule, deleteRule, deleteAllRulesById };
+module.exports = {
+  createRule, getRule, getRulesByDocAndSectionId, getRulesByDocId, getRulesByArrayOfDocsId,
+  updateRule, deleteRule, deleteAllRulesById
+};

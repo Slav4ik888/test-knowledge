@@ -83,7 +83,26 @@ describe(`DATA Reducer`, () => {
       loading: false,
     });
   });
+
+  it(`Reducer DEL_EMPLOYEE - при удалении сотрудника, удалет данные о нём из reducer`, () => {
+    expect(reducer({ employees: [...mockEmployees], loading: true }, {
+      type: dataActionType.DEL_EMPLOYEE,
+      payload: { userId: 22, name: `Gaya` },
+    })).toEqual({
+      employees: [{ telo: 1, userId: 21 }, { telo: 3, userId: 23 }],
+      loading: false,
+    });
+  });
   
+  it(`Reducer DEL_EMPLOYEE - при удалении несуществующего сотрудника - ничего не изменяет`, () => {
+    expect(reducer({ employees: [...mockEmployees], loading: true }, {
+      type: dataActionType.DEL_EMPLOYEE,
+      payload: { telo: 5, userId: 25, name: `Gelya` },
+    })).toEqual({
+      employees: mockEmployees,
+      loading: false,
+    });
+  });
 });
 
 

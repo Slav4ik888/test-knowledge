@@ -56,12 +56,12 @@ export const deleteEmployee = (employee) => (dispatch) => {
       // Определяем это сам пользователь себя удалил или его удалил Владелец
       switch (res.data.result) {
         case `user`:
-          console.log(`Удалили user`);
+          // console.log(`User удалил сам себя`);
           dispatch(logoutUser());
           break;
         
         case `employee`:
-          console.log(`Удалили employee`);
+          // console.log(`Удалили employee`);
           dispatch({
             type: dataActionType.DEL_EMPLOYEE,
             payload: employee,
@@ -303,11 +303,11 @@ export const setActiveRules = ({ docId, sectionId }) => (dispatch) => {
 };
 
 // Загружаем rules
-export const getAllRulesById = ({ docId, sectionId }) => (dispatch) => {
+export const getRulesByDocAndSectionId = ({ docId, sectionId }) => (dispatch) => {
   // console.log('docId, sectionId: ', docId, sectionId);
   // dispatch({ type: uiActionType.LOADING_UI });
   
-  return axios.get(`/getAllRulesById/${docId}/${sectionId}`)
+  return axios.get(`/getRulesByDocAndSectionId/${docId}/${sectionId}`)
     .then((res) => {
       dispatch({ // Сохраняем rules из активной section
         type: dataActionType.SET_ACTIVE_RULES,

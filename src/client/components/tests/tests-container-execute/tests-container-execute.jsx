@@ -40,12 +40,31 @@ const TestsContainerExecute = ({ open, onClose, errors, allPositions, userEmail,
 
   const placeholder = `Не выбрана`;
   const listTitle = `Должность для тестирования`;
-  
-  // Выбранная должность для тестирования
-  const [posSeleted, setPosSelected] = useState(positions.length ? positions[0].title : null);
-  console.log('posSeleted: ', posSeleted);
-  const handleSetPosSelected = (pos) => setPosSelected(pos);
 
+  let allDocumentsInPosition = []; // Документы закреплённые за выбранной должности
+  let allRulesInPosition = []; // Отдельные правила закреплённые за выбранной должностью
+  let allRules = []; // Итоговый список всех правил для выбранной должности
+  // Выбранная должность для тестирования
+  const [posSeleted, setPosSelected] = useState(null);
+  console.log('posSeleted: ', posSeleted);
+  const handleSetPosSelected = (pos) => {
+    console.log('pos: ', pos);
+    allDocumentsInPosition = posSeleted.documents; // Документы закреплённые за выбранной должности
+    console.log('allDocumentsInPosition: ', allDocumentsInPosition);
+    allRulesInPosition = posSeleted.rules; // Отдельные правила закреплённые за выбранной должностью
+    console.log('allRulesInPosition: ', allRulesInPosition);
+    allRules = getRulesFromDocuments();
+    setPosSelected(pos);
+  };
+
+  
+  // Получить правила по всем закреплённым документам за должностью
+  // Сформировать [{documentId, sectionId}, {}, ...] по documentId из position
+  // allDocumentsId.forEach((documentId) => getAllRulesById/:documentId/:sectionId );
+  // Сохранить в test-reducer.js
+
+  // Получить индивидуальные правила закреплённые за должностью
+  // allRulesId.forEach((ruleId) => getRule/:ruleId );
 
   const handleClose = () => {
     onClose();
