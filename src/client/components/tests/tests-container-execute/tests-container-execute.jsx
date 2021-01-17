@@ -2,7 +2,7 @@ import React, {useState} from 'react';
 import pt from 'prop-types';
 // Readux Stuff
 import { connect } from 'react-redux';
-// import {  } from '../../../redux/actions/data-actions';
+import { getRulesByArrayOfDocsId } from '../../../redux/actions/data-actions';
 // MUI Stuff
 import { makeStyles } from '@material-ui/core/styles';
 import Dialog from '@material-ui/core/Dialog';
@@ -11,6 +11,7 @@ import DialogContent from '@material-ui/core/DialogContent';
 // Component
 import DialogTitle from '../../dialogs/dialog-title/dialog-title';
 import ListSelect from '../../list-select/list-select';
+import CircularProgress from '@material-ui/core/CircularProgress';
 import { getPositionsByUser } from '../../../utils/utils';
 import { typeListSelect } from '../../../../types';
 
@@ -18,18 +19,18 @@ import { typeListSelect } from '../../../../types';
 const useStyles = makeStyles((theme) => ({
   dialog: {
     padding: theme.spacing(4),
-    minHeight: `300px`,
   },
   container: {
     display: 'flex',
     flexWrap: 'wrap',
     backgroundColor: theme.palette.background.bodyfield,
+    minHeight: `300px`,
   },
 }));
 
 
 // Запуск тестирования
-const TestsContainerExecute = ({ open, onClose, errors, allPositions, userEmail, employees }) => {
+const TestsContainerExecute = ({ open, onClose, loading, allPositions, userEmail, employees, getRulesByArrayOfDocsId }) => {
   
   if (!open) return null;
   
@@ -49,11 +50,17 @@ const TestsContainerExecute = ({ open, onClose, errors, allPositions, userEmail,
   console.log('posSeleted: ', posSeleted);
   const handleSetPosSelected = (pos) => {
     console.log('pos: ', pos);
-    allDocumentsInPosition = posSeleted.documents; // Документы закреплённые за выбранной должности
-    console.log('allDocumentsInPosition: ', allDocumentsInPosition);
-    allRulesInPosition = posSeleted.rules; // Отдельные правила закреплённые за выбранной должностью
-    console.log('allRulesInPosition: ', allRulesInPosition);
-    allRules = getRulesFromDocuments();
+
+    if (pos) {
+      allDocumentsInPosition = pos.documents; // Документы закреплённые за выбранной должности
+      console.log('allDocumentsInPosition: ', allDocumentsInPosition);
+
+      allRulesInPosition = pos.rules; // Отдельные правила закреплённые за выбранной должностью
+      console.log('allRulesInPosition: ', allRulesInPosition);
+
+      getRulesByArrayOfDocsId(allDocumentsInPosition); // Загружаем правила для тестирования
+    }
+
     setPosSelected(pos);
   };
 
@@ -90,6 +97,11 @@ const TestsContainerExecute = ({ open, onClose, errors, allPositions, userEmail,
             placeholder={placeholder}
             onSelected={handleSetPosSelected}
           />
+
+          {
+            loading && <CircularProgress size={30} className={classes.progress} />
+          }
+          
         </DialogContent>
       </Dialog>
     </>
@@ -97,20 +109,17 @@ const TestsContainerExecute = ({ open, onClose, errors, allPositions, userEmail,
 }
 
 TestsContainerExecute.propTypes = {
-  // createDocument: pt.func.isRequired,
-  // updateDocument: pt.func.isRequired,
-  // deleteDocument: pt.func.isRequired,
   open: pt.bool.isRequired,
   onClose: pt.func.isRequired,
-  errors: pt.object.isRequired,
-  // userPositions: pt.array,
+  loading: pt.bool.isRequired,
   allPositions: pt.array.isRequired,
   userEmail: pt.string,
   employees: pt.array.isRequired,
+  getRulesByArrayOfDocsId: pt.func.isRequired,
 };
 
 const mapStateToProps = (state) => ({
-  errors: state.UI.errors,
+  loading: state.UI.loading,
   // userPositions: state.user.userProfile.positions,
   userEmail: state.user.userProfile.email,
   employees: state.data.employees,
@@ -118,7 +127,7 @@ const mapStateToProps = (state) => ({
 });
 
 const mapActionsToProps = {
-  // createDocument,
+  getRulesByArrayOfDocsId,
   // updateDocument,
   // deleteDocument,
 };

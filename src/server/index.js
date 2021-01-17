@@ -83,4 +83,4 @@ app.use(express.static('dist'));
 
 app.listen(process.env.PORT || 8080, () => console.log(`Listening on port ${process.env.PORT || 8080}!`));
 
-//  git add . && git commit -m "getRulesByArrayOfDocsId" && git push origin master
+//  git add . && git commit -m "getRulesByArrayOfDocsId прикрепил к front" && git push origin master

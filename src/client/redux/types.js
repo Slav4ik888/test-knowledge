@@ -42,8 +42,9 @@ export const dataActionType = {
   DELETE_DOCUMENT: `DELETE_DOCUMENT`,
 
   CREATE_RULE: `CREATE_RULE`,
-  SET_RULES: `SET_RULES`,
+  SET_RULES: `SET_RULES`, // загруженные rules для открытой section
   SET_ACTIVE_RULES: `SET_ACTIVE_RULES`,
+  SET_RULES_FOR_TEST: `SET_RULES_FOR_TEST`, // загруженные rules для тестирования
   UPDATE_RULE: `UPDATE_RULE`,
   DELETE_RULE: `DELETE_RULE`,
   DELETE_RULES_FROM_SECTION: `DELETE_RULES_FROM_SECTION`,

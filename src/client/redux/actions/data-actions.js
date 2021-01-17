@@ -302,7 +302,7 @@ export const setActiveRules = ({ docId, sectionId }) => (dispatch) => {
   });
 };
 
-// Загружаем rules
+// Загружаем rules при разворачивании section
 export const getRulesByDocAndSectionId = ({ docId, sectionId }) => (dispatch) => {
   // console.log('docId, sectionId: ', docId, sectionId);
   // dispatch({ type: uiActionType.LOADING_UI });
@@ -321,12 +321,34 @@ export const getRulesByDocAndSectionId = ({ docId, sectionId }) => (dispatch) =>
     })
     .catch((err) => {
       console.log(err.response.data);
-      dispatch({
-        type: uiActionType.SET_ERRORS,
-        payload: err.response.data,
-      })
+      dispatch({ type: uiActionType.SET_ERRORS, payload: err.response.data });
     });
 };
+
+
+/**
+ * Получает все rules из массива документов
+ * Необходимо, перед тестированием, создать массив со всеми правилами относящиеся к выбранной должности
+ * @param {array} docsId - массив id документов
+ */
+export const getRulesByArrayOfDocsId = (docsId) => (dispatch) => {
+  console.log('docsId: ', docsId);
+  dispatch({ type: uiActionType.LOADING_UI });
+
+  return axios.post(`/getRulesByArrayOfDocsId`, { docsId })
+    .then((res) => {
+      dispatch({
+        type: dataActionType.SET_RULES_FOR_TEST,
+        payload: res.data.rules,
+      })
+      dispatch({ type: uiActionType.CLEAR_ERRORS });
+    })
+    .catch((err) => {
+      console.error(err.response.data);
+      dispatch({ type: uiActionType.SET_ERRORS, payload: err.response.data });
+    });
+};
+
 
 // Обновляем rule
 export const updateRule = (rule) => (dispatch) => {

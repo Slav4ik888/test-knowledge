@@ -155,7 +155,8 @@ async function getRulesByArrayOfDocsId(req, res) {
     const docsId = req.body.docsId;
 
     let rules = [];
-
+    console.log(`Start getRulesByArrayOfDocsId: `, docsId);
+    
     if (docsId && docsId.length) {
       for await (let docId of docsId) {
         req.params.documentId = docId;

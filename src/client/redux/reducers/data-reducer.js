@@ -18,6 +18,7 @@ const initialState = {
   // }
   activeRules: null, // { docId, sectionId } - чтобы по ним взять rules из активной section 
 
+  rulesForTest: [],
   questions: [], // Храняться объекты загруженных questions
   // questions = {
   //   id: `1`, // id массива вопросов
@@ -202,6 +203,13 @@ export default function (state = initialState, action) {
     case dataActionType.SET_ACTIVE_RULES:
       return extend(state, {
         activeRules: action.payload,
+      });
+      
+    // Сохраняем загруженные rules для тестирования поверх того, что было...
+    case dataActionType.SET_RULES_FOR_TEST: // test +
+
+      return extend(state, {
+        rulesForTest: action.payload,
       });
       
     case dataActionType.UPDATE_RULE:

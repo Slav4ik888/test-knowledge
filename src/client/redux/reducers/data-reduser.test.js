@@ -14,6 +14,8 @@ const mockInitialState = {
   rules: [], 
   activeRules: null, // { docId, sectionId } - чтобы по ним взять rules из активной section 
 
+  rulesForTest: [],
+
   questions: [], 
 };
 
@@ -103,6 +105,30 @@ describe(`DATA Reducer`, () => {
       loading: false,
     });
   });
+
+
+  it(`Reducer SET_RULES_FOR_TEST - при формировании теста для должности, полученные rules с сервера сохраняет в пустой массив`, () => {
+    expect(reducer({ rulesForTest: [] }, {
+      type: dataActionType.SET_RULES_FOR_TEST,
+      payload: [{ id: 1 }, { id: 2 }, { id: 3 }],
+    })).toEqual({ rulesForTest: [{ id: 1 }, { id: 2 }, { id: 3 }] });
+  });
+
+  it(`Reducer SET_RULES_FOR_TEST - при формировании теста для должности, полученные rules с сервера сохраняет в массив с данными`, () => {
+    expect(reducer({ rulesForTest: [1, 2, 3, 4, 5] }, {
+      type: dataActionType.SET_RULES_FOR_TEST,
+      payload: [{ id: 1 }, { id: 2 }, { id: 3 }],
+    })).toEqual({ rulesForTest: [{ id: 1 }, { id: 2 }, { id: 3 }] });
+  });
+
+  it(`Reducer SET_RULES_FOR_TEST - при формировании теста для должности, полученные пустой rules с сервера сохраняет в массив с данными`, () => {
+    expect(reducer({ rulesForTest: [1, 2, 3, 4, 5] }, {
+      type: dataActionType.SET_RULES_FOR_TEST,
+      payload: [],
+    })).toEqual({ rulesForTest: [] });
+  });
+    
+  
 });
 
 
