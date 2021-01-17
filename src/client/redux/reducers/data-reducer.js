@@ -1,6 +1,6 @@
 import {dataActionType} from '../types';
 import { extend, getIdxRulesFromDocAndSection } from '../../utils/utils';
-import { getArrWithoutItemByField, updateArrWithItemByField } from '../../utils/arrays';
+import { getArrWithoutItemByField, updateArrWithItemByField, getItemFromArrByField } from '../../utils/arrays';
 
 
 const initialState = {
@@ -206,14 +206,20 @@ export default function (state = initialState, action) {
         activeRules: action.payload,
       });
       
-    // Сохраняем загруженные rules для тестирования поверх того, что было...
-    case dataActionType.SET_RULES_FOR_TEST: // test +
+    // Загруженные rules для тестирования добавляем к тому, что было...
+    case dataActionType.ADD_RULES_FOR_TEST: // test +
+      let addItem = getItemFromArrByField(state.rulesForTest, `positionId`, action.payload.positionId);
+      
+      if (addItem) { // Если уже есть загруженные по positionId 
+        addItem.rules = [...addItem.rules, ...action.payload.rules];
+      } else { // Если нет
+        addItem = {};
+        addItem.positionId = action.payload.positionId;
+        addItem.rules = action.payload.rules;
+      }
 
       return extend(state, {
-        rulesForTest: updateArrWithItemByField(state.rulesForTest, `positionId`, {
-          positionId: action.payload.positionId,
-          rules: action.payload.rules,
-        })
+        rulesForTest: updateArrWithItemByField(state.rulesForTest, `positionId`, addItem),
       });
       
     case dataActionType.UPDATE_RULE:

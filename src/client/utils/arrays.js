@@ -25,6 +25,7 @@ export const getArrWithoutItemByField = (items, itemField, delItem) => {
 export const updateArrWithItemByField = (items, updateField, updateItem) => {
   const idx = items.findIndex((item) => item[updateField] === updateItem[updateField]);
   let newItems = items;
+
   if (idx !== -1) { // Если есть - обновляем
     newItems = [...newItems.slice(0, idx), updateItem, ...newItems.slice(idx + 1)];
   } else { // Нету - добавляем
@@ -34,17 +35,9 @@ export const updateArrWithItemByField = (items, updateField, updateItem) => {
 };
 
 /**
- * Возвращает item соответвующий id
+ * Возвращает item соответвующий value
  * @param {array} arr 
  * @param {string} field - `id` || `email` || any
  * @param {string || number} value 
  */
 export const getItemFromArrByField = (arr, field, value) => arr.find((item) => item[field] === value);
-
-/**
- * Возвращает массив 
- * @param {array} arrDocId 
- */
-export const getRulesFromDocuments = (arrDocId) => {
-  
-};

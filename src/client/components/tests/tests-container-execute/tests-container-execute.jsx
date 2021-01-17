@@ -2,17 +2,19 @@ import React, {useState} from 'react';
 import pt from 'prop-types';
 // Readux Stuff
 import { connect } from 'react-redux';
-import { getRulesByArrayOfDocsId } from '../../../redux/actions/data-actions';
+import { getRulesByArrayOfDocsId, getRulesByArrayOfRulesId } from '../../../redux/actions/data-actions';
 // MUI Stuff
 import { makeStyles } from '@material-ui/core/styles';
 import Dialog from '@material-ui/core/Dialog';
 // import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
+import Typography from '@material-ui/core/Typography';
 // Component
 import DialogTitle from '../../dialogs/dialog-title/dialog-title';
 import ListSelect from '../../list-select/list-select';
 import CircularProgress from '@material-ui/core/CircularProgress';
 import { getPositionsByUser } from '../../../utils/utils';
+import { getItemFromArrByField } from '../../../utils/arrays';
 import { typeListSelect } from '../../../../types';
 
 
@@ -20,8 +22,12 @@ const useStyles = makeStyles((theme) => ({
   dialog: {
     padding: theme.spacing(4),
   },
+  title: {
+    marginBottom: theme.spacing(3),
+  },
   container: {
     display: 'flex',
+    flexDirection: `column`,
     flexWrap: 'wrap',
     backgroundColor: theme.palette.background.bodyfield,
     minHeight: `300px`,
@@ -30,7 +36,8 @@ const useStyles = makeStyles((theme) => ({
 
 
 // Запуск тестирования
-const TestsContainerExecute = ({ open, onClose, loading, allPositions, userEmail, employees, getRulesByArrayOfDocsId, rulesForTest }) => {
+const TestsContainerExecute = ({ open, onClose, loading, allPositions, userEmail, employees,
+  getRulesByArrayOfDocsId, getRulesByArrayOfRulesId, rulesForTest }) => {
   
   if (!open) return null;
   
@@ -42,39 +49,35 @@ const TestsContainerExecute = ({ open, onClose, loading, allPositions, userEmail
   const placeholder = `Не выбрана`;
   const listTitle = `Должность для тестирования`;
 
-  let allDocumentsInPosition = []; // Документы закреплённые за выбранной должности
-  let allRulesInPosition = []; // Отдельные правила закреплённые за выбранной должностью
+  let docsInPos = []; // Документы закреплённые за выбранной должности
+  let rulesInPos = []; // Отдельные правила закреплённые за выбранной должностью
   let allRules = []; // Итоговый список всех правил для выбранной должности
 
   // Выбранная должность для тестирования
   const [posSeleted, setPosSelected] = useState(null);
   console.log('posSeleted: ', posSeleted);
+  const positionText = posSeleted ? `` : `Выберите должность для тестирования`;
+
   const handleSetPosSelected = (pos) => {
     console.log('pos: ', pos);
 
     if (pos) {
-      allDocumentsInPosition = pos.documents; // Документы закреплённые за выбранной должности
-      console.log('allDocumentsInPosition: ', allDocumentsInPosition);
-
-      allRulesInPosition = pos.rules; // Отдельные правила закреплённые за выбранной должностью
-      console.log('allRulesInPosition: ', allRulesInPosition);
-
-      const isRulesLoading = (arr, field, value) => arr.find(item => item[field] === value);
-
-      if (!isRulesLoading(rulesForTest, `positionId`, pos.id)) {
+      if (!getItemFromArrByField(rulesForTest, `positionId`, pos.id)) {
         console.log(`Нет загруженных rules для position ${pos.id}. ЗАГРУЖАЕМ`);
-        getRulesByArrayOfDocsId(allDocumentsInPosition, pos.id); // Загружаем правила для тестирования
+
+        docsInPos = pos.documents; // Документы закреплённые за выбранной должности
+        console.log('docsInPos: ', docsInPos);
+
+        rulesInPos = pos.rules; // Отдельные правила закреплённые за выбранной должностью
+        console.log('rulesInPos: ', rulesInPos);
+        // Загружаем правила по всем закреплённым за должностью документам и отдельным rules
+        getRulesByArrayOfDocsId(docsInPos, pos.id);
+        getRulesByArrayOfRulesId(rulesInPos, pos.id);
       }
     }
 
     setPosSelected(pos);
   };
-
-  
-  // Получить правила по всем закреплённым документам за должностью
-  // Сформировать [{documentId, sectionId}, {}, ...] по documentId из position
-  // allDocumentsId.forEach((documentId) => getAllRulesById/:documentId/:sectionId );
-  // Сохранить в test-reducer.js
 
   // Получить индивидуальные правила закреплённые за должностью
   // allRulesId.forEach((ruleId) => getRule/:ruleId );
@@ -93,7 +96,9 @@ const TestsContainerExecute = ({ open, onClose, loading, allPositions, userEmail
         <DialogTitle onClose={handleClose}>Тестирование</DialogTitle>
 
         <DialogContent dividers className={classes.container} >
-          
+
+          <Typography variant="h5" color="primary" className={classes.title}>{positionText}</Typography>
+
           <ListSelect
             type={typeListSelect.POSITION}
             title={listTitle}
@@ -122,6 +127,7 @@ TestsContainerExecute.propTypes = {
   userEmail: pt.string,
   employees: pt.array.isRequired,
   getRulesByArrayOfDocsId: pt.func.isRequired,
+  getRulesByArrayOfRulesId: pt.func.isRequired,
   rulesForTest: pt.array.isRequired,
 };
 
@@ -136,7 +142,7 @@ const mapStateToProps = (state) => ({
 
 const mapActionsToProps = {
   getRulesByArrayOfDocsId,
-  // updateDocument,
+  getRulesByArrayOfRulesId,
   // deleteDocument,
 };
 

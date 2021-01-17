@@ -11,7 +11,7 @@ const { signupCompany, getCompanyData, getUserAndCompanyData, updateCompanyData,
 const { createPosition, getPosition, getAllPositions, updatePosition, deletePosition } = require('./handlers/positions');
 const { getAllEmployeesData } = require('./handlers/data');
 const { createDocument, getDocument, getAllDocuments, updateDocument, deleteDocument } = require('./handlers/documents');
-const { createRule, getRule, getRulesByDocAndSectionId, getRulesByDocId, getRulesByArrayOfDocsId,
+const { createRule, getRule, getRulesByDocAndSectionId, getRulesByDocId, getRulesByArrayOfDocsId, getRulesByArrayOfRulesId,
   updateRule, deleteRule, deleteAllRulesById } = require('./handlers/rules');
 const { createQuestion, getAllQuestionsByRuleId, updateQuestion, deleteQuestion } = require('./handlers/questions');
 
@@ -56,6 +56,7 @@ app.get(`/api/getRule/:ruleId`, FBAuth, getRule);
 app.get(`/api/getRulesByDocAndSectionId/:documentId/:sectionId`, FBAuth, getRulesByDocAndSectionId);
 app.get(`/api/getRulesByDocId/:documentId`, FBAuth, getRulesByDocId);
 app.post(`/api/getRulesByArrayOfDocsId`, FBAuth, getRulesByArrayOfDocsId);
+app.post(`/api/getRulesByArrayOfRulesId`, FBAuth, getRulesByArrayOfRulesId);
 app.post(`/api/updateRule/:ruleId`, FBAuth, updateRule);
 app.get(`/api/deleteRule/:ruleId`, FBAuth, deleteRule);
 app.get(`/api/deleteAllRulesById/:documentId/:sectionId`, FBAuth, deleteAllRulesById);
@@ -83,4 +84,4 @@ app.use(express.static('dist'));
 
 app.listen(process.env.PORT || 8080, () => console.log(`Listening on port ${process.env.PORT || 8080}!`));
 
-//  git add . && git commit -m "fix rulesForTest" && git push origin master
+//  git add . && git commit -m "getRulesByArrayOfRulesId & fix ADD_RULES_FOR_TEST" && git push origin master

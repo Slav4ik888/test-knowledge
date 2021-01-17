@@ -31,3 +31,19 @@ export const mockRulesForPosition = {
   rules: [4, 5, 6, 7, 8],
   positionId: `zxcvb`
 };
+
+export const mockRulesForPositionAdd = {
+  rules: [5, 6, 7, 8, 9, 10],
+  positionId: `qwert`
+};
+
+export const mockRulesForTestAfterAdd = [{
+  rules: [1, 2, 3, 4, 5],
+  positionId: `dfghj`
+}, {
+  rules: [2, 3, 4, 5, 6, 5, 6, 7, 8, 9, 10],
+  positionId: `qwert`
+}, {
+  rules: [3, 4, 5, 6, 7],
+  positionId: `asdfg`
+}];

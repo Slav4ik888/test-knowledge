@@ -53,20 +53,29 @@ async function createRule(req, res) {
 async function getRule(req, res) {
   try {
     const ruleRes = await db.doc(`rules/${req.user.companyId}/rules/${req.params.ruleId}`).get();
-    
+    let rule = {};
+
     if (ruleRes.exists) {
-      const rule = ruleRes.data();
+      rule = ruleRes.data();
 
       if (req.update) {
         return rule;
       } else {
         return res.json({ rule, message: `Правило успешно передано` });
       }
+
+    } else {
+      if (req.update) {
+        console.log(`Правило ${req.params.ruleId} не найдено`);
+        return rule;
+      } else {
+        return res.json({ rule, message: `Правило ${req.params.ruleId} не найдено` });
+      }
     }
   } catch (err) {
-    if (err.code === 5) {
-      return res.status(500).json({ general: `Правило не найдено` });
-    }
+    // if (err.code === 5) {
+    //   return res.status(500).json({ general: `Правило не найдено` });
+    // }
     console.error(err);
     return res.status(500).json({ general: err.code });
   };
@@ -156,7 +165,7 @@ async function getRulesByArrayOfDocsId(req, res) {
 
     let rules = [];
     console.log(`Start getRulesByArrayOfDocsId: `, docsId);
-    
+
     if (docsId && docsId.length) {
       for await (let docId of docsId) {
         req.params.documentId = docId;
@@ -165,7 +174,37 @@ async function getRulesByArrayOfDocsId(req, res) {
         console.log('Загрузили правила для docId: ', docId);
 
         rules = [...rules, ...rulesByDocId];
-        console.log('rules.length: ', rules.length);
+      }
+    }
+
+    return res.json({ rules });
+
+  } catch (err) {
+    console.error(err);
+    return res.status(500).json({ general: err.code });
+  }
+};
+
+
+// Получает все rules из массива с ruleId
+// Необходимо, перед тестированием, создать массив со всеми правилами относящиеся к выбранной должности
+async function getRulesByArrayOfRulesId(req, res) {
+  try {
+    req.update = true;
+    const rulesId = req.body.rulesId;
+
+    let rules = [];
+    console.log(`Start getRulesByArrayOfRulesId: `, rulesId);
+    
+    if (rulesId && rulesId.length) {
+      for await (let ruleId of rulesId) {
+        req.params.ruleId = ruleId;
+
+        const rule = await getRule(req, res);
+        if (rule.id) {
+          console.log('Загрузили правило: ', ruleId);
+          rules.push(rule);
+        }
       }
     }
 
@@ -272,6 +311,6 @@ async function deleteAllRulesById(req, res) {
 };
 
 module.exports = {
-  createRule, getRule, getRulesByDocAndSectionId, getRulesByDocId, getRulesByArrayOfDocsId,
+  createRule, getRule, getRulesByDocAndSectionId, getRulesByDocId, getRulesByArrayOfDocsId, getRulesByArrayOfRulesId,
   updateRule, deleteRule, deleteAllRulesById
 };

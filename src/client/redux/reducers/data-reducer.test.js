@@ -1,6 +1,9 @@
 import reducer from './data-reducer';
 import { dataActionType } from '../types';
-import { mockInitialState, mockEmployees, mockRulesForTest, mockRulesForPosition } from '../../mocks/for-data-reducer';
+import {
+  mockInitialState, mockEmployees, mockRulesForTest, mockRulesForPosition,
+  mockRulesForPositionAdd, mockRulesForTestAfterAdd
+} from '../../mocks/for-data-reducer';
 
 // const api = createAPI(() => {});
 
@@ -91,27 +94,33 @@ describe(`DATA Reducer`, () => {
   });
 
 
-  it(`Reducer SET_RULES_FOR_TEST - при формировании теста для должности, полученные rules с сервера сохраняет в пустой массив`, () => {
+  it(`Reducer ADD_RULES_FOR_TEST - при формировании теста для должности, полученные rules с сервера сохраняет в пустой массив`, () => {
     expect(reducer({ rulesForTest: [] }, {
-      type: dataActionType.SET_RULES_FOR_TEST,
+      type: dataActionType.ADD_RULES_FOR_TEST,
       payload: mockRulesForPosition,
     })).toEqual({ rulesForTest: [mockRulesForPosition] });
   });
 
-  it(`Reducer SET_RULES_FOR_TEST - при формировании теста для должности, полученные rules с сервера сохраняет в массив с данными`, () => {
+  it(`Reducer ADD_RULES_FOR_TEST - при формировании теста для должности, полученные rules с сервера сохраняет в массив с данными`, () => {
     expect(reducer({ rulesForTest: [...mockRulesForTest] }, {
-      type: dataActionType.SET_RULES_FOR_TEST,
+      type: dataActionType.ADD_RULES_FOR_TEST,
       payload: mockRulesForPosition,
     })).toEqual({ rulesForTest: [...mockRulesForTest, mockRulesForPosition] });
   });
 
-  it(`Reducer SET_RULES_FOR_TEST - при формировании теста для должности, полученные пустой rules с сервера ничего не меняет в массиве с данными`, () => {
+  it(`Reducer ADD_RULES_FOR_TEST - при формировании теста для должности, полученные пустой rules с сервера ничего не меняет в массиве с данными`, () => {
     expect(reducer({ rulesForTest: [...mockRulesForTest] }, {
-      type: dataActionType.SET_RULES_FOR_TEST,
+      type: dataActionType.ADD_RULES_FOR_TEST,
       payload: { positionId: `cvbnm`, rules: [] },
     })).toEqual({ rulesForTest: [...mockRulesForTest, { positionId: `cvbnm`, rules: [] }] });
   });
-    
+
+  it(`Reducer ADD_RULES_FOR_TEST - полученные rules добавляются в массиве с данными для уже имеющегоя positionId`, () => {
+    expect(reducer({ rulesForTest: [...mockRulesForTest] }, {
+      type: dataActionType.ADD_RULES_FOR_TEST,
+      payload: mockRulesForPositionAdd,
+    })).toEqual({ rulesForTest: mockRulesForTestAfterAdd });
+  });
   
 });
 
