@@ -18,7 +18,8 @@ const initialState = {
   // }
   activeRules: null, // { docId, sectionId } - чтобы по ним взять rules из активной section 
 
-  rulesForTest: [],
+  rulesForTest: [], // [{ positionId: ``, rules: []}, {}]
+
   questions: [], // Храняться объекты загруженных questions
   // questions = {
   //   id: `1`, // id массива вопросов
@@ -209,7 +210,10 @@ export default function (state = initialState, action) {
     case dataActionType.SET_RULES_FOR_TEST: // test +
 
       return extend(state, {
-        rulesForTest: action.payload,
+        rulesForTest: updateArrWithItemByField(state.rulesForTest, `positionId`, {
+          positionId: action.payload.positionId,
+          rules: action.payload.rules,
+        })
       });
       
     case dataActionType.UPDATE_RULE:

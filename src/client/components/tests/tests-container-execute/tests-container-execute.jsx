@@ -30,7 +30,7 @@ const useStyles = makeStyles((theme) => ({
 
 
 // Запуск тестирования
-const TestsContainerExecute = ({ open, onClose, loading, allPositions, userEmail, employees, getRulesByArrayOfDocsId }) => {
+const TestsContainerExecute = ({ open, onClose, loading, allPositions, userEmail, employees, getRulesByArrayOfDocsId, rulesForTest }) => {
   
   if (!open) return null;
   
@@ -45,6 +45,7 @@ const TestsContainerExecute = ({ open, onClose, loading, allPositions, userEmail
   let allDocumentsInPosition = []; // Документы закреплённые за выбранной должности
   let allRulesInPosition = []; // Отдельные правила закреплённые за выбранной должностью
   let allRules = []; // Итоговый список всех правил для выбранной должности
+
   // Выбранная должность для тестирования
   const [posSeleted, setPosSelected] = useState(null);
   console.log('posSeleted: ', posSeleted);
@@ -58,7 +59,12 @@ const TestsContainerExecute = ({ open, onClose, loading, allPositions, userEmail
       allRulesInPosition = pos.rules; // Отдельные правила закреплённые за выбранной должностью
       console.log('allRulesInPosition: ', allRulesInPosition);
 
-      getRulesByArrayOfDocsId(allDocumentsInPosition); // Загружаем правила для тестирования
+      const isRulesLoading = (arr, field, value) => arr.find(item => item[field] === value);
+
+      if (!isRulesLoading(rulesForTest, `positionId`, pos.id)) {
+        console.log(`Нет загруженных rules для position ${pos.id}. ЗАГРУЖАЕМ`);
+        getRulesByArrayOfDocsId(allDocumentsInPosition, pos.id); // Загружаем правила для тестирования
+      }
     }
 
     setPosSelected(pos);
@@ -116,6 +122,7 @@ TestsContainerExecute.propTypes = {
   userEmail: pt.string,
   employees: pt.array.isRequired,
   getRulesByArrayOfDocsId: pt.func.isRequired,
+  rulesForTest: pt.array.isRequired,
 };
 
 const mapStateToProps = (state) => ({
@@ -124,6 +131,7 @@ const mapStateToProps = (state) => ({
   userEmail: state.user.userProfile.email,
   employees: state.data.employees,
   allPositions: state.data.positions,
+  rulesForTest: state.data.rulesForTest,
 });
 
 const mapActionsToProps = {

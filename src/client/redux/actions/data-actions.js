@@ -330,16 +330,21 @@ export const getRulesByDocAndSectionId = ({ docId, sectionId }) => (dispatch) =>
  * Получает все rules из массива документов
  * Необходимо, перед тестированием, создать массив со всеми правилами относящиеся к выбранной должности
  * @param {array} docsId - массив id документов
+ * @param {string} positionId
  */
-export const getRulesByArrayOfDocsId = (docsId) => (dispatch) => {
-  console.log('docsId: ', docsId);
+export const getRulesByArrayOfDocsId = (docsId, positionId) => (dispatch) => {
+  console.log(`docsId: ${docsId}`);
+  console.log(`posId: ${positionId}`);
   dispatch({ type: uiActionType.LOADING_UI });
 
   return axios.post(`/getRulesByArrayOfDocsId`, { docsId })
     .then((res) => {
       dispatch({
         type: dataActionType.SET_RULES_FOR_TEST,
-        payload: res.data.rules,
+        payload: {
+          positionId,
+          rules: res.data.rules,
+        },
       })
       dispatch({ type: uiActionType.CLEAR_ERRORS });
     })

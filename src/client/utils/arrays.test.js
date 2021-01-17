@@ -10,8 +10,8 @@ describe(`ARRAY.JS - updateArrWithItemByField`, () => {
     expect(updateArrWithItemByField([...mockArray], `id`, mockFieldUpdate)).toEqual(mockArrayUpdated);
   });
 
-  it(`Обновляем несуществующим объектом, ничего не меняет`, () => {
-    expect(updateArrWithItemByField([...mockArray], `id`, {id: `555`})).toEqual(mockArray);
+  it(`Обновляем несуществующим объектом, он добавляется к массиву`, () => {
+    expect(updateArrWithItemByField([...mockArray], `id`, {id: `555`})).toEqual([...mockArray, {id: `555`}]);
   });
 });
 

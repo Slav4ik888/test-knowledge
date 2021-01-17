@@ -1,25 +1,9 @@
 import reducer from './data-reducer';
 import { dataActionType } from '../types';
-// import {offers} from '../../mocks/offers.js';
+import { mockInitialState, mockEmployees, mockRulesForTest, mockRulesForPosition } from '../../mocks/for-data-reducer';
 
 // const api = createAPI(() => {});
 
-const mockInitialState = {
-  loading: false,
-  employees: [],
-  positions: [],
-  documents: [],
-  activeDocument: null,
-
-  rules: [], 
-  activeRules: null, // { docId, sectionId } - чтобы по ним взять rules из активной section 
-
-  rulesForTest: [],
-
-  questions: [], 
-};
-
-const mockEmployees = [{ telo: 1, userId: 21 }, { telo: 2, userId: 22 }, { telo: 3, userId: 23 }];
 
 describe(`DATA Reducer`, () => {
 
@@ -76,12 +60,12 @@ describe(`DATA Reducer`, () => {
     });
   });
 
-  it(`Reducer UPDATE_EMPLOYEE - обновление несуществующего сотрудника - ничего не обновляет`, () => {
+  it(`Reducer UPDATE_EMPLOYEE - обновление несуществующего сотрудника - добавляет его`, () => {
     expect(reducer({ employees: [...mockEmployees], loading: true }, {
       type: dataActionType.UPDATE_EMPLOYEE,
       payload: { telo: 5, userId: 25, name: `Gelya` },
     })).toEqual({
-      employees: mockEmployees,
+      employees: [...mockEmployees, { telo: 5, userId: 25, name: `Gelya` }],
       loading: false,
     });
   });
@@ -110,22 +94,22 @@ describe(`DATA Reducer`, () => {
   it(`Reducer SET_RULES_FOR_TEST - при формировании теста для должности, полученные rules с сервера сохраняет в пустой массив`, () => {
     expect(reducer({ rulesForTest: [] }, {
       type: dataActionType.SET_RULES_FOR_TEST,
-      payload: [{ id: 1 }, { id: 2 }, { id: 3 }],
-    })).toEqual({ rulesForTest: [{ id: 1 }, { id: 2 }, { id: 3 }] });
+      payload: mockRulesForPosition,
+    })).toEqual({ rulesForTest: [mockRulesForPosition] });
   });
 
   it(`Reducer SET_RULES_FOR_TEST - при формировании теста для должности, полученные rules с сервера сохраняет в массив с данными`, () => {
-    expect(reducer({ rulesForTest: [1, 2, 3, 4, 5] }, {
+    expect(reducer({ rulesForTest: [...mockRulesForTest] }, {
       type: dataActionType.SET_RULES_FOR_TEST,
-      payload: [{ id: 1 }, { id: 2 }, { id: 3 }],
-    })).toEqual({ rulesForTest: [{ id: 1 }, { id: 2 }, { id: 3 }] });
+      payload: mockRulesForPosition,
+    })).toEqual({ rulesForTest: [...mockRulesForTest, mockRulesForPosition] });
   });
 
-  it(`Reducer SET_RULES_FOR_TEST - при формировании теста для должности, полученные пустой rules с сервера сохраняет в массив с данными`, () => {
-    expect(reducer({ rulesForTest: [1, 2, 3, 4, 5] }, {
+  it(`Reducer SET_RULES_FOR_TEST - при формировании теста для должности, полученные пустой rules с сервера ничего не меняет в массиве с данными`, () => {
+    expect(reducer({ rulesForTest: [...mockRulesForTest] }, {
       type: dataActionType.SET_RULES_FOR_TEST,
-      payload: [],
-    })).toEqual({ rulesForTest: [] });
+      payload: { positionId: `cvbnm`, rules: [] },
+    })).toEqual({ rulesForTest: [...mockRulesForTest, { positionId: `cvbnm`, rules: [] }] });
   });
     
   
@@ -192,4 +176,4 @@ describe(`DATA Operation work correctly`, () => {
   // });
 });
 
-// npm run test data-reduser.test.js
+// npm run test data-reducer.test.js

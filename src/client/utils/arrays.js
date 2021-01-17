@@ -25,8 +25,10 @@ export const getArrWithoutItemByField = (items, itemField, delItem) => {
 export const updateArrWithItemByField = (items, updateField, updateItem) => {
   const idx = items.findIndex((item) => item[updateField] === updateItem[updateField]);
   let newItems = items;
-  if (idx !== -1) {
+  if (idx !== -1) { // Если есть - обновляем
     newItems = [...newItems.slice(0, idx), updateItem, ...newItems.slice(idx + 1)];
+  } else { // Нету - добавляем
+    newItems.push(updateItem);
   }
   return newItems;
 };
