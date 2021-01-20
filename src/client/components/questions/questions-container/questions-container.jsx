@@ -2,7 +2,7 @@ import React, { useState, useRef, useEffect } from 'react';
 import pt from 'prop-types';
 // Readux Stuff
 import { connect } from 'react-redux';
-import { createQuestion, getAllQuestionsByRuleId, deleteQuestion } from '../../../redux/actions/data-actions';
+import { createQuestion, getQuestionsByRuleId, deleteQuestion } from '../../../redux/actions/data-actions';
 // MUI Stuff
 import { makeStyles } from '@material-ui/core/styles';
 import Dialog from '@material-ui/core/Dialog';
@@ -34,7 +34,7 @@ const useStyles = makeStyles((theme) => ({
 
 
 // Контейнер с вопросами, которые можно создавать и редактировать
-const QuestionsContainer = ({ open, onClose, ruleId, errors, allQuestions, getAllQuestionsByRuleId, createQuestion, deleteQuestion }) => {
+const QuestionsContainer = ({ open, onClose, ruleId, errors, allQuestions, getQuestionsByRuleId, createQuestion, deleteQuestion }) => {
   
   if (!open) return null;
 
@@ -44,7 +44,7 @@ const QuestionsContainer = ({ open, onClose, ruleId, errors, allQuestions, getAl
   // Проверяем загружали ли уже и если нет то загружаем первый раз
   if (!activeQuestionsObj) {
     console.log(`Нет загр-х questions - ЗАГРУЖАЕМ`);
-    getAllQuestionsByRuleId({ ruleId });
+    getQuestionsByRuleId({ ruleId });
 
   } else { // Есть загр-е - НЕ загружаем
     questions = sortingArr(activeQuestionsObj.questions, `order`); // Получаем questions отсортированные по order
@@ -132,7 +132,7 @@ QuestionsContainer.propTypes = {
   errors: pt.object.isRequired,
   createQuestion: pt.func.isRequired,
   allQuestions: pt.array.isRequired,
-  getAllQuestionsByRuleId: pt.func.isRequired,
+  getQuestionsByRuleId: pt.func.isRequired,
   deleteQuestion: pt.func.isRequired,
 };
 
@@ -143,7 +143,7 @@ const mapStateToProps = (state) => ({
 
 const mapActionsToProps = {
   createQuestion,
-  getAllQuestionsByRuleId,
+  getQuestionsByRuleId,
   deleteQuestion,
 };
 

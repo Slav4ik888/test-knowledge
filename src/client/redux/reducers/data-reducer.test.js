@@ -1,8 +1,9 @@
 import reducer from './data-reducer';
 import { dataActionType } from '../types';
 import {
-  mockInitialState, mockEmployees, mockRulesForTest, mockRulesForPosition,
-  mockRulesForPositionAdd, mockRulesForTestAfterAdd
+  mockInitialState, mockEmployees,
+  mockRulesForTest, mockRulesForPosition, mockRulesForPositionAdd, mockRulesForTestAfterAdd,
+  mockQuestionsForTest, mockQuestionsForPosition, mockQuestionsForPositionAdd, mockQuestionsForTestAfterAdd,
 } from '../../mocks/for-data-reducer';
 
 // const api = createAPI(() => {});
@@ -94,6 +95,7 @@ describe(`DATA Reducer`, () => {
   });
 
 
+
   it(`Reducer ADD_RULES_FOR_TEST - при формировании теста для должности, полученные rules с сервера сохраняет в пустой массив`, () => {
     expect(reducer({ rulesForTest: [] }, {
       type: dataActionType.ADD_RULES_FOR_TEST,
@@ -122,6 +124,35 @@ describe(`DATA Reducer`, () => {
     })).toEqual({ rulesForTest: mockRulesForTestAfterAdd });
   });
   
+
+
+  it(`Reducer ADD_QUESTIONS_FOR_TEST - при формировании теста для должности, полученные questions с сервера сохраняет в пустой массив`, () => {
+    expect(reducer({ questionsForTest: [] }, {
+      type: dataActionType.ADD_QUESTIONS_FOR_TEST,
+      payload: mockQuestionsForPosition,
+    })).toEqual({ questionsForTest: [mockQuestionsForPosition], testReady: true });
+  });
+  
+  it(`Reducer ADD_QUESTIONS_FOR_TEST - при формировании теста для должности, полученные questions с сервера сохраняет в массив с данными`, () => {
+    expect(reducer({ questionsForTest: [...mockQuestionsForTest] }, {
+      type: dataActionType.ADD_QUESTIONS_FOR_TEST,
+      payload: mockQuestionsForPosition,
+    })).toEqual({ questionsForTest: [...mockQuestionsForTest, mockQuestionsForPosition], testReady: true });
+  });
+
+  it(`Reducer ADD_QUESTIONS_FOR_TEST - при формировании теста для должности, полученные пустой questions с сервера ничего не меняет в массиве с данными`, () => {
+    expect(reducer({ questionsForTest: [...mockQuestionsForTest] }, {
+      type: dataActionType.ADD_QUESTIONS_FOR_TEST,
+      payload: { positionId: `cvbnm`, questions: [] },
+    })).toEqual({ questionsForTest: [...mockQuestionsForTest, { positionId: `cvbnm`, questions: [] }], testReady: true });
+  });
+
+  it(`Reducer ADD_QUESTIONS_FOR_TEST - полученные questions добавляются в массив и заменяют данные для уже имеющегоя positionId`, () => {
+    expect(reducer({ questionsForTest: [...mockQuestionsForTest] }, {
+      type: dataActionType.ADD_QUESTIONS_FOR_TEST,
+      payload: mockQuestionsForPositionAdd,
+    })).toEqual({ questionsForTest: mockQuestionsForTestAfterAdd, testReady: true });
+  });
 });
 
 

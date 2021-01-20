@@ -1,9 +1,6 @@
 // Вопросы для тестирования
 export const questions = {
-  id: `1`, // id массива вопросов
   ruleId: `1`, // id правила - для которого вопросы
-  createdAt: `2020-11-04T18:16:54.385Z`,
-  lastChange: `2020-11-04T18:16:54.385Z`,
   questions: [
     {
       // question1

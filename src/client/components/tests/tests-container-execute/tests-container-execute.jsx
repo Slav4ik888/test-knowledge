@@ -2,7 +2,7 @@ import React, {useState} from 'react';
 import pt from 'prop-types';
 // Readux Stuff
 import { connect } from 'react-redux';
-import { getRulesByArrayOfDocsId, getRulesByArrayOfRulesId } from '../../../redux/actions/data-actions';
+import { getRulesAndQuestionsByPositionId } from '../../../redux/actions/data-actions';
 // MUI Stuff
 import { makeStyles } from '@material-ui/core/styles';
 import Dialog from '@material-ui/core/Dialog';
@@ -37,7 +37,7 @@ const useStyles = makeStyles((theme) => ({
 
 // Запуск тестирования
 const TestsContainerExecute = ({ open, onClose, loading, allPositions, userEmail, employees,
-  getRulesByArrayOfDocsId, getRulesByArrayOfRulesId, rulesForTest }) => {
+  getRulesAndQuestionsByPositionId, rulesForTest }) => {
   
   if (!open) return null;
   
@@ -70,17 +70,13 @@ const TestsContainerExecute = ({ open, onClose, loading, allPositions, userEmail
 
         rulesInPos = pos.rules; // Отдельные правила закреплённые за выбранной должностью
         console.log('rulesInPos: ', rulesInPos);
-        // Загружаем правила по всем закреплённым за должностью документам и отдельным rules
-        getRulesByArrayOfDocsId(docsInPos, pos.id);
-        getRulesByArrayOfRulesId(rulesInPos, pos.id);
+        // Загружаем rules & questions по всем закреплённым за должностью документам и отдельным rules
+        getRulesAndQuestionsByPositionId(pos.id, docsInPos, rulesInPos);
       }
     }
 
     setPosSelected(pos);
   };
-
-  // Получить индивидуальные правила закреплённые за должностью
-  // allRulesId.forEach((ruleId) => getRule/:ruleId );
 
   const handleClose = () => {
     onClose();
@@ -126,8 +122,7 @@ TestsContainerExecute.propTypes = {
   allPositions: pt.array.isRequired,
   userEmail: pt.string,
   employees: pt.array.isRequired,
-  getRulesByArrayOfDocsId: pt.func.isRequired,
-  getRulesByArrayOfRulesId: pt.func.isRequired,
+  getRulesAndQuestionsByPositionId: pt.func.isRequired,
   rulesForTest: pt.array.isRequired,
 };
 
@@ -141,9 +136,7 @@ const mapStateToProps = (state) => ({
 });
 
 const mapActionsToProps = {
-  getRulesByArrayOfDocsId,
-  getRulesByArrayOfRulesId,
-  // deleteDocument,
+  getRulesAndQuestionsByPositionId,
 };
 
 export default connect(mapStateToProps, mapActionsToProps)(TestsContainerExecute);

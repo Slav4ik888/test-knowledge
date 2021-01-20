@@ -18,14 +18,9 @@ const initialState = {
   // }
   activeRules: null, // { docId, sectionId } - чтобы по ним взять rules из активной section 
 
-  rulesForTest: [], // [{ positionId: ``, rules: []}, {}]
-
-  questions: [], // Храняться объекты загруженных questions
+  questions: [], // Храняться объекты загруженных questions (во время редактирования документов)
   // questions = {
-  //   id: `1`, // id массива вопросов
   //   ruleId: `1`, // id правила - для которого вопросы
-  //   createdAt: `2020-11-04T18:16:54.385Z`,
-  //   lastChange: `2020-11-04T18:16:54.385Z`,
   //   questions: [
   //     {
   //       // question1
@@ -36,6 +31,10 @@ const initialState = {
   //     },
   //   ],
   // };
+
+  testReady: false, // Тестирование готово для выбранной должности
+  rulesForTest: [], // [{ positionId: ``, rules: []}, {}]
+  questionsForTest: [], // [{ positionId: ``, questions: [] }, { }]
 };
 
 
@@ -206,22 +205,6 @@ export default function (state = initialState, action) {
         activeRules: action.payload,
       });
       
-    // Загруженные rules для тестирования добавляем к тому, что было...
-    case dataActionType.ADD_RULES_FOR_TEST: // test +
-      let addItem = getItemFromArrByField(state.rulesForTest, `positionId`, action.payload.positionId);
-      
-      if (addItem) { // Если уже есть загруженные по positionId 
-        addItem.rules = [...addItem.rules, ...action.payload.rules];
-      } else { // Если нет
-        addItem = {};
-        addItem.positionId = action.payload.positionId;
-        addItem.rules = action.payload.rules;
-      }
-
-      return extend(state, {
-        rulesForTest: updateArrWithItemByField(state.rulesForTest, `positionId`, addItem),
-      });
-      
     case dataActionType.UPDATE_RULE:
       const updRule = action.payload;
       let updRules = state.rules;
@@ -274,7 +257,6 @@ export default function (state = initialState, action) {
       return extend(state, {
         loading: false,
       });
-    
     
     case dataActionType.DELETE_RULES_FROM_SECTION:
       let deRules = state.rules;
@@ -337,7 +319,7 @@ export default function (state = initialState, action) {
         questions: setQuestions,
         loading: false,
       });
-    
+
     case dataActionType.UPDATE_QUESTION:
       let updQuestions = state.questions;
       // Находим индекс где хранятся нужные questions
@@ -382,6 +364,38 @@ export default function (state = initialState, action) {
 
       return extend(state, {
         loading: false,
+      });
+    
+    
+    
+    case dataActionType.TEST_READY_OFF:
+      return extend(state, { testReady: false });
+    
+    // Загруженные rules для тестирования добавляем к тому, что было...
+    case dataActionType.ADD_RULES_FOR_TEST: // test +
+      let addItem = getItemFromArrByField(state.rulesForTest, `positionId`, action.payload.positionId);
+      
+      if (addItem) { // Если уже есть загруженные по positionId 
+        addItem.rules = [...addItem.rules, ...action.payload.rules];
+      } else { // Если нет
+        addItem = {};
+        addItem.positionId = action.payload.positionId;
+        addItem.rules = action.payload.rules;
+      }
+
+      return extend(state, {
+        rulesForTest: updateArrWithItemByField(state.rulesForTest, `positionId`, addItem),
+      });
+      
+    // Загруженные вопросы (сразу по нескольким ruleId) - перед тестированием...
+    case dataActionType.ADD_QUESTIONS_FOR_TEST: // test +
+      
+      return extend(state, {
+        testReady: true,
+        questionsForTest: updateArrWithItemByField(state.questionsForTest, `positionId`, {
+          positionId: action.payload.positionId,
+          questions: action.payload.questions
+        }),
       });
     
     

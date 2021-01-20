@@ -325,63 +325,61 @@ export const getRulesByDocAndSectionId = ({ docId, sectionId }) => (dispatch) =>
     });
 };
 
-
 /**
  * Получает все rules из массива документов
  * Необходимо, перед тестированием, создать массив со всеми правилами относящиеся к выбранной должности
  * @param {array} docsId - массив id документов
  * @param {string} positionId
  */
-export const getRulesByArrayOfDocsId = (docsId, positionId) => (dispatch) => {
-  // console.log(`docsId: ${docsId}`);
-  // console.log(`posId: ${positionId}`);
-  dispatch({ type: uiActionType.LOADING_UI });
+// export const getRulesByArrayOfDocsId = (docsId, positionId) => (dispatch) => {
+//   // console.log(`docsId: ${docsId}`);
+//   // console.log(`posId: ${positionId}`);
+//   dispatch({ type: uiActionType.LOADING_UI });
 
-  return axios.post(`/getRulesByArrayOfDocsId`, { docsId })
-    .then((res) => {
-      dispatch({
-        type: dataActionType.ADD_RULES_FOR_TEST,
-        payload: {
-          positionId,
-          rules: res.data.rules,
-        },
-      })
-      dispatch({ type: uiActionType.CLEAR_ERRORS });
-    })
-    .catch((err) => {
-      console.error(err.response.data);
-      dispatch({ type: uiActionType.SET_ERRORS, payload: err.response.data });
-    });
-};
-
+//   return axios.post(`/getRulesByArrayOfDocsId`, { docsId })
+//     .then((res) => {
+//       dispatch({
+//         type: dataActionType.ADD_RULES_FOR_TEST,
+//         payload: {
+//           positionId,
+//           rules: res.data.rules,
+//         },
+//       })
+//       dispatch({ type: uiActionType.CLEAR_ERRORS });
+//     })
+//     .catch((err) => {
+//       console.error(err.response.data);
+//       dispatch({ type: uiActionType.SET_ERRORS, payload: err.response.data });
+//     });
+// };
 
 /**
  * Получает все rules из массива с ruleId
  * Необходимо, перед тестированием, создать массив со всеми правилами относящиеся к выбранной должности
- * @param {array} rulesId - массив id документов
+ * @param {array} rulesId - массив id правил
  * @param {string} positionId
  */
-export const getRulesByArrayOfRulesId = (rulesId, positionId) => (dispatch) => {
-  console.log(`rulesId: ${rulesId}`);
-  console.log(`posId: ${positionId}`);
-  dispatch({ type: uiActionType.LOADING_UI });
+// export const getRulesByArrayOfRulesId = (rulesId, positionId) => (dispatch) => {
+//   console.log(`rulesId: ${rulesId}`);
+//   console.log(`posId: ${positionId}`);
+//   dispatch({ type: uiActionType.LOADING_UI });
 
-  return axios.post(`/getRulesByArrayOfRulesId`, { rulesId })
-    .then((res) => {
-      dispatch({
-        type: dataActionType.ADD_RULES_FOR_TEST,
-        payload: {
-          positionId,
-          rules: res.data.rules,
-        },
-      })
-      dispatch({ type: uiActionType.CLEAR_ERRORS });
-    })
-    .catch((err) => {
-      console.error(err.response.data);
-      dispatch({ type: uiActionType.SET_ERRORS, payload: err.response.data });
-    });
-};
+//   return axios.post(`/getRulesByArrayOfRulesId`, { rulesId })
+//     .then((res) => {
+//       dispatch({
+//         type: dataActionType.ADD_RULES_FOR_TEST,
+//         payload: {
+//           positionId,
+//           rules: res.data.rules,
+//         },
+//       })
+//       dispatch({ type: uiActionType.CLEAR_ERRORS });
+//     })
+//     .catch((err) => {
+//       console.error(err.response.data);
+//       dispatch({ type: uiActionType.SET_ERRORS, payload: err.response.data });
+//     });
+// };
 
 
 // Обновляем rule
@@ -473,10 +471,10 @@ export const createQuestion = (newQuestion) => (dispatch) => {
 };
 
 // Загружаем questions по ruleId
-export const getAllQuestionsByRuleId = ({ ruleId }) => (dispatch) => {
+export const getQuestionsByRuleId = ({ ruleId }) => (dispatch) => {
   // dispatch({ type: uiActionType.LOADING_UI });
 
-  return axios.get(`getAllQuestionsByRuleId/${ruleId}`)
+  return axios.get(`getQuestionsByRuleId/${ruleId}`)
     .then((res) => {
       dispatch({
         type: dataActionType.SET_QUESTIONS_BY_RULEID,
@@ -489,12 +487,74 @@ export const getAllQuestionsByRuleId = ({ ruleId }) => (dispatch) => {
     })
     .catch((err) => {
       console.log(err.response.data);
-      dispatch({
-        type: uiActionType.SET_ERRORS,
-        payload: err.response.data,
-      })
+      dispatch({ type: uiActionType.SET_ERRORS, payload: err.response.data });
     })
 
+};
+
+/**
+ * Необходимо, перед тестированием, загрузить массив со всеми questions относящиеся к выбранной должности
+ * 
+ * Получает rules из массива документов 
+ * затем получает rules из массива с ruleId
+ * затем получает questions для каждого ruleId из итогового массива правилами для данной должности
+ * @param {string} positionId
+ * @param {array} docsId - массив id документов
+ * @param {array} rulesId - массив id правил
+ */
+export const getRulesAndQuestionsByPositionId = (positionId, docsId, rulesId) => (dispatch) => {
+  dispatch({ type: uiActionType.LOADING_UI });
+  dispatch({ type: dataActionType.TEST_READY_OFF });
+  
+  let allRules = [];
+  let allRulesId = [];
+
+  return axios.post(`/getRulesByArrayOfDocsId`, { docsId })
+    .then((res) => {
+      dispatch({
+        type: dataActionType.ADD_RULES_FOR_TEST,
+        payload: {
+          positionId,
+          rules: res.data.rules,
+        },
+      });
+      allRules = res.data.rules.concat();
+
+      return axios.post(`/getRulesByArrayOfRulesId`, { rulesId })
+        .then((res) => {
+          dispatch({
+            type: dataActionType.ADD_RULES_FOR_TEST,
+            payload: {
+              positionId,
+              rules: res.data.rules,
+            },
+          });
+          allRules = [...allRules, ...res.data.rules];
+          // Сформировать array из ruleId
+          allRulesId = [...allRules.map((rule) => rule.id)];
+
+          return axios.post(`/getQuestionsByArrayOfRulesId`, { rulesId: allRulesId })
+            .then((res) => {
+              const q = res.data.questions;
+              console.log('Questions: ', q.length);
+              // q.forEach((item, i) => console.log(`Questions ${i+1}: ${item.questions.length}`));
+
+              dispatch({
+                type: dataActionType.ADD_QUESTIONS_FOR_TEST,
+                payload: {
+                  positionId,
+                  questions: res.data.questions,
+                },
+              });
+              
+              dispatch({ type: uiActionType.CLEAR_ERRORS });
+            })
+        })
+    })
+    .catch((err) => {
+      console.error(err.response.data);
+      dispatch({ type: uiActionType.SET_ERRORS, payload: err.response.data });
+    })
 };
 
 // Обновляем question

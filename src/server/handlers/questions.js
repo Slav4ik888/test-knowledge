@@ -43,7 +43,7 @@ async function createQuestion(req, res) {
 
 // Загружаем questions по ruleId
 // ruleId  берём либо из params либо из переданного req.ruleId
-async function getAllQuestionsByRuleId(req, res) {
+async function getQuestionsByRuleId(req, res) {
   try {
     const questionRes = await db.collection(`questions`)
       .doc(req.user.companyId)
@@ -72,6 +72,33 @@ async function getAllQuestionsByRuleId(req, res) {
         return res.json({ questions });
       }
     }
+  } catch (err) {
+    console.error(err);
+    return res.status(500).json({ general: err.code });
+  }
+};
+
+// Загружаем вопросы для всех ruleId переданных в массиве rulesId
+async function getQuestionsByArrayOfRulesId(req, res) {
+  try {
+    req.update = true;
+    const rulesId = req.body.rulesId;
+
+    let questions = [];
+
+    for await (let ruleId of rulesId) {
+      req.ruleId = ruleId;
+      // Поочерёдно загружаем вопросы для каждого rule
+      const questionsForRule = await getQuestionsByRuleId(req, res);
+      
+      if (questionsForRule.length) {
+        questions = [...questions, ...questionsForRule];
+      }
+    }
+
+    console.log(`Загрузили список questions для теста`);
+    return res.json({ questions });
+
   } catch (err) {
     console.error(err);
     return res.status(500).json({ general: err.code });
@@ -163,7 +190,7 @@ async function deleteAllQuestionsByRuleId(req, res, ruleId) {
   try {
     req.update = true;
     req.ruleId = ruleId;
-    const allQuestions = await getAllQuestionsByRuleId(req, res);
+    const allQuestions = await getQuestionsByRuleId(req, res);
 
     if (allQuestions.length) {
       allQuestions.forEach((quest) => db.doc(`questions/${req.user.companyId}/questions/${quest.id}`).delete());
@@ -176,4 +203,7 @@ async function deleteAllQuestionsByRuleId(req, res, ruleId) {
 
 };
 
-module.exports = { createQuestion, getAllQuestionsByRuleId, updateQuestion, deleteQuestion, deleteAllQuestionsByRuleId };
+module.exports = {
+  createQuestion, getQuestionsByRuleId, getQuestionsByArrayOfRulesId, 
+  updateQuestion, deleteQuestion, deleteAllQuestionsByRuleId
+};

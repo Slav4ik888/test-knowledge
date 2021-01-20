@@ -164,7 +164,6 @@ async function getRulesByArrayOfDocsId(req, res) {
     const docsId = req.body.docsId;
 
     let rules = [];
-    console.log(`Start getRulesByArrayOfDocsId: `, docsId);
 
     if (docsId && docsId.length) {
       for await (let docId of docsId) {
@@ -194,7 +193,6 @@ async function getRulesByArrayOfRulesId(req, res) {
     const rulesId = req.body.rulesId;
 
     let rules = [];
-    console.log(`Start getRulesByArrayOfRulesId: `, rulesId);
     
     if (rulesId && rulesId.length) {
       for await (let ruleId of rulesId) {

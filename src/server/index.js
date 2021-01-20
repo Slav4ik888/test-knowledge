@@ -13,7 +13,8 @@ const { getAllEmployeesData } = require('./handlers/data');
 const { createDocument, getDocument, getAllDocuments, updateDocument, deleteDocument } = require('./handlers/documents');
 const { createRule, getRule, getRulesByDocAndSectionId, getRulesByDocId, getRulesByArrayOfDocsId, getRulesByArrayOfRulesId,
   updateRule, deleteRule, deleteAllRulesById } = require('./handlers/rules');
-const { createQuestion, getAllQuestionsByRuleId, updateQuestion, deleteQuestion } = require('./handlers/questions');
+const { createQuestion, getQuestionsByRuleId, getQuestionsByArrayOfRulesId,
+  updateQuestion, deleteQuestion } = require('./handlers/questions');
 
 app.use(bodyParser.json());
 
@@ -63,7 +64,8 @@ app.get(`/api/deleteAllRulesById/:documentId/:sectionId`, FBAuth, deleteAllRules
 
 // questions
 app.post(`/api/createQuestion/:ruleId`, FBAuth, createQuestion);
-app.get(`/api/getAllQuestionsByRuleId/:ruleId`, FBAuth, getAllQuestionsByRuleId);
+app.get(`/api/getQuestionsByRuleId/:ruleId`, FBAuth, getQuestionsByRuleId);
+app.post(`/api/getQuestionsByArrayOfRulesId`, FBAuth, getQuestionsByArrayOfRulesId);
 app.post(`/api/updateQuestion`, FBAuth, updateQuestion);
 app.get(`/api/deleteQuestion/:questionId`, FBAuth, deleteQuestion);
 
@@ -84,4 +86,4 @@ app.use(express.static('dist'));
 
 app.listen(process.env.PORT || 8080, () => console.log(`Listening on port ${process.env.PORT || 8080}!`));
 
-//  git add . && git commit -m "getRulesByArrayOfRulesId & fix ADD_RULES_FOR_TEST" && git push origin master
+//  git add . && git commit -m "getRulesAndQuestionsByPositionId" && git push origin master
