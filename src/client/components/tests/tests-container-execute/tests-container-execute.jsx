@@ -9,10 +9,11 @@ import Dialog from '@material-ui/core/Dialog';
 // import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
 import Typography from '@material-ui/core/Typography';
+import CircularProgress from '@material-ui/core/CircularProgress';
 // Component
 import DialogTitle from '../../dialogs/dialog-title/dialog-title';
 import ListSelect from '../../list-select/list-select';
-import CircularProgress from '@material-ui/core/CircularProgress';
+import TestQuestionsList from '../test-questions-list/test-questions-list';
 import { getPositionsByUser } from '../../../utils/utils';
 import { getItemFromArrByField } from '../../../utils/arrays';
 import { typeListSelect } from '../../../../types';
@@ -37,7 +38,7 @@ const useStyles = makeStyles((theme) => ({
 
 // Запуск тестирования
 const TestsContainerExecute = ({ open, onClose, loading, allPositions, userEmail, employees,
-  getRulesAndQuestionsByPositionId, rulesForTest }) => {
+  getRulesAndQuestionsByPositionId, testReady, rulesForTest }) => {
   
   if (!open) return null;
   
@@ -95,7 +96,7 @@ const TestsContainerExecute = ({ open, onClose, loading, allPositions, userEmail
 
           <Typography variant="h5" color="primary" className={classes.title}>{positionText}</Typography>
 
-          <ListSelect
+          {!testReady && <ListSelect
             type={typeListSelect.POSITION}
             title={listTitle}
             items={positions}
@@ -104,11 +105,14 @@ const TestsContainerExecute = ({ open, onClose, loading, allPositions, userEmail
             placeholder={placeholder}
             onSelected={handleSetPosSelected}
           />
+          }
 
           {
             loading && <CircularProgress size={30} className={classes.progress} />
           }
           
+          <TestQuestionsList positionId={posSeleted && posSeleted.id} />
+
         </DialogContent>
       </Dialog>
     </>
@@ -119,6 +123,7 @@ TestsContainerExecute.propTypes = {
   open: pt.bool.isRequired,
   onClose: pt.func.isRequired,
   loading: pt.bool.isRequired,
+  testReady: pt.bool.isRequired,
   allPositions: pt.array.isRequired,
   userEmail: pt.string,
   employees: pt.array.isRequired,
@@ -128,7 +133,7 @@ TestsContainerExecute.propTypes = {
 
 const mapStateToProps = (state) => ({
   loading: state.UI.loading,
-  // userPositions: state.user.userProfile.positions,
+  testReady: state.data.testReady,
   userEmail: state.user.userProfile.email,
   employees: state.data.employees,
   allPositions: state.data.positions,
