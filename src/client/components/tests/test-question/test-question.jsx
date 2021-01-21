@@ -3,13 +3,20 @@ import pt from 'prop-types';
 // Readux Stuff
 import { connect } from 'react-redux'
 // MUI Stuff
-import { makeStyles } from '@material-ui/core/styles';
+import { makeStyles, withStyles } from '@material-ui/core/styles';
 import Typography from '@material-ui/core/Typography';
 import Divider from '@material-ui/core/Divider';
 import FormGroup from '@material-ui/core/FormGroup';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
 import Checkbox from '@material-ui/core/Checkbox';
 // Components
+
+
+const FormControlLabelWrap = withStyles({
+  root: {
+    marginBottom: `10px`,
+  },
+})((props) => <FormControlLabel {...props} />);
 
 
 const useStyle = makeStyles((theme) => ({
@@ -43,7 +50,7 @@ const TestQuestion = ({ question }) => {
 
       <FormGroup className={classes.answers}>
         {
-          question.answers.map((answer, idx) => <FormControlLabel
+          question.answers.map((answer, idx) => <FormControlLabelWrap
             key={`answer${idx}`}
             control={<Checkbox color={"primary"}
               checked={Boolean(employeeAnswer[`answer${idx}`])}

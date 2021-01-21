@@ -22,6 +22,18 @@ const useStyle = makeStyles((theme) => ({
     flexDirection: `column`,
     marginBottom: theme.spacing(1),
   },
+  posTitle: {
+    fontWeight: `bold`,
+  },
+  questionsLength: {
+    fontSize: `10px`,
+  },
+  questAll: {
+    fontWeight: `bold`,
+  },
+  questRest: {
+    fontWeight: `bold`,
+  },
 }));
 
 
@@ -40,11 +52,16 @@ const TestQuestionsList = ({ position, testReady, rulesForTest, questionsForTest
   return (
     <div className={classes.container}>
       <div className={classes.header}>
-        <Typography>{`Список вопросов для должности "${position.title}"`}</Typography>
-        <Typography>{`Всего вопросов ${oldQuests.length}"`}</Typography>
-        <Typography>{`Осталось ответить ${questions.length}"`}</Typography>
+        <Typography>{`Для должности "`}
+          <span className={classes.posTitle}>{position.title}</span>{`"`}
+        </Typography>
+        <Typography className={classes.questionsLength}>
+          {`Всего вопросов `}<span className={classes.questAll}>{oldQuests.length}</span>
+          {`   Осталось ответить на `}<span className={classes.questRest}>{questions.length}</span>
+        </Typography>
       </div>
       <Divider />
+
       <TestQuestion question={currentQuestion}/>
     </div>
   )

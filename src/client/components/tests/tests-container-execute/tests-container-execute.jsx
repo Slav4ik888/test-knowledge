@@ -95,8 +95,11 @@ const TestsContainerExecute = ({ open, onClose, loading, allPositions, userEmail
 
         <DialogContent dividers className={classes.container} >
 
-          <Typography variant="h5" color="primary" className={classes.title}>{positionText}</Typography>
-
+          {
+            positionText && <Typography variant="h5" color="primary" className={classes.title}>
+              {positionText}
+            </Typography>
+          }
           {!testReady && <ListSelect
             type={typeListSelect.POSITION}
             title={listTitle}
