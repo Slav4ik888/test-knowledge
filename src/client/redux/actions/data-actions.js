@@ -597,3 +597,6 @@ export const deleteQuestion = (question) => (dispatch) => {
       });
     });
 };
+
+export const testReadyOn = () => (dispatch) => dispatch({ type: dataActionType.TEST_READY_ON });
+export const testReadyOff = () => (dispatch) => dispatch({ type: dataActionType.TEST_READY_OFF });

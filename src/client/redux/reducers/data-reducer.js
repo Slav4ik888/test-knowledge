@@ -367,6 +367,8 @@ export default function (state = initialState, action) {
       });
     
     
+    case dataActionType.TEST_READY_ON:
+      return extend(state, { testReady: true });
     
     case dataActionType.TEST_READY_OFF:
       return extend(state, { testReady: false });

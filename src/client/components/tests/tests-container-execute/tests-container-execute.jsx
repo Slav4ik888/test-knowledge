@@ -2,7 +2,7 @@ import React, {useState} from 'react';
 import pt from 'prop-types';
 // Readux Stuff
 import { connect } from 'react-redux';
-import { getRulesAndQuestionsByPositionId } from '../../../redux/actions/data-actions';
+import { getRulesAndQuestionsByPositionId, testReadyOff } from '../../../redux/actions/data-actions';
 // MUI Stuff
 import { makeStyles } from '@material-ui/core/styles';
 import Dialog from '@material-ui/core/Dialog';
@@ -38,7 +38,7 @@ const useStyles = makeStyles((theme) => ({
 
 // Запуск тестирования
 const TestsContainerExecute = ({ open, onClose, loading, allPositions, userEmail, employees,
-  getRulesAndQuestionsByPositionId, testReady, rulesForTest }) => {
+  getRulesAndQuestionsByPositionId, testReady, rulesForTest, testReadyOff }) => {
   
   if (!open) return null;
   
@@ -80,6 +80,7 @@ const TestsContainerExecute = ({ open, onClose, loading, allPositions, userEmail
   };
 
   const handleClose = () => {
+    testReadyOff(); // Отключаем тестирование
     onClose();
   };
 
@@ -111,7 +112,7 @@ const TestsContainerExecute = ({ open, onClose, loading, allPositions, userEmail
             loading && <CircularProgress size={30} className={classes.progress} />
           }
           
-          <TestQuestionsList positionId={posSeleted && posSeleted.id} />
+          <TestQuestionsList position={posSeleted ? posSeleted : {}} />
 
         </DialogContent>
       </Dialog>
@@ -129,6 +130,7 @@ TestsContainerExecute.propTypes = {
   employees: pt.array.isRequired,
   getRulesAndQuestionsByPositionId: pt.func.isRequired,
   rulesForTest: pt.array.isRequired,
+  testReadyOff: pt.func.isRequired,
 };
 
 const mapStateToProps = (state) => ({
@@ -142,6 +144,7 @@ const mapStateToProps = (state) => ({
 
 const mapActionsToProps = {
   getRulesAndQuestionsByPositionId,
+  testReadyOff,
 };
 
 export default connect(mapStateToProps, mapActionsToProps)(TestsContainerExecute);
