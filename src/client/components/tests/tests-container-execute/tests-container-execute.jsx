@@ -2,7 +2,7 @@ import React, {useState} from 'react';
 import pt from 'prop-types';
 // Readux Stuff
 import { connect } from 'react-redux';
-import { getRulesAndQuestionsByPositionId, testReadyOff } from '../../../redux/actions/data-actions';
+import { getRulesAndQuestionsByPositionId, testReadyOn, testReadyOff } from '../../../redux/actions/data-actions';
 // MUI Stuff
 import { makeStyles } from '@material-ui/core/styles';
 import Dialog from '@material-ui/core/Dialog';
@@ -38,7 +38,7 @@ const useStyles = makeStyles((theme) => ({
 
 // Запуск тестирования
 const TestsContainerExecute = ({ open, onClose, loading, allPositions, userEmail, employees,
-  getRulesAndQuestionsByPositionId, testReady, rulesForTest, testReadyOff }) => {
+  getRulesAndQuestionsByPositionId, testReady, rulesForTest, testReadyOn, testReadyOff }) => {
   
   if (!open) return null;
   
@@ -73,10 +73,13 @@ const TestsContainerExecute = ({ open, onClose, loading, allPositions, userEmail
         console.log('rulesInPos: ', rulesInPos);
         // Загружаем rules & questions по всем закреплённым за должностью документам и отдельным rules
         getRulesAndQuestionsByPositionId(pos.id, docsInPos, rulesInPos);
+      } else {
+        testReadyOn(); // Если уже загружали данные для должности, то просто включаем флажок тестирования
       }
     }
 
     setPosSelected(pos);
+    
   };
 
   const handleClose = () => {
@@ -100,15 +103,16 @@ const TestsContainerExecute = ({ open, onClose, loading, allPositions, userEmail
               {positionText}
             </Typography>
           }
-          {!testReady && <ListSelect
-            type={typeListSelect.POSITION}
-            title={listTitle}
-            items={positions}
-            valueField={`title`}
-            label={`positions`}
-            placeholder={placeholder}
-            onSelected={handleSetPosSelected}
-          />
+          {
+            !testReady && <ListSelect
+              type={typeListSelect.POSITION}
+              title={listTitle}
+              items={positions}
+              valueField={`title`}
+              label={`positions`}
+              placeholder={placeholder}
+              onSelected={handleSetPosSelected}
+            />
           }
 
           {
@@ -133,6 +137,7 @@ TestsContainerExecute.propTypes = {
   employees: pt.array.isRequired,
   getRulesAndQuestionsByPositionId: pt.func.isRequired,
   rulesForTest: pt.array.isRequired,
+  testReadyOn: pt.func.isRequired,
   testReadyOff: pt.func.isRequired,
 };
 
@@ -147,6 +152,7 @@ const mapStateToProps = (state) => ({
 
 const mapActionsToProps = {
   getRulesAndQuestionsByPositionId,
+  testReadyOn,
   testReadyOff,
 };
 

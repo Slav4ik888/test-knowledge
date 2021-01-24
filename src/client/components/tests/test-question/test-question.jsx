@@ -10,8 +10,37 @@ import FormGroup from '@material-ui/core/FormGroup';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
 import Checkbox from '@material-ui/core/Checkbox';
 // Components
+import NextQuestion from '../../buttons/next-question/next-question';
 
 
+// Проверка выбранных ответов сотрудника
+const checkAnswers = (question, answers) => {
+  let result = true;
+
+  question.answers.forEach((ans, i) => {
+    if (ans.trueAnswer !== answers[`answer${i}`]) {
+      // console.log(`${ans.trueAnswer} не равно ${answers["answer" + i]}`);
+      result = false;
+    } 
+  });
+
+  return result;
+};
+
+
+// Возвращает начальный объект с ответами в статусе false
+const createStartAnswers = (answers) => {
+  console.log('answers: ', answers);
+  let createdAnswers = {};
+  answers.forEach((answer, i) => {
+    createdAnswers[`answer${i}`] = false;
+  });
+  console.log(`createdAnswers: `, createdAnswers);
+  return createdAnswers;
+};
+
+
+// Добавленный стиль для FormControlLabel
 const FormControlLabelWrap = withStyles({
   root: {
     marginBottom: `10px`,
@@ -37,10 +66,15 @@ const TestQuestion = ({ question }) => {
 
   const classes = useStyle();
 
-  const [employeeAnswer, setEmployeeAnswer] = useState({});
+  const [employeeAnswer, setEmployeeAnswer] = useState(createStartAnswers(question.answers));
   console.log('employeeAnswer: ', employeeAnswer);
   const handleSetAnswer = (e) => {
     setEmployeeAnswer({ ...employeeAnswer, [e.target.name]: e.target.checked });
+  }
+
+  const handleNextQuestion = () => {
+    console.log(`Нажали ответить`);
+    console.log(checkAnswers(question, employeeAnswer));
   }
 
   return (  
@@ -60,6 +94,10 @@ const TestQuestion = ({ question }) => {
           />)
         }
       </FormGroup> 
+
+      <Divider />
+
+      <NextQuestion onNext={handleNextQuestion}/>
     </div>
   )
 };

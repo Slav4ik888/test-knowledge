@@ -62,7 +62,7 @@ const TestQuestionsList = ({ position, testReady, rulesForTest, questionsForTest
       </div>
       <Divider />
 
-      <TestQuestion question={currentQuestion}/>
+      <TestQuestion question={currentQuestion} />      
     </div>
   )
 };
