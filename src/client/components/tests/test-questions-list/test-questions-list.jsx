@@ -47,8 +47,16 @@ const TestQuestionsList = ({ position, testReady, rulesForTest, questionsForTest
   const oldQuests = getItemFromArrByField(questionsForTest, `positionId`, position.id).questions;
   const questions = getMixedArray(oldQuests);
 
-  const [currentQuestion, setCurrentQuestion] = useState(questions.length && questions[0]);
-
+  const [currentQuestion, setCurrentQuestion] = useState(0);
+  const handleNextQuestion = () => {
+    if (currentQuestion === questions.length) {
+      // Вопросы закончились
+    } else {
+      setCurrentQuestion(currentQuestion + 1);
+    }
+    
+};
+  
   return (
     <div className={classes.container}>
       <div className={classes.header}>
@@ -61,8 +69,11 @@ const TestQuestionsList = ({ position, testReady, rulesForTest, questionsForTest
         </Typography>
       </div>
       <Divider />
-
-      <TestQuestion question={currentQuestion} />      
+      {
+        questions.length ? <TestQuestion question={questions[currentQuestion]} onNextQuestion={handleNextQuestion} /> 
+          : null
+      }
+           
     </div>
   )
 };

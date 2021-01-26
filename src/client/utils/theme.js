@@ -18,6 +18,9 @@ export default {
       section: ``,
       ruleTitle: `#aa2e25`,
       rule: `#666666`,
+      noAnswer: `##37474f`,
+      rightAnswer: `#64dd17`,
+      wrongAnswer: `#ff3d00`,
     },
     background: {
       default: `#e4e9ea`, // Для body #ebecf0  

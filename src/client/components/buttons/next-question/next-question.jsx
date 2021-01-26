@@ -18,23 +18,19 @@ const useStyles = makeStyles((theme) => ({
   }
 }));
 
-const NextQuestion = ({ onNext }) => {
+const NextQuestion = ({ onCallback, text, next }) => {
   const classes = useStyles();
 
-  const handleAnswer = () => {
-    onNext();
-  }
-  
   return (
     <>
       <div className={classes.container}>
         <Button
           variant="contained"
           color="primary"
-          endIcon={<NavigateNextIcon/>}
-          onClick={handleAnswer} className={classes.button}
+          endIcon={next && <NavigateNextIcon />}
+          onClick={onCallback} className={classes.button}
         >
-          Подтвердить ответ
+          {text}
         </Button>
       </div>
     </>
@@ -42,7 +38,8 @@ const NextQuestion = ({ onNext }) => {
 };
 
 NextQuestion.propTypes = {
-  onNext: pt.func.isRequired,
+  onCallback: pt.func.isRequired,
+  text: pt.string.isRequired,
 }
 
 export default NextQuestion;

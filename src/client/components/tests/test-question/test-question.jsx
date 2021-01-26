@@ -1,51 +1,69 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import pt from 'prop-types';
-// Readux Stuff
-import { connect } from 'react-redux'
 // MUI Stuff
-import { makeStyles, withStyles } from '@material-ui/core/styles';
+import { makeStyles } from '@material-ui/core/styles';
 import Typography from '@material-ui/core/Typography';
 import Divider from '@material-ui/core/Divider';
 import FormGroup from '@material-ui/core/FormGroup';
-import FormControlLabel from '@material-ui/core/FormControlLabel';
-import Checkbox from '@material-ui/core/Checkbox';
 // Components
+import TestAnswer from '../test-answer/test-answer';
 import NextQuestion from '../../buttons/next-question/next-question';
+import { typeResAnswer } from '../../../../types';
 
 
-// Проверка выбранных ответов сотрудника
-const checkAnswers = (question, answers) => {
-  let result = true;
+/**
+ * Возвращает {} answers with `answer0...4` || `result0..4`
+ * @param {Array} answers 
+ * @param {Object} obj 
+ * @param {String} field 
+ * 
+ * @return {Object} updatedObj
+ */
+const clearFields = (answers, obj, field) => {
+  let updatedObj = Object.assign({}, obj);
 
-  question.answers.forEach((ans, i) => {
-    if (ans.trueAnswer !== answers[`answer${i}`]) {
-      // console.log(`${ans.trueAnswer} не равно ${answers["answer" + i]}`);
-      result = false;
-    } 
-  });
+  answers.forEach((item, i) => updatedObj[`${field}${i}`] = field === `answer` ? false : typeResAnswer.NO_CHECK);
 
-  return result;
+  return updatedObj;
 };
 
 
 // Возвращает начальный объект с ответами в статусе false
 const createStartAnswers = (answers) => {
-  console.log('answers: ', answers);
-  let createdAnswers = {};
-  answers.forEach((answer, i) => {
-    createdAnswers[`answer${i}`] = false;
-  });
-  console.log(`createdAnswers: `, createdAnswers);
-  return createdAnswers;
+  let ans = {};
+  ans = clearFields(answers, {}, `answer`);
+  ans = clearFields(answers, ans, `result`);
+  ans.resultTotal = typeResAnswer.NO_CHECK;
+
+  return ans;
 };
 
+/**
+ * Возвращает answers промаркированными typeResAnswer выбранные ответы сотрудника
+ * @param {Object} question 
+ * @param {Object} answers 
+ * 
+ * @return {Object} answers
+ */
+const checkAnswers = (question, answers) => {
+  answers.resultTotal = typeResAnswer.RIGHT;
 
-// Добавленный стиль для FormControlLabel
-const FormControlLabelWrap = withStyles({
-  root: {
-    marginBottom: `10px`,
-  },
-})((props) => <FormControlLabel {...props} />);
+  question.answers.forEach((ans, i) => {
+    if (ans.trueAnswer !== answers[`answer${i}`]) { // Выбрали не верный ответ
+      // console.log(`${ans.trueAnswer} не равно ${answers["answer" + i]}`);
+      answers[`result${i}`] = typeResAnswer.WRONG;
+      answers.resultTotal = typeResAnswer.WRONG;
+
+    } else if (ans.trueAnswer) { // Выбрали верный ответ
+      answers[`result${i}`] = typeResAnswer.RIGHT;
+    }
+    if (ans.trueAnswer) { // Правильный ответ в любом случае отмечаем верным, чтобы загорелся зелёным
+      answers[`result${i}`] = typeResAnswer.RIGHT;
+    }
+  });
+
+  return answers;
+};
 
 
 const useStyle = makeStyles((theme) => ({
@@ -59,23 +77,39 @@ const useStyle = makeStyles((theme) => ({
 }));
 
 
-const TestQuestion = ({ question }) => {
+const TestQuestion = ({ question, onNextQuestion }) => {
 
   if (!question) return null;
-  console.log('question: ', question);
 
   const classes = useStyle();
 
   const [employeeAnswer, setEmployeeAnswer] = useState(createStartAnswers(question.answers));
-  console.log('employeeAnswer: ', employeeAnswer);
+
+  useEffect(() => {
+    console.log(`question Effect`);
+    setEmployeeAnswer(createStartAnswers(question.answers));
+  }, [question]);
+
   const handleSetAnswer = (e) => {
-    setEmployeeAnswer({ ...employeeAnswer, [e.target.name]: e.target.checked });
-  }
+    if (!isCheck) {
+      setEmployeeAnswer({ ...employeeAnswer, [e.target.name]: e.target.checked });
+      setIsCheck(false);
+    }
+  };
+
+  const [isCheck, setIsCheck] = useState(false);
+
+  const handleCheckQuestion = () => {
+    const checkedAnswers = checkAnswers(question, employeeAnswer);
+    setEmployeeAnswer(checkedAnswers);
+    setIsCheck(true);
+  };
 
   const handleNextQuestion = () => {
-    console.log(`Нажали ответить`);
-    console.log(checkAnswers(question, employeeAnswer));
-  }
+    setEmployeeAnswer(createStartAnswers(question.answers));
+    setIsCheck(false);
+    onNextQuestion();
+  };
 
   return (  
     <div>
@@ -84,29 +118,33 @@ const TestQuestion = ({ question }) => {
 
       <FormGroup className={classes.answers}>
         {
-          question.answers.map((answer, idx) => <FormControlLabelWrap
+          question.answers.map((answer, idx) => <TestAnswer
             key={`answer${idx}`}
-            control={<Checkbox color={"primary"}
-              checked={Boolean(employeeAnswer[`answer${idx}`])}
-              onChange={handleSetAnswer}
-              name={`answer${idx}`} />}
-            label={answer.answer}
+            employeeAnswer={employeeAnswer}
+            onSetAnswer={handleSetAnswer}
+            idx={idx}
+            answer={answer.answer}
+            result={isCheck}
           />)
         }
       </FormGroup> 
 
       <Divider />
 
-      <NextQuestion onNext={handleNextQuestion}/>
+      {
+        isCheck
+          ? <NextQuestion onCallback={handleNextQuestion} text={`Следующий вопрос`} next />
+          : <NextQuestion onCallback={handleCheckQuestion} text={`Ответить`} />
+      }
+      
     </div>
   )
 };
 
 TestQuestion.propTypes = {
   question: pt.object,
+  onNextQuestion: pt.func.isRequired,
 };
 
-const mapStateToProps = (state) => ({
-});
 
-export default connect(mapStateToProps)(TestQuestion);
+export default TestQuestion;

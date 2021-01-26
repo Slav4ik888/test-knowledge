@@ -69,3 +69,10 @@ exports.typeUpDown = {
   RULE: `Правило`,
   ANSWER: `Ответ`,
 };
+
+// Типы для результата ответа на вопрос
+exports.typeResAnswer = {
+  NO_CHECK: `Не выбран`,
+  RIGHT: `Верно`,
+  WRONG: `Не верно`,
+};

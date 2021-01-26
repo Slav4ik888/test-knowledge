@@ -101,6 +101,9 @@ const QuestionContainerEdit = ({ open, loading, onClose, question, updateQuestio
     }
   };
 
+  // Проверяем есть ли хотя бы 1 верный ответ
+  const checkIsTrueAnswer = (answers) => Boolean(answers.find((answer) => answer.trueAnswer === true));
+
   // Добавили новый ответ
   const handleAddAnswer = (answer) => {
 
@@ -112,7 +115,7 @@ const QuestionContainerEdit = ({ open, loading, onClose, question, updateQuestio
     };
     newQuestion.answers.push(addAnswer);
     setNewQuestion(newQuestion);
-    setIsChange(true);
+    setIsChange(checkIsTrueAnswer(newQuestion.answers)); // Если есть хотя бы 1 правильный ответ
     clearErrors();
   };
 
@@ -120,7 +123,7 @@ const QuestionContainerEdit = ({ open, loading, onClose, question, updateQuestio
   const handleEditAnswer = (answer, move) => {
     newQuestion.answers = updateArrWithItemByField(newQuestion.answers, `id`, answer);
     setNewQuestion(newQuestion);
-    setIsChange(true);
+    setIsChange(checkIsTrueAnswer(newQuestion.answers)); // Если есть хотя бы 1 правильный ответ
     if (move) clearErrors();
   };
 
@@ -131,7 +134,7 @@ const QuestionContainerEdit = ({ open, loading, onClose, question, updateQuestio
   const handleDelAnswer = (answer) => {
     newQuestion.answers = getArrWithoutItemByField(newQuestion.answers, `id`, answer);
     setNewQuestion(newQuestion);
-    setIsChange(true);
+    setIsChange(checkIsTrueAnswer(newQuestion.answers)); // Если есть хотя бы 1 правильный ответ
     clearErrors();
   };
 
