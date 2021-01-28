@@ -32,12 +32,26 @@ export const mockTestData = {
 };
 
 export const mockTestReadyTrue = {
-  testReady: true, // Тестирование готово для выбранной должности
-  questionsAll: 0, // Всего вопросов
-  questionsRest: 0, // Осталось ответить
-  errorValue: 0, // Кол-во ошибок
-  timeStart: 0, // Время начало теста
-  timeEnd: 0, // Время завершения теста
+  testReady: true, 
+  questionsAll: 0,
+  questionsRest: 0,
+  errorValue: 0,
+  timeStart: 0, 
+  timeEnd: 0, 
+};
+
+export const mockTestDataUpdateObj = {
+  questionsAll: 120,
+  timeStart: 918237498273,
+};
+
+export const mockTestDataUpdated = {
+  testReady: false, 
+  questionsAll: 120,
+  questionsRest: 0,
+  errorValue: 0,
+  timeStart: 918237498273, 
+  timeEnd: 0, 
 };
   
 export const mockEmployees = [{ telo: 1, userId: 21 }, { telo: 2, userId: 22 }, { telo: 3, userId: 23 }];

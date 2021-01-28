@@ -3,6 +3,7 @@ import pt from 'prop-types';
 // Readux Stuff
 import { connect } from 'react-redux';
 import { getRulesAndQuestionsByPositionId, updateTestData } from '../../../redux/actions/data-actions';
+import * as s from '../../../redux/selectors/data-selectors';
 // MUI Stuff
 import { makeStyles } from '@material-ui/core/styles';
 import Dialog from '@material-ui/core/Dialog';
@@ -142,11 +143,11 @@ TestsContainerExecute.propTypes = {
 
 const mapStateToProps = (state) => ({
   loading: state.UI.loading,
-  testData: state.data.testData,
   userEmail: state.user.userProfile.email,
-  employees: state.data.employees,
-  allPositions: state.data.positions,
-  rulesForTest: state.data.rulesForTest,
+  testData: s.getTestData(state),
+  employees: s.getEmployees(state),
+  allPositions: s.getPositions(state),
+  rulesForTest: s.getRulesForTest(state),
 });
 
 const mapActionsToProps = {

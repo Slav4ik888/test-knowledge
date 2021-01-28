@@ -71,19 +71,11 @@ app.get(`/api/deleteQuestion/:questionId`, FBAuth, deleteQuestion);
 
 // testing
 
-// Получить правила по всем закреплённым документам за должностью
-// Сформировать [{documentId, sectionId}, {}, ...] по documentId из position
-// allDocumentsId.forEach((documentId) => getRulesByDocAndSectionId/:documentId/:sectionId );
-// Сохранить в test-reducer.js
 
-// Получить индивидуальные правила закреплённые за должностью
-// allRulesId.forEach((ruleId) => getRule/:ruleId );
-
-// app.get(`/api/get`)
 
 app.use(express.static('dist'));
 // app.get('/api/getUsername', (req, res) => res.send({ username: os.userInfo().username }));
 
 app.listen(process.env.PORT || 8080, () => console.log(`Listening on port ${process.env.PORT || 8080}!`));
 
-//  git add . && git commit -m "testData in dataReducer" && git push origin master
+//  git add . && git commit -m "TestQuestionsControlPanel & start selectors" && git push origin master

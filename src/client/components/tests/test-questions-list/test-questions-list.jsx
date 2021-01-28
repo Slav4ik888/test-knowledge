@@ -1,13 +1,13 @@
 import React, { useState } from 'react';
 import pt from 'prop-types';
 // Readux Stuff
-import { connect } from 'react-redux'
+import { connect } from 'react-redux';
+import * as s from '../../../redux/selectors/data-selectors';
 // MUI Stuff
 import { makeStyles } from '@material-ui/core/styles';
-import Divider from '@material-ui/core/Divider';
-import Typography from '@material-ui/core/Typography';
 // Components
 import TestQuestion from '../test-question/test-question';
+import TestQuestionsControlPanel from '../test-questions-control-panel/test-questions-control-panel';
 import { getItemFromArrByField } from '../../../utils/arrays';
 import { getMixedArray } from '../../../utils/random';
 
@@ -17,35 +17,18 @@ const useStyle = makeStyles((theme) => ({
     display: `flex`,
     flexDirection: `column`,
   },
-  header: {
-    display: `flex`,
-    flexDirection: `column`,
-    marginBottom: theme.spacing(1),
-  },
-  posTitle: {
-    fontWeight: `bold`,
-  },
-  questionsLength: {
-    fontSize: `10px`,
-  },
-  questAll: {
-    fontWeight: `bold`,
-  },
-  questRest: {
-    fontWeight: `bold`,
-  },
 }));
 
 
-const TestQuestionsList = ({ position, testData, rulesForTest, questionsForTest }) => {
+const TestQuestionsList = ({ position, testReady, rulesForTest, questionsForTest }) => {
 
-  if (!testData.testReady) return null;
+  if (!testReady) return null;
 
   const classes = useStyle();
 
   // Формируем список вопросов и перемешиваем их
-  const oldQuests = getItemFromArrByField(questionsForTest, `positionId`, position.id).questions;
-  const questions = getMixedArray(oldQuests);
+  const allQuestions = getItemFromArrByField(questionsForTest, `positionId`, position.id).questions;
+  const questions = getMixedArray(allQuestions);
 
   const [currentQuestion, setCurrentQuestion] = useState(0);
   const handleNextQuestion = () => {
@@ -55,43 +38,31 @@ const TestQuestionsList = ({ position, testData, rulesForTest, questionsForTest 
       setCurrentQuestion(currentQuestion + 1);
     }
     
-};
+  };
   
   return (
     <div className={classes.container}>
-      <div className={classes.header}>
-        <Typography>{`Для должности "`}
-          <span className={classes.posTitle}>{position.title}</span>{`"`}
-        </Typography>
-        <Typography className={classes.questionsLength}>
-          <span>
-            {`Всего вопросов `}<span className={classes.questAll}>{oldQuests.length}</span>
-            {`   Осталось ответить на `}<span className={classes.questRest}>{questions.length}</span>
-          </span>
-        </Typography>
-      </div>
-      <Divider />
+      <TestQuestionsControlPanel positionTitle={position.title} />
       {
         questions.length ? <TestQuestion question={questions[currentQuestion]} onNextQuestion={handleNextQuestion} /> 
           : null
       }
-           
     </div>
   )
 };
 
 TestQuestionsList.propTypes = {
   position: pt.object,
-  testData: pt.object.isRequired,
+  testReady: pt.bool.isRequired,
   rulesForTest: pt.array.isRequired,
   questionsForTest: pt.array.isRequired,
 
 };
 
 const mapStateToProps = (state) => ({
-  testData: state.data.testData,
-  rulesForTest: state.data.rulesForTest,
-  questionsForTest: state.data.questionsForTest,
+  testReady: s.getTestReady(state),
+  rulesForTest: s.getRulesForTest(state),
+  questionsForTest: s.getQuestionsForTest(state),
 });
 
 export default connect(mapStateToProps)(TestQuestionsList);

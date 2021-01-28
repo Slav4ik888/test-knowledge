@@ -4,7 +4,7 @@ import {
   mockInitialState, mockEmployees,
   mockRulesForTest, mockRulesForPosition, mockRulesForPositionAdd, mockRulesForTestAfterAdd,
   mockQuestionsForTest, mockQuestionsForPosition, mockQuestionsForPositionAdd, mockQuestionsForTestAfterAdd,
-  mockTestData, mockTestReadyTrue,
+  mockTestData, mockTestReadyTrue, mockTestDataUpdateObj, mockTestDataUpdated,
 } from '../../mocks/for-data-reducer';
 
 // const api = createAPI(() => {});
@@ -165,6 +165,15 @@ describe(`DATA Reducer`, () => {
       questionsForTest: mockQuestionsForTestAfterAdd,
       testData: mockTestReadyTrue
     });
+  });
+
+
+
+  it(`Reducer UPDATE_TESTDATA - обновляем некоторые элементы testData`, () => {
+    expect(reducer({ testData: mockTestData }, {
+      type: dataActionType.UPDATE_TESTDATA,
+      payload: mockTestDataUpdateObj,
+    })).toEqual({ testData: mockTestDataUpdated });
   });
 });
 

@@ -375,7 +375,7 @@ export default function (state = initialState, action) {
       });
     
     
-    case dataActionType.UPDATE_TESTDATA:
+    case dataActionType.UPDATE_TESTDATA: // test +
       return extend(state, { testData: updateObj(state.testData, action.payload) });
     
     // Загруженные rules для тестирования добавляем к тому, что было...
