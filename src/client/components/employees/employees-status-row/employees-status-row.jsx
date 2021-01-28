@@ -15,7 +15,7 @@ import Tooltip from '@material-ui/core/Tooltip';
 // Icons
 import HowToRegIcon from '@material-ui/icons/HowToReg';
 // Components
-import { arrFromObj } from '../../../utils/utils';
+import { arrFromObj } from '../../../utils/objects';
 import { role } from '../../../../types';
 
 

@@ -1,5 +1,5 @@
 import {uiActionType} from '../types';
-import {extend} from '../../utils/utils';
+import {extend} from '../../utils/objects';
 
 
 const initialState = {

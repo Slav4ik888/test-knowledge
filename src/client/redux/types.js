@@ -53,8 +53,7 @@ export const dataActionType = {
   UPDATE_QUESTION: `UPDATE_QUESTION`,
   DELETE_QUESTION: `DELETE_QUESTION`,
 
-  TEST_READY_ON: `TEST_READY_ON`,
-  TEST_READY_OFF: `TEST_READY_OFF`,
+  UPDATE_TESTDATA: `UPDATE_TESTDATA`, // Обновляем данные по проходящему тестированию
   ADD_RULES_FOR_TEST: `ADD_RULES_FOR_TEST`, // загруженные rules для тестирования
   ADD_QUESTIONS_FOR_TEST: `ADD_QUESTIONS_FOR_TEST`,
 };

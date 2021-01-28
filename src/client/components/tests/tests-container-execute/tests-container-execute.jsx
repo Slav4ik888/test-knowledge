@@ -2,7 +2,7 @@ import React, {useState} from 'react';
 import pt from 'prop-types';
 // Readux Stuff
 import { connect } from 'react-redux';
-import { getRulesAndQuestionsByPositionId, testReadyOn, testReadyOff } from '../../../redux/actions/data-actions';
+import { getRulesAndQuestionsByPositionId, updateTestData } from '../../../redux/actions/data-actions';
 // MUI Stuff
 import { makeStyles } from '@material-ui/core/styles';
 import Dialog from '@material-ui/core/Dialog';
@@ -38,7 +38,7 @@ const useStyles = makeStyles((theme) => ({
 
 // Запуск тестирования
 const TestsContainerExecute = ({ open, onClose, loading, allPositions, userEmail, employees,
-  getRulesAndQuestionsByPositionId, testReady, rulesForTest, testReadyOn, testReadyOff }) => {
+  getRulesAndQuestionsByPositionId, testData, rulesForTest, updateTestData }) => {
   
   if (!open) return null;
   
@@ -74,7 +74,7 @@ const TestsContainerExecute = ({ open, onClose, loading, allPositions, userEmail
         // Загружаем rules & questions по всем закреплённым за должностью документам и отдельным rules
         getRulesAndQuestionsByPositionId(pos.id, docsInPos, rulesInPos);
       } else {
-        testReadyOn(); // Если уже загружали данные для должности, то просто включаем флажок тестирования
+        updateTestData({testReady: true}); // Если уже загружали данные для должности, то просто включаем флажок тестирования
       }
     }
 
@@ -83,7 +83,7 @@ const TestsContainerExecute = ({ open, onClose, loading, allPositions, userEmail
   };
 
   const handleClose = () => {
-    testReadyOff(); // Отключаем тестирование
+    updateTestData({testReady: false}); // Отключаем тестирование
     onClose();
   };
 
@@ -104,7 +104,7 @@ const TestsContainerExecute = ({ open, onClose, loading, allPositions, userEmail
             </Typography>
           }
           {
-            !testReady && <ListSelect
+            !testData.testReady && <ListSelect
               type={typeListSelect.POSITION}
               title={listTitle}
               items={positions}
@@ -131,19 +131,18 @@ TestsContainerExecute.propTypes = {
   open: pt.bool.isRequired,
   onClose: pt.func.isRequired,
   loading: pt.bool.isRequired,
-  testReady: pt.bool.isRequired,
   allPositions: pt.array.isRequired,
   userEmail: pt.string,
   employees: pt.array.isRequired,
   getRulesAndQuestionsByPositionId: pt.func.isRequired,
+  testData: pt.object.isRequired,
   rulesForTest: pt.array.isRequired,
-  testReadyOn: pt.func.isRequired,
-  testReadyOff: pt.func.isRequired,
+  updateTestData: pt.func.isRequired,
 };
 
 const mapStateToProps = (state) => ({
   loading: state.UI.loading,
-  testReady: state.data.testReady,
+  testData: state.data.testData,
   userEmail: state.user.userProfile.email,
   employees: state.data.employees,
   allPositions: state.data.positions,
@@ -152,8 +151,7 @@ const mapStateToProps = (state) => ({
 
 const mapActionsToProps = {
   getRulesAndQuestionsByPositionId,
-  testReadyOn,
-  testReadyOff,
+  updateTestData,
 };
 
 export default connect(mapStateToProps, mapActionsToProps)(TestsContainerExecute);

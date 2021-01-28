@@ -1,5 +1,6 @@
 import {dataActionType} from '../types';
-import { extend, getIdxRulesFromDocAndSection } from '../../utils/utils';
+import { extend, updateObj } from '../../utils/objects';
+import { getIdxRulesFromDocAndSection } from '../../utils/utils';
 import { getArrWithoutItemByField, updateArrWithItemByField, getItemFromArrByField } from '../../utils/arrays';
 
 
@@ -32,7 +33,14 @@ const initialState = {
   //   ],
   // };
 
-  testReady: false, // Тестирование готово для выбранной должности
+  testData: {
+    testReady: false, // Тестирование готово для выбранной должности
+    questionsAll: 0, // Всего вопросов
+    questionsRest: 0, // Осталось ответить
+    errorValue: 0, // Кол-во ошибок
+    timeStart: 0, // Время начало теста
+    timeEnd: 0, // Время завершения теста
+  },
   rulesForTest: [], // [{ positionId: ``, rules: []}, {}]
   questionsForTest: [], // [{ positionId: ``, questions: [] }, { }]
 };
@@ -367,11 +375,8 @@ export default function (state = initialState, action) {
       });
     
     
-    case dataActionType.TEST_READY_ON:
-      return extend(state, { testReady: true });
-    
-    case dataActionType.TEST_READY_OFF:
-      return extend(state, { testReady: false });
+    case dataActionType.UPDATE_TESTDATA:
+      return extend(state, { testData: updateObj(state.testData, action.payload) });
     
     // Загруженные rules для тестирования добавляем к тому, что было...
     case dataActionType.ADD_RULES_FOR_TEST: // test +
@@ -393,7 +398,7 @@ export default function (state = initialState, action) {
     case dataActionType.ADD_QUESTIONS_FOR_TEST: // test +
       
       return extend(state, {
-        testReady: true,
+        testData: updateObj(state.testData, { testReady: true }),
         questionsForTest: updateArrWithItemByField(state.questionsForTest, `positionId`, {
           positionId: action.payload.positionId,
           questions: action.payload.questions

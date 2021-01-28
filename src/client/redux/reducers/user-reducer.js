@@ -1,5 +1,5 @@
 import {userActionType} from '../types';
-import {extend} from '../../utils/utils';
+import {extend} from '../../utils/objects';
 const initialState = {
   authenticated: false,
   loading: false,

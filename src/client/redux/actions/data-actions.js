@@ -504,7 +504,7 @@ export const getQuestionsByRuleId = ({ ruleId }) => (dispatch) => {
  */
 export const getRulesAndQuestionsByPositionId = (positionId, docsId, rulesId) => (dispatch) => {
   dispatch({ type: uiActionType.LOADING_UI });
-  dispatch({ type: dataActionType.TEST_READY_OFF });
+  dispatch({ type: dataActionType.UPDATE_TESTDATA, payload: { testReady: false } }); // Отключаем тестирование
   
   let allRules = [];
   let allRulesId = [];
@@ -598,5 +598,7 @@ export const deleteQuestion = (question) => (dispatch) => {
     });
 };
 
-export const testReadyOn = () => (dispatch) => dispatch({ type: dataActionType.TEST_READY_ON });
-export const testReadyOff = () => (dispatch) => dispatch({ type: dataActionType.TEST_READY_OFF });
+export const updateTestData = (obj) => (dispatch) => dispatch({
+  type: dataActionType.UPDATE_TESTDATA,
+  payload: obj
+});

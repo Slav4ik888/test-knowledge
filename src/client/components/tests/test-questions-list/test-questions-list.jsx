@@ -37,9 +37,9 @@ const useStyle = makeStyles((theme) => ({
 }));
 
 
-const TestQuestionsList = ({ position, testReady, rulesForTest, questionsForTest }) => {
+const TestQuestionsList = ({ position, testData, rulesForTest, questionsForTest }) => {
 
-  if (!testReady) return null;
+  if (!testData.testReady) return null;
 
   const classes = useStyle();
 
@@ -64,8 +64,10 @@ const TestQuestionsList = ({ position, testReady, rulesForTest, questionsForTest
           <span className={classes.posTitle}>{position.title}</span>{`"`}
         </Typography>
         <Typography className={classes.questionsLength}>
-          {`Всего вопросов `}<span className={classes.questAll}>{oldQuests.length}</span>
-          {`   Осталось ответить на `}<span className={classes.questRest}>{questions.length}</span>
+          <span>
+            {`Всего вопросов `}<span className={classes.questAll}>{oldQuests.length}</span>
+            {`   Осталось ответить на `}<span className={classes.questRest}>{questions.length}</span>
+          </span>
         </Typography>
       </div>
       <Divider />
@@ -80,14 +82,14 @@ const TestQuestionsList = ({ position, testReady, rulesForTest, questionsForTest
 
 TestQuestionsList.propTypes = {
   position: pt.object,
-  testReady: pt.bool.isRequired,
+  testData: pt.object.isRequired,
   rulesForTest: pt.array.isRequired,
   questionsForTest: pt.array.isRequired,
 
 };
 
 const mapStateToProps = (state) => ({
-  testReady: state.data.testReady,
+  testData: state.data.testData,
   rulesForTest: state.data.rulesForTest,
   questionsForTest: state.data.questionsForTest,
 });

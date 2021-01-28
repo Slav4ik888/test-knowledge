@@ -10,11 +10,36 @@ export const mockInitialState = {
 
   questions: [], 
 
-  testReady: false,
+  testData: {
+    testReady: false, // Тестирование готово для выбранной должности
+    questionsAll: 0, // Всего вопросов
+    questionsRest: 0, // Осталось ответить
+    errorValue: 0, // Кол-во ошибок
+    timeStart: 0, // Время начало теста
+    timeEnd: 0, // Время завершения теста
+  },
   rulesForTest: [],
   questionsForTest: [],
 };
 
+export const mockTestData = {
+  testReady: false, // Тестирование готово для выбранной должности
+  questionsAll: 0, // Всего вопросов
+  questionsRest: 0, // Осталось ответить
+  errorValue: 0, // Кол-во ошибок
+  timeStart: 0, // Время начало теста
+  timeEnd: 0, // Время завершения теста
+};
+
+export const mockTestReadyTrue = {
+  testReady: true, // Тестирование готово для выбранной должности
+  questionsAll: 0, // Всего вопросов
+  questionsRest: 0, // Осталось ответить
+  errorValue: 0, // Кол-во ошибок
+  timeStart: 0, // Время начало теста
+  timeEnd: 0, // Время завершения теста
+};
+  
 export const mockEmployees = [{ telo: 1, userId: 21 }, { telo: 2, userId: 22 }, { telo: 3, userId: 23 }];
 
 
