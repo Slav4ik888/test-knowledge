@@ -14,6 +14,8 @@ import FormGroup from '@material-ui/core/FormGroup';
 import TestAnswer from '../test-answer/test-answer';
 import NextQuestion from '../../buttons/next-question/next-question';
 import { typeResAnswer, typeMessage } from '../../../../types';
+import { messagesForRightAnswer, messagesForWrongAnswer } from '../../../utils/consts';
+import { getRandomElement } from '../../../utils/random';
 
 
 /**
@@ -94,6 +96,7 @@ const useStyle = makeStyles((theme) => ({
 
 // Текущий вопрос с вариантами ответов
 const TestQuestion = ({ question, onNextQuestion, testData, updateTestData, setMessage }) => {
+  console.log('question: ', question);
 
   if (!question) return null;
 
@@ -122,11 +125,11 @@ const TestQuestion = ({ question, onNextQuestion, testData, updateTestData, setM
     handleUpdateTestData(checkedAnswers, testData, updateTestData); // Обновляем даные по прохождению тестирования - testData
     
     if (checkedAnswers.resultTotal === typeResAnswer.RIGHT) { // Если ответили правильно, сразу следующий вопрос
-      setMessage({ type: typeMessage.SUCCESS, timeout: 3000, message: `Правильно!` });
+      setMessage({ type: typeMessage.SUCCESS, timeout: 3000, message: getRandomElement(messagesForRightAnswer) });
       handleNextQuestion();
 
     } else {
-      setMessage({ type: typeMessage.ERROR, timeout: 3000, message: `Не верный ответ!` });
+      setMessage({ type: typeMessage.ERROR, timeout: 3000, message: getRandomElement(messagesForWrongAnswer) });
       setIsCheck(true);
     }
   };

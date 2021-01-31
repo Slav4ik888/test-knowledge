@@ -89,7 +89,7 @@ const TestSelectPosition = ({ open, onClose, loading, allPositions, userEmail, e
   const handleClose = () => {
     updateTestData({ // Отключаем тестирование
       testReady: false,
-      questionsAll: 0,
+      questionsAll: null,
       questionsRest: 0,
       errorValue: 0,
       timeStart: 0, 

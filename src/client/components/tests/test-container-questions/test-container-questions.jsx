@@ -6,12 +6,14 @@ import { updateTestData } from '../../../redux/actions/data-actions';
 import * as s from '../../../redux/selectors/data-selectors';
 // MUI Stuff
 import { makeStyles } from '@material-ui/core/styles';
+// Functions
+import { getItemFromArrByField } from '../../../utils/arrays';
+import { getMixedArray } from '../../../utils/random';
+import { typeResAnswer, typeConfirm } from '../../../../types';
 // Components
 import TestQuestion from '../test-question/test-question';
 import TestQuestionsControlPanel from '../test-questions-control-panel/test-questions-control-panel';
-import { getItemFromArrByField } from '../../../utils/arrays';
-import { getMixedArray } from '../../../utils/random';
-import { typeResAnswer } from '../../../../types';
+import Confirm from '../../confirm/confirm';
 
 
 const useStyle = makeStyles((theme) => ({
@@ -31,9 +33,8 @@ const TestContainerQuestions = ({ position, testData, rulesForTest, questionsFor
 
   // Формируем список вопросов
   const startQuestions = getItemFromArrByField(questionsForTest, `positionId`, position.id).questions;
-  console.log('startQuestions: ', startQuestions);
 
-  if (!testData.questionsAll) { // Сохраняет начальные данные по тесту 
+  if (!testData.questionsAll && testData.questionsAll !== 0) { // Сохраняет начальные данные по тесту 
     updateTestData({
       questionsAll: startQuestions.length,
       questionsRest: startQuestions.length,
@@ -48,21 +49,21 @@ const TestContainerQuestions = ({ position, testData, rulesForTest, questionsFor
   // Нажали следующий вопрос
   const handleNextQuestion = (answer) => {
     let newErrorQuestions = [...errorQuestions];
-    console.log('newErrorQuestions: ', newErrorQuestions);
+    
     // Проверяем правильность ответа 
     if (answer.resultTotal !== typeResAnswer.RIGHT) { // Если правильный ответ - удаляем этот вопрос
       newErrorQuestions.push(questions[currentQuestion]);
       setErrorQuestions(newErrorQuestions);
     }
     
-    if (currentQuestion === questions.length) { // Вопросы закончились
+    if (currentQuestion === questions.length - 1) { // Вопросы закончились
       if (newErrorQuestions.length) { // Был неверный ответ
-        console.log('newErrorQuestions.length: ', newErrorQuestions.length);
         setQuestions(getMixedArray(newErrorQuestions));
         setErrorQuestions([]);
         setCurrentQuestion(0);
 
       } else {
+        // setQuestions([]); // Создать компонент выводящий итоги тестирования и завершение.
         console.log(`Вопросы закончились. Неверных ответов нет.`);
       }
 
@@ -71,13 +72,24 @@ const TestContainerQuestions = ({ position, testData, rulesForTest, questionsFor
     }
     
   };
+
+  // Для загрытия теста, если для выбранной должности не оказалось вопросов
+  const handleCloseTest = () => {
+    updateTestData({
+      testReady: false,
+      questionsAll: null,
+    });
+  }
   
   return (
     <div className={classes.container}>
       <TestQuestionsControlPanel positionTitle={position.title} />
       {
-        questions.length ? <TestQuestion question={questions[currentQuestion]} onNextQuestion={handleNextQuestion} /> 
-          : null
+        questions.length ? <TestQuestion question={questions[currentQuestion]} onNextQuestion={handleNextQuestion} />
+          : <Confirm open={!questions.length} typeOk={typeConfirm.NO_QUESTIONS}
+              onOk={handleCloseTest} onCancel={handleCloseTest}
+              title = {`Для выбранной должности отсутствуют вопросы. Сообщите об этом своему руководителю.`}
+            />
       }
     </div>
   )

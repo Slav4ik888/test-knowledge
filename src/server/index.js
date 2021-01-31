@@ -78,4 +78,4 @@ app.use(express.static('dist'));
 
 app.listen(process.env.PORT || 8080, () => console.log(`Listening on port ${process.env.PORT || 8080}!`));
 
-//  git add . && git commit -m "MessageBar" && git push origin master
+//  git add . && git commit -m "Confirm for test" && git push origin master

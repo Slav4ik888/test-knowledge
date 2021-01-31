@@ -35,7 +35,7 @@ const initialState = {
 
   testData: {
     testReady: false, // Тестирование готово для выбранной должности
-    questionsAll: 0, // Всего вопросов
+    questionsAll: null, // Всего вопросов
     questionsRest: 0, // Осталось ответить
     errorValue: 0, // Кол-во ошибок
     timeStart: 0, // Время начало теста
@@ -398,7 +398,7 @@ export default function (state = initialState, action) {
     case dataActionType.ADD_QUESTIONS_FOR_TEST: // test +
       
       return extend(state, {
-        testData: updateObj(state.testData, { testReady: true }),
+        // testData: updateObj(state.testData, { testReady: true }),
         questionsForTest: updateArrWithItemByField(state.questionsForTest, `positionId`, {
           positionId: action.payload.positionId,
           questions: action.payload.questions

@@ -41,7 +41,12 @@ const MessageBar = ({ message, clearMessage }) => {
 
   return (
     <MuiSnackbar open={isSnack} autoHideDuration={message.timeout} onClose={handleCloseMessageBar} >
-      <Alert onClose={handleCloseMessageBar} severity={message.type} className={classes.snack}>
+      <Alert
+        onClose={handleCloseMessageBar}
+        // variant="outlined"
+        severity={message.type}
+        className={classes.snack}
+      >
         {message.message}
       </Alert>
     </MuiSnackbar>

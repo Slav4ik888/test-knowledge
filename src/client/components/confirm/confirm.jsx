@@ -35,9 +35,13 @@ const Confirm = ({ open, typeOk, onOk, onCancel, title }) => {
         </DialogTitle>
 
         <DialogActions className={classes.dialog}>
-          <Button variant="contained" color="secondary" onClick={onCancel} className={classes.button}>
-            Отменить
-          </Button>
+          {
+            typeOk !== typeConfirm.NO_QUESTIONS ?
+              <Button variant="contained" color="secondary" onClick={onCancel} className={classes.button}>
+                Отменить
+              </Button>
+              : null
+          }
           <Button variant="outlined" onClick={onOk}>
             {typeOk}
           </Button>
@@ -48,7 +52,7 @@ const Confirm = ({ open, typeOk, onOk, onCancel, title }) => {
 };
 
 Confirm.propTypes = {
-  typeOk: pt.oneOf([typeConfirm.DEL, typeConfirm.SAVE, typeConfirm.WITHOUT_SAVE]).isRequired,
+  typeOk: pt.oneOf([typeConfirm.DEL, typeConfirm.SAVE, typeConfirm.WITHOUT_SAVE, typeConfirm.NO_QUESTIONS]).isRequired,
   onOk: pt.func.isRequired,
   onCancel: pt.func.isRequired,
   open: pt.bool.isRequired,

@@ -539,7 +539,7 @@ export const getRulesAndQuestionsByPositionId = (positionId, docsId, rulesId) =>
               // const q = res.data.questions;
               // console.log('Questions: ', q.length);
               // q.forEach((item, i) => console.log(`Questions ${i+1}: ${item.questions.length}`));
-
+              dispatch({ type: uiActionType.CLEAR_ERRORS });
               dispatch({
                 type: dataActionType.ADD_QUESTIONS_FOR_TEST,
                 payload: {
@@ -548,21 +548,12 @@ export const getRulesAndQuestionsByPositionId = (positionId, docsId, rulesId) =>
                 },
               });
 
-              // // Формируем список вопросов для должности
-              // const startQuestions = getItemFromArrByField(res.data.questions, `positionId`, positionId).questions;
-              // console.log('startQuestions: ', startQuestions);
 
-              // // Сохраняет начальные данные по тесту 
-              // dispatch({
-              //   type: dataActionType.UPDATE_TESTDATA,
-              //   payload: {
-              //     questionsAll: startQuestions.length,
-              //     questionsRest: startQuestions.length,
-              //   }
-              // });
-
-              dispatch({ type: uiActionType.CLEAR_ERRORS });
-            })
+              dispatch({
+                type: dataActionType.UPDATE_TESTDATA,
+                payload: { testReady: true }
+              });
+            });
         })
     })
     .catch((err) => {
