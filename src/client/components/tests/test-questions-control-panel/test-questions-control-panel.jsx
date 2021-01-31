@@ -33,7 +33,7 @@ const useStyle = makeStyles((theme) => ({
   },
 }));
 
-
+// Верхняя панель с текущими показателями тестирования
 const TestQuestionsControlPanel = ({ positionTitle, testData }) => {
 
   const classes = useStyle();

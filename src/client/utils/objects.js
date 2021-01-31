@@ -31,8 +31,6 @@ export const updateObj = (obj, changes) => {
       updated[key] = changes[key];
     }
   }
-  console.log('changes: ', changes);
-  console.log(`obj: `, obj);
-  console.log(`updated: `, updated);
+  
   return updated;
 };

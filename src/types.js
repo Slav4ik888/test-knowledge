@@ -76,3 +76,11 @@ exports.typeResAnswer = {
   RIGHT: `Верно`,
   WRONG: `Не верно`,
 };
+
+// Типы для MessageBar
+exports.typeMessage = {
+  SUCCESS: `success`,
+  INFO: `info`,
+  WARNING: `warning`,
+  ERROR: `error`,
+};

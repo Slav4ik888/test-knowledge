@@ -14,7 +14,7 @@ import CircularProgress from '@material-ui/core/CircularProgress';
 // Component
 import DialogTitle from '../../dialogs/dialog-title/dialog-title';
 import ListSelect from '../../list-select/list-select';
-import TestQuestionsList from '../test-questions-list/test-questions-list';
+import TestContainerQuestions from '../test-container-questions/test-container-questions';
 import { getPositionsByUser } from '../../../utils/utils';
 import { getItemFromArrByField } from '../../../utils/arrays';
 import { typeListSelect } from '../../../../types';
@@ -37,8 +37,8 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 
-// Запуск тестирования
-const TestsContainerExecute = ({ open, onClose, loading, allPositions, userEmail, employees,
+// Запуск тестирования - выбор должности
+const TestSelectPosition = ({ open, onClose, loading, allPositions, userEmail, employees,
   getRulesAndQuestionsByPositionId, testData, rulesForTest, updateTestData }) => {
   
   if (!open) return null;
@@ -55,6 +55,7 @@ const TestsContainerExecute = ({ open, onClose, loading, allPositions, userEmail
   let rulesInPos = []; // Отдельные правила закреплённые за выбранной должностью
   let allRules = []; // Итоговый список всех правил для выбранной должности
 
+  
   // Выбранная должность для тестирования
   const [posSeleted, setPosSelected] = useState(null);
   console.log('posSeleted: ', posSeleted);
@@ -74,8 +75,9 @@ const TestsContainerExecute = ({ open, onClose, loading, allPositions, userEmail
         console.log('rulesInPos: ', rulesInPos);
         // Загружаем rules & questions по всем закреплённым за должностью документам и отдельным rules
         getRulesAndQuestionsByPositionId(pos.id, docsInPos, rulesInPos);
-      } else {
-        updateTestData({testReady: true}); // Если уже загружали данные для должности, то просто включаем флажок тестирования
+
+      } else { // Если уже загружали данные для должности, то просто включаем флажок тестирования
+        updateTestData({ testReady: true });
       }
     }
 
@@ -83,8 +85,17 @@ const TestsContainerExecute = ({ open, onClose, loading, allPositions, userEmail
     
   };
 
+  // Закрыли тестирование
   const handleClose = () => {
-    updateTestData({testReady: false}); // Отключаем тестирование
+    updateTestData({ // Отключаем тестирование
+      testReady: false,
+      questionsAll: 0,
+      questionsRest: 0,
+      errorValue: 0,
+      timeStart: 0, 
+      timeEnd: 0,
+    }); 
+
     onClose();
   };
 
@@ -117,10 +128,9 @@ const TestsContainerExecute = ({ open, onClose, loading, allPositions, userEmail
           }
 
           {
-            loading && <CircularProgress size={30} className={classes.progress} />
+            loading ? <CircularProgress size={30} className={classes.progress} />
+              : <TestContainerQuestions position={posSeleted ? posSeleted : {}} />
           }
-          
-          <TestQuestionsList position={posSeleted ? posSeleted : {}} />
 
         </DialogContent>
       </Dialog>
@@ -128,7 +138,7 @@ const TestsContainerExecute = ({ open, onClose, loading, allPositions, userEmail
   );
 }
 
-TestsContainerExecute.propTypes = {
+TestSelectPosition.propTypes = {
   open: pt.bool.isRequired,
   onClose: pt.func.isRequired,
   loading: pt.bool.isRequired,
@@ -155,4 +165,4 @@ const mapActionsToProps = {
   updateTestData,
 };
 
-export default connect(mapStateToProps, mapActionsToProps)(TestsContainerExecute);
+export default connect(mapStateToProps, mapActionsToProps)(TestSelectPosition);

@@ -1,4 +1,5 @@
 import { dataActionType, uiActionType } from '../types';
+import { getItemFromArrByField } from '../../utils/arrays';
 import { logoutUser } from './user-actions';
 
 import axios from 'axios';
@@ -535,8 +536,8 @@ export const getRulesAndQuestionsByPositionId = (positionId, docsId, rulesId) =>
 
           return axios.post(`/getQuestionsByArrayOfRulesId`, { rulesId: allRulesId })
             .then((res) => {
-              const q = res.data.questions;
-              console.log('Questions: ', q.length);
+              // const q = res.data.questions;
+              // console.log('Questions: ', q.length);
               // q.forEach((item, i) => console.log(`Questions ${i+1}: ${item.questions.length}`));
 
               dispatch({
@@ -546,7 +547,20 @@ export const getRulesAndQuestionsByPositionId = (positionId, docsId, rulesId) =>
                   questions: res.data.questions,
                 },
               });
-              
+
+              // // Формируем список вопросов для должности
+              // const startQuestions = getItemFromArrByField(res.data.questions, `positionId`, positionId).questions;
+              // console.log('startQuestions: ', startQuestions);
+
+              // // Сохраняет начальные данные по тесту 
+              // dispatch({
+              //   type: dataActionType.UPDATE_TESTDATA,
+              //   payload: {
+              //     questionsAll: startQuestions.length,
+              //     questionsRest: startQuestions.length,
+              //   }
+              // });
+
               dispatch({ type: uiActionType.CLEAR_ERRORS });
             })
         })
@@ -598,7 +612,10 @@ export const deleteQuestion = (question) => (dispatch) => {
     });
 };
 
-export const updateTestData = (obj) => (dispatch) => dispatch({
-  type: dataActionType.UPDATE_TESTDATA,
-  payload: obj
-});
+export const updateTestData = (obj) => (dispatch) => {
+  console.log('obj updateTestData: ', obj);
+  dispatch({
+    type: dataActionType.UPDATE_TESTDATA,
+    payload: obj
+  });
+};

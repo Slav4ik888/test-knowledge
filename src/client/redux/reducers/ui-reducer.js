@@ -8,8 +8,15 @@ const initialState = {
   //   sectionSelected: null,
   //   docSelected: null,
   // },
-  messages: {},
+  message: {},
+  // {
+  //   type: ``,
+  //   timeout: 3000,
+  //   message: `Всё ок!`,
+  // }
+
   errors: {},
+  
 };
 
 export default function (state = initialState, action) {
@@ -32,23 +39,18 @@ export default function (state = initialState, action) {
         errors: {},
       });
     
-    case uiActionType.SET_MESSAGES:
+    case uiActionType.SET_MESSAGE:
       return extend(state, {
         loading: false,
-        messages: action.payload,
+        message: action.payload,
       });
     
-    case uiActionType.CLEAR_MESSAGES:
+    case uiActionType.CLEAR_MESSAGE:
       return extend(state, {
         loading: false,
-        messages: {},
+        message: {},
       });
     
-    // case uiActionType.SET_RULES_STORED:
-    //   return extend(state, {
-    //     ruleStored: action.payload,
-    //     loading: false,
-    //   });
     
     default: return state;
   }

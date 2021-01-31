@@ -1,5 +1,4 @@
 
-
 export const getEmployees = (state) => state.data.employees;
 
 export const getPositions = (state) => state.data.positions;

@@ -45,16 +45,15 @@ const useStyle = makeStyles((theme) => ({
 }));
 
 
+// Один из вариантов ответа
 const TestAnswer = ({ employeeAnswer, idx, onSetAnswer, answer, result }) => {
-  console.log('employeeAnswer: ', employeeAnswer);
 
   const classes = useStyle();
 
   const checked = Boolean(employeeAnswer[`answer${idx}`]);
   const [resAnswer, setResAnswer] = useState(employeeAnswer[`result${idx}`]);
-  console.log(`resAnswer${idx}: `, resAnswer);
+
   useEffect(() => {
-    console.log(`useEffect ${idx}`);
     setResAnswer(employeeAnswer[`result${idx}`]);
   }, [result]);
 
@@ -63,17 +62,17 @@ const TestAnswer = ({ employeeAnswer, idx, onSetAnswer, answer, result }) => {
 
   switch (resAnswer) {
     case typeResAnswer.NO_CHECK:
-      console.log('NO_CHECK: ', idx);
+      // console.log('NO_CHECK: ', idx);
       icon = null;
       clClass = classes.noAnswer;
       break;
     case typeResAnswer.RIGHT:
-      console.log('RIGHT: ', idx);
+      // console.log('RIGHT: ', idx);
       icon = <RightIcon className={classes.icon} />;
       clClass = classes.rightAnswer;
       break;
     case typeResAnswer.WRONG:
-      console.log('WRONG: ', idx);
+      // console.log('WRONG: ', idx);
       icon = <WrongIcon className={classes.icon} />;
       clClass = classes.wrongAnswer;
       break;

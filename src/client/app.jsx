@@ -22,6 +22,7 @@ import Navbar from './components/navbar/navbar';
 import AuthRoute from './utils/auth-route';
 import PrivateRoute from './utils/private-route';
 import Snackbar from './components/dialogs/snackbar/snackbar';
+import MessageBar from './components/dialogs/message-bar/message-bar';
 
 
 const token = localStorage.TKidToken;
@@ -46,34 +47,38 @@ if (token && !token.includes(`Bearer undefined`)) {
 
 const App = () => {
   return (
-    <Router>
-      <div className="container">
-        <Navbar />
-        <Switch>
-          <Route exact path={route.HOME} component={Home} />
-          
-          <PrivateRoute exact path={route.CREATE_RULE} render={() => <CreateRule />} />
+    <>
+      <Router>
+        <div className="container">
+          <Navbar />
+          <Switch>
+            <Route exact path={route.HOME} component={Home} />
+            
+            <PrivateRoute exact path={route.CREATE_RULE} render={() => <CreateRule />} />
 
-          <AuthRoute exact path={route.SIGNUP_COMPANY} component={SignupCompany} />
-          <AuthRoute exact path={route.LOGIN} component={Login} />
-          <Route exact path={route.ROOT} />
+            <AuthRoute exact path={route.SIGNUP_COMPANY} component={SignupCompany} />
+            <AuthRoute exact path={route.LOGIN} component={Login} />
+            <Route exact path={route.ROOT} />
 
-          <Route
-            render={() => (
-              <>
-                <h1>
-                  404.
-                  <br />
-                  <small>Page not found</small>
-                </h1>
-                <Redirect to={route.ROOT} />
-              </>
-            )}
-          />
-        </Switch>
-      </div>
+            <Route
+              render={() => (
+                <>
+                  <h1>
+                    404.
+                    <br />
+                    <small>Page not found</small>
+                  </h1>
+                  <Redirect to={route.ROOT} />
+                </>
+              )}
+            />
+          </Switch>
+        </div>
+      </Router>
+      
       <Snackbar />
-    </Router>
+      <MessageBar />
+    </>
   );
 };
 

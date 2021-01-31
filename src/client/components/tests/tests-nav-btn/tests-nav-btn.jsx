@@ -10,7 +10,7 @@ import ListItemText from '@material-ui/core/ListItemText';
 // Icons
 import QueryBuilderIcon from '@material-ui/icons/QueryBuilder';
 // Components
-import TestsContainerExecute from '../tests-container-execute/tests-container-execute';
+import TestSelectPosition from '../tests-select-position/tests-select-position';
 
 
 const useStyles = makeStyles((theme) => ({
@@ -60,7 +60,7 @@ const TestsNavBtn = ({ open, onDrawerOpen, onDrawerClose }) => {
         </>
       }
 
-      <TestsContainerExecute
+      <TestSelectPosition
         open={isTests}
         onClose={handleTestsClose}
       />

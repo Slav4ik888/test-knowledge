@@ -1,13 +1,17 @@
 import { uiActionType } from '../types';
 
 
-// Сохраняем выбранные значения rule в store
-// export const setRuleStored = (ruleState) => (dispatch) => {
-//   dispatch({
-//     type: uiActionType.SET_RULES_STORED,
-//     payload: ruleState,
-//   })
-// };
+// Сохраняем сообщение для пользователя
+export const setMessage = (message) => (dispatch) => {
+  dispatch({
+    type: uiActionType.SET_MESSAGE,
+    payload: message,
+  })
+};
+
+// Очищаем сообщение
+export const clearMessage = (message) => (dispatch) => dispatch({ type: uiActionType.CLEAR_MESSAGE });
+
 
 // Сохраняем выбранные значения rule в store
 export const setErrors = (general) => (dispatch) => {
