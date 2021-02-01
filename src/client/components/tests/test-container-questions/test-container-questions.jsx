@@ -83,7 +83,8 @@ const TestContainerQuestions = ({ position, testData, rulesForTest, questionsFor
   
   return (
     <div className={classes.container}>
-      <TestQuestionsControlPanel positionTitle={position.title} />
+      <TestQuestionsControlPanel position={position} question={questions[currentQuestion]} />
+
       {
         questions.length ? <TestQuestion question={questions[currentQuestion]} onNextQuestion={handleNextQuestion} />
           : <Confirm open={!questions.length} typeOk={typeConfirm.NO_QUESTIONS}

@@ -97,6 +97,8 @@ const useStyle = makeStyles((theme) => ({
 // Текущий вопрос с вариантами ответов
 const TestQuestion = ({ question, onNextQuestion, testData, updateTestData, setMessage }) => {
   console.log('question: ', question);
+  
+  // Ссылка на само правило, которое можно посмотреть после ответа
 
   if (!question) return null;
 

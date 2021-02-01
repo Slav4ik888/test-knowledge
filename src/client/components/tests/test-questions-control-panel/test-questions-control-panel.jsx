@@ -34,14 +34,19 @@ const useStyle = makeStyles((theme) => ({
 }));
 
 // Верхняя панель с текущими показателями тестирования
-const TestQuestionsControlPanel = ({ positionTitle, testData }) => {
+const TestQuestionsControlPanel = ({ position, testData, question, document }) => {
+  console.log('document: ', document);
 
   const classes = useStyle();
+
+
+  // Получаем правило и название документа из которого этот вопрос
+
 
   return (
     <div className={classes.container}>
       <Typography>{`Для должности "`}
-        <span className={classes.posTitle}>{positionTitle}</span>{`"`}
+        <span className={classes.posTitle}>{position.title}</span>{`"`}
       </Typography>
       <Typography className={classes.questionsLength}>
         <span>
@@ -50,6 +55,8 @@ const TestQuestionsControlPanel = ({ positionTitle, testData }) => {
           {`   Ошибок `}<span className={classes.questError}>{testData.errorValue}</span>
         </span>
       </Typography>
+
+      <Typography>Документ: {document.title || ``}</Typography>
       
       <Divider />
     </div>
@@ -57,12 +64,17 @@ const TestQuestionsControlPanel = ({ positionTitle, testData }) => {
 };
 
 TestQuestionsControlPanel.propTypes = {
-  positionTitle: pt.string.isRequired,
+  position: pt.object.isRequired,
   testData: pt.object.isRequired,
+  question: pt.object.isRequired,
+  document: pt.object.isRequired,
+  rule: pt.object.isRequired,
 };
 
-const mapStateToProps = (state) => ({
+const mapStateToProps = (state, props) => ({
   testData: s.getTestData(state),
+  document: s.getDocumentFromRuleForTest(state, props),
+  rule: s.getRuleFromRulesForTestById(state, props),
 });
 
 export default connect(mapStateToProps)(TestQuestionsControlPanel);
