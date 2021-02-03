@@ -25,13 +25,13 @@ const useStyle = makeStyles((theme) => ({
 
 
 // 
-const TestContainerQuestions = ({ position, testData, rulesForTest, questionsForTest, updateTestData }) => {
+const TestContainerQuestions = ({ position, testData, rulesForTest, questionsForTest, updateTestData, onShowResult }) => {
 
   if (!testData.testReady) return null;
 
   const classes = useStyle();
 
-  // Формируем список вопросов
+  // Формирует список вопросов
   const startQuestions = getItemFromArrByField(questionsForTest, `positionId`, position.id).questions;
 
   if (!testData.questionsAll && testData.questionsAll !== 0) { // Сохраняет начальные данные по тесту 
@@ -42,7 +42,6 @@ const TestContainerQuestions = ({ position, testData, rulesForTest, questionsFor
   }
 
   const [questions, setQuestions] = useState(getMixedArray(startQuestions));
-
   const [errorQuestions, setErrorQuestions] = useState([]);
   const [currentQuestion, setCurrentQuestion] = useState(0);
 
@@ -50,7 +49,7 @@ const TestContainerQuestions = ({ position, testData, rulesForTest, questionsFor
   const handleNextQuestion = (answer) => {
     let newErrorQuestions = [...errorQuestions];
     
-    // Проверяем правильность ответа 
+    // Проверяет правильность ответа 
     if (answer.resultTotal !== typeResAnswer.RIGHT) { // Если правильный ответ - удаляем этот вопрос
       newErrorQuestions.push(questions[currentQuestion]);
       setErrorQuestions(newErrorQuestions);
@@ -62,15 +61,22 @@ const TestContainerQuestions = ({ position, testData, rulesForTest, questionsFor
         setErrorQuestions([]);
         setCurrentQuestion(0);
 
-      } else {
-        // setQuestions([]); // Создать компонент выводящий итоги тестирования и завершение.
-        console.log(`Вопросы закончились. Неверных ответов нет.`);
+      } else { // Вопросы закончились. Неверных ответов нет
+        handleShowResults(); // Выводит итоги тестирования и завершение.
       }
 
     } else { // Устанавливаем следующий вопрос
       setCurrentQuestion(currentQuestion + 1);
     }
     
+  };
+
+  // Вывод результатов
+  const handleShowResults = () => {
+    onShowResult({
+      position,
+      testData
+    });
   };
 
   // Для загрытия теста, если для выбранной должности не оказалось вопросов
@@ -102,6 +108,7 @@ TestContainerQuestions.propTypes = {
   rulesForTest: pt.array.isRequired,
   questionsForTest: pt.array.isRequired,
   updateTestData: pt.func.isRequired,
+  onShowResult: pt.func.isRequired,
 };
 
 const mapStateToProps = (state) => ({

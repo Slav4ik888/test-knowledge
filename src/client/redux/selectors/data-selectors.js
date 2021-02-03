@@ -30,7 +30,6 @@ export const getDocumentFromRuleForTest = createSelector(
   getRuleFromRulesForTestById,
   getDocuments,
   (rule, documents) => {
-    console.log('rule: ', rule);
     return documents.find(doc => doc.id === rule.docId);
   }
 

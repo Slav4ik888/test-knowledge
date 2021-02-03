@@ -15,6 +15,8 @@ import CircularProgress from '@material-ui/core/CircularProgress';
 import DialogTitle from '../../dialogs/dialog-title/dialog-title';
 import ListSelect from '../../list-select/list-select';
 import TestContainerQuestions from '../test-container-questions/test-container-questions';
+import TestShowResult from '../test-show-result/test-show-result';
+// Functions
 import { getPositionsByUser } from '../../../utils/utils';
 import { getItemFromArrByField } from '../../../utils/arrays';
 import { typeListSelect } from '../../../../types';
@@ -55,24 +57,16 @@ const TestSelectPosition = ({ open, onClose, loading, allPositions, userEmail, e
   let rulesInPos = []; // Отдельные правила закреплённые за выбранной должностью
   let allRules = []; // Итоговый список всех правил для выбранной должности
 
-  
   // Выбранная должность для тестирования
   const [posSeleted, setPosSelected] = useState(null);
-  console.log('posSeleted: ', posSeleted);
   const positionText = posSeleted ? `` : `Выберите должность для тестирования`;
 
   const handleSetPosSelected = (pos) => {
-    console.log('pos: ', pos);
-
     if (pos) {
       if (!getItemFromArrByField(rulesForTest, `positionId`, pos.id)) {
         console.log(`Нет загруженных rules для position ${pos.id}. ЗАГРУЖАЕМ`);
-
         docsInPos = pos.documents; // Документы закреплённые за выбранной должности
-        console.log('docsInPos: ', docsInPos);
-
         rulesInPos = pos.rules; // Отдельные правила закреплённые за выбранной должностью
-        console.log('rulesInPos: ', rulesInPos);
         // Загружаем rules & questions по всем закреплённым за должностью документам и отдельным rules
         getRulesAndQuestionsByPositionId(pos.id, docsInPos, rulesInPos);
 
@@ -82,8 +76,11 @@ const TestSelectPosition = ({ open, onClose, loading, allPositions, userEmail, e
     }
 
     setPosSelected(pos);
-    
   };
+
+  // Выводит результаты тестирования || закрывает вывод тестирования
+  const [showResult, setShowResult] = useState(null);
+  const handleShowResultOpen = (result) => setShowResult(result);
 
   // Закрыли тестирование
   const handleClose = () => {
@@ -95,7 +92,7 @@ const TestSelectPosition = ({ open, onClose, loading, allPositions, userEmail, e
       timeStart: 0, 
       timeEnd: 0,
     }); 
-
+    setShowResult(null);
     onClose();
   };
 
@@ -103,7 +100,7 @@ const TestSelectPosition = ({ open, onClose, loading, allPositions, userEmail, e
     <>
       <Dialog
         disableBackdropClick fullWidth
-        className={classes.dialog} maxWidth="sm" scroll={`paper`}
+        className={classes.dialog} maxWidth="sm" // scroll={`paper`}
         open={open} onClose={handleClose}
       >
         <DialogTitle onClose={handleClose}>Тестирование</DialogTitle>
@@ -129,8 +126,13 @@ const TestSelectPosition = ({ open, onClose, loading, allPositions, userEmail, e
 
           {
             loading ? <CircularProgress size={30} className={classes.progress} />
-              : <TestContainerQuestions position={posSeleted ? posSeleted : {}} />
+              : <TestContainerQuestions
+                  position={posSeleted ? posSeleted : {}}
+                  onShowResult={handleShowResultOpen}
+                />
           }
+
+          <TestShowResult result={showResult} onClose={handleClose} />
 
         </DialogContent>
       </Dialog>
