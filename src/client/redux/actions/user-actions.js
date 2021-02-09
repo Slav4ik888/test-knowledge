@@ -23,6 +23,7 @@ import route from '../../utils/routes';
 
 axios.defaults.baseURL = `/api`;
 
+// Регистрация новой компании
 export const signupCompany = (newCompanyData, history) => (dispatch) => {
   dispatch({type: uiActionType.LOADING_UI});
   return axios.post(`/signupCompany`, newCompanyData)
@@ -92,6 +93,7 @@ export const addUser = (user) => (dispatch) => {
     });
 };
 
+// Вход пользователя, загрузка стартовых данных
 export const loginUser = (userData, history) => (dispatch) => {
   dispatch({type: uiActionType.LOADING_UI});
   return axios.post(`/login`, userData)
@@ -115,6 +117,7 @@ export const loginUser = (userData, history) => (dispatch) => {
     });
 };
 
+// Выход пользователя
 export const logoutUser = () => (dispatch) => {
   localStorage.removeItem(`TKidToken`);
   delete axios.defaults.headers.common[`Authorization`];
@@ -178,8 +181,30 @@ export const getUserAndCompanyData = () => (dispatch) => {
 // Обновляем данные о пользователе
 export const updateUserData = (userProfile) => (dispatch) => {
   console.log('userProfile: ', userProfile);
-  dispatch({type: userActionType.LOADING_USER});
+  dispatch({ type: userActionType.LOADING_USER });
+  
   return axios.post(`/updateUserData`, userProfile)
+    .then(() => {
+      dispatch({
+        type: userActionType.SET_USER,
+        payload: userProfile,
+      });
+    })
+    .catch((err) => {
+      console.log(err);
+      dispatch({
+        type: uiActionType.SET_ERRORS,
+        payload: err.response.data,
+      });
+    });
+};
+
+// Обновляем данные по тестированию
+export const updateUserTestingData = (userProfile) => (dispatch) => {
+  console.log('userProfile: ', userProfile);
+  dispatch({ type: userActionType.LOADING_USER });
+  
+  return axios.post(`/updateUserTestingData`, userProfile)
     .then(() => {
       dispatch({
         type: userActionType.SET_USER,
@@ -263,6 +288,7 @@ export const deleteCompany = () => (dispatch) => {
     });
 };
 
+// Установка авторизационных заголовков
 const setAuthorizationHeader = (token) => {
   const TKidToken = `Bearer ${token}`;
   localStorage.setItem(`TKidToken`, TKidToken);

@@ -8,7 +8,7 @@ const { role } = require('../../types');
 const { validationSignupData, validationLoginData, isEmpty } = require('../utils/validators');
 
 // Create new user
-exports.addUser = (req, res) => {
+const addUser = (req, res) => {
   const newUser = {
     email: req.body.email,
     password: req.body.password,
@@ -56,7 +56,7 @@ exports.addUser = (req, res) => {
 };
 
 // Login user
-exports.login = (req, res) => {
+const login = (req, res) => {
   const user = {
     email: req.body.email,
     password: req.body.password
@@ -92,49 +92,52 @@ exports.login = (req, res) => {
 
 
 // Get own user details
-exports.getUserData = (req, res) => {
-  db
-    .doc(`users/${req.user.companyId}/users/${req.user.email}`)
-    .get()
-    .then(doc => {
-      if (doc.exists) {
-        return doc.data();
-      }
-    })
-    .then((userData) => {
-      if (req.update) {
-        return userData;
-      } else {
-        return res.json(userData);
-      }
-    })
-    .catch(err => {
-      console.error(err);
-      return res.status(500).json({ general: err.code });
-    })
+async function getUserData(req, res) {
+
+  try {
+    const doc = await db.doc(`users/${req.user.companyId}/users/${req.user.email}`).get();
+
+    let userData = {};
+
+    if (doc.exists) {
+      userData = doc.data();
+    }
+
+    if (req.update) {
+      return userData;
+
+    } else {
+      return res.json(userData);
+    }
+  } catch(err) {
+    console.error(err);
+    return res.status(500).json({ general: err.code });
+  }
 };
 
 // Update user details
-exports.updateUserData = (req, res) => {
+async function updateUserData(req, res) {
 
-  let result;
-  if (req.user.role !== `Владелец` && req.user.userId !== req.body.userId) {
+  // let userUpdate = ``;
+
+  if (req.user.role !== role.OWNER && req.user.userId !== req.body.userId) {
     console.log(`Сотрудник пытается обновить данные другого сотрудника`);
     return res.status(400).json({ error: `Извините, у вас недостаточно прав для обновления данных другого сотрудника` });
   }
-  if (req.user.role !== `Владелец` && req.user.userId === req.body.userId) {
+  if (req.user.role !== role.OWNER && req.user.userId === req.body.userId) {
     console.log(`Сотрудник, обновляет свои данные`);
-    result = `user`;
+    // userUpdate = `user`;
   }
-  if (req.user.role === `Владелец` && req.user.userId !== req.body.userId) {
+  if (req.user.role === role.OWNER && req.user.userId !== req.body.userId) {
     console.log(`Владелец, обновляет данные сотрудника`);
-    result = `worker`;
+    // userUpdate = `worker`;
   }
-  if (req.user.role === `Владелец` && req.user.userId === req.body.userId) {
+  if (req.user.role === role.OWNER && req.user.userId === req.body.userId) {
     console.log(`Владелец, обновляет свои данные`);
-    result = `user`;
+    // userUpdate = `user`;
   }
-  
+
+
   const firstName = !isEmpty(req.body.firstName.trim()) ? req.body.firstName : ``;
   const secondName = !isEmpty(req.body.secondName.trim()) ? req.body.secondName : ``;
   const middleName = !isEmpty(req.body.middleName.trim()) ? req.body.middleName : ``;
@@ -144,10 +147,13 @@ exports.updateUserData = (req, res) => {
     secondName,
     middleName,
     positions: req.body.positions,
-    role: req.body.role,
     lastChange: new Date().toISOString(),
   };
 
+  // Обновляем роль пользователя только если это Владелец или Администратор
+  updateEmployee.role = req.user.role === role.OWNER || req.user.role === role.ADMIN ?
+    req.body.role : req.user.role;
+  
   db
     .doc(`users/${req.user.companyId}/users/${req.body.email}`)
     .update(updateEmployee)
@@ -160,8 +166,54 @@ exports.updateUserData = (req, res) => {
     })
 };
 
+
+
+// Обновить данные по тестированию
+async function updateUserTestingData(req, res) {
+
+  if (req.user.userId !== req.body.userId) {
+    console.log(`Кто-то пытается обновить данные по тестированию другого сотрудника: `, req.user.userId, ` - `, req.body.userId);
+    return res.status(400).json({ error: `Извините, у вас недостаточно прав для обновления данных тестирования другого сотрудника` });
+  }
+
+  if (!req.body.newPassedTesting) {
+    console.log(`Нет данных newPassedTesting`);
+    return res.status(400).json({ message: `Нет данных по тестированию` });
+  }
+
+  console.log(`Обновление данных по тестированию`);
+
+  req.update = true;
+
+  // Получаем данные по пользователю 
+  const userData = await getUserData(req, res);
+  // console.log('userData for passedTesting: ', userData);
+
+  const updateEmployee = {
+    lastChange: new Date().toISOString(),
+  };
+
+  let updatedPassedTesting = userData.passedTesting ? [...userData.passedTesting] : [];
+  updatedPassedTesting.push(req.body.newPassedTesting);
+  updateEmployee.passedTesting = updatedPassedTesting;
+  
+  db
+    .doc(`users/${req.user.companyId}/users/${req.user.email}`)
+    .update(updateEmployee)
+    .then(() => {
+      return res.json({ message: `Результат тестирования сохранён` });
+    })
+    .catch(err => {
+      console.error(err);
+      return res.status(500).json({ general: err.code });
+    })
+};
+
+
+
+
 // Delete user
-exports.deleteUser = (req, res) => { 
+const deleteUser = (req, res) => { 
 
   let result;
   if (req.user.role !== `Владелец` && req.user.userId !== req.body.userId) {
@@ -195,4 +247,13 @@ exports.deleteUser = (req, res) => {
       console.log('Error deleting user:', err);
       return res.status(500).json({ general: err.code });
     });
+};
+
+module.exports = {
+  addUser,
+  login,
+  getUserData,
+  updateUserData,
+  updateUserTestingData,
+  deleteUser,
 };

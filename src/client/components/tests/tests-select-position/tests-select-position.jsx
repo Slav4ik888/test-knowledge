@@ -59,6 +59,7 @@ const TestSelectPosition = ({ open, onClose, loading, allPositions, userEmail, e
 
   // Выбранная должность для тестирования
   const [posSeleted, setPosSelected] = useState(null);
+  
   const positionText = posSeleted ? `` : `Выберите должность для тестирования`;
 
   const handleSetPosSelected = (pos) => {

@@ -64,7 +64,8 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 const ProfielUserEdit = ({ open, onClose, userProfile, updateUserData, deleteUser}) => {
-
+  // TODO: Вывести блок с результатами тестирований
+  
   if (!open) {
     return null;
   }

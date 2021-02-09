@@ -547,8 +547,6 @@ export const getRulesAndQuestionsByPositionId = (positionId, docsId, rulesId) =>
                   questions: res.data.questions,
                 },
               });
-
-
               dispatch({
                 type: dataActionType.UPDATE_TESTDATA,
                 payload: { testReady: true }

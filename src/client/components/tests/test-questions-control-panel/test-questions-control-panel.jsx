@@ -53,13 +53,10 @@ const useStyle = makeStyles((theme) => ({
 
 // Верхняя панель с текущими показателями тестирования
 const TestQuestionsControlPanel = ({ position, testData, document }) => {
-  console.log('document: ', document);
 
   const classes = useStyle();
 
-
   // Получаем правило из которого этот вопрос, чтобы посмотреть при неправильном ответе
-
 
   return (
     <div className={classes.container}>

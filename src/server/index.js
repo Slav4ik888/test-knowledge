@@ -6,7 +6,7 @@ const FBAuth = require('./firebase/fb-auth');
 
 // const os = require('os');
 
-const { addUser, login, getUserData, updateUserData, deleteUser } = require('./handlers/users');
+const { addUser, login, getUserData, updateUserData, updateUserTestingData, deleteUser } = require('./handlers/users');
 const { signupCompany, getCompanyData, getUserAndCompanyData, updateCompanyData, deleteCompany } = require('./handlers/company');
 const { createPosition, getPosition, getAllPositions, updatePosition, deletePosition } = require('./handlers/positions');
 const { getAllEmployeesData } = require('./handlers/data');
@@ -26,6 +26,7 @@ app.post(`/api/addUser`, FBAuth, addUser);
 // get data user and company routes 
 app.get(`/api/getUserData`, FBAuth, getUserData);
 app.post(`/api/updateUserData`, FBAuth, updateUserData);
+app.post(`/api/updateUserTestingData`, FBAuth, updateUserTestingData);
 app.post(`/api/deleteUser`, FBAuth, deleteUser)
 app.get(`/api/userAndCompany`, FBAuth, getUserAndCompanyData);
 
@@ -78,4 +79,4 @@ app.use(express.static('dist'));
 
 app.listen(process.env.PORT || 8080, () => console.log(`Listening on port ${process.env.PORT || 8080}!`));
 
-//  git add . && git commit -m "start TestShowResult" && git push origin master
+//  git add . && git commit -m "end TestShowResult & add time.js & updateUserTestingData" && git push origin master

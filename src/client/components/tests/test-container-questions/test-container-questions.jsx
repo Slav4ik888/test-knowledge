@@ -26,6 +26,7 @@ const useStyle = makeStyles((theme) => ({
 
 // 
 const TestContainerQuestions = ({ position, testData, rulesForTest, questionsForTest, updateTestData, onShowResult }) => {
+  console.log('position: ', position);
 
   if (!testData.testReady) return null;
 
@@ -38,6 +39,7 @@ const TestContainerQuestions = ({ position, testData, rulesForTest, questionsFor
     updateTestData({
       questionsAll: startQuestions.length,
       questionsRest: startQuestions.length,
+      timeStart: new Date(),
     });
   }
 
@@ -73,9 +75,12 @@ const TestContainerQuestions = ({ position, testData, rulesForTest, questionsFor
 
   // Вывод результатов
   const handleShowResults = () => {
+    const newTestDate = Object.assign({}, testData);
+    newTestDate.timeEnd = new Date();
+
     onShowResult({
       position,
-      testData
+      testData: newTestDate
     });
   };
 
